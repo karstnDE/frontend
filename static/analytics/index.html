@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Treasury Analytics</title>
+    <style>
+    body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 24px; background: #fafafa; }
+    h1 { margin: 0 0 16px 0; color: #1f1f1f; }
+    h2 { margin: 32px 0 16px 0; color: #1f1f1f; clear: both; }
+    .meta { color: #666; margin-bottom: 16px; }
+    .chart {
+      margin: 24px 0 32px 0;
+      background: white;
+      padding: 16px;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      min-height: 400px;
+      width: 100%;
+      position: relative;
+      clear: both;
+      overflow: visible;
+    }
+    .chart div { width: 100% !important; }
+    .tbl {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 32px 0;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .tbl th, .tbl td { border-bottom: 1px solid #eaeaea; padding: 8px 12px; }
+    .tbl th { text-align: left; font-weight: 600; background: #f8f9fa; }
+    .controls {
+      background: white;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      clear: both;
+    }
+    .control-group { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+    .control-item { display: flex; flex-direction: column; gap: 4px; }
+    .control-item label { font-size: 14px; font-weight: 500; color: #374151; }
+    .control-item input, .control-item select { padding: 6px 8px; border: 1px solid #d1d5db; border-radius: 4px; }
+    .checkbox-group { display: flex; gap: 16px; align-items: center; }
+    .checkbox-group label { display: flex; align-items: center; gap: 6px; font-size: 14px; }
+    .loading { display: none; color: #6b7280; font-style: italic; margin: 8px 0; }
+    .error { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 12px; border-radius: 6px; margin: 12px 0; }
+
+    /* Chart container fixes */
+    #bar-chart, #daily-stacked-chart, #cumulative-chart {
+      height: 500px;
+      width: 100%;
+    }
+
+    /* Top table container */
+    #top-table {
+      margin: 16px 0 32px 0;
+      background: white;
+      padding: 16px;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    /* Prevent chart overlap */
+    .js-plotly-plot {
+      margin-bottom: 24px !important;
+    }
+
+    @media (max-width: 768px) {
+      body { margin: 12px; }
+      .control-group { flex-direction: column; align-items: stretch; }
+      .control-item { flex-direction: row; align-items: center; justify-content: space-between; }
+      .chart { min-height: 350px; }
+      #bar-chart, #daily-stacked-chart, #cumulative-chart { height: 400px; }
+    }
+    </style>
+    <script src="https://cdn.plot.ly/plotly-3.1.0.min.js" charset="utf-8"></script>
+  </head>
+  <body>
+    <h1>Treasury Analytics</h1>
+    <div class="meta">Address: G9XfJoY81n8A9bZKaJFhJYomRrcvFkuJ22em2g8rZuCh &nbsp;&nbsp; Range: <span id="range-label">2025-07-30 - 2025-10-11</span></div>
+
+    <div class="controls">
+      <div class="control-group">
+        <div class="control-item">
+          <label for="date-start">From Date (UTC)</label>
+          <input id="date-start" type="date" value="2025-07-30" />
+        </div>
+        <div class="control-item">
+          <label for="date-end">To Date (UTC)</label>
+          <input id="date-end" type="date" value="2025-10-11" />
+        </div>
+        <div class="control-item">
+          <label>Group Mode</label>
+          <div class="checkbox-group">
+            <label><input type="radio" name="group" value="token" checked /> By Token</label>
+            <label><input type="radio" name="group" value="type" /> By Type</label>
+          </div>
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="control-item">
+          <label>
+            <input type="checkbox" id="full-range" /> Full Range
+          </label>
+        </div>
+        <div class="control-item">
+          <label>
+            <input type="checkbox" id="raw-types" /> Show Raw Transaction Types
+          </label>
+        </div>
+        <div class="control-item">
+          <label for="threshold-pct">Cluster Threshold (%)</label>
+          <input id="threshold-pct" type="number" min="0" max="100" step="0.01" value="0.1" style="width: 120px;" />
+        </div>
+      </div>
+      <div class="loading" id="loading">Loading data...</div>
+    </div>
+
+    <h2 id="breakdown-title" style="margin-top:18px">Breakdown</h2>
+    <div id="bar-chart" class="chart"></div>
+
+    <h2>Top 10 Transactions</h2>
+    <div id="top-table"></div>
+
+    <h2>Daily Realized (stacked)</h2>
+    <div id="daily-stacked-chart" class="chart"></div>
+
+    <h2>Cumulative Realized</h2>
+    <div id="cumulative-chart" class="chart"></div>
+
+    <script>
+      const DATA_BASE = 'data';
+      let dailyStacked = [];
+      let dailyByToken = [];
+      let dailyByType = [];
+      let topTokenByMint = {};
+      let topTypeByLabel = {};
+      let tokenNameToMint = {};
+      let isLoading = false;
+
+      const parseDate = (s) => new Date(s + 'T00:00:00Z');
+
+      function showLoading(show = true) {
+        const loader = document.getElementById('loading');
+        if (loader) loader.style.display = show ? 'block' : 'none';
+        isLoading = show;
+      }
+
+      function showError(message) {
+        const container = document.getElementById('top-table');
+        if (container) {
+          container.innerHTML = `<div class="error">Error: ${message}</div>`;
+        }
+      }
+
+      async function loadAll() {
+        showLoading(true);
+        try {
+          const fetchJSON = async (p) => {
+            try {
+              const r = await fetch(p);
+              if (!r.ok) throw new Error(`HTTP ${r.status}`);
+              return r.json();
+            } catch {
+              return null;
+            }
+          };
+
+          // Load all data sources
+          let ds = await fetchJSON(`${DATA_BASE}/daily_stacked.json`);
+          dailyStacked = ds || [];
+
+          let dtok = await fetchJSON(`${DATA_BASE}/daily_by_token.json`);
+          dailyByToken = dtok || [];
+
+          let dtyp = await fetchJSON(`${DATA_BASE}/daily_by_type.json`);
+          dailyByType = dtyp || [];
+
+          let ttokm = await fetchJSON(`${DATA_BASE}/top_transactions_token.json`);
+          topTokenByMint = ttokm || {};
+
+          let ttypl = await fetchJSON(`${DATA_BASE}/top_transactions_type.json`);
+          topTypeByLabel = ttypl || {};
+
+          // Build token name to mint mapping
+          const tokenSums = {};
+          dailyByToken.forEach(r => {
+            if (!tokenSums[r.token_name]) tokenSums[r.token_name] = {};
+            tokenSums[r.token_name][r.mint] = (tokenSums[r.token_name][r.mint] || 0) + r.sol_equivalent;
+          });
+
+          for (const [name, sums] of Object.entries(tokenSums)) {
+            if (Object.keys(sums).length > 0) {
+              tokenNameToMint[name] = Object.entries(sums).sort((a,b) => b[1] - a[1])[0][0];
+            }
+          }
+
+          console.log('Data loaded:', {
+            dailyStacked: dailyStacked.length,
+            dailyByToken: dailyByToken.length,
+            dailyByType: dailyByType.length,
+            topTokenByMint: Object.keys(topTokenByMint).length,
+            topTypeByLabel: Object.keys(topTypeByLabel).length
+          });
+        } catch (error) {
+          console.error('Failed to load data:', error);
+          showError('Failed to load chart data');
+        } finally {
+          showLoading(false);
+        }
+      }
+
+      function applyThreshold(records, key, start, end, thresholdPct = 0.1) {
+        const m = new Map();
+        for (const r of records) {
+          const ds = r.date;
+          if (!ds) continue;
+          const dt = parseDate(ds);
+          if (dt < start || dt >= end) continue;
+          const k = r[key];
+          if (!k) continue;
+          const v = +r.sol_equivalent || 0;
+          m.set(k, (m.get(k)||0)+v);
+        }
+
+        const entries = Array.from(m.entries()).sort((a,b)=>b[1]-a[1]);
+        const total = entries.reduce((s, [,v])=>s+v, 0);
+        const threshold = total * (thresholdPct / 100);
+
+        const significant = entries.filter(([,v]) => v >= threshold);
+        const insignificant = entries.filter(([,v]) => v < threshold);
+        const othersTotal = insignificant.reduce((s, [,v])=>s+v, 0);
+
+        if (othersTotal > 0 && significant.length < entries.length) {
+          significant.push(['Others', othersTotal]);
+        }
+
+        return { agg: significant.slice(0, 10), total };
+      }
+
+      function renderBar(group, start, end, useRawTypes = false, thresholdPct = 0.1) {
+        const records = group==='token'? dailyByToken : dailyByType;
+        const key = group==='token'? 'token_name' : 'type';
+        const result = applyThreshold(records, key, start, end, thresholdPct);
+        const agg = result.agg;
+        const total = result.total;
+        const labels = agg.map(x=>x[0]);
+        const vals = agg.map(x=>x[1]);
+
+        const title = `Treasury Revenue: ${total.toFixed(1)} SOL`;
+        document.getElementById('breakdown-title').textContent = title;
+
+        const config = {
+          displayModeBar: 'hover',
+          displaylogo: false,
+          modeBarButtonsToRemove: ['zoom2d', 'autoscale', 'select2d', 'lasso2d'],
+          responsive: true
+        };
+
+        const layout = {
+          margin: {l: 60, r: 30, t: 60, b: 100},
+          yaxis: {title: 'Treasury Revenue (SOL)'},
+          xaxis: {tickangle: -30, title: group === 'token' ? 'Token' : 'Transaction Type'},
+          template: 'plotly_white',
+          hovermode: 'closest',
+          height: 500,
+          autosize: true
+        };
+
+        const trace = {
+          type: 'bar',
+          x: labels,
+          y: vals,
+          text: vals.map(v => v.toFixed(2)),
+          textposition: 'outside',
+          texttemplate: '%{text}',
+          hovertemplate: '%{x}<br>Revenue: %{y:.6f} SOL<extra></extra>',
+          marker: {
+            color: labels.map((_, i) => {
+              const colors = ['#2E86AB', '#A23B72', '#F18F01', '#C73E1D', '#7209B7', '#F72585', '#4CC9F0', '#06FFA5', '#FFBE0B', '#FB8500'];
+              return colors[i % colors.length];
+            })
+          }
+        };
+
+        return Plotly.react('bar-chart', [trace], layout, config);
+      }
+
+      function renderDaily(start, end) {
+        const within = dailyStacked.filter(r=>{ const d=parseDate(r.date); return d>=start && d<end; });
+        const dates = within.map(r=>r.date);
+
+        // Enhanced daily stacked chart by transaction type
+        const typeKeys = Array.from(new Set(dailyByType.map(r=>r.type)));
+        const totalsByType = new Map();
+
+        for (const r of dailyByType){
+          const d = parseDate(r.date);
+          if (d < start || d >= end) continue;
+          totalsByType.set(r.type, (totalsByType.get(r.type)||0)+(+r.sol_equivalent||0));
+        }
+
+        const sortedTypes = Array.from(totalsByType.entries()).sort((a,b)=>b[1]-a[1]).map(x=>x[0]);
+        const topTypes = sortedTypes.slice(0, 15);
+        const traces = [];
+
+        const typeColors = {
+          'fusion_collectprotocolfees': '#2C7BE5',
+          'collect_protocol_fees': '#2C7BE5',
+          'compound_fees_tuna': '#F6C026',
+          'liquidate_position_orca_liquidation': '#E63946',
+          'liquidate_position_orca_sl_tp': '#FF8C00',
+          'liquidate_position_orca_unclear': '#FFA500',
+          'open_position_with_liquidity_fusion': '#52B788',
+          'add_liquidity_orca': '#90E0EF',
+          'collect_and_compound_fees_orca': '#4CC9F0',
+          'Unattributed': '#6C757D'
+        };
+
+        const extraColors = ['#FF6B35', '#004E89', '#FF9F1C', '#2E86AB', '#A23B72', '#F18F01', '#C73E1D', '#003459', '#FFB997', '#7209B7'];
+
+        for (let i = 0; i < topTypes.length; i++) {
+          const t = topTypes[i];
+          const color = typeColors[t] || extraColors[i % extraColors.length];
+          traces.push({
+            type: 'bar',
+            name: t,
+            x: dates,
+            y: dates.map(d => {
+              const rec = dailyByType.find(r => r.date === d && r.type === t);
+              return rec ? +rec.sol_equivalent || 0 : 0;
+            }),
+            marker: { color },
+            hovertemplate: `%{fullData.name}<br>Date: %{x}<br>Amount: %{y:.6f} SOL<extra></extra>`
+          });
+        }
+
+        const others = dates.map(d => {
+          let s = 0;
+          for (const r of dailyByType) {
+            if (r.date === d && !topTypes.includes(r.type)) {
+              s += (+r.sol_equivalent || 0);
+            }
+          }
+          return s;
+        });
+
+        if (others.some(v => v > 0)) {
+          traces.push({
+            type: 'bar',
+            name: 'Others (Combined)',
+            x: dates,
+            y: others,
+            marker: { color: '#CCCCCC' },
+            hovertemplate: 'Others (Combined)<br>Date: %{x}<br>Amount: %{y:.6f} SOL<extra></extra>'
+          });
+        }
+
+        const dailyLayout = {
+          barmode: 'stack',
+          margin: { l: 60, r: 50, t: 60, b: 50 },
+          yaxis: { title: 'Daily Realized (SOL)' },
+          xaxis: { title: 'Date' },
+          legend: { orientation: 'v', yanchor: 'top', y: 1, x: 1.02 },
+          template: 'plotly_white',
+          title: `Daily Realized SOL by Transaction Type (Peak: ${Math.max(...dates.map(d => traces.reduce((sum, trace) => sum + (trace.y[traces[0].x.indexOf(d)] || 0), 0))).toFixed(1)} SOL/day)`,
+          height: 500,
+          autosize: true
+        };
+
+        const dailyConfig = {
+          displayModeBar: 'hover',
+          displaylogo: false,
+          modeBarButtonsToRemove: ['zoom2d', 'autoscale', 'select2d', 'lasso2d'],
+          responsive: true
+        };
+
+        Plotly.react('daily-stacked-chart', traces, dailyLayout, dailyConfig);
+
+        // Enhanced cumulative chart with stacked areas
+        const orca = within.map(r=>+r.orca_sol||0);
+        const fusion = within.map(r=>+r.fusion_sol||0);
+        const other = within.map(r=>+r.other_sol||0);
+
+        const cumOrca = []; const cumFusion = []; const cumOther = [];
+        let so = 0, sf = 0, st = 0;
+
+        for (let i = 0; i < dates.length; i++) {
+          so += orca[i] || 0;
+          sf += fusion[i] || 0;
+          st += other[i] || 0;
+          cumOrca.push(so);
+          cumFusion.push(sf);
+          cumOther.push(st);
+        }
+
+        const totalCumulative = cumOrca[cumOrca.length - 1] + cumFusion[cumFusion.length - 1] + cumOther[cumOther.length - 1];
+
+        const cumulativeTraces = [
+          {
+            name: 'Orca (Cumulative)',
+            x: dates,
+            y: cumOrca,
+            mode: 'lines',
+            stackgroup: 'one',
+            line: { width: 0 },
+            fillcolor: 'rgba(255, 193, 7, 0.6)',
+            hovertemplate: 'Orca (Cumulative)<br>Date: %{x}<br>Amount: %{y:.6f} SOL<extra></extra>'
+          },
+          {
+            name: 'Fusion (Cumulative)',
+            x: dates,
+            y: cumFusion,
+            mode: 'lines',
+            stackgroup: 'one',
+            line: { width: 0 },
+            fillcolor: 'rgba(128, 128, 128, 0.6)',
+            hovertemplate: 'Fusion (Cumulative)<br>Date: %{x}<br>Amount: %{y:.6f} SOL<extra></extra>'
+          }
+        ];
+
+        if (cumOther.some(v => v > 0)) {
+          cumulativeTraces.push({
+            name: 'Other (Cumulative)',
+            x: dates,
+            y: cumOther,
+            mode: 'lines',
+            stackgroup: 'one',
+            line: { width: 0 },
+            fillcolor: 'rgba(100, 100, 100, 0.4)',
+            hovertemplate: 'Other (Cumulative)<br>Date: %{x}<br>Amount: %{y:.6f} SOL<extra></extra>'
+          });
+        }
+
+        const cumulativeLayout = {
+          margin: { l: 60, r: 30, t: 60, b: 50 },
+          yaxis: { title: 'Cumulative Realized (SOL)' },
+          xaxis: { title: 'Date' },
+          legend: { orientation: 'v', yanchor: 'top', y: 1, x: 1.02 },
+          template: 'plotly_white',
+          title: `Cumulative Realized SOL by Platform (Total: ${totalCumulative.toFixed(1)} SOL)`,
+          hovermode: 'x unified',
+          height: 500,
+          autosize: true
+        };
+
+        const cumulativeConfig = {
+          displayModeBar: 'hover',
+          displaylogo: false,
+          modeBarButtonsToRemove: ['zoom2d', 'autoscale', 'select2d', 'lasso2d'],
+          responsive: true
+        };
+
+        Plotly.react('cumulative-chart', cumulativeTraces, cumulativeLayout, cumulativeConfig);
+      }
+
+      function renderTop(group, start, end, selectedKey=null) {
+        let rows = [];
+        let dataSource = 'general';
+
+        if (group === 'token') {
+          if (selectedKey && selectedKey !== 'Others') {
+            const mint = tokenNameToMint[selectedKey];
+            rows = topTokenByMint[mint] || [];
+            dataSource = `token-specific (${mint ? mint.slice(0,8)+'...' : 'unknown'})`;
+          } else {
+            // Show combined top transactions from all tokens
+            rows = [];
+            for (const [mint, txs] of Object.entries(topTokenByMint)) {
+              rows.push(...txs);
+            }
+            dataSource = 'all tokens';
+          }
+        } else {
+          if (selectedKey && selectedKey !== 'Others') {
+            rows = topTypeByLabel[selectedKey] || [];
+            dataSource = `type-specific (${selectedKey})`;
+          } else {
+            // Show combined top transactions from all types
+            rows = [];
+            for (const [type, txs] of Object.entries(topTypeByLabel)) {
+              rows.push(...txs);
+            }
+            dataSource = 'all types';
+          }
+        }
+
+        // Filter by date range
+        const filteredRows = rows.filter(r => {
+          const t = (r.timestamp || 0) * 1000;
+          const inRange = (t === 0 || (t >= start.getTime() && t < end.getTime()));
+          return inRange;
+        });
+
+        // Sort by amount and take top 5
+        const topRows = filteredRows
+          .sort((a, b) => (b.amount || 0) - (a.amount || 0))
+          .slice(0, 5);
+
+        const shortSig = (s) => s ? (s.slice(0,5)+'…'+s.slice(-5)) : '-';
+
+        let tableContent = '';
+        if (topRows.length === 0) {
+          tableContent = '<tr><td colspan="4" style="text-align:center; color:#666; padding:20px;">No transactions found for the selected criteria and date range.</td></tr>';
+        } else {
+          tableContent = topRows.map(r => {
+            const t = r.timestamp ? new Date(r.timestamp * 1000).toISOString() : 'N/A';
+            const a = (+r.amount || 0).toFixed(6);
+            const sig = r.signature || '-';
+            const lbl = r.label || 'Unknown';
+            return `<tr><td><a href="https://solscan.io/tx/${sig}" target="_blank">${shortSig(sig)}</a></td><td>${t}</td><td style="text-align:right">${a}</td><td>${lbl}</td></tr>`;
+          }).join('');
+        }
+
+        const html = [
+          '<div class="meta" id="selected-key" style="margin:6px 0 8px 0;">',
+          (selectedKey ? `Selected: ${selectedKey}` : `Showing top transactions (${dataSource})`),
+          '</div>',
+          '<table class="tbl">',
+          '<thead><tr><th>Signature</th><th>Timestamp (UTC)</th><th>Realized SOL</th><th>Label</th></tr></thead>',
+          '<tbody>',
+          tableContent,
+          '</tbody></table>'
+        ].join('');
+
+        document.getElementById('top-table').innerHTML = html;
+      }
+
+      async function main(){
+        await loadAll();
+
+        const startInput = document.getElementById('date-start');
+        const endInput = document.getElementById('date-end');
+        const rangeLabel = document.getElementById('range-label');
+        const radios = Array.from(document.querySelectorAll('input[name="group"]'));
+        const fullRangeCheckbox = document.getElementById('full-range');
+        const rawTypesCheckbox = document.getElementById('raw-types');
+        const thresholdInput = document.getElementById('threshold-pct');
+
+        let group = 'token';
+        let selectedKey = null;
+        let useFullRange = false;
+        let useRawTypes = false;
+        let thresholdPct = 0.1;
+
+        let updateTimeout;
+        function debounceUpdate() {
+          clearTimeout(updateTimeout);
+          updateTimeout = setTimeout(updateAll, 300);
+        }
+
+        function currentRange(){
+          const s = parseDate(startInput.value);
+          const e = parseDate(endInput.value);
+          const e2 = new Date(e.getTime());
+          e2.setUTCDate(e2.getUTCDate() + 1);
+          rangeLabel.textContent = `${s.toISOString().split('T')[0]} - ${e.toISOString().split('T')[0]}`;
+          return [s, e2];
+        }
+
+        async function updateAll(){
+          if (isLoading) return;
+          showLoading(true);
+          try {
+            const [s, e] = currentRange();
+            await renderBar(group, s, e, useRawTypes, thresholdPct);
+            renderDaily(s, e);
+            renderTop(group, s, e, selectedKey);
+          } catch (error) {
+            console.error('Update failed:', error);
+            showError('Failed to update charts');
+          } finally {
+            showLoading(false);
+          }
+        }
+
+        if (fullRangeCheckbox) {
+          fullRangeCheckbox.addEventListener('change', () => {
+            useFullRange = fullRangeCheckbox.checked;
+            selectedKey = null;
+            debounceUpdate();
+          });
+        }
+
+        if (rawTypesCheckbox) {
+          rawTypesCheckbox.addEventListener('change', () => {
+            useRawTypes = rawTypesCheckbox.checked;
+            selectedKey = null;
+            debounceUpdate();
+          });
+        }
+
+        if (thresholdInput) {
+          thresholdInput.addEventListener('input', () => {
+            thresholdPct = parseFloat(thresholdInput.value) || 0.1;
+            selectedKey = null;
+            debounceUpdate();
+          });
+        }
+
+        const setupChartClicks = () => {
+          const barDiv = document.getElementById('bar-chart');
+          if (barDiv && barDiv.on) {
+            barDiv.on('plotly_click', (ev) => {
+              try {
+                if (ev && ev.points && ev.points[0]) {
+                  selectedKey = ev.points[0].x;
+                  updateAll();
+                }
+              } catch (error) {
+                console.error('Chart click error:', error);
+              }
+            });
+          }
+        };
+
+        for (const r of radios) {
+          r.addEventListener('change', () => {
+            group = document.querySelector('input[name="group"]:checked').value;
+            selectedKey = null;
+            debounceUpdate();
+          });
+        }
+
+        startInput.addEventListener('change', () => {
+          selectedKey = null;
+          debounceUpdate();
+        });
+
+        endInput.addEventListener('change', () => {
+          selectedKey = null;
+          debounceUpdate();
+        });
+
+        await updateAll();
+        setTimeout(setupChartClicks, 500);
+        console.log('Dashboard initialized successfully');
+      }
+
+      window.addEventListener('error', (event) => {
+        console.error('Global error:', event.error);
+        showError('Application error occurred');
+      });
+
+      // Initialize when DOM and Plotly are ready
+      function initWhenReady() {
+        if (typeof Plotly !== 'undefined') {
+          console.log('Plotly loaded, initializing dashboard...');
+          main();
+        } else {
+          console.log('Waiting for Plotly to load...');
+          setTimeout(initWhenReady, 100);
+        }
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initWhenReady);
+      } else {
+        initWhenReady();
+      }
+    </script>
+  </body>
+</html>
