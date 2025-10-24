@@ -15,12 +15,17 @@ const sidebars: SidebarsConfig = {
 
   // Analysis sidebar
   analysisSidebar: [
-    'interactive',
+    'analysis/overview',
+    {
+      type: 'html',
+      value: '<span class="sidebar-heading">DEFITUNA</span>',
+    },
+    'analysis/defituna/overview',
     {
       type: 'category',
       label: 'Treasury Analysis',
       items: [
-        'analysis/defituna/overview',
+        'analysis/defituna/staking-apy',
         {
           type: 'category',
           label: 'Revenue Breakdown',
@@ -28,13 +33,13 @@ const sidebars: SidebarsConfig = {
             'analysis/defituna/revenue-breakdown/by-token',
             'analysis/defituna/revenue-breakdown/by-type',
             'analysis/defituna/revenue-breakdown/by-pool',
+            'analysis/defituna/revenue-breakdown/pools-vs-types',
           ],
         },
-        'analysis/defituna/tx-type-development',
-        'analysis/defituna/orca-vs-sol',
+        'analysis/defituna/tx-type-per-day',
+        'analysis/defituna/orca-vs-fusion',
       ],
     },
-    'analysis/general',
   ],
 };
 

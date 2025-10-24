@@ -52,23 +52,6 @@ export default function Dashboard(): React.ReactElement {
 
   return (
     <div style={{ padding: '24px 0' }}>
-      {/* Metadata */}
-      <div style={{
-        padding: '16px 24px',
-        background: 'var(--ifm-background-surface-color)',
-        border: '1px solid var(--ifm-toc-border-color)',
-        borderRadius: 'var(--ifm-global-radius)',
-        marginBottom: '24px',
-        fontSize: '14px',
-        color: 'var(--ifm-color-secondary)',
-      }}>
-        <strong>Treasury Address:</strong> G9XfJoY81n8A9bZKaJFhJYomRrcvFkuJ22em2g8rZuCh
-        <span style={{ margin: '0 16px' }}>•</span>
-        <strong>Date Range:</strong> {summary.date_range.start} to {summary.date_range.end}
-        <span style={{ margin: '0 16px' }}>•</span>
-        <strong>Days:</strong> {summary.date_range.days}
-      </div>
-
       {/* Dashboard Controls */}
       <DashboardControlsComponent controls={controls} onChange={setControls} />
 

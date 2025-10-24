@@ -1,11 +1,14 @@
-import React from 'react';
-import type { TopTransactionsData, GroupMode } from './types';
+import React, { useMemo } from 'react';
+import type { TopTransactionsData, GroupMode, SummaryData } from './types';
 
 interface TopTransactionsTableProps {
   topTransactionsToken: TopTransactionsData;
   topTransactionsType: TopTransactionsData;
   topTransactionsPool: TopTransactionsData;
   groupMode: GroupMode;
+  selectedFilter?: string | null;
+  selectedFilterLabel?: string | null;
+  summary?: SummaryData;
 }
 
 export default function TopTransactionsTable({
@@ -13,7 +16,24 @@ export default function TopTransactionsTable({
   topTransactionsType,
   topTransactionsPool,
   groupMode,
+  selectedFilter,
+  selectedFilterLabel,
+  summary,
 }: TopTransactionsTableProps): React.ReactElement {
+  // Create mint-to-name mapping from summary
+  const mintToName = useMemo(() => {
+    if (!summary) return {};
+    const mapping: Record<string, string> = {};
+    summary.top_tokens_by_value.forEach(token => {
+      if (token.mint === 'WSOL_DIRECT') {
+        // Map WSOL_DIRECT to actual wrapped SOL address
+        mapping['So11111111111111111111111111111111111111112'] = token.name;
+      }
+      mapping[token.mint] = token.name;
+    });
+    return mapping;
+  }, [summary]);
+
   // Select data based on group mode
   let topTransactions: TopTransactionsData = {};
   let groupLabel = '';
@@ -34,9 +54,18 @@ export default function TopTransactionsTable({
   }
 
   // Flatten and sort all transactions by amount
-  const allTransactions = Object.entries(topTransactions).flatMap(([group, txs]) =>
+  let allTransactions = Object.entries(topTransactions).flatMap(([group, txs]) =>
     txs.map(tx => ({ ...tx, group }))
   );
+
+  // Apply filter if selectedFilter is provided
+  if (selectedFilter) {
+    // Handle WSOL_DIRECT -> actual wrapped SOL address mapping
+    const filterValue = selectedFilter === 'WSOL_DIRECT'
+      ? 'So11111111111111111111111111111111111111112'
+      : selectedFilter;
+    allTransactions = allTransactions.filter(tx => tx.group === filterValue);
+  }
 
   const top10 = allTransactions
     .sort((a, b) => b.amount - a.amount)
@@ -65,6 +94,10 @@ export default function TopTransactionsTable({
     });
   };
 
+  const tableTitle = selectedFilter
+    ? `Top 10 Transactions for ${selectedFilterLabel || selectedFilter}`
+    : 'Top 10 Transactions';
+
   return (
     <div style={{
       background: 'var(--ifm-background-surface-color)',
@@ -72,14 +105,16 @@ export default function TopTransactionsTable({
       borderRadius: 'var(--ifm-global-radius)',
       padding: '24px',
       marginBottom: '24px',
-      overflowX: 'auto',
     }}>
-      <h3 style={{ marginTop: 0, marginBottom: '20px' }}>Top 10 Transactions</h3>
-      <table style={{
-        width: '100%',
-        borderCollapse: 'collapse',
-        fontSize: '14px',
-      }}>
+      <h3 style={{ marginTop: 0, marginBottom: '20px' }}>{tableTitle}</h3>
+      <div style={{ overflowX: 'auto' }}>
+        <table style={{
+          display: 'table',
+          width: '100%',
+          minWidth: '800px',
+          borderCollapse: 'collapse',
+          fontSize: '14px',
+        }}>
         <thead>
           <tr style={{ borderBottom: '2px solid var(--ifm-toc-border-color)' }}>
             <th style={{ textAlign: 'left', padding: '12px 8px', fontWeight: 600 }}>Rank</th>
@@ -124,14 +159,18 @@ export default function TopTransactionsTable({
                 </div>
               </td>
               <td style={{ padding: '12px 8px' }}>
-                <div style={{
-                  fontSize: '13px',
-                  maxWidth: '150px',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                }}>
-                  {tx.group}
+                <div
+                  style={{
+                    fontSize: '13px',
+                    maxWidth: '150px',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    cursor: groupMode === 'token' ? 'help' : 'default',
+                  }}
+                  title={groupMode === 'token' ? tx.group : undefined}
+                >
+                  {groupMode === 'token' ? (mintToName[tx.group] || tx.group) : tx.group}
                 </div>
               </td>
               <td style={{ padding: '12px 8px' }}>
@@ -170,7 +209,8 @@ export default function TopTransactionsTable({
             </tr>
           ))}
         </tbody>
-      </table>
+        </table>
+      </div>
     </div>
   );
 }

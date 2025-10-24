@@ -26,6 +26,8 @@
   --ifm-background-surface-color: #FFFFFF;
   --ifm-font-color-base: #111111;
   --ifm-color-secondary: #4F5964;
+  --sidebar-link-color: #5f6b77;
+  --sidebar-content-gap: 60px;
   --ifm-toc-border-color: #E1E7EE;
   --ifm-hr-background-color: #E1E7EE;
 
@@ -49,14 +51,17 @@
   --doc-sidebar-width: 290px !important;
   --ifm-global-radius: 12px;
   --ifm-code-border-radius: 6px;
-  --max-content-width: 1680px; /* Max width for centered content - increased for better chart display */
-  --ifm-container-width: 1680px;
-  --ifm-container-width-xl: 1680px;
-  --ifm-container-width-lg: 1680px;
+  --max-content-width: min(1896px, calc(100vw - 64px)); /* Allow docs layout to breathe on wide screens while keeping a 32px gutter */
+  --ifm-container-width: var(--max-content-width);
+  --ifm-container-width-xl: var(--max-content-width);
+  --ifm-container-width-lg: var(--max-content-width);
   --sidebar-rail-offset: 18px;
+  --sidebar-rail-step: 22px;
+  --sidebar-highlight: rgba(0, 163, 180, 0.14);
+  --sidebar-highlight-hover: rgba(0, 163, 180, 0.22);
 
   /* Spacing */
-  --page-gutter: clamp(16px, 3vw, 32px); /* Reduced max from 64px to 32px for more content space */
+  --page-gutter: 16px; /* Fixed minimal padding for maximum chart space */
   --ifm-spacing-horizontal: var(--page-gutter);
   --ifm-spacing-vertical: 16px;
 }
@@ -66,6 +71,8 @@
   --ifm-background-surface-color: #0F141B;
   --ifm-font-color-base: #E6E9EE;
   --ifm-color-secondary: #97A3B4;
+  --sidebar-link-color: #9aa7b8;
+  --sidebar-content-gap: 18px;
   --ifm-toc-border-color: #1F2A35;
   --ifm-hr-background-color: #1F2A35;
 
@@ -135,7 +142,7 @@ body {
 }
 
 .navbar__link {
-  font-weight: 600;
+  font-weight: 400; /* Changed from 600 to normal weight */
   font-size: 14px;
   letter-spacing: 0.01em;
   color: var(--ifm-color-secondary);
@@ -148,6 +155,7 @@ body {
 }
 
 .navbar__link--active {
+  font-weight: 500; /* Slightly heavier for active tab */
   border-bottom: 2px solid var(--accent);
 }
 
@@ -163,6 +171,7 @@ body {
   position: relative;
   border-right: none !important;
   border-left: none !important;
+  --rail-position: var(--sidebar-rail-offset);
 }
 
 .theme-doc-sidebar-container .menu {
@@ -176,12 +185,17 @@ body {
   overflow: visible;
 }
 
+.theme-doc-sidebar-container .menu__list {
+  margin: 0;
+  padding-left: 0;
+}
+
 .theme-doc-sidebar-container .theme-doc-sidebar-menu::before {
   content: "";
   position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
+  top: 4px;
+  bottom: 4px;
+  left: var(--rail-position, var(--sidebar-rail-offset));
   width: 1px;
   background: var(--ifm-toc-border-color);
   opacity: 0.6;
@@ -194,37 +208,127 @@ body {
   }
 }
 
-.menu__link {
+.menu__link,
+.menu__caret {
   position: relative;
-  border-radius: 8px;
-  padding: 8px 16px 8px calc(var(--sidebar-rail-offset) + 12px);
-  color: var(--ifm-color-secondary);
-  transition: color 120ms ease;
+  border-radius: 0;
+  padding: 8px 16px 8px calc(var(--rail-position, var(--sidebar-rail-offset)) + 14px);
+  color: var(--sidebar-link-color);
   font-size: 14px;
-}
-
-.menu__link:hover {
-  color: var(--accent);
-  text-decoration: none;
-}
-
-.menu__link--active {
-  color: var(--accent);
-  font-weight: 600;
+  font-weight: 400;
+  transition: color 120ms ease;
   background: transparent !important;
-  box-shadow: none !important;
+  z-index: 0;
 }
 
-.menu__link--active::before {
+.menu__link:hover,
+.menu__caret:hover {
+  color: var(--sidebar-link-color);
+  text-decoration: none;
+  background: transparent !important;
+}
+
+.menu__link--active:not(.menu__link--sublist) {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.menu__link--active:not(.menu__link--sublist)::before {
   content: "";
   position: absolute;
-  top: 4px;
-  bottom: 4px;
-  left: -1px;
+  top: 3px;
+  bottom: 3px;
+  left: calc(var(--rail-position, var(--sidebar-rail-offset)) - 1px);
   width: 3px;
   border-radius: 2px;
   background: var(--accent);
   z-index: 1;
+}
+
+.menu__link:not(.menu__link--sublist)::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: calc(var(--rail-position, var(--sidebar-rail-offset)) + 1px);
+  right: 12px;
+  background: transparent;
+  border-radius: 0 12px 12px 0;
+  opacity: 0;
+  transition: background 140ms ease, opacity 140ms ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.menu__link:not(.menu__link--sublist):hover::after {
+  background: var(--ifm-menu-color-background-hover);
+  opacity: 1;
+}
+
+.menu__link--active:not(.menu__link--sublist):hover::after {
+  background: var(--sidebar-highlight-hover);
+  opacity: 1;
+}
+
+.menu__link--sublist::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: calc(var(--rail-position, var(--sidebar-rail-offset)) + 1px);
+  right: 12px;
+  background: transparent;
+  border-radius: 0 12px 12px 0;
+  opacity: 0;
+  transition: background 140ms ease, opacity 140ms ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.menu__link--sublist:hover::before {
+  background: var(--ifm-menu-color-background-hover);
+  opacity: 1;
+}
+
+.theme-doc-sidebar-container .menu__link--sublist,
+.theme-doc-sidebar-container .menu__link--sublist-caret {
+  padding-right: 20px;
+}
+
+.theme-doc-sidebar-container .menu__list .menu__list .menu__link,
+.theme-doc-sidebar-container .menu__list .menu__list .menu__caret {
+  padding-left: calc(var(--rail-position, var(--sidebar-rail-offset)) + 16px);
+}
+
+.theme-doc-sidebar-container .menu__link--sublist-caret::after {
+  margin-left: 10px;
+  margin-right: 6px;
+}
+
+.theme-doc-sidebar-container .menu__list .menu__list .linkIconPlaceholder,
+.theme-doc-sidebar-container .menu__list .menu__list .categoryIconPlaceholder {
+  width: 0;
+}
+
+.theme-doc-sidebar-container .menu__list-item-collapsible,
+.theme-doc-sidebar-container .menu__list-item-collapsible:hover,
+.theme-doc-sidebar-container .menu__list-item-collapsible--active {
+  background: transparent !important;
+  border-radius: 0;
+}
+
+.theme-doc-sidebar-container .sidebar-heading {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  font-weight: 600;
+  color: var(--ifm-font-color-base);
+  margin: 20px 0 12px;
+  padding-left: calc(var(--sidebar-rail-offset) + 16px);
+}
+
+.theme-doc-sidebar-container .sidebar-heading + .menu__list {
+  margin-top: 4px;
 }
 
 @media (min-width: 997px) {
@@ -234,14 +338,27 @@ body {
 }
 
 .menu__list-item-collapsible {
-  border-radius: 8px;
+  border-radius: 0;
 }
 
 /* Nested navigation */
-.menu__list .menu__list {
-  margin-left: 12px;
-  border-left: 1px solid var(--ifm-toc-border-color);
-  padding-left: 12px;
+.theme-doc-sidebar-container .menu__list .menu__list {
+  --rail-position: calc(var(--rail-position, var(--sidebar-rail-offset)) + var(--sidebar-rail-step));
+  position: relative;
+  margin: 0 0 0 var(--sidebar-rail-step);
+  padding: 0;
+}
+
+.theme-doc-sidebar-container .menu__list .menu__list::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: var(--rail-position, var(--sidebar-rail-offset));
+  width: 1px;
+  background: var(--ifm-toc-border-color);
+  opacity: 0.6;
+  pointer-events: none;
 }
 
 /* ========================
@@ -267,6 +384,7 @@ body {
 
 main[class*="docMainContainer"] {
   flex: 1 1 auto;
+  margin-left: var(--sidebar-content-gap);
 }
 
 main[class*="docMainContainer"] > .container {
@@ -293,12 +411,26 @@ main[class*="docMainContainer"] > .container > .row > .col:last-child {
   padding-right: 0;
 }
 
+@media (min-width: 997px) {
+  main[class*="docMainContainer"] > .container > .row > .col.col--3 {
+    flex: 0 0 auto;
+    width: auto;
+    min-width: clamp(240px, 16vw, 300px);
+    max-width: clamp(260px, 18vw, 320px);
+    margin-left: 32px;
+  }
+
+  main[class*="docMainContainer"] > .container > .row > .col.col--3 [class*="tableOfContents_"] {
+    width: 100%;
+  }
+}
+
 article {
   background: var(--ifm-background-surface-color);
-  border: 1px solid var(--ifm-toc-border-color);
+  border: none;
   border-radius: var(--ifm-global-radius);
-  box-shadow: 0 8px 18px rgba(12, 30, 43, 0.06);
-  padding: 32px 24px; /* Reduced horizontal padding from 40px to 24px for more chart space */
+  box-shadow: 0 0px 0px rgba(12, 30, 43, 0.06);
+  padding: -20px 24px; /* Reduced horizontal padding from 40px to 24px for more chart space */
   margin: 24px 0; /* Removed horizontal margin for more width */
 }
 
@@ -310,6 +442,9 @@ article {
   article {
     padding: 24px;
     margin: 16px;
+  }
+  main[class*="docMainContainer"] {
+    margin-left: 0;
   }
 }
 
@@ -459,8 +594,7 @@ textarea:focus {
    ======================== */
 
 .footer {
-  border-top: 1px solid var(--ifm-toc-border-color);
-  background: var(--ifm-background-surface-color);
+  display: none; /* Footer removed - GitHub link moved to navbar */
 }
 
 /* ========================

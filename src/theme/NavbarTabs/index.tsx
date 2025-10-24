@@ -31,8 +31,8 @@ const tabs: NavTab[] = [
   },
   {
     label: 'Analysis',
-    to: '/interactive',
-    activePattern: /^\/(interactive|analysis)\//,
+    to: '/analysis/overview',
+    activePattern: /^\/analysis\//,
     Icon: ChartLineUp,
   },
 ];

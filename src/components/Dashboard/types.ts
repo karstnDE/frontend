@@ -57,6 +57,7 @@ export interface SummaryData {
   }>;
   top_types_by_value: Array<{
     type: string;
+    label?: string;
     total_sol: number;
   }>;
 }

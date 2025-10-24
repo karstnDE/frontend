@@ -1,0 +1,187 @@
+---
+title: Revenue by Token
+---
+
+import { useState } from 'react';
+import { useDashboardData } from '@site/src/components/Dashboard/useDashboardData';
+import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
+import BreakdownChart from '@site/src/components/Dashboard/BreakdownChart';
+import TopTransactionsTable from '@site/src/components/Dashboard/TopTransactionsTable';
+
+export function TokenRevenueDashboard() {
+  const data = useDashboardData();
+  const [selectedTokenId, setSelectedTokenId] = useState(null);
+  const [selectedTokenLabel, setSelectedTokenLabel] = useState(null);
+
+  const handleBarClick = (id, label) => {
+    setSelectedTokenId(id);
+    setSelectedTokenLabel(label);
+  };
+
+  const clearFilter = () => {
+    setSelectedTokenId(null);
+    setSelectedTokenLabel(null);
+  };
+
+  // Show loading state
+  if (data.loading) {
+    return <LoadingSpinner />;
+  }
+
+  // Show error state
+  if (data.error) {
+    return (
+      <div style={{
+        padding: '32px',
+        background: 'var(--ifm-background-surface-color)',
+        border: '1px solid var(--ifm-color-danger)',
+        borderRadius: 'var(--ifm-global-radius)',
+        color: 'var(--ifm-color-danger)',
+      }}>
+        <h3>Error Loading Dashboard</h3>
+        <p>{data.error}</p>
+      </div>
+    );
+  }
+
+  const summary = data.summary;
+  if (!summary) {
+    return <div>No data available</div>;
+  }
+
+  return (
+    <div style={{ padding: '24px 0' }}>
+      {/* Revenue Breakdown Chart - Token View */}
+      <BreakdownChart
+        summary={summary}
+        groupMode="token"
+        onBarClick={handleBarClick}
+      />
+
+      {/* Clear Filter Button */}
+      {selectedTokenLabel && (
+        <div style={{
+          marginBottom: '16px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px'
+        }}>
+          <span style={{ fontSize: '14px', color: 'var(--ifm-color-secondary)' }}>
+            Filtered by: <strong>{selectedTokenLabel}</strong>
+          </span>
+          <button
+            onClick={clearFilter}
+            style={{
+              padding: '6px 12px',
+              fontSize: '13px',
+              background: 'var(--ifm-color-emphasis-200)',
+              border: '1px solid var(--ifm-toc-border-color)',
+              borderRadius: 'var(--ifm-global-radius)',
+              cursor: 'pointer',
+              color: 'var(--ifm-font-color-base)',
+            }}
+          >
+            Clear Filter
+          </button>
+        </div>
+      )}
+
+      {/* Top Transactions Table */}
+      <TopTransactionsTable
+        topTransactionsToken={data.topTransactionsToken}
+        topTransactionsType={data.topTransactionsType}
+        topTransactionsPool={data.topTransactionsPool}
+        groupMode="token"
+        selectedFilter={selectedTokenId}
+        selectedFilterLabel={selectedTokenLabel}
+        summary={summary}
+      />
+    </div>
+  );
+}
+
+# Revenue Breakdown: By Token
+
+This page shows how treasury revenue is distributed across different **token mints**, revealing which tokens contribute most to the protocol's earnings.
+
+## Overview
+
+<TokenRevenueDashboard />
+
+## Understanding Token Revenue
+
+The Marimekko chart above visualizes revenue distribution across tokens with:
+
+- **Width**: Represents each token's relative contribution to total revenue
+- **Height**: Shows the breakdown within each token (by transaction type or pool)
+- **Area**: Total segment area = token's share of overall treasury revenue
+
+### Key Insights
+
+This token-based view helps you understand:
+
+- **Top Performers**: Which tokens generate the most treasury revenue
+- **Diversification**: How dependent the protocol is on specific tokens
+- **Long-tail Contributions**: Cumulative impact of smaller token inflows
+- **Token Composition**: How each token's revenue breaks down by source
+
+### Interactive Features
+
+- **Click on segments**: View the top transactions for that specific token in the table below
+- **Hover**: See exact SOL amounts and percentages for each token
+- **Cross-reference**: Compare with [By Type](./by-type) and [By Pool](./by-pool) views
+
+## Top Tokens
+
+The largest contributors typically include:
+
+- **WSOL**: Direct SOL deposits to the treasury
+- **USDC/USDT**: Stablecoin revenues from trading fees or liquidations
+- **Protocol Tokens**: Partner protocol tokens from liquidity provision
+- **Volatile Assets**: Tokens from liquidations or trading activity
+
+Each token's contribution is converted to SOL equivalents using the conversion rates from the revenue attribution system.
+
+## Conversion Methodology
+
+Token revenues are converted to SOL using:
+
+1. **Real-time Rates**: Conversion rates from actual swap transactions in the treasury data
+2. **Same-day Pricing**: Uses the rate active when the transaction occurred
+3. **100% Accuracy**: All conversions validated against on-chain data
+
+This ensures that cross-token comparisons reflect true economic value.
+
+## Top Transactions Table
+
+The table below shows:
+- **Default**: Top transactions across all tokens
+- **Filtered**: When you click a token segment, see that token's largest revenue events
+
+This drill-down capability lets you investigate:
+- Unusual spikes in specific token inflows
+- Largest individual contributions per token
+- Timing and context of major token revenue events
+
+## Analysis Tips
+
+### Identifying Anomalies
+
+Look for:
+- Tokens with unusually high single-day contributions (potential liquidations)
+- Gradual shifts in token composition over time
+- New tokens appearing (protocol integrations or partnerships)
+
+### Risk Assessment
+
+Use this view to evaluate:
+- **Concentration Risk**: Is too much revenue from one token?
+- **Volatility Risk**: Are high-revenue tokens stable or volatile?
+- **Diversification**: Is the token mix healthy for protocol sustainability?
+
+### Cross-referencing
+
+Compare this token view with:
+- **[By Type](./by-type)**: See which transaction types generate token revenues
+- **[By Pool](./by-pool)**: Understand which pools trade which tokens
+- **[Tx Type per Day](../tx-type-per-day)**: Track token evolution over time

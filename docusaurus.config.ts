@@ -72,34 +72,7 @@ const config: Config = {
         // Search bar is added automatically by @easyops-cn/docusaurus-search-local
       ],
     },
-    footer: {
-      style: 'dark',
-      links: [
-        {
-          title: 'Docs',
-          items: [
-            {
-              label: 'Home',
-              to: '/',
-            },
-            {
-              label: 'Interactive Dashboard',
-              to: '/interactive',
-            },
-          ],
-        },
-        {
-          title: 'More',
-          items: [
-            {
-              label: 'GitHub',
-              href: 'https://github.com/karstenalytics/analytics',
-            },
-          ],
-        },
-      ],
-      copyright: `Copyright © ${new Date().getFullYear()} karstenalytics.`,
-    },
+    footer: undefined, // Footer removed - GitHub link moved to navbar
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,

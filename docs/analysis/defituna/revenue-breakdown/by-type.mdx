@@ -1,0 +1,200 @@
+---
+title: Revenue by Type
+---
+
+import { useState } from 'react';
+import { useDashboardData } from '@site/src/components/Dashboard/useDashboardData';
+import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
+import BreakdownChart from '@site/src/components/Dashboard/BreakdownChart';
+import TopTransactionsTable from '@site/src/components/Dashboard/TopTransactionsTable';
+
+export function TypeRevenueDashboard() {
+  const data = useDashboardData();
+  const [selectedTypeId, setSelectedTypeId] = useState(null);
+  const [selectedTypeLabel, setSelectedTypeLabel] = useState(null);
+
+  const handleBarClick = (id, label) => {
+    setSelectedTypeId(id);
+    setSelectedTypeLabel(label);
+  };
+
+  const clearFilter = () => {
+    setSelectedTypeId(null);
+    setSelectedTypeLabel(null);
+  };
+
+  // Show loading state
+  if (data.loading) {
+    return <LoadingSpinner />;
+  }
+
+  // Show error state
+  if (data.error) {
+    return (
+      <div style={{
+        padding: '32px',
+        background: 'var(--ifm-background-surface-color)',
+        border: '1px solid var(--ifm-color-danger)',
+        borderRadius: 'var(--ifm-global-radius)',
+        color: 'var(--ifm-color-danger)',
+      }}>
+        <h3>Error Loading Dashboard</h3>
+        <p>{data.error}</p>
+      </div>
+    );
+  }
+
+  const summary = data.summary;
+  if (!summary) {
+    return <div>No data available</div>;
+  }
+
+  return (
+    <div style={{ padding: '24px 0' }}>
+      {/* Revenue Breakdown Chart - Type View */}
+      <BreakdownChart
+        summary={summary}
+        groupMode="type"
+        onBarClick={handleBarClick}
+      />
+
+      {/* Clear Filter Button */}
+      {selectedTypeLabel && (
+        <div style={{
+          marginBottom: '16px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px'
+        }}>
+          <span style={{ fontSize: '14px', color: 'var(--ifm-color-secondary)' }}>
+            Filtered by: <strong>{selectedTypeLabel}</strong>
+          </span>
+          <button
+            onClick={clearFilter}
+            style={{
+              padding: '6px 12px',
+              fontSize: '13px',
+              background: 'var(--ifm-color-emphasis-200)',
+              border: '1px solid var(--ifm-toc-border-color)',
+              borderRadius: 'var(--ifm-global-radius)',
+              cursor: 'pointer',
+              color: 'var(--ifm-font-color-base)',
+            }}
+          >
+            Clear Filter
+          </button>
+        </div>
+      )}
+
+      {/* Top Transactions Table */}
+      <TopTransactionsTable
+        topTransactionsToken={data.topTransactionsToken}
+        topTransactionsType={data.topTransactionsType}
+        topTransactionsPool={data.topTransactionsPool}
+        groupMode="type"
+        selectedFilter={selectedTypeId}
+        selectedFilterLabel={selectedTypeLabel}
+        summary={summary}
+      />
+    </div>
+  );
+}
+
+# Revenue Breakdown: By Type
+
+This page shows how treasury revenue is distributed across different **transaction classifications**, revealing which types of operations generate the most protocol earnings.
+
+## Overview
+
+<TypeRevenueDashboard />
+
+## Understanding Transaction Types
+
+The Marimekko chart above visualizes revenue distribution across transaction types with:
+
+- **Width**: Represents each transaction type's relative contribution to total revenue
+- **Height**: Shows the breakdown within each type (by token or pool)
+- **Area**: Total segment area = transaction type's share of overall treasury revenue
+
+### Key Transaction Types
+
+Common transaction classifications include:
+
+- **SwapReward**: Rewards from liquidity pool swap fees
+- **ClosePosition**: Revenue from closed liquidity positions
+- **WithdrawFees**: Collected protocol fees from various operations
+- **Liquidations**: Proceeds from liquidating underwater positions
+- **Transfers**: Direct token transfers to the treasury
+- **Other Types**: Additional protocol-specific operations
+
+### Classification System
+
+All transactions are classified using the **log-based analysis system** which:
+
+1. Examines on-chain transaction logs and instructions
+2. Matches patterns defined in `transaction_types_config.json`
+3. Assigns each transaction to exactly one type
+4. Maintains 100% attribution accuracy (every SOL is classified)
+
+### Interactive Features
+
+- **Click on segments**: View the top transactions for that specific type in the table below
+- **Hover**: See exact SOL amounts and percentages for each transaction type
+- **Cross-reference**: Compare with [By Token](./by-token) and [By Pool](./by-pool) views
+
+## Key Insights
+
+This transaction type view helps you understand:
+
+- **Revenue Drivers**: Which protocol operations generate the most income
+- **Operation Mix**: Balance between different revenue-generating activities
+- **Classification Changes**: Impact of updates to the classification system
+- **Protocol Evolution**: How revenue sources shift as the protocol matures
+
+## Top Transactions Table
+
+The table below shows:
+- **Default**: Top transactions across all types
+- **Filtered**: When you click a type segment, see that type's largest revenue events
+
+This drill-down capability lets you investigate:
+- Which specific transactions contributed most to each type's revenue
+- Timing and context of large type-specific events
+- Unusual patterns within transaction classifications
+
+## Analysis Tips
+
+### Identifying Dominant Types
+
+Look for:
+- **High-volume types**: Categories that consistently generate revenue
+- **Volatile types**: Categories with large but infrequent contributions (e.g., liquidations)
+- **Emerging types**: New classifications appearing as the protocol adds features
+
+### Classification Logic Changes
+
+When the classification system is updated:
+- Revenue may shift between categories as patterns are refined
+- Historical data is reprocessed to maintain consistency
+- The system still maintains 100% attribution accuracy
+
+Reference shifts in the type mix with:
+- **[Tx Type per Day](../tx-type-per-day)**: See how types evolve over time
+- System change logs in the backend repository
+
+### Cross-referencing
+
+Compare this type view with:
+- **[By Token](./by-token)**: See which tokens are involved in each transaction type
+- **[By Pool](./by-pool)**: Understand which pools generate which transaction types
+- **[Tx Type per Day](../tx-type-per-day)**: Track daily evolution of transaction types
+
+## Technical Details
+
+For deeper understanding of the classification system:
+
+- **Classification Engine**: See `tx_classifier.py` in the backend repository
+- **Type Definitions**: Review `transaction_types_config.json` for pattern matching rules
+- **Attribution System**: Read the Revenue Attribution System documentation
+
+The classification logic is transparent and auditable, ensuring accurate type attribution for every treasury transaction.

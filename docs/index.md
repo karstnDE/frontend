@@ -32,7 +32,7 @@ sidebar_position: 1
   <div class="section-grid">
     <div class="section-card" data-animate>
       <h3><span class="icon ph ph-rocket-launch"></span> Ship the latest dashboard</h3>
-      <p>Run the private pipeline, sync the generated bundle into <code>docs/analytics/</code>, and publish with <code>mkdocs gh-deploy</code>.</p>
+      <p>Run the private pipeline, sync the generated bundle into <code>docs/analytics/</code>, and publish with <code>npm run deploy</code>.</p>
       <ul>
         <li>Review <code>docs/data/_manifest.json</code> for timestamps.</li>
         <li>Use the Quick Publish script or GitHub Action.</li>
@@ -62,7 +62,7 @@ sidebar_position: 1
   <div class="section-grid">
     <div class="section-card" data-animate>
       <h3><span class="icon ph ph-calendar-check"></span> Daily publish</h3>
-      <p>Confirm cache freshness, run the attribution job, sync the <code>site/</code> export, and push to <code>main</code>.</p>
+      <p>Confirm cache freshness, run the attribution job, sync the <code>build/</code> export, and push to <code>main</code>.</p>
       <p><strong>Tip:</strong> update <code>docs/data/_manifest.json</code> so the dashboard shows "last updated".</p>
     </div>
     <div class="section-card" data-animate>
@@ -90,5 +90,4 @@ sidebar_position: 1
     <a class="btn-secondary" href="mailto:contact@karstenalytics.com">Contact the data team</a>
   </div>
 </div>
-
 

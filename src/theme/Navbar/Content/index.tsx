@@ -16,6 +16,7 @@ import NavbarMobileSidebarToggle from '@theme/Navbar/MobileSidebar/Toggle';
 import NavbarLogo from '@theme/Navbar/Logo';
 import NavbarSearch from '@theme/Navbar/Search';
 import { useManifest } from '@site/src/hooks/useManifest';
+import { GithubLogo } from '@phosphor-icons/react';
 
 import styles from './styles.module.css';
 
@@ -96,12 +97,6 @@ export default function NavbarContent(): ReactNode {
         // Ask the user to add the respective navbar items => more flexible
         <>
           <NavbarItems items={rightItems} />
-          <NavbarColorModeToggle className={styles.colorModeToggle} />
-          {!searchBarItem && (
-            <NavbarSearch>
-              <SearchBar />
-            </NavbarSearch>
-          )}
           {timestamp && (
             <span className={styles.timestamp} style={{
               fontSize: '13px',
@@ -112,6 +107,42 @@ export default function NavbarContent(): ReactNode {
               Last updated: {timestamp}
             </span>
           )}
+          <NavbarColorModeToggle className={styles.colorModeToggle} />
+          {!searchBarItem && (
+            <NavbarSearch>
+              <SearchBar />
+            </NavbarSearch>
+          )}
+          <a
+            href="https://github.com/karstenalytics/frontend"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              marginLeft: '12px',
+              padding: '4px 8px',
+              borderRadius: '6px',
+              color: 'var(--ifm-color-secondary)',
+              textDecoration: 'none',
+              fontSize: '13px',
+              fontWeight: 500,
+              transition: 'color 120ms ease, background 120ms ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = 'var(--accent)';
+              e.currentTarget.style.background = 'var(--ifm-toc-border-color)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'var(--ifm-color-secondary)';
+              e.currentTarget.style.background = 'transparent';
+            }}
+            title="View source on GitHub"
+          >
+            <GithubLogo size={18} weight="regular" />
+            <span>GitHub Repo</span>
+          </a>
         </>
       }
     />

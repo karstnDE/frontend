@@ -1,0 +1,160 @@
+---
+title: Transaction Types per Day
+---
+
+import { useState } from 'react';
+import { useDashboardData } from '@site/src/components/Dashboard/useDashboardData';
+import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
+import DashboardControlsComponent from '@site/src/components/Dashboard/DashboardControls';
+import DailyStackedChart from '@site/src/components/Dashboard/DailyStackedChart';
+import TopTransactionsTable from '@site/src/components/Dashboard/TopTransactionsTable';
+
+export function DailyTrendsDashboard() {
+  const data = useDashboardData();
+
+  const [controls, setControls] = useState({
+    startDate: '',
+    endDate: '',
+    groupMode: 'token',
+    fullRange: true,
+    showRawTypes: false,
+    clusterThreshold: 0.1,
+  });
+
+  // Show loading state
+  if (data.loading) {
+    return <LoadingSpinner />;
+  }
+
+  // Show error state
+  if (data.error) {
+    return (
+      <div style={{
+        padding: '32px',
+        background: 'var(--ifm-background-surface-color)',
+        border: '1px solid var(--ifm-color-danger)',
+        borderRadius: 'var(--ifm-global-radius)',
+        color: 'var(--ifm-color-danger)',
+      }}>
+        <h3>Error Loading Dashboard</h3>
+        <p>{data.error}</p>
+        <p style={{ fontSize: '14px', color: 'var(--ifm-color-secondary)', marginTop: '16px' }}>
+          Please ensure the analytics data files are available in <code>/analytics/data/</code>
+        </p>
+      </div>
+    );
+  }
+
+  if (!data.dailyStacked || data.dailyStacked.length === 0) {
+    return <div>No daily data available</div>;
+  }
+
+  return (
+    <div style={{ padding: '24px 0' }}>
+      {/* Metadata */}
+      <div style={{
+        padding: '16px 24px',
+        background: 'var(--ifm-background-surface-color)',
+        border: '1px solid var(--ifm-toc-border-color)',
+        borderRadius: 'var(--ifm-global-radius)',
+        marginBottom: '24px',
+        fontSize: '14px',
+        color: 'var(--ifm-color-secondary)',
+      }}>
+        <strong>Treasury Address:</strong> G9XfJoY81n8A9bZKaJFhJYomRrcvFkuJ22em2g8rZuCh
+        <span style={{ margin: '0 16px' }}>•</span>
+        <strong>Total Days:</strong> {data.dailyStacked.length}
+      </div>
+
+      {/* Dashboard Controls */}
+      <DashboardControlsComponent controls={controls} onChange={setControls} />
+
+      {/* Daily Stacked Chart */}
+      <DailyStackedChart data={data.dailyStacked} />
+
+      {/* Top Transactions Table */}
+      <TopTransactionsTable
+        topTransactionsToken={data.topTransactionsToken}
+        topTransactionsType={data.topTransactionsType}
+        topTransactionsPool={data.topTransactionsPool}
+        groupMode={controls.groupMode}
+      />
+    </div>
+  );
+}
+
+# Transaction Types per Day
+
+This dashboard tracks how individual **transaction type families** evolve over time, revealing daily patterns in protocol operations and revenue sources.
+
+## Overview
+
+<DailyTrendsDashboard />
+
+## Understanding the Chart
+
+The stacked area chart provides a time-series view of treasury revenue with the following characteristics:
+
+### Chart Elements
+
+- **X-axis**: Date (chronological)
+- **Y-axis**: Daily revenue in SOL
+- **Stacked Areas**: Each colored area represents a different category (token, type, or pool depending on grouping mode)
+- **Total Height**: The top edge shows total daily revenue across all categories
+
+### Grouping Modes
+
+Switch between different perspectives using the controls:
+
+- **By Token**: See how different token inflows contribute to daily revenue over time
+- **By Type**: Track how transaction types (fees, liquidations, transfers, etc.) evolve
+- **By Pool**: Monitor which liquidity pools drive daily activity
+
+### What to Look For
+
+- **Spikes and Anomalies**: Sudden increases often indicate large liquidations or protocol events
+- **Compositional Shifts**: Changes in the relative height of areas show evolving revenue sources
+- **Trends**: Upward or downward slopes reveal growth or decline patterns
+- **Volatility**: Fluctuation patterns indicate revenue stability or variability
+
+### Interactive Features
+
+- **Click on areas**: Select a specific category to view its top transactions in the table below
+- **Hover**: See detailed breakdown for any day including exact SOL amounts per category
+- **Zoom**: Use the date range controls to focus on specific time periods
+
+## Top Transactions Table
+
+The interactive table below the chart displays:
+- **Default view**: Top transactions across the entire date range
+- **Filtered view**: When you click on a specific area (token/type/pool), see the top transactions for that category
+
+This allows you to investigate the specific events behind daily revenue patterns.
+
+## Use Cases
+
+### Trend Analysis
+- Identify growth periods and their drivers
+- Spot seasonal or cyclical patterns
+- Detect changes in protocol activity levels
+
+### Composition Analysis
+- See which revenue sources are gaining or losing importance
+- Understand protocol diversification over time
+- Track the impact of new features or pools
+
+### Event Investigation
+- Investigate revenue spikes by clicking to see top transactions
+- Correlate revenue patterns with protocol or market events
+- Validate expected outcomes from protocol changes
+
+## Methodology
+
+Daily revenue is calculated from the **realized types attribution system**:
+
+1. Each day's transactions are classified and attributed
+2. Revenue is grouped by the selected dimension (token, type, or pool)
+3. Values are stacked to show composition while maintaining total visibility
+4. All SOL equivalents are calculated using same-day conversion rates
+
+The data maintains 100% attribution accuracy, ensuring the total shown matches actual on-chain treasury inflows.
