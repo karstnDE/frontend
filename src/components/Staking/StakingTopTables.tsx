@@ -27,7 +27,7 @@ function renderTable(title: string, rows: StakingTopEntry[], emptyMessage: strin
                 <td style={{ textAlign: 'left', fontWeight: 600 }}>{index + 1}</td>
                 <td style={{ textAlign: 'left', fontFamily: 'var(--ifm-font-family-monospace)' }}>
                   <a href={`https://solscan.io/account/${row.address}`} target="_blank" rel="noopener noreferrer">
-                    {row.address.slice(0, 4)}…{row.address.slice(-4)}
+                    {row.address.slice(0, 4)}ï¿½{row.address.slice(-4)}
                   </a>
                 </td>
                 <td style={{ textAlign: 'right' }}>{row.amount.toLocaleString(undefined, { maximumFractionDigits: 2 })}</td>
@@ -41,10 +41,13 @@ function renderTable(title: string, rows: StakingTopEntry[], emptyMessage: strin
 }
 
 export default function StakingTopTables({ topStakers, topWithdrawers }: StakingTopTablesProps): React.ReactElement {
+  const formatter = new Intl.NumberFormat(undefined, { maximumFractionDigits: 2 });
+  const safeStakers = topStakers ?? [];
+  const safeWithdrawers = topWithdrawers ?? [];
   return (
     <div className="staking-top-grid">
-      {renderTable('Top Stakers (last 7 days)', topStakers, 'No staking activity recorded in the past week.')}
-      {renderTable('Top Withdrawers (last 7 days)', topWithdrawers, 'No withdrawals recorded in the past week.')}
+      {renderTable('Top Stakers (last 7 days)', safeStakers, 'No staking activity recorded in the past week.')}
+      {renderTable('Top Withdrawers (last 7 days)', safeWithdrawers, 'No withdrawals recorded in the past week.')}
     </div>
   );
-}
+}

@@ -20,6 +20,14 @@ export default function StakingBalanceChart({
   const x = sorted.map((point) => point.date);
   const staked = sorted.map((point) => point.staked);
   const unstaked = sorted.map((point) => point.unstaked);
+  const totals = sorted.map((point) => point.total ?? point.staked + point.unstaked);
+  const hasData = sorted.length > 0;
+  const [minTotal, maxTotal] = hasData
+    ? [Math.min(...totals), Math.max(...totals)]
+    : [0, 0];
+  const padding = hasData ? Math.max(1, (maxTotal - minTotal) * 0.1) : 0;
+  const yRange = hasData ? [Math.max(0, minTotal - padding), maxTotal + padding] : undefined;
+  const latest = hasData ? sorted[sorted.length - 1] : null;
 
   return (
     <div
@@ -37,7 +45,27 @@ export default function StakingBalanceChart({
           Maximum TUNA supply: {maxSupply.toLocaleString()}
         </p>
       )}
-      {sorted.length === 0 ? (
+      {latest && (
+        <div
+          style={{
+            display: 'flex',
+            gap: '16px',
+            marginBottom: '16px',
+            flexWrap: 'wrap',
+          }}
+        >
+          <div className="badge badge--primary" style={{ padding: '12px 16px', fontSize: '14px' }}>
+            <strong>{latest.staked.toLocaleString(undefined, { maximumFractionDigits: 2 })}</strong> staked TUNA
+          </div>
+          <div className="badge badge--info" style={{ padding: '12px 16px', fontSize: '14px' }}>
+            <strong>{latest.unstaked.toLocaleString(undefined, { maximumFractionDigits: 2 })}</strong> unstaked TUNA
+          </div>
+          <div className="badge badge--secondary" style={{ padding: '12px 16px', fontSize: '14px' }}>
+            <strong>{latest.total.toLocaleString(undefined, { maximumFractionDigits: 2 })}</strong> total TUNA
+          </div>
+        </div>
+      )}
+      {!hasData ? (
         <div style={{ padding: '24px', color: 'var(--ifm-color-emphasis-600)' }}>
           No TUNA activity recorded for the selected period.
         </div>
@@ -79,7 +107,7 @@ export default function StakingBalanceChart({
             },
             yaxis: {
               title: 'TUNA tokens',
-              rangemode: 'tozero',
+              ...(yRange ? { range: yRange } : { rangemode: 'tozero' }),
             },
             legend: {
               orientation: 'h',
@@ -93,4 +121,3 @@ export default function StakingBalanceChart({
     </div>
   );
 }
-

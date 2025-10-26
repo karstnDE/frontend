@@ -1,15 +1,15 @@
 {
   "date_range": {
-    "start": "2025-07-27",
+    "start": "2025-07-24",
     "end": "2025-10-25",
-    "days": 91
+    "days": 94
   },
   "totals": {
-    "wsol_direct": 2755.1096653150003,
-    "total_token_records": 1052,
+    "wsol_direct": 2755.1127764350003,
+    "total_token_records": 1053,
     "total_pool_records": 2050,
     "total_pool_type_records": 4936,
-    "total_type_records": 797,
+    "total_type_records": 799,
     "unique_mints": 27,
     "unique_pools": 42,
     "unique_types": 20,
@@ -19,7 +19,7 @@
     {
       "name": "SOL (direct)",
       "mint": "WSOL_DIRECT",
-      "total_sol": 2755.1096653150003
+      "total_sol": 2755.1127764350003
     },
     {
       "name": "USDC",
@@ -198,7 +198,7 @@
       "type": "Others",
       "types": [],
       "label": "Others",
-      "total_sol": 19.512895165666595
+      "total_sol": 19.519117405666595
     }
   ]
 }

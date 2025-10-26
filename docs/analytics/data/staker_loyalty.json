@@ -1,0 +1,153 @@
+{
+  "generated_at": "2025-10-26T22:28:40.915981+00:00",
+  "date_range": {
+    "start": "2025-07-24",
+    "end": "2025-10-25"
+  },
+  "summary": {
+    "total_users": 1749,
+    "compound_only_users": 412,
+    "claim_only_users": 1037,
+    "mixed_users": 300,
+    "total_rewards_sol": 3627.1012118049994,
+    "total_compounded_sol": 192.707821465,
+    "total_claimed_sol": 3434.3933903399993,
+    "compound_rate": 5.312998182620341,
+    "loyalty_score": 23.556317895940538
+  },
+  "user_segments": {
+    "by_behavior": {
+      "compound_only": {
+        "count": 412,
+        "percentage": 23.556317895940538
+      },
+      "claim_only": {
+        "count": 1037,
+        "percentage": 59.29102344196684
+      },
+      "mixed": {
+        "count": 300,
+        "percentage": 17.152658662092623
+      }
+    },
+    "by_reward_size": {
+      "whales": {
+        "label": "Whales (>10 SOL)",
+        "user_count": 17,
+        "avg_compound_rate": 0.22404018289732025,
+        "total_rewards": 3405.3920770429995
+      },
+      "large": {
+        "label": "Large (1-10 SOL)",
+        "user_count": 48,
+        "avg_compound_rate": 0.42434052748504403,
+        "total_rewards": 132.153549293
+      },
+      "medium": {
+        "label": "Medium (0.1-1 SOL)",
+        "user_count": 210,
+        "avg_compound_rate": 0.5162434900918405,
+        "total_rewards": 70.760424868
+      },
+      "small": {
+        "label": "Small (<0.1 SOL)",
+        "user_count": 1472,
+        "avg_compound_rate": 0.31163327303619914,
+        "total_rewards": 18.795160601
+      }
+    }
+  },
+  "weekly_trends": [
+    {
+      "week": "2025-W31",
+      "claim_amount": 46.94660463000004,
+      "compound_amount": 0.0,
+      "total_amount": 46.94660463000004,
+      "compound_rate": 0.0
+    },
+    {
+      "week": "2025-W32",
+      "claim_amount": 284.8348909280002,
+      "compound_amount": 5.148093162000002,
+      "total_amount": 289.98298409000023,
+      "compound_rate": 1.7753087058384847
+    },
+    {
+      "week": "2025-W33",
+      "claim_amount": 341.50480495099947,
+      "compound_amount": 26.359178984000017,
+      "total_amount": 367.8639839349995,
+      "compound_rate": 7.16546879692838
+    },
+    {
+      "week": "2025-W34",
+      "claim_amount": 134.79753462800008,
+      "compound_amount": 15.273572190999998,
+      "total_amount": 150.07110681900008,
+      "compound_rate": 10.177556836054636
+    },
+    {
+      "week": "2025-W35",
+      "claim_amount": 421.12403601699987,
+      "compound_amount": 23.040810393000015,
+      "total_amount": 444.1648464099999,
+      "compound_rate": 5.187445737597049
+    },
+    {
+      "week": "2025-W36",
+      "claim_amount": 60.81152725499997,
+      "compound_amount": 6.277011430000001,
+      "total_amount": 67.08853868499997,
+      "compound_rate": 9.356309666353562
+    },
+    {
+      "week": "2025-W37",
+      "claim_amount": 31.822922953000006,
+      "compound_amount": 8.332589503999996,
+      "total_amount": 40.155512457,
+      "compound_rate": 20.75079856824848
+    },
+    {
+      "week": "2025-W38",
+      "claim_amount": 216.93054747600002,
+      "compound_amount": 7.730286429,
+      "total_amount": 224.660833905,
+      "compound_rate": 3.4408696409757056
+    },
+    {
+      "week": "2025-W39",
+      "claim_amount": 346.47715552499994,
+      "compound_amount": 25.01216293200001,
+      "total_amount": 371.48931845699997,
+      "compound_rate": 6.732942695604094
+    },
+    {
+      "week": "2025-W40",
+      "claim_amount": 341.8066777070001,
+      "compound_amount": 14.901827503,
+      "total_amount": 356.7085052100001,
+      "compound_rate": 4.17759242780798
+    },
+    {
+      "week": "2025-W41",
+      "claim_amount": 1027.8662082430003,
+      "compound_amount": 41.927585047,
+      "total_amount": 1069.7937932900004,
+      "compound_rate": 3.919221191035107
+    },
+    {
+      "week": "2025-W42",
+      "claim_amount": 133.50057225799998,
+      "compound_amount": 10.279261817000007,
+      "total_amount": 143.779834075,
+      "compound_rate": 7.1493070520849455
+    },
+    {
+      "week": "2025-W43",
+      "claim_amount": 45.96990776900001,
+      "compound_amount": 8.425442073000012,
+      "total_amount": 54.39534984200002,
+      "compound_rate": 15.489269022945992
+    }
+  ]
+}

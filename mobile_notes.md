@@ -1,1 +1,0 @@
-This space is for jotting down quick thoughts. Edit and expand as needed.

@@ -1,16 +1,24 @@
 {
-  "generated_at": "2025-10-26T11:04:51.514435+00:00",
+  "generated_at": "2025-10-26T22:27:39.200212+00:00",
   "date_range": {
-    "start": "2025-07-27",
+    "start": "2025-07-24",
     "end": "2025-10-25"
   },
   "summary": {
-    "transactions_scanned": 133837,
-    "staker_unique_addresses": 4745,
+    "transactions_scanned": 140815,
+    "staker_unique_addresses": 4746,
     "daily_active_unique_addresses": 28225
   },
   "stakers": {
     "daily_counts": [
+      {
+        "date": "2025-07-25",
+        "count": 3
+      },
+      {
+        "date": "2025-07-26",
+        "count": 1
+      },
       {
         "date": "2025-07-27",
         "count": 542

@@ -1,0 +1,170 @@
+---
+title: Staker Conviction
+---
+
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
+
+# Staker Conviction
+
+Understanding protocol loyalty through reward behavior analysis.
+
+Stakers can choose to **compound** their rewards (reinvesting back into TUNA) or **claim** them (taking profits). This analysis examines **1,749 stakers who actively managed their rewards** (claimed or compounded) between July 27 - October 25, 2025.
+
+:::info Data Scope
+This represents stakers with observable reward activity in our on-chain data. The total staker population may be larger.
+:::
+
+**Key Insight**: The data reveals a surprising "Inverse Whale Effect" - medium-tier stakers demonstrate the highest conviction, not the largest holders.
+
+<BrowserOnly fallback={<LoadingSpinner />}>
+  {() => {
+    const { useStakerLoyalty } = require('@site/src/hooks/useStakerLoyalty');
+    const {
+      LoyaltyStats,
+      BehaviorPieChart,
+      InverseWhaleChart,
+      WeeklyTrendsChart,
+      BehaviorSegmentsTable,
+    } = require('@site/src/components/Loyalty');
+
+    function StakerConvictionPage() {
+      const { data, loading, error } = useStakerLoyalty();
+
+      if (loading) {
+        return <LoadingSpinner />;
+      }
+
+      if (error || !data) {
+        return (
+          <div className="alert alert--danger" role="alert">
+            <strong>Could not load staker loyalty data.</strong> {error || 'Unknown error'}
+          </div>
+        );
+      }
+
+      const { summary, user_segments, weekly_trends, date_range } = data;
+
+      return (
+        <>
+          <LoyaltyStats summary={summary} />
+
+          <BehaviorPieChart userSegments={user_segments} totalUsers={summary.total_users} />
+
+          <div style={{ marginBottom: '32px' }}>
+            <h3>What This Tells Us</h3>
+            <p>
+              Nearly <strong>60% of stakers never compound their rewards</strong>, treating staking
+              primarily as yield farming rather than long-term investment. However, a dedicated core of{' '}
+              <strong>23.6% (412 users)</strong> exclusively compound, demonstrating strong protocol
+              conviction.
+            </p>
+          </div>
+
+          <InverseWhaleChart userSegments={user_segments} />
+
+          <div style={{ marginBottom: '32px' }}>
+            <h3>Understanding the Paradox</h3>
+            <p>Why do smaller stakers show more loyalty than whales?</p>
+            <ul>
+              <li>
+                <strong>Medium stakers (0.1-1 SOL)</strong>: Core believers, likely community members
+                invested in long-term success
+              </li>
+              <li>
+                <strong>Whales (&gt;10 SOL)</strong>: More profit-oriented, likely professional yield
+                farmers
+              </li>
+              <li>
+                <strong>Small stakers (&lt;0.1 SOL)</strong>: Experimenting, learning the protocol
+              </li>
+            </ul>
+            <p>
+              This pattern suggests your <strong>most loyal community is in the middle tier</strong> -
+              these are the users most aligned with protocol success.
+            </p>
+          </div>
+
+          <WeeklyTrendsChart weeklyTrends={weekly_trends} />
+
+          <div style={{ marginBottom: '32px' }}>
+            <h3>Trend Analysis</h3>
+            <p>
+              The weekly compound rate shows <strong>no clear upward trend</strong>, ranging from 0% to
+              20.8% with an overall average of 5.3%. This suggests current behavior is stable rather than
+              improving, indicating that compound rates reflect established user preferences rather than
+              market conditions.
+            </p>
+          </div>
+
+          <BehaviorSegmentsTable userSegments={user_segments} totalUsers={summary.total_users} />
+
+          <details>
+            <summary>
+              <strong>Methodology</strong>
+            </summary>
+            <div style={{ padding: '16px 0' }}>
+              <h4>How Metrics Are Calculated</h4>
+
+              <p>
+                <strong>Loyalty Score</strong>: Percentage of users who have only compounded rewards
+                (never claimed). These "true believers" demonstrate the highest protocol conviction.
+              </p>
+
+              <p>
+                <strong>Reinvestment Rate</strong>: Percentage of total rewards that were compounded
+                rather than claimed, calculated as:
+              </p>
+              <pre style={{ background: 'var(--ifm-color-emphasis-100)', padding: '12px', borderRadius: '4px' }}>
+                Reinvestment Rate = (Total Compounded SOL / Total Rewards SOL) × 100
+              </pre>
+
+              <p>
+                <strong>User Behavior Segments</strong>:
+              </p>
+              <ul>
+                <li>
+                  <strong>Compound-only</strong>: Users who have never executed a ClaimReward transaction
+                </li>
+                <li>
+                  <strong>Claim-only</strong>: Users who have never executed a CompoundReward transaction
+                </li>
+                <li>
+                  <strong>Mixed</strong>: Users who have executed both ClaimReward and CompoundReward
+                  transactions
+                </li>
+              </ul>
+
+              <p>
+                <strong>Reward Size Tiers</strong>: Users are segmented based on their total rewards
+                earned (compounded + claimed) during the analysis period:
+              </p>
+              <ul>
+                <li>Small: &lt;0.1 SOL</li>
+                <li>Medium: 0.1-1 SOL</li>
+                <li>Large: 1-10 SOL</li>
+                <li>Whales: &gt;10 SOL</li>
+              </ul>
+
+              <h4>Data Source</h4>
+
+              <p>
+                Analysis is based on on-chain transaction data from the DefiTuna staking program,
+                covering the period from <strong>{date_range.start}</strong> to{' '}
+                <strong>{date_range.end}</strong>.
+              </p>
+
+              <p>
+                Reward amounts are extracted from transaction logs (ClaimReward and CompoundReward
+                instructions) and tracked per unique wallet address (fee payer). The data is updated as
+                part of the daily analytics pipeline.
+              </p>
+            </div>
+          </details>
+        </>
+      );
+    }
+
+    return <StakerConvictionPage />;
+  }}
+</BrowserOnly>

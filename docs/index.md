@@ -32,9 +32,9 @@ sidebar_position: 1
   <div class="section-grid">
     <div class="section-card" data-animate>
       <h3><span class="icon ph ph-rocket-launch"></span> Ship the latest dashboard</h3>
-      <p>Run the private pipeline, sync the generated bundle into <code>docs/analytics/</code>, and publish with <code>npm run deploy</code>.</p>
+      <p>Run the private pipeline, sync the generated bundle into <code>static/analytics/</code>, and publish with <code>npm run deploy</code>.</p>
       <ul>
-        <li>Review <code>docs/data/_manifest.json</code> for timestamps.</li>
+        <li>Review <code>static/data/_manifest.json</code> for timestamps.</li>
         <li>Use the Quick Publish script or GitHub Action.</li>
       </ul>
     </div>
@@ -63,7 +63,7 @@ sidebar_position: 1
     <div class="section-card" data-animate>
       <h3><span class="icon ph ph-calendar-check"></span> Daily publish</h3>
       <p>Confirm cache freshness, run the attribution job, sync the <code>build/</code> export, and push to <code>main</code>.</p>
-      <p><strong>Tip:</strong> update <code>docs/data/_manifest.json</code> so the dashboard shows "last updated".</p>
+      <p><strong>Tip:</strong> update <code>static/data/_manifest.json</code> so the dashboard shows "last updated".</p>
     </div>
     <div class="section-card" data-animate>
       <h3><span class="icon ph ph-shield-check"></span> QA workflows</h3>

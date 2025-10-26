@@ -27,6 +27,7 @@ const sidebars: SidebarsConfig = {
       items: [
         'analysis/defituna/staking-apy',
         'analysis/defituna/staked-tuna',
+        'analysis/defituna/staker-conviction',
         {
           type: 'category',
           label: 'Revenue Breakdown',
