@@ -2,330 +2,330 @@
   {
     "pool_id": "7VuKeevbvbQQcxz6N4SNLmuq6PYy4AcGQRDssoqo4t65",
     "pool_label": "Fusion SOL-USDC",
-    "total_sol": 1605.7556786524483,
-    "share_of_total": 0.35100859438512916,
+    "total_sol": 1608.3752211798148,
+    "share_of_total": 0.35079195932138163,
     "types": [
       {
         "type": "fusion_collectprotocolfees",
-        "sol_equivalent": 1275.1394249853329,
-        "share_of_pool": 0.7941055055495311,
-        "share_of_total": 0.2787378572964333
+        "sol_equivalent": 1276.9780357820503,
+        "share_of_pool": 0.793955302821272,
+        "share_of_total": 0.2785131362902749
       },
       {
         "type": "tuna_liquidatetunalppositionfusion",
-        "sol_equivalent": 216.043045540271,
-        "share_of_pool": 0.13454291235736096,
-        "share_of_total": 0.047225718551038895
+        "sol_equivalent": 216.10347850706324,
+        "share_of_pool": 0.13436135776112101,
+        "share_of_total": 0.04713288394610477
       },
       {
         "type": "tuna_liquidatepositionfusion",
         "sol_equivalent": 72.00911394625456,
-        "share_of_pool": 0.04484437757472835,
-        "share_of_total": 0.015740761938581406
+        "share_of_pool": 0.04477134004429182,
+        "share_of_total": 0.01570542609558096
       },
       {
         "type": "tuna_openandincreasetunalppositionfusion",
-        "sol_equivalent": 29.896950595014818,
-        "share_of_pool": 0.018618617385245288,
-        "share_of_total": 0.006535294717789478
+        "sol_equivalent": 30.15605167453559,
+        "share_of_pool": 0.018749388374943245,
+        "share_of_total": 0.006577134684123877
       },
       {
         "type": "tuna_openpositionwithliquidityfusion",
         "sol_equivalent": 6.111856590234018,
-        "share_of_pool": 0.003806218263143926,
-        "share_of_total": 0.0013360153224691571
-      },
-      {
-        "type": "tuna_collectandcompoundfeesfusion",
-        "sol_equivalent": 3.232515529216935,
-        "share_of_pool": 0.0020130805527835125,
-        "share_of_total": 0.0007066085752165796
+        "share_of_pool": 0.0038000191185180647,
+        "share_of_total": 0.0013330161520436615
       },
       {
         "type": "tuna_increasetunalppositionfusion",
-        "sol_equivalent": 2.999228219111515,
-        "share_of_pool": 0.0018677986065903066,
-        "share_of_total": 0.0006556133634937664
+        "sol_equivalent": 3.45710549850345,
+        "share_of_pool": 0.0021494396661790828,
+        "share_of_total": 0.000754006151942057
+      },
+      {
+        "type": "tuna_collectandcompoundfeesfusion",
+        "sol_equivalent": 3.2360359341609954,
+        "share_of_pool": 0.002011990667070349,
+        "share_of_total": 0.0007057901482379413
       },
       {
         "type": "TunaOpenandincreasetunaspotpositionfusion",
         "sol_equivalent": 0.2069479493906953,
-        "share_of_pool": 0.00012887885258133804,
-        "share_of_total": 4.523758489054374e-05
+        "share_of_pool": 0.00012866894905213085,
+        "share_of_total": 4.5136032741820014e-05
       },
       {
         "type": "tuna_addliquidityfusion",
         "sol_equivalent": 0.054786584790840274,
-        "share_of_pool": 3.411887967714816e-05,
-        "share_of_total": 1.1976019997471127e-05
+        "share_of_pool": 3.406331064380106e-05,
+        "share_of_total": 1.1949135481711848e-05
       },
       {
         "type": "TunaIncreasetunaspotpositionfusion",
         "sol_equivalent": 0.04170578254139638,
-        "share_of_pool": 2.5972682579205273e-05,
-        "share_of_total": 9.116634804537975e-06
+        "share_of_pool": 2.5930381164914573e-05,
+        "share_of_total": 9.096169214790635e-06
       },
       {
         "type": "TunaLiquidatetunaspotpositionfusion",
         "sol_equivalent": 0.02010272128971162,
-        "share_of_pool": 1.2519165622121195e-05,
-        "share_of_total": 4.394334727895392e-06
+        "share_of_pool": 1.2498775798700368e-05,
+        "share_of_total": 4.384470051544768e-06
       },
       {
         "type": "TunaDecreasetunaspotpositionfusion",
         "sol_equivalent": 2.09e-07,
-        "share_of_pool": 1.30156787099388e-10,
-        "share_of_total": 4.5686150889440694e-11
+        "share_of_pool": 1.2994480221268841e-10,
+        "share_of_total": 4.5583591771818375e-11
       }
     ]
   },
   {
     "pool_id": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
     "pool_label": "Orca (SOL\u2013USDC)",
-    "total_sol": 1491.2391644809118,
-    "share_of_total": 0.3259759688072651,
+    "total_sol": 1492.3532127447538,
+    "share_of_total": 0.32548717525894005,
     "types": [
       {
         "type": "tuna_liquidatetunalppositionorca",
-        "sol_equivalent": 746.9782848789679,
-        "share_of_pool": 0.5009111232261559,
-        "share_of_total": 0.16328498867998154
+        "sol_equivalent": 746.9941208019319,
+        "share_of_pool": 0.500547802237817,
+        "share_of_total": 0.16292189023245762
       },
       {
         "type": "openpositionwithliquidity",
-        "sol_equivalent": 414.0265174021485,
-        "share_of_pool": 0.27763924611399793,
-        "share_of_total": 0.09050372223092919
+        "sol_equivalent": 415.1214165264969,
+        "share_of_pool": 0.2781656601006679,
+        "share_of_total": 0.09053935496020483
       },
       {
         "type": "liquidate_position_orca_liquidation",
         "sol_equivalent": 264.3339676305358,
-        "share_of_pool": 0.1772579301339288,
-        "share_of_total": 0.05778182550417795
+        "share_of_pool": 0.1771256063062776,
+        "share_of_total": 0.0576521132626574
       },
       {
         "type": "liquidate_position_orca_sl_tp",
         "sol_equivalent": 39.0681381244355,
-        "share_of_pool": 0.02619843889228513,
-        "share_of_total": 0.008540061499150578
+        "share_of_pool": 0.02617888164195453,
+        "share_of_total": 0.008520890237077904
       },
       {
         "type": "liquidity_add_tuna",
         "sol_equivalent": 18.02507134872267,
-        "share_of_pool": 0.0120873108606942,
-        "share_of_total": 0.003940172868089369
+        "share_of_pool": 0.012078287629756728,
+        "share_of_total": 0.003931327722574516
       },
       {
         "type": "tuna_addliquidityorca",
         "sol_equivalent": 4.8250617825345925,
-        "share_of_pool": 0.0032356055939653096,
-        "share_of_total": 0.0010547296681710481
+        "share_of_pool": 0.0032331902001003377,
+        "share_of_total": 0.0010523619453055462
       },
       {
         "type": "compound_fees_tuna",
-        "sol_equivalent": 3.982123313566695,
-        "share_of_pool": 0.002670345178972576,
-        "share_of_total": 0.0008704683567653951
+        "sol_equivalent": 3.9854365300965005,
+        "share_of_pool": 0.0026705718834259336,
+        "share_of_total": 0.0008692368986622545
       }
     ]
   },
   {
     "pool_id": "CeaZcxBNLpJWtxzt58qQmfMBtJY8pQLvursXTJYGQpbN",
     "pool_label": "Orca (SOL\u2013CBBTC)",
-    "total_sol": 292.8783375229967,
-    "share_of_total": 0.06402145416423047,
+    "total_sol": 292.887092960778,
+    "share_of_total": 0.06387964440554413,
     "types": [
       {
         "type": "tuna_liquidatetunalppositionorca",
         "sol_equivalent": 237.74636883203377,
-        "share_of_pool": 0.8117581205997048,
-        "share_of_total": 0.05196993531041586
+        "share_of_pool": 0.8117338542599131,
+        "share_of_total": 0.051853269962065025
       },
       {
         "type": "openpositionwithliquidity",
-        "sol_equivalent": 33.78000944618288,
-        "share_of_pool": 0.11533802647159075,
-        "share_of_total": 0.007384108175143747
+        "sol_equivalent": 33.78789678007217,
+        "share_of_pool": 0.11536150821298527,
+        "share_of_total": 0.007369252122732757
       },
       {
         "type": "liquidate_position_orca_liquidation",
         "sol_equivalent": 18.479574952145594,
-        "share_of_pool": 0.06309642122539905,
-        "share_of_total": 0.004039524639408864
+        "share_of_pool": 0.06309453504876805,
+        "share_of_total": 0.0040304564628484444
       },
       {
         "type": "liquidate_position_orca_sl_tp",
         "sol_equivalent": 2.5361947041979356,
-        "share_of_pool": 0.008659550329490636,
-        "share_of_total": 0.0005543970045023315
+        "share_of_pool": 0.008659291464706403,
+        "share_of_total": 0.0005531524595694084
       },
       {
         "type": "compound_fees_tuna",
-        "sol_equivalent": 0.14069599386902962,
-        "share_of_pool": 0.000480390578077432,
-        "share_of_total": 3.075530337531249e-05
+        "sol_equivalent": 0.1415640977610522,
+        "share_of_pool": 0.00048334017156573635,
+        "share_of_total": 3.087559828653393e-05
       },
       {
         "type": "liquidity_add_tuna",
         "sol_equivalent": 0.12234397456174821,
-        "share_of_pool": 0.0004177296811927643,
-        "share_of_total": 2.6743661637521163e-05
+        "share_of_pool": 0.000417717193765626,
+        "share_of_total": 2.6683625799829964e-05
       },
       {
         "type": "tuna_addliquidityorca",
         "sol_equivalent": 0.07314962000572968,
-        "share_of_pool": 0.0002497611145446563,
-        "share_of_total": 1.5990069746827828e-05
+        "share_of_pool": 0.0002497536482958828,
+        "share_of_total": 1.5954174242128325e-05
       }
     ]
   },
   {
     "pool_id": "C9U2Ksk6KKWvLEeo5yUQ7Xu46X7NzeBJtd9PBfuXaUSM",
     "pool_label": "Orca (SOL\u2013FARTCOIN )",
-    "total_sol": 254.801275217,
-    "share_of_total": 0.05569803591572138,
+    "total_sol": 254.80733000400002,
+    "share_of_total": 0.05557432206396815,
     "types": [
       {
         "type": "liquidate_position_orca_liquidation",
         "sol_equivalent": 168.37282774359397,
-        "share_of_pool": 0.6608005693856919,
-        "share_of_total": 0.036805293846773404
+        "share_of_pool": 0.6607848672993466,
+        "share_of_total": 0.036722671030290345
       },
       {
         "type": "tuna_liquidatetunalppositionorca",
-        "sol_equivalent": 68.81738210357112,
-        "share_of_pool": 0.27008256550114673,
-        "share_of_total": 0.015043068433493043
+        "sol_equivalent": 68.82278497057112,
+        "share_of_pool": 0.270097351475292,
+        "share_of_total": 0.015010477199512684
       },
       {
         "type": "openpositionwithliquidity",
         "sol_equivalent": 12.353257634055419,
-        "share_of_pool": 0.048481930176898995,
-        "share_of_total": 0.0027003482882564166
+        "share_of_pool": 0.04848077813876663,
+        "share_of_total": 0.0026942863781956035
       },
       {
         "type": "liquidate_position_orca_sl_tp",
         "sol_equivalent": 3.877537560095553,
-        "share_of_pool": 0.015217889144366607,
-        "share_of_total": 0.0008476065361243978
+        "share_of_pool": 0.015217527533586583,
+        "share_of_total": 0.0008457037761688437
       },
       {
         "type": "liquidity_add_tuna",
         "sol_equivalent": 0.8917044754827054,
-        "share_of_pool": 0.0034996075852575326,
-        "share_of_total": 0.000194921268974605
+        "share_of_pool": 0.0034995244268236207,
+        "share_of_total": 0.00019448369756701946
       },
       {
         "type": "compound_fees_tuna",
-        "sol_equivalent": 0.36028042122183107,
-        "share_of_pool": 0.0014139663191049588,
-        "share_of_total": 7.875514682512835e-05
+        "sol_equivalent": 0.36093234122183104,
+        "share_of_pool": 0.0014164912022592328,
+        "share_of_total": 7.872053827513206e-05
       },
       {
         "type": "tuna_addliquidityorca",
         "sol_equivalent": 0.1282852789794136,
-        "share_of_pool": 0.0005034718875333736,
-        "share_of_total": 2.804239527438988e-05
+        "share_of_pool": 0.0005034599239252645,
+        "share_of_total": 2.7979443958523553e-05
       }
     ]
   },
   {
     "pool_id": "HsQGWEh3ib6w59rBh5n1jXmi8VXFBqKEjxozL6PGfcgb",
     "pool_label": "Orca (SOL\u2013USELESS)",
-    "total_sol": 171.226821651,
-    "share_of_total": 0.03742915985773654,
+    "total_sol": 172.06571664999998,
+    "share_of_total": 0.037528102323918525,
     "types": [
       {
         "type": "liquidate_position_orca_liquidation",
         "sol_equivalent": 102.3655522339162,
-        "share_of_pool": 0.5978359654573333,
-        "share_of_total": 0.02237649791980679
+        "share_of_pool": 0.5949212558254046,
+        "share_of_total": 0.022326265763289888
       },
       {
         "type": "tuna_liquidatetunalppositionorca",
-        "sol_equivalent": 36.809263047540774,
-        "share_of_pool": 0.2149736980025629,
-        "share_of_total": 0.008046284907746705
+        "sol_equivalent": 37.05362623543269,
+        "share_of_pool": 0.21534578158183432,
+        "share_of_total": 0.008081518526227287
       },
       {
         "type": "openpositionwithliquidity",
-        "sol_equivalent": 24.24322394193446,
-        "share_of_pool": 0.14158543450247402,
-        "share_of_total": 0.005299423861520186
+        "sol_equivalent": 24.758503723272085,
+        "share_of_pool": 0.14388981259778508,
+        "share_of_total": 0.005399911610539139
       },
       {
         "type": "liquidate_position_orca_sl_tp",
         "sol_equivalent": 4.555388145348904,
-        "share_of_pool": 0.026604407542142217,
-        "share_of_total": 0.0009957806228152127
+        "share_of_pool": 0.026474699516203157,
+        "share_of_total": 0.0009935452324390684
       },
       {
         "type": "liquidity_add_tuna",
-        "sol_equivalent": 2.0998083497148015,
-        "share_of_pool": 0.012263314412240264,
-        "share_of_total": 0.00045900555552142526
+        "sol_equivalent": 2.1529369912898644,
+        "share_of_pool": 0.012512294913862288,
+        "share_of_total": 0.0004695626838344692
       },
       {
         "type": "compound_fees_tuna",
-        "sol_equivalent": 0.8691067032086611,
-        "share_of_pool": 0.005075762633614156,
-        "share_of_total": 0.00018998153101347008
+        "sol_equivalent": 0.8952300914040618,
+        "share_of_pool": 0.005202838245953756,
+        "share_of_total": 0.0001952526460689493
       },
       {
         "type": "tuna_addliquidityorca",
         "sol_equivalent": 0.28447922933617825,
-        "share_of_pool": 0.0016614174496330542,
-        "share_of_total": 6.218545931274854e-05
+        "share_of_pool": 0.0016533173189569154,
+        "share_of_total": 6.204586151972175e-05
       }
     ]
   },
   {
     "pool_id": "FwewVm8u6tFPGewAyHmWAqad9hmF7mvqxK4mJ7iNqqGC",
     "pool_label": "Orca (SOL\u2013USDT)",
-    "total_sol": 150.0721464087649,
-    "share_of_total": 0.03280487428293334,
+    "total_sol": 150.82474503676488,
+    "share_of_total": 0.03289537610930373,
     "types": [
       {
         "type": "tuna_liquidatetunalppositionorca",
         "sol_equivalent": 86.0801130195643,
-        "share_of_pool": 0.5735915363341323,
-        "share_of_total": 0.018816598239195802
+        "share_of_pool": 0.5707293786479234,
+        "share_of_total": 0.018774357567252663
       },
       {
         "type": "openpositionwithliquidity",
-        "sol_equivalent": 33.0818944886587,
-        "share_of_pool": 0.22043993692574096,
-        "share_of_total": 0.007231504417786688
+        "sol_equivalent": 33.10353016481642,
+        "share_of_pool": 0.21948341538218505,
+        "share_of_total": 0.007219989498751517
       },
       {
         "type": "liquidate_position_orca_liquidation",
         "sol_equivalent": 25.235107589572678,
-        "share_of_pool": 0.16815317294681428,
-        "share_of_total": 0.005516243698796591
+        "share_of_pool": 0.16731410739942834,
+        "share_of_total": 0.005503860491296634
+      },
+      {
+        "type": "liquidity_add_tuna",
+        "sol_equivalent": 3.048999623249621,
+        "share_of_pool": 0.020215513193848927,
+        "share_of_total": 0.0006649969097542523
       },
       {
         "type": "liquidate_position_orca_sl_tp",
         "sol_equivalent": 2.970738880980594,
-        "share_of_pool": 0.019795404757448645,
-        "share_of_total": 0.0006493857644478834
-      },
-      {
-        "type": "liquidity_add_tuna",
-        "sol_equivalent": 2.3215876111636633,
-        "share_of_pool": 0.015469810132788718,
-        "share_of_total": 0.0005074851765869822
+        "share_of_pool": 0.019696627899198172,
+        "share_of_total": 0.0006479279828291289
       },
       {
         "type": "compound_fees_tuna",
-        "sol_equivalent": 0.2896977138457176,
-        "share_of_pool": 0.0019303896211135814,
-        "share_of_total": 6.332618883771036e-05
+        "sol_equivalent": 0.2932486536020408,
+        "share_of_pool": 0.0019443006751349641,
+        "share_of_total": 6.395850197813781e-05
       },
       {
         "type": "tuna_addliquidityorca",
         "sol_equivalent": 0.09300710497924783,
-        "share_of_pool": 0.0006197492819614645,
-        "share_of_total": 2.0330797281684053e-05
+        "share_of_pool": 0.0006166568022811941,
+        "share_of_total": 2.0285157441400425e-05
       }
     ]
   },
@@ -333,199 +333,199 @@
     "pool_id": "unknown_pool",
     "pool_label": "Other / Not Applicable",
     "total_sol": 146.16890529802802,
-    "share_of_total": 0.03195164910425873,
+    "share_of_total": 0.031879922051860715,
     "types": [
       {
         "type": "token_transfer",
         "sol_equivalent": 145.99796071999998,
         "share_of_pool": 0.9988304997038905,
-        "share_of_total": 0.03191428164117012
+        "share_of_total": 0.03184263847358112
       },
       {
         "type": "fusion_collectprotocolfees",
         "sol_equivalent": 0.1699504691617422,
         "share_of_pool": 0.0011626991993627185,
-        "share_of_total": 3.715015683184015e-05
+        "share_of_total": 3.7066759845444324e-05
       },
       {
         "type": "tuna_liquidatetunalppositionfusion",
         "sol_equivalent": 0.0005746438512359635,
         "share_of_pool": 3.931368645501623e-06,
-        "share_of_total": 1.2561371146055282e-07
+        "share_of_total": 1.2533172597572098e-07
       },
       {
         "type": "tuna_collectandcompoundfeesfusion",
         "sol_equivalent": 0.0004194650150648045,
         "share_of_pool": 2.8697281012643907e-06,
-        "share_of_total": 9.169254531623049e-08
+        "share_of_total": 9.148670817834303e-08
       }
     ]
   },
   {
     "pool_id": "AXB9KoFBT4ZxJgc4bHMYDgSkxjox6JuL3bbLBeL8LdSJ",
     "pool_label": "Fusion SOL-USDC",
-    "total_sol": 136.5129767586853,
-    "share_of_total": 0.02984092083523449,
+    "total_sol": 136.59896983197038,
+    "share_of_total": 0.02979268745105967,
     "types": [
       {
         "type": "tuna_liquidatetunalppositionfusion",
         "sol_equivalent": 86.38408878724157,
-        "share_of_pool": 0.6327903093047569,
-        "share_of_total": 0.018883045525266796
+        "share_of_pool": 0.6323919491743031,
+        "share_of_total": 0.018840655688316423
       },
       {
         "type": "fusion_collectprotocolfees",
-        "sol_equivalent": 28.987168935784368,
-        "share_of_pool": 0.21234002527851353,
-        "share_of_total": 0.006336421884487812
+        "sol_equivalent": 29.07292192839161,
+        "share_of_pool": 0.21283412286457246,
+        "share_of_total": 0.0063409005014246405
       },
       {
         "type": "tuna_liquidatepositionfusion",
         "sol_equivalent": 18.214761525820084,
-        "share_of_pool": 0.13342879159406515,
-        "share_of_total": 0.0039816380070995
+        "share_of_pool": 0.13334479424131793,
+        "share_of_total": 0.003972699778057446
       },
       {
         "type": "tuna_openandincreasetunalppositionfusion",
         "sol_equivalent": 1.9068409400385882,
-        "share_of_pool": 0.013968202769538317,
-        "share_of_total": 0.0004168240330562961
+        "share_of_pool": 0.013959409374640104,
+        "share_of_total": 0.00041588832050004496
       },
       {
         "type": "tuna_openpositionwithliquidityfusion",
         "sol_equivalent": 0.8480629454673402,
-        "share_of_pool": 0.006212324759179967,
-        "share_of_total": 0.00018538149134145654
+        "share_of_pool": 0.00620841391783948,
+        "share_of_total": 0.00018496533542100048
       },
       {
         "type": "tuna_increasetunalppositionfusion",
-        "sol_equivalent": 0.05405538925882609,
-        "share_of_pool": 0.00039597253347115914,
-        "share_of_total": 1.1816185024240099e-05
+        "sol_equivalent": 0.05429546993665485,
+        "share_of_pool": 0.0003974808155833342,
+        "share_of_total": 1.1842021706466564e-05
       },
       {
         "type": "TunaIncreasetunaspotpositionfusion",
         "sol_equivalent": 0.051567355927671144,
-        "share_of_pool": 0.00037774691572968206,
-        "share_of_total": 1.1272315808043434e-05
+        "share_of_pool": 0.0003775091129245254,
+        "share_of_total": 1.1247011011287176e-05
       },
       {
         "type": "TunaOpenandincreasetunaspotpositionfusion",
         "sol_equivalent": 0.029740006586892007,
-        "share_of_pool": 0.00021785479514862215,
-        "share_of_total": 6.5009876956062605e-06
+        "share_of_pool": 0.000217717649140949,
+        "share_of_total": 6.486393873435764e-06
       },
       {
         "type": "TunaLiquidatetunaspotpositionfusion",
         "sol_equivalent": 0.023594338207999967,
-        "share_of_pool": 0.0001728358634337584,
-        "share_of_total": 5.157581318216183e-06
+        "share_of_pool": 0.0001727270581690567,
+        "share_of_total": 5.146003258371709e-06
       },
       {
         "type": "tuna_collectandcompoundfeesfusion",
         "sol_equivalent": 0.013096534351964336,
-        "share_of_pool": 9.593618616283745e-05,
-        "share_of_total": 2.8628241365195508e-06
+        "share_of_pool": 9.58757915090744e-05,
+        "share_of_total": 2.8563974905528142e-06
       }
     ]
   },
   {
     "pool_id": "6a3m2EgFFKfsFuQtP4LJJXPcAe3TQYXNyHUjjZpUxYgd",
     "pool_label": "Orca (SOL\u2013JLP)",
-    "total_sol": 103.28370642075411,
-    "share_of_total": 0.02257720093760415,
+    "total_sol": 103.28377414275411,
+    "share_of_total": 0.022526533000842074,
     "types": [
       {
         "type": "liquidate_position_orca_liquidation",
         "sol_equivalent": 83.8048439480977,
-        "share_of_pool": 0.8114043042442338,
-        "share_of_total": 0.018319238018558958
+        "share_of_pool": 0.8114037722156286,
+        "share_of_total": 0.018278113851823107
       },
       {
         "type": "tuna_liquidatetunalppositionorca",
         "sol_equivalent": 11.784896871134709,
-        "share_of_pool": 0.11410218784292794,
-        "share_of_total": 0.0025761080223500377
+        "share_of_pool": 0.11410211302741671,
+        "share_of_total": 0.002570325014577915
       },
       {
         "type": "openpositionwithliquidity",
         "sol_equivalent": 7.002258636920728,
-        "share_of_pool": 0.0677963531672182,
-        "share_of_total": 0.001530651888293061
+        "share_of_pool": 0.0677963087139179,
+        "share_of_total": 0.0015272157855793485
       },
       {
         "type": "liquidate_position_orca_sl_tp",
         "sol_equivalent": 0.477140798079788,
-        "share_of_pool": 0.0046197102584218455,
-        "share_of_total": 0.0001043001267779012
+        "share_of_pool": 0.004619707229330193,
+        "share_of_total": 0.00010406598735573528
       },
       {
         "type": "compound_fees_tuna",
-        "sol_equivalent": 0.1759780332775404,
-        "share_of_pool": 0.0017038315081436591,
-        "share_of_total": 3.846774632318051e-05
+        "sol_equivalent": 0.1760457552775404,
+        "share_of_pool": 0.0017044860796258084,
+        "share_of_total": 3.8396161922166704e-05
       },
       {
         "type": "tuna_addliquidityorca",
         "sol_equivalent": 0.025058813296489218,
-        "share_of_pool": 0.00024262116615379162,
-        "share_of_total": 5.477706819969996e-06
+        "share_of_pool": 0.00024262100706984305,
+        "share_of_total": 5.465410122456358e-06
       },
       {
         "type": "liquidity_add_tuna",
         "sol_equivalent": 0.013529319947161498,
-        "share_of_pool": 0.00013099181290073144,
-        "share_of_total": 2.9574284810408614e-06
+        "share_of_pool": 0.0001309917270108845,
+        "share_of_total": 2.950789461347986e-06
       }
     ]
   },
   {
     "pool_id": "9vNKzrrHAjqjuTGLjCBo9Ai4edMYgP9dsG4tFZ2hF251",
     "pool_label": "Orca (GP\u2013USDC)",
-    "total_sol": 58.2756335324996,
-    "share_of_total": 0.012738705199729791,
+    "total_sol": 58.289189229678286,
+    "share_of_total": 0.012713065103138408,
     "types": [
       {
         "type": "liquidate_position_orca_liquidation",
         "sol_equivalent": 39.82502841354633,
-        "share_of_pool": 0.6833907415409977,
-        "share_of_total": 0.008705513192715505
+        "share_of_pool": 0.6832318126200524,
+        "share_of_total": 0.008685970514373987
       },
       {
         "type": "openpositionwithliquidity",
         "sol_equivalent": 8.542639852781596,
-        "share_of_pool": 0.14659025282011687,
-        "share_of_total": 0.0018673700158293274
+        "share_of_pool": 0.14655616188313803,
+        "share_of_total": 0.0018631780272864253
       },
       {
         "type": "tuna_liquidatetunalppositionorca",
         "sol_equivalent": 4.290352279496074,
-        "share_of_pool": 0.07362171836541936,
-        "share_of_total": 0.0009378453665546099
+        "share_of_pool": 0.07360459694491026,
+        "share_of_total": 0.0009357400328509064
       },
       {
         "type": "liquidate_position_orca_sl_tp",
         "sol_equivalent": 4.04270831492788,
-        "share_of_pool": 0.06937218988229982,
-        "share_of_total": 0.0008837118759702951
+        "share_of_pool": 0.06935605672946145,
+        "share_of_total": 0.0008817280644986041
       },
       {
         "type": "liquidity_add_tuna",
-        "sol_equivalent": 1.1204131953008014,
-        "share_of_pool": 0.0192261006424917,
-        "share_of_total": 0.0002449156282250373
+        "sol_equivalent": 1.1322932964895005,
+        "share_of_pool": 0.019425442546951513,
+        "share_of_total": 0.0002469569157566694
       },
       {
         "type": "compound_fees_tuna",
-        "sol_equivalent": 0.3686522177192988,
-        "share_of_pool": 0.006326009609379983,
-        "share_of_total": 8.058517150454941e-05
+        "sol_equivalent": 0.37032781370928347,
+        "share_of_pool": 0.006353284693154196,
+        "share_of_total": 8.076972192284202e-05
       },
       {
         "type": "tuna_addliquidityorca",
         "sol_equivalent": 0.08583925872762163,
-        "share_of_pool": 0.0014729871392946787,
-        "share_of_total": 1.8763948930468233e-05
+        "share_of_pool": 0.001472644582332191,
+        "share_of_total": 1.8721826448973214e-05
       }
     ]
   }
