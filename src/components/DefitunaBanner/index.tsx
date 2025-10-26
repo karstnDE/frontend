@@ -34,9 +34,11 @@ export default function DefitunaBanner(): JSX.Element | null {
     loadSummary();
   }, []);
 
-  // Only show banner on DefiTuna pages (check if page ID contains 'defituna')
-  const isDefitunaPage = metadata.id?.toLowerCase().includes('defituna');
-  if (!isDefitunaPage) {
+  // Only show banner on DefiTuna + usage analytics pages
+  const id = metadata.id?.toLowerCase() ?? '';
+  const isDefitunaPage = id.includes('defituna');
+  const isUsagePage = id.includes('usage-statistics');
+  if (!isDefitunaPage && !isUsagePage) {
     return null;
   }
 

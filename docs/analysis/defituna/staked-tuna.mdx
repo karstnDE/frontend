@@ -1,0 +1,50 @@
+---
+title: TUNA Treasury Allocation
+---
+
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
+
+# TUNA Treasury Allocation
+
+<BrowserOnly fallback={<LoadingSpinner />}>
+  {() => {
+    const StakingBalanceChart = require('@site/src/components/Staking/StakingBalanceChart').default;
+    const StakingTopTables = require('@site/src/components/Staking/StakingTopTables').default;
+    const { useStakingMetrics } = require('@site/src/hooks/useStakingMetrics');
+
+    function DefitunaStakedTunaPage() {
+      const { data, loading, error } = useStakingMetrics();
+
+      if (loading) {
+        return <LoadingSpinner />;
+      }
+
+      if (error || !data) {
+        return (
+          <div className="alert alert--danger" role="alert">
+            <strong>Could not load staking metrics.</strong> {error || 'Unknown error'}
+          </div>
+        );
+      }
+
+      const { daily, top_stakers_7d, top_withdrawers_7d, supply } = data;
+
+      return (
+        <>
+          <p>
+            The DefiTuna treasury accumulates TUNA tokens through protocol operations. Some of these tokens remain liquid in
+            the treasury while a portion is locked in staking positions to compound rewards. The chart below splits the current
+            holdings into staked and unstaked segments so you can see how the treasury allocates its TUNA balance over time.
+          </p>
+
+          <StakingBalanceChart data={daily} maxSupply={supply?.max} />
+
+          <StakingTopTables topStakers={top_stakers_7d} topWithdrawers={top_withdrawers_7d} />
+        </>
+      );
+    }
+
+    return <DefitunaStakedTunaPage />;
+  }}
+</BrowserOnly>

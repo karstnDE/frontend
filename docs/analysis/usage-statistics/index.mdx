@@ -1,0 +1,81 @@
+---
+id: usage-statistics-overview
+title: Usage Statistics
+---
+
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
+
+# Usage Statistics
+
+<BrowserOnly fallback={<LoadingSpinner />}>
+  {() => {
+    const UsageTimeSeriesChart = require('@site/src/components/Usage/UsageTimeSeriesChart').default;
+    const UsageTopAddresses = require('@site/src/components/Usage/UsageTopAddresses').default;
+    const { useUsageMetrics } = require('@site/src/hooks/useUsageMetrics');
+
+    function UsageStatisticsPage() {
+      const { data, loading, error } = useUsageMetrics();
+
+      if (loading) {
+        return <LoadingSpinner />;
+      }
+
+      if (error || !data) {
+        return (
+          <div className="alert alert--danger" role="alert">
+            <strong>Could not load usage metrics.</strong> {error || 'Unknown error'}
+          </div>
+        );
+      }
+
+      const { summary, daily_users, weekly_users } = data;
+
+      return (
+        <>
+          <p>
+            Usage metrics capture how the DefiTuna community interacts with the protocol. We track stakers who manage
+            their positions, daily active users who trigger fee-generating actions, and the rolling seven day active set
+            to highlight sustained participation.
+          </p>
+          <div className="usage-summary-grid">
+            <div className="usage-summary-card">
+              <h3>Transactions scanned</h3>
+              <p>{summary.transactions_scanned.toLocaleString()}</p>
+            </div>
+            <div className="usage-summary-card">
+              <h3>Unique stakers</h3>
+              <p>{summary.staker_unique_addresses.toLocaleString()}</p>
+            </div>
+            <div className="usage-summary-card">
+              <h3>Daily active users</h3>
+              <p>{summary.daily_active_unique_addresses.toLocaleString()}</p>
+            </div>
+          </div>
+
+          <UsageTimeSeriesChart
+            title="Daily Active Users (rolling view preview)"
+            data={daily_users.daily_counts}
+            yAxisLabel="Daily users"
+            description="This curve tracks the number of distinct wallets that executed fee-generating actions each day. Head to the dedicated pages for stakers and daily/weekly actives for deeper dives."
+          />
+
+          <UsageTimeSeriesChart
+            title="Weekly Active Users (7-day union)"
+            data={weekly_users.rolling_counts}
+            yAxisLabel="Active wallets (7-day)"
+            description="Weekly actives measure the union of addresses active within the trailing seven days. The chart helps identify sustained protocol use beyond single-day spikes."
+          />
+
+          <UsageTopAddresses
+            title="Top Daily Users (overall period)"
+            rows={daily_users.top_wallets}
+            description="Addresses ranked by the number of distinct days they executed fee-generating transactions."
+          />
+        </>
+      );
+    }
+
+    return <UsageStatisticsPage />;
+  }}
+</BrowserOnly>

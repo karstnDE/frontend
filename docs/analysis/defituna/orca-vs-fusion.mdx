@@ -2,86 +2,8 @@
 title: Orca vs. Fusion
 ---
 
-import { useState } from 'react';
-import { useDashboardData } from '@site/src/components/Dashboard/useDashboardData';
+import BrowserOnly from '@docusaurus/BrowserOnly';
 import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
-import DashboardControlsComponent from '@site/src/components/Dashboard/DashboardControls';
-import CumulativeChart from '@site/src/components/Dashboard/CumulativeChart';
-import TopTransactionsTable from '@site/src/components/Dashboard/TopTransactionsTable';
-
-export function CumulativeRevenueDashboard() {
-  const data = useDashboardData();
-
-  const [controls, setControls] = useState({
-    startDate: '',
-    endDate: '',
-    groupMode: 'token',
-    fullRange: true,
-    showRawTypes: false,
-    clusterThreshold: 0.1,
-  });
-
-  // Show loading state
-  if (data.loading) {
-    return <LoadingSpinner />;
-  }
-
-  // Show error state
-  if (data.error) {
-    return (
-      <div style={{
-        padding: '32px',
-        background: 'var(--ifm-background-surface-color)',
-        border: '1px solid var(--ifm-color-danger)',
-        borderRadius: 'var(--ifm-global-radius)',
-        color: 'var(--ifm-color-danger)',
-      }}>
-        <h3>Error Loading Dashboard</h3>
-        <p>{data.error}</p>
-        <p style={{ fontSize: '14px', color: 'var(--ifm-color-secondary)', marginTop: '16px' }}>
-          Please ensure the analytics data files are available in <code>/analytics/data/</code>
-        </p>
-      </div>
-    );
-  }
-
-  if (!data.dailyStacked || data.dailyStacked.length === 0) {
-    return <div>No cumulative data available</div>;
-  }
-
-  return (
-    <div style={{ padding: '24px 0' }}>
-      {/* Metadata */}
-      <div style={{
-        padding: '16px 24px',
-        background: 'var(--ifm-background-surface-color)',
-        border: '1px solid var(--ifm-toc-border-color)',
-        borderRadius: 'var(--ifm-global-radius)',
-        marginBottom: '24px',
-        fontSize: '14px',
-        color: 'var(--ifm-color-secondary)',
-      }}>
-        <strong>Treasury Address:</strong> G9XfJoY81n8A9bZKaJFhJYomRrcvFkuJ22em2g8rZuCh
-        <span style={{ margin: '0 16px' }}>•</span>
-        <strong>Total Days:</strong> {data.dailyStacked.length}
-      </div>
-
-      {/* Dashboard Controls */}
-      <DashboardControlsComponent controls={controls} onChange={setControls} />
-
-      {/* Cumulative Revenue Chart */}
-      <CumulativeChart data={data.dailyStacked} />
-
-      {/* Top Transactions Table */}
-      <TopTransactionsTable
-        topTransactionsToken={data.topTransactionsToken}
-        topTransactionsType={data.topTransactionsType}
-        topTransactionsPool={data.topTransactionsPool}
-        groupMode={controls.groupMode}
-      />
-    </div>
-  );
-}
 
 # Orca vs. Fusion
 
@@ -89,7 +11,87 @@ This dashboard compares the **cumulative revenue performance** of the two main l
 
 ## Overview
 
-<CumulativeRevenueDashboard />
+<BrowserOnly fallback={<LoadingSpinner />}>
+  {() => {
+    const { useState } = require('react');
+    const { useDashboardData } = require('@site/src/components/Dashboard/useDashboardData');
+    const DashboardControlsComponent = require('@site/src/components/Dashboard/DashboardControls').default;
+    const CumulativeChart = require('@site/src/components/Dashboard/CumulativeChart').default;
+    const TopTransactionsTable = require('@site/src/components/Dashboard/TopTransactionsTable').default;
+
+    function CumulativeRevenueDashboard() {
+      const data = useDashboardData();
+
+      const [controls, setControls] = useState({
+        startDate: '',
+        endDate: '',
+        groupMode: 'token',
+        fullRange: true,
+        showRawTypes: false,
+        clusterThreshold: 0.1,
+      });
+
+      if (data.loading) {
+        return <LoadingSpinner />;
+      }
+
+      if (data.error) {
+        return (
+          <div
+            style={{
+              padding: '32px',
+              background: 'var(--ifm-background-surface-color)',
+              border: '1px solid var(--ifm-color-danger)',
+              borderRadius: 'var(--ifm-global-radius)',
+              color: 'var(--ifm-color-danger)',
+            }}>
+            <h3>Error Loading Dashboard</h3>
+            <p>{data.error}</p>
+            <p style={{ fontSize: '14px', color: 'var(--ifm-color-secondary)', marginTop: '16px' }}>
+              Please ensure the analytics data files are available in <code>/analytics/data/</code>
+            </p>
+          </div>
+        );
+      }
+
+      if (!data.dailyStacked || data.dailyStacked.length === 0) {
+        return <div>No cumulative data available</div>;
+      }
+
+      return (
+        <div style={{ padding: '24px 0' }}>
+          <div
+            style={{
+              padding: '16px 24px',
+              background: 'var(--ifm-background-surface-color)',
+              border: '1px solid var(--ifm-toc-border-color)',
+              borderRadius: 'var(--ifm-global-radius)',
+              marginBottom: '24px',
+              fontSize: '14px',
+              color: 'var(--ifm-color-secondary)',
+            }}>
+            <strong>Treasury Address:</strong> G9XfJoY81n8A9bZKaJFhJYomRrcvFkuJ22em2g8rZuCh
+            <span style={{ margin: '0 16px' }}>│</span>
+            <strong>Total Days:</strong> {data.dailyStacked.length}
+          </div>
+
+          <DashboardControlsComponent controls={controls} onChange={setControls} />
+
+          <CumulativeChart data={data.dailyStacked} />
+
+          <TopTransactionsTable
+            topTransactionsToken={data.topTransactionsToken}
+            topTransactionsType={data.topTransactionsType}
+            topTransactionsPool={data.topTransactionsPool}
+            groupMode={controls.groupMode}
+          />
+        </div>
+      );
+    }
+
+    return <CumulativeRevenueDashboard />;
+  }}
+</BrowserOnly>
 
 ## Understanding the Comparison
 

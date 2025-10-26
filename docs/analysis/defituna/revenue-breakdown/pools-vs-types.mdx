@@ -2,35 +2,8 @@
 title: Pools vs. Types
 ---
 
-import { useState } from 'react';
-import PoolTypeMatrixChart from '@site/src/components/Dashboard/PoolTypeMatrixChart';
+import BrowserOnly from '@docusaurus/BrowserOnly';
 import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
-
-export function PoolTypeMatrix() {
-  const [selectedSegment, setSelectedSegment] = useState(null);
-
-  const handleSegmentClick = (pool, type) => {
-    setSelectedSegment({ pool, type });
-  };
-
-  return (
-    <div style={{ padding: '24px 0' }}>
-      <PoolTypeMatrixChart onSegmentClick={handleSegmentClick} />
-
-      {selectedSegment && (
-        <div style={{
-          padding: '16px',
-          background: 'var(--ifm-background-surface-color)',
-          border: '1px solid var(--accent)',
-          borderRadius: 'var(--ifm-global-radius)',
-          marginBottom: '24px',
-        }}>
-          <strong>Selected:</strong> {selectedSegment.pool} → {selectedSegment.type}
-        </div>
-      )}
-    </div>
-  );
-}
 
 # Revenue Breakdown: Pools vs. Types
 
@@ -38,7 +11,95 @@ This page shows the **two-dimensional revenue distribution** using a Marimekko c
 
 ## Overview
 
-<PoolTypeMatrix />
+<BrowserOnly fallback={<LoadingSpinner />}>
+  {() => {
+    const { useState, useEffect } = require('react');
+    const PoolTypeMatrixChart = require('@site/src/components/Dashboard/PoolTypeMatrixChart').default;
+    const TopTransactionsTable = require('@site/src/components/Dashboard/TopTransactionsTable').default;
+    
+    function PoolTypeMatrix() {
+      const [selectedSegment, setSelectedSegment] = useState(null);
+      const [topTransactionsPool, setTopTransactionsPool] = useState({});
+      const [summary, setSummary] = useState(null);
+      const [loading, setLoading] = useState(true);
+
+      useEffect(() => {
+        Promise.all([
+          fetch('/analytics/data/top_transactions_pool.json').then(res => res.json()),
+          fetch('/analytics/data/summary.json').then(res => res.json())
+        ])
+          .then(([poolData, summaryData]) => {
+            setTopTransactionsPool(poolData);
+            setSummary(summaryData);
+            setLoading(false);
+          })
+          .catch(err => {
+            console.error('Error loading transaction data:', err);
+            setLoading(false);
+          });
+      }, []);
+
+      const handleSegmentClick = (poolId, poolLabel) => {
+        setSelectedSegment({ poolId, poolLabel });
+      };
+
+      const handleClearFilter = () => {
+        setSelectedSegment(null);
+      };
+
+      return (
+        <div style={{ padding: '24px 0' }}>
+          <PoolTypeMatrixChart onSegmentClick={handleSegmentClick} />
+
+          {selectedSegment && (
+            <div style={{
+              padding: '16px',
+              background: 'var(--ifm-background-surface-color)',
+              border: '1px solid var(--accent)',
+              borderRadius: 'var(--ifm-global-radius)',
+              marginBottom: '24px',
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span><strong>Filtered by:</strong> {selectedSegment.poolLabel}</span>
+                <button
+                  onClick={handleClearFilter}
+                  style={{
+                    padding: '6px 16px',
+                    background: 'var(--accent)',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                  }}
+                >
+                  Clear Filter
+                </button>
+              </div>
+            </div>
+          )}
+
+          {!loading && (
+            <TopTransactionsTable
+              topTransactionsToken={{}}
+              topTransactionsType={{}}
+              topTransactionsPool={topTransactionsPool}
+              groupMode="pool"
+              selectedFilter={selectedSegment?.poolId}
+              selectedFilterLabel={selectedSegment?.poolLabel}
+              summary={summary}
+            />
+          )}
+        </div>
+      );
+    }
+    
+    return <PoolTypeMatrix />;
+  }}
+</BrowserOnly>
+
+
+This page shows the **two-dimensional revenue distribution** using a Marimekko chart that combines both pool and transaction type perspectives in a single visualization.
 
 ## Understanding the Marimekko Chart
 

@@ -2,86 +2,108 @@
 title: Transaction Types per Day
 ---
 
-import { useState } from 'react';
-import { useDashboardData } from '@site/src/components/Dashboard/useDashboardData';
+import BrowserOnly from '@docusaurus/BrowserOnly';
 import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
-import DashboardControlsComponent from '@site/src/components/Dashboard/DashboardControls';
-import DailyStackedChart from '@site/src/components/Dashboard/DailyStackedChart';
-import TopTransactionsTable from '@site/src/components/Dashboard/TopTransactionsTable';
 
-export function DailyTrendsDashboard() {
-  const data = useDashboardData();
+# Transaction Types per Day
 
-  const [controls, setControls] = useState({
-    startDate: '',
-    endDate: '',
-    groupMode: 'token',
-    fullRange: true,
-    showRawTypes: false,
-    clusterThreshold: 0.1,
-  });
+<BrowserOnly fallback={<LoadingSpinner />}>
+  {() => {
+    const { useState } = require('react');
+    const { useDashboardData } = require('@site/src/components/Dashboard/useDashboardData');
+    const BreakdownChart = require('@site/src/components/Dashboard/BreakdownChart').default;
+    const TopTransactionsTable = require('@site/src/components/Dashboard/TopTransactionsTable').default;
+    
+    function RevenueDashboard() {
+      const data = useDashboardData();
+      const [selectedId, setSelectedId] = useState(null);
+      const [selectedLabel, setSelectedLabel] = useState(null);
 
-  // Show loading state
-  if (data.loading) {
-    return <LoadingSpinner />;
-  }
+      const handleBarClick = (id, label) => {
+        setSelectedId(id);
+        setSelectedLabel(label);
+      };
 
-  // Show error state
-  if (data.error) {
-    return (
-      <div style={{
-        padding: '32px',
-        background: 'var(--ifm-background-surface-color)',
-        border: '1px solid var(--ifm-color-danger)',
-        borderRadius: 'var(--ifm-global-radius)',
-        color: 'var(--ifm-color-danger)',
-      }}>
-        <h3>Error Loading Dashboard</h3>
-        <p>{data.error}</p>
-        <p style={{ fontSize: '14px', color: 'var(--ifm-color-secondary)', marginTop: '16px' }}>
-          Please ensure the analytics data files are available in <code>/analytics/data/</code>
-        </p>
-      </div>
-    );
-  }
+      const clearFilter = () => {
+        setSelectedId(null);
+        setSelectedLabel(null);
+      };
 
-  if (!data.dailyStacked || data.dailyStacked.length === 0) {
-    return <div>No daily data available</div>;
-  }
+      if (data.loading) {
+        return <LoadingSpinner />;
+      }
 
-  return (
-    <div style={{ padding: '24px 0' }}>
-      {/* Metadata */}
-      <div style={{
-        padding: '16px 24px',
-        background: 'var(--ifm-background-surface-color)',
-        border: '1px solid var(--ifm-toc-border-color)',
-        borderRadius: 'var(--ifm-global-radius)',
-        marginBottom: '24px',
-        fontSize: '14px',
-        color: 'var(--ifm-color-secondary)',
-      }}>
-        <strong>Treasury Address:</strong> G9XfJoY81n8A9bZKaJFhJYomRrcvFkuJ22em2g8rZuCh
-        <span style={{ margin: '0 16px' }}>•</span>
-        <strong>Total Days:</strong> {data.dailyStacked.length}
-      </div>
+      if (data.error) {
+        return (
+          <div style={{
+            padding: '32px',
+            background: 'var(--ifm-background-surface-color)',
+            border: '1px solid var(--ifm-color-danger)',
+            borderRadius: 'var(--ifm-global-radius)',
+            color: 'var(--ifm-color-danger)',
+          }}>
+            <h3>Error Loading Dashboard</h3>
+            <p>{data.error}</p>
+          </div>
+        );
+      }
 
-      {/* Dashboard Controls */}
-      <DashboardControlsComponent controls={controls} onChange={setControls} />
+      const summary = data.summary;
+      if (!summary) {
+        return <div>No data available</div>;
+      }
 
-      {/* Daily Stacked Chart */}
-      <DailyStackedChart data={data.dailyStacked} />
+      return (
+        <div style={{ padding: '24px 0' }}>
+          <BreakdownChart
+            summary={summary}
+            groupMode="type"
+            onBarClick={handleBarClick}
+          />
 
-      {/* Top Transactions Table */}
-      <TopTransactionsTable
-        topTransactionsToken={data.topTransactionsToken}
-        topTransactionsType={data.topTransactionsType}
-        topTransactionsPool={data.topTransactionsPool}
-        groupMode={controls.groupMode}
-      />
-    </div>
-  );
-}
+          {selectedLabel && (
+            <div style={{
+              marginBottom: '16px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px'
+            }}>
+              <span style={{ fontSize: '14px', color: 'var(--ifm-color-secondary)' }}>
+                Filtered by: <strong>{selectedLabel}</strong>
+              </span>
+              <button
+                onClick={clearFilter}
+                style={{
+                  padding: '6px 12px',
+                  fontSize: '13px',
+                  background: 'var(--ifm-color-emphasis-200)',
+                  border: '1px solid var(--ifm-toc-border-color)',
+                  borderRadius: 'var(--ifm-global-radius)',
+                  cursor: 'pointer',
+                  color: 'var(--ifm-font-color-base)',
+                }}
+              >
+                Clear Filter
+              </button>
+            </div>
+          )}
+
+          <TopTransactionsTable
+            topTransactionsToken={data.topTransactionsToken}
+            topTransactionsType={data.topTransactionsType}
+            topTransactionsPool={data.topTransactionsPool}
+            groupMode="type"
+            selectedFilter={selectedId}
+            selectedFilterLabel={selectedLabel}
+            summary={summary}
+          />
+        </div>
+      );
+    }
+    
+    return <RevenueDashboard />;
+  }}
+</BrowserOnly>
 
 # Transaction Types per Day
 
@@ -89,7 +111,10 @@ This dashboard tracks how individual **transaction type families** evolve over t
 
 ## Overview
 
-<DailyTrendsDashboard />
+<BrowserOnly fallback={<LoadingSpinner />}>
+  {() => {
+  }}
+</BrowserOnly>
 
 ## Understanding the Chart
 
@@ -158,3 +183,4 @@ Daily revenue is calculated from the **realized types attribution system**:
 4. All SOL equivalents are calculated using same-day conversion rates
 
 The data maintains 100% attribution accuracy, ensuring the total shown matches actual on-chain treasury inflows.
+

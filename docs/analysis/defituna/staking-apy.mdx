@@ -2,131 +2,8 @@
 title: TUNA Staking APY
 ---
 
-import ApyChart from '@site/src/components/Dashboard/ApyChart';
-import { useEffect, useState } from 'react';
-
-export function ApySummaryStats() {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [userEntryPrice, setUserEntryPrice] = useState(null);
-
-  useEffect(() => {
-    // Load APY data
-    fetch('/data/apy_data.json')
-      .then(response => response.json())
-      .then(jsonData => {
-        setData(jsonData);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error('Error loading APY summary:', err);
-        setLoading(false);
-      });
-
-    // Load user entry price from localStorage, default to 0.05 (public pre-sale price)
-    const saved = localStorage.getItem('tunaEntryPrice');
-    if (saved && !isNaN(parseFloat(saved))) {
-      setUserEntryPrice(parseFloat(saved));
-    } else {
-      setUserEntryPrice(0.05);
-    }
-
-    // Listen for storage changes to sync across components
-    const handleStorageChange = () => {
-      const newSaved = localStorage.getItem('tunaEntryPrice');
-      if (newSaved && !isNaN(parseFloat(newSaved))) {
-        setUserEntryPrice(parseFloat(newSaved));
-      } else {
-        setUserEntryPrice(null);
-      }
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    // Also listen for custom event for same-page updates
-    window.addEventListener('tunaEntryPriceChanged', handleStorageChange);
-
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('tunaEntryPriceChanged', handleStorageChange);
-    };
-  }, []);
-
-  if (loading) {
-    return <div style={{ padding: '24px', textAlign: 'center', color: 'var(--ifm-color-secondary)' }}>Loading summary statistics...</div>;
-  }
-
-  if (!data || !data.summary || Object.keys(data.summary).length === 0) {
-    return <div style={{ padding: '24px', textAlign: 'center', color: 'var(--ifm-color-secondary)' }}>No summary statistics available</div>;
-  }
-
-  const summary = data.summary;
-
-  // Calculate personalized APY stats if user entry price is available
-  let personalizedStats = null;
-  if (userEntryPrice !== null && userEntryPrice > 0 && data.daily_apy) {
-    const personalizedApyValues = data.daily_apy
-      .filter(d => d.revenue_per_tuna_usdc)
-      .map(d => (d.revenue_per_tuna_usdc / userEntryPrice) * 100);
-
-    if (personalizedApyValues.length > 0) {
-      personalizedStats = {
-        current: personalizedApyValues[personalizedApyValues.length - 1],
-        average: personalizedApyValues.reduce((a, b) => a + b, 0) / personalizedApyValues.length,
-        max: Math.max(...personalizedApyValues),
-        min: Math.min(...personalizedApyValues),
-      };
-    }
-  }
-
-  const StatCard = ({ label, marketValue, personalizedValue }) => (
-    <div style={{
-      padding: '24px',
-      background: 'var(--ifm-background-surface-color)',
-      border: '1px solid var(--ifm-toc-border-color)',
-      borderRadius: 'var(--ifm-global-radius)',
-    }}>
-      <div style={{ fontSize: '14px', color: 'var(--ifm-color-secondary)', marginBottom: '8px' }}>{label}</div>
-      <div style={{ fontSize: '28px', fontWeight: '600', color: label.includes('Current') ? 'var(--accent)' : 'inherit' }}>
-        {marketValue?.toFixed(2)}%
-      </div>
-      {personalizedValue !== null && personalizedValue !== undefined && (
-        <div style={{ fontSize: '16px', fontWeight: '500', color: 'rgba(34, 197, 94, 1)', marginTop: '8px' }}>
-          Custom APY: {personalizedValue.toFixed(2)}%
-        </div>
-      )}
-    </div>
-  );
-
-  return (
-    <div style={{
-      display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-      gap: '16px',
-      marginBottom: '32px',
-    }}>
-      <StatCard
-        label="Current APY"
-        marketValue={summary.current_apy}
-        personalizedValue={personalizedStats?.current}
-      />
-      <StatCard
-        label="Average APY"
-        marketValue={summary.average_apy}
-        personalizedValue={personalizedStats?.average}
-      />
-      <StatCard
-        label="Maximum APY"
-        marketValue={summary.max_apy}
-        personalizedValue={personalizedStats?.max}
-      />
-      <StatCard
-        label="Minimum APY"
-        marketValue={summary.min_apy}
-        personalizedValue={personalizedStats?.min}
-      />
-    </div>
-  );
-}
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
 
 # TUNA Staking APY
 
@@ -134,11 +11,145 @@ This dashboard shows the historical development of the Annual Percentage Yield (
 
 ## Current Statistics
 
-<ApySummaryStats />
+<BrowserOnly fallback={<LoadingSpinner />}>
+  {() => {
+    const { useEffect, useState } = require('react');
+
+    function ApySummaryStats() {
+      const [data, setData] = useState(null);
+      const [loading, setLoading] = useState(true);
+      const [userEntryPrice, setUserEntryPrice] = useState(null);
+
+      useEffect(() => {
+        // Load APY data
+        fetch('/data/apy_data.json')
+          .then(response => response.json())
+          .then(jsonData => {
+            setData(jsonData);
+            setLoading(false);
+          })
+          .catch(err => {
+            console.error('Error loading APY summary:', err);
+            setLoading(false);
+          });
+
+        // Load user entry price from localStorage, default to 0.05 (public pre-sale price)
+        const saved = localStorage.getItem('tunaEntryPrice');
+        if (saved && !isNaN(parseFloat(saved))) {
+          setUserEntryPrice(parseFloat(saved));
+        } else {
+          setUserEntryPrice(0.05);
+        }
+
+        // Listen for storage changes to sync across components
+        const handleStorageChange = () => {
+          const newSaved = localStorage.getItem('tunaEntryPrice');
+          if (newSaved && !isNaN(parseFloat(newSaved))) {
+            setUserEntryPrice(parseFloat(newSaved));
+          } else {
+            setUserEntryPrice(null);
+          }
+        };
+
+        window.addEventListener('storage', handleStorageChange);
+        // Also listen for custom event for same-page updates
+        window.addEventListener('tunaEntryPriceChanged', handleStorageChange);
+
+        return () => {
+          window.removeEventListener('storage', handleStorageChange);
+          window.removeEventListener('tunaEntryPriceChanged', handleStorageChange);
+        };
+      }, []);
+
+      if (loading) {
+        return <div style={{ padding: '24px', textAlign: 'center', color: 'var(--ifm-color-secondary)' }}>Loading summary statistics...</div>;
+      }
+
+      if (!data || !data.summary || Object.keys(data.summary).length === 0) {
+        return <div style={{ padding: '24px', textAlign: 'center', color: 'var(--ifm-color-secondary)' }}>No summary statistics available</div>;
+      }
+
+      const summary = data.summary;
+
+      // Calculate personalized APY stats if user entry price is available
+      let personalizedStats = null;
+      if (userEntryPrice !== null && userEntryPrice > 0 && data.daily_apy) {
+        const personalizedApyValues = data.daily_apy
+          .filter(d => d.revenue_per_tuna_usdc)
+          .map(d => (d.revenue_per_tuna_usdc / userEntryPrice) * 100);
+
+        if (personalizedApyValues.length > 0) {
+          personalizedStats = {
+            current: personalizedApyValues[personalizedApyValues.length - 1],
+            average: personalizedApyValues.reduce((a, b) => a + b, 0) / personalizedApyValues.length,
+            max: Math.max(...personalizedApyValues),
+            min: Math.min(...personalizedApyValues),
+          };
+        }
+      }
+
+      const StatCard = ({ label, marketValue, personalizedValue }) => (
+        <div style={{
+          padding: '24px',
+          background: 'var(--ifm-background-surface-color)',
+          border: '1px solid var(--ifm-toc-border-color)',
+          borderRadius: 'var(--ifm-global-radius)',
+        }}>
+          <div style={{ fontSize: '14px', color: 'var(--ifm-color-secondary)', marginBottom: '8px' }}>{label}</div>
+          <div style={{ fontSize: '28px', fontWeight: '600', color: label.includes('Current') ? 'var(--accent)' : 'inherit' }}>
+            {marketValue?.toFixed(2)}%
+          </div>
+          {personalizedValue !== null && personalizedValue !== undefined && (
+            <div style={{ fontSize: '16px', fontWeight: '500', color: 'rgba(34, 197, 94, 1)', marginTop: '8px' }}>
+              Custom APY: {personalizedValue.toFixed(2)}%
+            </div>
+          )}
+        </div>
+      );
+
+      return (
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gap: '16px',
+          marginBottom: '32px',
+        }}>
+          <StatCard
+            label="Current APY"
+            marketValue={summary.current_apy}
+            personalizedValue={personalizedStats?.current}
+          />
+          <StatCard
+            label="Average APY"
+            marketValue={summary.average_apy}
+            personalizedValue={personalizedStats?.average}
+          />
+          <StatCard
+            label="Maximum APY"
+            marketValue={summary.max_apy}
+            personalizedValue={personalizedStats?.max}
+          />
+          <StatCard
+            label="Minimum APY"
+            marketValue={summary.min_apy}
+            personalizedValue={personalizedStats?.min}
+          />
+        </div>
+      );
+    }
+
+    return <ApySummaryStats />;
+  }}
+</BrowserOnly>
 
 ## APY Development Over Time
 
-<ApyChart />
+<BrowserOnly fallback={<LoadingSpinner />}>
+  {() => {
+    const ApyChart = require('@site/src/components/Dashboard/ApyChart').default;
+    return <ApyChart />;
+  }}
+</BrowserOnly>
 
 ## Methodology
 
@@ -276,5 +287,3 @@ The APY data is manually updated when:
 - USD/SOL exchange rates change significantly
 
 For the most current data, check the "Last updated" timestamp in the site header.
-
-

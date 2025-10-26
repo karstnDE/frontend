@@ -1,8 +1,8 @@
 {
   "date_range": {
-    "start": "2025-07-30",
+    "start": "2025-07-27",
     "end": "2025-10-22",
-    "days": 85
+    "days": 88
   },
   "totals": {
     "wsol_direct": 2740.0496991750006,
@@ -105,7 +105,7 @@
     },
     {
       "pool_id": "AXB9KoFBT4ZxJgc4bHMYDgSkxjox6JuL3bbLBeL8LdSJ",
-      "pool_label": "Fusion USDC-TUNA",
+      "pool_label": "Fusion SOL-USDC",
       "total_sol": 136.05213102470037
     },
     {
@@ -121,44 +121,84 @@
   ],
   "top_types_by_value": [
     {
-      "type": "fusion_collectprotocolfees",
+      "type": "Liquidate LP Position (Orca)",
+      "types": [
+        "liquidate_position_orca_liquidation",
+        "tuna_liquidatetunalppositionorca"
+      ],
+      "label": "Liquidate LP Position (Orca)",
+      "total_sol": 1989.626472105682
+    },
+    {
+      "type": "Collect Protocol Fees (Fusion)",
+      "types": [
+        "fusion_collectprotocolfees"
+      ],
+      "label": "Collect Protocol Fees (Fusion)",
       "total_sol": 1319.7718565362024
     },
     {
-      "type": "tuna_liquidatetunalppositionorca",
-      "total_sol": 1222.4570652231534
-    },
-    {
-      "type": "liquidate_position_orca_liquidation",
-      "total_sol": 767.1694068825286
-    },
-    {
-      "type": "openpositionwithliquidity",
+      "type": "Open Position w. Liq. (Orca)",
+      "types": [
+        "openpositionwithliquidity"
+      ],
+      "label": "Open Position w. Liq. (Orca)",
       "total_sol": 556.0526569779054
     },
     {
-      "type": "tuna_liquidatetunalppositionfusion",
-      "total_sol": 302.44163431519826
+      "type": "Liquidate LP Position (Fusion)",
+      "types": [
+        "tuna_liquidatepositionfusion",
+        "tuna_liquidatetunalppositionfusion"
+      ],
+      "label": "Liquidate LP Position (Fusion)",
+      "total_sol": 392.6838603247155
     },
     {
-      "type": "token_transfer",
+      "type": "Token Transfer",
+      "types": [
+        "token_transfer"
+      ],
+      "label": "Token Transfer",
       "total_sol": 145.99796071999998
     },
     {
-      "type": "tuna_liquidatepositionfusion",
-      "total_sol": 90.24222600951728
-    },
-    {
-      "type": "liquidate_position_orca_sl_tp",
+      "type": "Position SL/TP (Orca)",
+      "types": [
+        "liquidate_position_orca_sl_tp"
+      ],
+      "label": "Position SL/TP (Orca)",
       "total_sol": 64.11541080868821
     },
     {
-      "type": "tuna_openandincreasetunalppositionfusion",
+      "type": "Open & Incr. LP Position (Fusion)",
+      "types": [
+        "tuna_openandincreasetunalppositionfusion"
+      ],
+      "label": "Open & Incr. LP Position (Fusion)",
       "total_sol": 30.799034910113164
     },
     {
+      "type": "Liquidity Add Tuna",
+      "types": [
+        "liquidity_add_tuna"
+      ],
+      "label": "Liquidity Add Tuna",
+      "total_sol": 24.68208890549281
+    },
+    {
+      "type": "Tuna Openpositionwithliquidityfusion",
+      "types": [
+        "tuna_openpositionwithliquidityfusion"
+      ],
+      "label": "Tuna Openpositionwithliquidityfusion",
+      "total_sol": 6.959919535701356
+    },
+    {
       "type": "Others",
-      "total_sol": 50.48002687969371
+      "types": [],
+      "label": "Others",
+      "total_sol": 18.83801843849954
     }
   ]
 }

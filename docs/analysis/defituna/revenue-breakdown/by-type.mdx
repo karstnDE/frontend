@@ -2,103 +2,108 @@
 title: Revenue by Type
 ---
 
-import { useState } from 'react';
-import { useDashboardData } from '@site/src/components/Dashboard/useDashboardData';
+import BrowserOnly from '@docusaurus/BrowserOnly';
 import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
-import BreakdownChart from '@site/src/components/Dashboard/BreakdownChart';
-import TopTransactionsTable from '@site/src/components/Dashboard/TopTransactionsTable';
 
-export function TypeRevenueDashboard() {
-  const data = useDashboardData();
-  const [selectedTypeId, setSelectedTypeId] = useState(null);
-  const [selectedTypeLabel, setSelectedTypeLabel] = useState(null);
+# Revenue Breakdown: By Transaction Type
 
-  const handleBarClick = (id, label) => {
-    setSelectedTypeId(id);
-    setSelectedTypeLabel(label);
-  };
+<BrowserOnly fallback={<LoadingSpinner />}>
+  {() => {
+    const { useState } = require('react');
+    const { useDashboardData } = require('@site/src/components/Dashboard/useDashboardData');
+    const BreakdownChart = require('@site/src/components/Dashboard/BreakdownChart').default;
+    const TopTransactionsTable = require('@site/src/components/Dashboard/TopTransactionsTable').default;
+    
+    function RevenueDashboard() {
+      const data = useDashboardData();
+      const [selectedId, setSelectedId] = useState(null);
+      const [selectedLabel, setSelectedLabel] = useState(null);
 
-  const clearFilter = () => {
-    setSelectedTypeId(null);
-    setSelectedTypeLabel(null);
-  };
+      const handleBarClick = (id, label) => {
+        setSelectedId(id);
+        setSelectedLabel(label);
+      };
 
-  // Show loading state
-  if (data.loading) {
-    return <LoadingSpinner />;
-  }
+      const clearFilter = () => {
+        setSelectedId(null);
+        setSelectedLabel(null);
+      };
 
-  // Show error state
-  if (data.error) {
-    return (
-      <div style={{
-        padding: '32px',
-        background: 'var(--ifm-background-surface-color)',
-        border: '1px solid var(--ifm-color-danger)',
-        borderRadius: 'var(--ifm-global-radius)',
-        color: 'var(--ifm-color-danger)',
-      }}>
-        <h3>Error Loading Dashboard</h3>
-        <p>{data.error}</p>
-      </div>
-    );
-  }
+      if (data.loading) {
+        return <LoadingSpinner />;
+      }
 
-  const summary = data.summary;
-  if (!summary) {
-    return <div>No data available</div>;
-  }
+      if (data.error) {
+        return (
+          <div style={{
+            padding: '32px',
+            background: 'var(--ifm-background-surface-color)',
+            border: '1px solid var(--ifm-color-danger)',
+            borderRadius: 'var(--ifm-global-radius)',
+            color: 'var(--ifm-color-danger)',
+          }}>
+            <h3>Error Loading Dashboard</h3>
+            <p>{data.error}</p>
+          </div>
+        );
+      }
 
-  return (
-    <div style={{ padding: '24px 0' }}>
-      {/* Revenue Breakdown Chart - Type View */}
-      <BreakdownChart
-        summary={summary}
-        groupMode="type"
-        onBarClick={handleBarClick}
-      />
+      const summary = data.summary;
+      if (!summary) {
+        return <div>No data available</div>;
+      }
 
-      {/* Clear Filter Button */}
-      {selectedTypeLabel && (
-        <div style={{
-          marginBottom: '16px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '12px'
-        }}>
-          <span style={{ fontSize: '14px', color: 'var(--ifm-color-secondary)' }}>
-            Filtered by: <strong>{selectedTypeLabel}</strong>
-          </span>
-          <button
-            onClick={clearFilter}
-            style={{
-              padding: '6px 12px',
-              fontSize: '13px',
-              background: 'var(--ifm-color-emphasis-200)',
-              border: '1px solid var(--ifm-toc-border-color)',
-              borderRadius: 'var(--ifm-global-radius)',
-              cursor: 'pointer',
-              color: 'var(--ifm-font-color-base)',
-            }}
-          >
-            Clear Filter
-          </button>
+      return (
+        <div style={{ padding: '24px 0' }}>
+          <BreakdownChart
+            summary={summary}
+            groupMode="type"
+            onBarClick={handleBarClick}
+          />
+
+          {selectedLabel && (
+            <div style={{
+              marginBottom: '16px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px'
+            }}>
+              <span style={{ fontSize: '14px', color: 'var(--ifm-color-secondary)' }}>
+                Filtered by: <strong>{selectedLabel}</strong>
+              </span>
+              <button
+                onClick={clearFilter}
+                style={{
+                  padding: '6px 12px',
+                  fontSize: '13px',
+                  background: 'var(--ifm-color-emphasis-200)',
+                  border: '1px solid var(--ifm-toc-border-color)',
+                  borderRadius: 'var(--ifm-global-radius)',
+                  cursor: 'pointer',
+                  color: 'var(--ifm-font-color-base)',
+                }}
+              >
+                Clear Filter
+              </button>
+            </div>
+          )}
+
+          <TopTransactionsTable
+            topTransactionsToken={data.topTransactionsToken}
+            topTransactionsType={data.topTransactionsType}
+            topTransactionsPool={data.topTransactionsPool}
+            groupMode="type"
+            selectedFilter={selectedId}
+            selectedFilterLabel={selectedLabel}
+            summary={summary}
+          />
         </div>
-      )}
-
-      {/* Top Transactions Table */}
-      <TopTransactionsTable
-        topTransactionsToken={data.topTransactionsToken}
-        topTransactionsType={data.topTransactionsType}
-        topTransactionsPool={data.topTransactionsPool}
-        groupMode="type"
-        selectedFilter={selectedTypeId}
-        selectedFilterLabel={selectedTypeLabel}
-        summary={summary}
-      />
-    </div>
-  );
-}
+      );
+    }
+    
+    return <RevenueDashboard />;
+  }}
+</BrowserOnly>
 
 # Revenue Breakdown: By Type
 
@@ -106,7 +111,10 @@ This page shows how treasury revenue is distributed across different **transacti
 
 ## Overview
 
-<TypeRevenueDashboard />
+<BrowserOnly fallback={<LoadingSpinner />}>
+  {() => {
+  }}
+</BrowserOnly>
 
 ## Understanding Transaction Types
 
@@ -198,3 +206,4 @@ For deeper understanding of the classification system:
 - **Attribution System**: Read the Revenue Attribution System documentation
 
 The classification logic is transparent and auditable, ensuring accurate type attribution for every treasury transaction.
+

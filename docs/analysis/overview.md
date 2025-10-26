@@ -48,6 +48,7 @@ The DefiTuna protocol treasury is our primary focus, with comprehensive coverage
 - **Revenue Attribution**: Multi-dimensional breakdowns by token, transaction type, and liquidity pool
 - **Staking APY**: Historical yield calculations based on treasury inflows and token metrics
 - **Daily Trends**: Time-series analysis of revenue patterns and growth
+- **Usage Statistics**: Cohort views of stakers plus daily and weekly active wallets`n- **TUNA Treasury Allocation**: Daily split of treasury-held TUNA between staked and liquid balances
 - **Top Transactions**: Detailed views of largest revenue events
 
 Navigate to the **DefiTuna** section in the sidebar to explore interactive dashboards and detailed analytics.
@@ -67,3 +68,4 @@ For developers and technical users interested in the backend implementation:
 ---
 
 Use the sidebar navigation to explore specific analytics for each protocol.
+

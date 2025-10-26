@@ -7,7 +7,7 @@ import type { SummaryData, GroupMode } from './types';
 interface BreakdownChartProps {
   summary: SummaryData;
   groupMode: GroupMode;
-  onBarClick?: (selectedId: string, selectedLabel: string) => void;
+  onBarClick?: (selectedId: string | string[], selectedLabel: string) => void;
 }
 
 export default function BreakdownChart({ summary, groupMode, onBarClick }: BreakdownChartProps): React.ReactElement {
@@ -15,7 +15,7 @@ export default function BreakdownChart({ summary, groupMode, onBarClick }: Break
   const isDark = colorMode === 'dark';
   const template = getPlotlyTemplate(isDark);
 
-  // Helper function to format pool labels as two-line (pair name on top, protocol below)
+  // Helper function to format pool labels (prefer swapping pair/protocol for pools)
   const formatPoolLabel = (label: string): string => {
     // Pattern 1: "Orca (SOL-USDC)" -> "SOL-USDC<br>Orca"
     const parenMatch = label.match(/^(.+?)\s+\((.+?)\)$/);
@@ -33,14 +33,60 @@ export default function BreakdownChart({ summary, groupMode, onBarClick }: Break
       return `${pair}<br>${protocol}`;
     }
 
-    // Fallback: return as-is if no pattern matches
+    // Fallback: use dynamic wrapping
+    return formatLabelWithWrapping(label);
+  };
+
+  // Helper function to format labels with dynamic wrapping based on estimated overflow
+  const formatLabelWithWrapping = (label: string, maxCharsPerLine: number = 14): string => {
+    // Don't wrap if already short enough
+    if (label.length <= maxCharsPerLine) {
+      return label;
+    }
+
+    // Find the best break point within the max character limit
+    const findBreakPoint = (text: string, maxLength: number): number => {
+      // If there's a parenthesis, prefer breaking before it
+      const parenIdx = text.indexOf('(');
+      if (parenIdx > 0 && parenIdx <= maxLength + 5) {
+        // Find the space before the parenthesis
+        const spaceBeforeParen = text.lastIndexOf(' ', parenIdx);
+        if (spaceBeforeParen > 0) {
+          return spaceBeforeParen;
+        }
+      }
+
+      // Otherwise, find the last space within the limit
+      const lastSpace = text.lastIndexOf(' ', maxLength);
+      if (lastSpace > maxLength * 0.5) { // Don't break too early
+        return lastSpace;
+      }
+
+      // If no good space found, try to break at word boundaries after maxLength
+      const nextSpace = text.indexOf(' ', maxLength);
+      if (nextSpace > 0) {
+        return nextSpace;
+      }
+
+      // No good break point found
+      return -1;
+    };
+
+    const breakPoint = findBreakPoint(label, maxCharsPerLine);
+    if (breakPoint > 0) {
+      const line1 = label.substring(0, breakPoint).trim();
+      const line2 = label.substring(breakPoint).trim();
+      return `${line1}<br>${line2}`;
+    }
+
+    // Fallback: return as-is
     return label;
   };
 
   // Select data based on group mode
   let labels: string[] = [];
   let values: number[] = [];
-  let ids: string[] = []; // Identifiers for filtering (mint/type/pool_id)
+  let ids: (string | string[])[] = []; // Identifiers for filtering (mint/type/pool_id or array of types)
   let title = '';
 
   switch (groupMode) {
@@ -51,9 +97,9 @@ export default function BreakdownChart({ summary, groupMode, onBarClick }: Break
       title = 'Revenue Breakdown by Token';
       break;
     case 'type':
-      labels = summary.top_types_by_value.map(t => t.label || t.type);
+      labels = summary.top_types_by_value.map(t => formatLabelWithWrapping(t.label || t.type));
       values = summary.top_types_by_value.map(t => t.total_sol);
-      ids = summary.top_types_by_value.map(t => t.type); // Use type for filtering
+      ids = summary.top_types_by_value.map(t => t.types || [t.type]); // Use types array for filtering
       title = 'Revenue Breakdown by Transaction Type';
       break;
     case 'pool':
@@ -67,11 +113,14 @@ export default function BreakdownChart({ summary, groupMode, onBarClick }: Break
   // Create hover text that includes both label and ID
   const hoverTexts = labels.map((label, idx) => {
     const id = ids[idx];
+    // Remove <br> tags from label for hover display
+    const cleanLabel = label.replace(/<br>/g, ' ');
+
     // For token mode, show the mint address; for others just show the label
     if (groupMode === 'token') {
-      return `<b>${label}</b><br>${values[idx].toFixed(2)} SOL<br><i>${id}</i>`;
+      return `<b>${cleanLabel}</b><br>${values[idx].toFixed(2)} SOL<br><i>${id}</i>`;
     }
-    return `<b>${label}</b><br>${values[idx].toFixed(2)} SOL`;
+    return `<b>${cleanLabel}</b><br>${values[idx].toFixed(2)} SOL`;
   });
 
   const trace: any = {
@@ -123,7 +172,7 @@ export default function BreakdownChart({ summary, groupMode, onBarClick }: Break
           if (event.points && event.points.length > 0 && onBarClick) {
             const point = event.points[0];
             const clickedId = point.customdata; // mint/type/pool_id
-            const clickedLabel = point.x; // human-readable name
+            const clickedLabel = point.x.replace(/<br>/g, ' '); // Strip <br> tags for display
             onBarClick(clickedId, clickedLabel);
           }
         }}

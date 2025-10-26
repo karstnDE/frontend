@@ -26,6 +26,7 @@ const sidebars: SidebarsConfig = {
       label: 'Treasury Analysis',
       items: [
         'analysis/defituna/staking-apy',
+        'analysis/defituna/staked-tuna',
         {
           type: 'category',
           label: 'Revenue Breakdown',
@@ -36,6 +37,16 @@ const sidebars: SidebarsConfig = {
             'analysis/defituna/revenue-breakdown/pools-vs-types',
           ],
         },
+        {
+          type: 'category',
+          label: 'Usage Statistics',
+          items: [
+            'analysis/usage-statistics/usage-statistics-overview',
+            'analysis/usage-statistics/usage-statistics-stakers',
+            'analysis/usage-statistics/usage-statistics-daily',
+            'analysis/usage-statistics/usage-statistics-weekly',
+          ],
+        },
         'analysis/defituna/tx-type-per-day',
         'analysis/defituna/orca-vs-fusion',
       ],
@@ -44,3 +55,8 @@ const sidebars: SidebarsConfig = {
 };
 
 export default sidebars;
+
+
+
+
+

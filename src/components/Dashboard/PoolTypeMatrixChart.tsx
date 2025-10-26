@@ -17,7 +17,7 @@ interface PoolTypeData {
 }
 
 interface PoolTypeMatrixChartProps {
-  onSegmentClick?: (pool: string, type: string) => void;
+  onSegmentClick?: (poolId: string, poolLabel: string) => void;
 }
 
 export default function PoolTypeMatrixChart({ onSegmentClick }: PoolTypeMatrixChartProps): React.ReactElement {
@@ -27,6 +27,28 @@ export default function PoolTypeMatrixChart({ onSegmentClick }: PoolTypeMatrixCh
 
   const [data, setData] = useState<PoolTypeData[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Helper function to format pool labels (prefer swapping pair/protocol for pools)
+  const formatPoolLabel = (label: string): string => {
+    // Pattern 1: "Orca (SOL-USDC)" -> "SOL-USDC<br>Orca"
+    const parenMatch = label.match(/^(.+?)\s+\((.+?)\)$/);
+    if (parenMatch) {
+      const protocol = parenMatch[1];
+      const pair = parenMatch[2];
+      return `${pair}<br>${protocol}`;
+    }
+
+    // Pattern 2: "Fusion SOL-USDC" -> "SOL-USDC<br>Fusion"
+    const spaceMatch = label.match(/^(Fusion|Orca)\s+(.+)$/);
+    if (spaceMatch) {
+      const protocol = spaceMatch[1];
+      const pair = spaceMatch[2];
+      return `${pair}<br>${protocol}`;
+    }
+
+    // Fallback: return as-is
+    return label;
+  };
 
   useEffect(() => {
     fetch('/analytics/data/pool_type_summary.json')
@@ -77,7 +99,7 @@ export default function PoolTypeMatrixChart({ onSegmentClick }: PoolTypeMatrixCh
   data.forEach(pool => {
     const width = pool.share_of_total;
     poolPositions.push({
-      pool: pool.pool_label,
+      pool: formatPoolLabel(pool.pool_label),  // Apply label formatting
       xStart: cumulativeX,
       xEnd: cumulativeX + width,
       width: width,
@@ -91,7 +113,8 @@ export default function PoolTypeMatrixChart({ onSegmentClick }: PoolTypeMatrixCh
     const yValues: number[] = [];
     const widths: number[] = [];
     const hoverTexts: string[] = [];
-    const customData: Array<[string, string]> = [];
+    const textLabels: string[] = [];
+    const customData: Array<[string, string, string]> = [];  // [pool_id, pool_label, type]
 
     poolPositions.forEach((poolPos, poolIdx) => {
       const pool = data[poolIdx];
@@ -101,15 +124,19 @@ export default function PoolTypeMatrixChart({ onSegmentClick }: PoolTypeMatrixCh
         // Position bar at center of pool's x range
         const xCenter = poolPos.xStart + poolPos.width / 2;
         xValues.push(xCenter);
-        yValues.push(typeData.sol_equivalent);
+        // Use percentage of pool (0-100) instead of absolute SOL for normalized height
+        yValues.push(typeData.share_of_pool * 100);
         widths.push(poolPos.width * 0.95); // Slight gap between pools
         hoverTexts.push(
           `<b>${pool.pool_label}</b><br>` +
           `Type: ${typeName}<br>` +
           `${typeData.sol_equivalent.toFixed(2)} SOL<br>` +
-          `${(typeData.share_of_pool * 100).toFixed(1)}% of pool`
+          `${(typeData.share_of_pool * 100).toFixed(1)}% of pool<br>` +
+          `${(typeData.share_of_total * 100).toFixed(2)}% of total revenue`
         );
-        customData.push([pool.pool_label, typeName]);
+        // Only show text label if segment is large enough (>8% of pool height)
+        textLabels.push(typeData.share_of_pool * 100 > 8 ? typeName : '');
+        customData.push([pool.pool_id, pool.pool_label, typeName]);
       }
     });
 
@@ -120,6 +147,12 @@ export default function PoolTypeMatrixChart({ onSegmentClick }: PoolTypeMatrixCh
         y: yValues,
         width: widths,
         name: typeName,
+        text: textLabels,
+        textposition: 'inside',
+        textfont: {
+          size: 9,
+          color: '#ffffff',
+        },
         marker: {
           color: typeColorMap[typeName],
           line: {
@@ -156,27 +189,22 @@ export default function PoolTypeMatrixChart({ onSegmentClick }: PoolTypeMatrixCh
             tickmode: 'array',
             tickvals: poolPositions.map(p => p.xStart + p.width / 2),
             ticktext: poolPositions.map(p => p.pool),
-            tickangle: -45,
+            tickangle: 0,
+            tickfont: { size: 11 },
             range: [-0.05, 1.05],
           },
           yaxis: {
             ...template.layout.yaxis,
-            title: 'Revenue (SOL)',
+            title: 'Share of Pool Revenue (%)',
+            range: [0, 105],
+            ticksuffix: '%',
           },
           barmode: 'stack',
-          showlegend: true,
-          legend: {
-            orientation: 'v',
-            x: 1.02,
-            y: 1,
-            xanchor: 'left',
-            yanchor: 'top',
-            bgcolor: 'rgba(0,0,0,0)',
-          },
+          showlegend: false,
           hovermode: 'closest',
           margin: {
             l: 60,
-            r: 200,
+            r: 40,
             t: 60,
             b: 120,
           },
@@ -187,8 +215,8 @@ export default function PoolTypeMatrixChart({ onSegmentClick }: PoolTypeMatrixCh
         onClick={(event: any) => {
           if (event.points && event.points.length > 0 && onSegmentClick) {
             const point = event.points[0];
-            const [pool, type] = point.customdata;
-            onSegmentClick(pool, type);
+            const [poolId, poolLabel, typeName] = point.customdata;
+            onSegmentClick(poolId, poolLabel);
           }
         }}
       />

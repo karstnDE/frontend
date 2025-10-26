@@ -2,103 +2,108 @@
 title: Revenue by Pool
 ---
 
-import { useState } from 'react';
-import { useDashboardData } from '@site/src/components/Dashboard/useDashboardData';
+import BrowserOnly from '@docusaurus/BrowserOnly';
 import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
-import BreakdownChart from '@site/src/components/Dashboard/BreakdownChart';
-import TopTransactionsTable from '@site/src/components/Dashboard/TopTransactionsTable';
 
-export function PoolRevenueDashboard() {
-  const data = useDashboardData();
-  const [selectedPoolId, setSelectedPoolId] = useState(null);
-  const [selectedPoolLabel, setSelectedPoolLabel] = useState(null);
+# Revenue Breakdown: By Pool
 
-  const handleBarClick = (id, label) => {
-    setSelectedPoolId(id);
-    setSelectedPoolLabel(label);
-  };
+<BrowserOnly fallback={<LoadingSpinner />}>
+  {() => {
+    const { useState } = require('react');
+    const { useDashboardData } = require('@site/src/components/Dashboard/useDashboardData');
+    const BreakdownChart = require('@site/src/components/Dashboard/BreakdownChart').default;
+    const TopTransactionsTable = require('@site/src/components/Dashboard/TopTransactionsTable').default;
+    
+    function RevenueDashboard() {
+      const data = useDashboardData();
+      const [selectedId, setSelectedId] = useState(null);
+      const [selectedLabel, setSelectedLabel] = useState(null);
 
-  const clearFilter = () => {
-    setSelectedPoolId(null);
-    setSelectedPoolLabel(null);
-  };
+      const handleBarClick = (id, label) => {
+        setSelectedId(id);
+        setSelectedLabel(label);
+      };
 
-  // Show loading state
-  if (data.loading) {
-    return <LoadingSpinner />;
-  }
+      const clearFilter = () => {
+        setSelectedId(null);
+        setSelectedLabel(null);
+      };
 
-  // Show error state
-  if (data.error) {
-    return (
-      <div style={{
-        padding: '32px',
-        background: 'var(--ifm-background-surface-color)',
-        border: '1px solid var(--ifm-color-danger)',
-        borderRadius: 'var(--ifm-global-radius)',
-        color: 'var(--ifm-color-danger)',
-      }}>
-        <h3>Error Loading Dashboard</h3>
-        <p>{data.error}</p>
-      </div>
-    );
-  }
+      if (data.loading) {
+        return <LoadingSpinner />;
+      }
 
-  const summary = data.summary;
-  if (!summary) {
-    return <div>No data available</div>;
-  }
+      if (data.error) {
+        return (
+          <div style={{
+            padding: '32px',
+            background: 'var(--ifm-background-surface-color)',
+            border: '1px solid var(--ifm-color-danger)',
+            borderRadius: 'var(--ifm-global-radius)',
+            color: 'var(--ifm-color-danger)',
+          }}>
+            <h3>Error Loading Dashboard</h3>
+            <p>{data.error}</p>
+          </div>
+        );
+      }
 
-  return (
-    <div style={{ padding: '24px 0' }}>
-      {/* Revenue Breakdown Chart - Pool View */}
-      <BreakdownChart
-        summary={summary}
-        groupMode="pool"
-        onBarClick={handleBarClick}
-      />
+      const summary = data.summary;
+      if (!summary) {
+        return <div>No data available</div>;
+      }
 
-      {/* Clear Filter Button */}
-      {selectedPoolLabel && (
-        <div style={{
-          marginBottom: '16px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '12px'
-        }}>
-          <span style={{ fontSize: '14px', color: 'var(--ifm-color-secondary)' }}>
-            Filtered by: <strong>{selectedPoolLabel}</strong>
-          </span>
-          <button
-            onClick={clearFilter}
-            style={{
-              padding: '6px 12px',
-              fontSize: '13px',
-              background: 'var(--ifm-color-emphasis-200)',
-              border: '1px solid var(--ifm-toc-border-color)',
-              borderRadius: 'var(--ifm-global-radius)',
-              cursor: 'pointer',
-              color: 'var(--ifm-font-color-base)',
-            }}
-          >
-            Clear Filter
-          </button>
+      return (
+        <div style={{ padding: '24px 0' }}>
+          <BreakdownChart
+            summary={summary}
+            groupMode="pool"
+            onBarClick={handleBarClick}
+          />
+
+          {selectedLabel && (
+            <div style={{
+              marginBottom: '16px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px'
+            }}>
+              <span style={{ fontSize: '14px', color: 'var(--ifm-color-secondary)' }}>
+                Filtered by: <strong>{selectedLabel}</strong>
+              </span>
+              <button
+                onClick={clearFilter}
+                style={{
+                  padding: '6px 12px',
+                  fontSize: '13px',
+                  background: 'var(--ifm-color-emphasis-200)',
+                  border: '1px solid var(--ifm-toc-border-color)',
+                  borderRadius: 'var(--ifm-global-radius)',
+                  cursor: 'pointer',
+                  color: 'var(--ifm-font-color-base)',
+                }}
+              >
+                Clear Filter
+              </button>
+            </div>
+          )}
+
+          <TopTransactionsTable
+            topTransactionsToken={data.topTransactionsToken}
+            topTransactionsType={data.topTransactionsType}
+            topTransactionsPool={data.topTransactionsPool}
+            groupMode="pool"
+            selectedFilter={selectedId}
+            selectedFilterLabel={selectedLabel}
+            summary={summary}
+          />
         </div>
-      )}
-
-      {/* Top Transactions Table */}
-      <TopTransactionsTable
-        topTransactionsToken={data.topTransactionsToken}
-        topTransactionsType={data.topTransactionsType}
-        topTransactionsPool={data.topTransactionsPool}
-        groupMode="pool"
-        selectedFilter={selectedPoolId}
-        selectedFilterLabel={selectedPoolLabel}
-        summary={summary}
-      />
-    </div>
-  );
-}
+      );
+    }
+    
+    return <RevenueDashboard />;
+  }}
+</BrowserOnly>
 
 # Revenue Breakdown: By Pool
 
@@ -106,7 +111,10 @@ This page shows how treasury revenue is distributed across different **liquidity
 
 ## Overview
 
-<PoolRevenueDashboard />
+<BrowserOnly fallback={<LoadingSpinner />}>
+  {() => {
+  }}
+</BrowserOnly>
 
 ## Understanding Pool Revenue
 
@@ -216,3 +224,4 @@ For more information on pool attribution:
 - **Adding Pools**: Use `tools/refresh_pool_labels.py` to update pool mappings
 
 The pool attribution system ensures accurate tracking of which liquidity strategies drive treasury growth.
+

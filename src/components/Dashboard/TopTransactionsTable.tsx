@@ -6,7 +6,7 @@ interface TopTransactionsTableProps {
   topTransactionsType: TopTransactionsData;
   topTransactionsPool: TopTransactionsData;
   groupMode: GroupMode;
-  selectedFilter?: string | null;
+  selectedFilter?: string | string[] | null;
   selectedFilterLabel?: string | null;
   summary?: SummaryData;
 }
@@ -60,14 +60,29 @@ export default function TopTransactionsTable({
 
   // Apply filter if selectedFilter is provided
   if (selectedFilter) {
-    // Handle WSOL_DIRECT -> actual wrapped SOL address mapping
-    const filterValue = selectedFilter === 'WSOL_DIRECT'
-      ? 'So11111111111111111111111111111111111111112'
-      : selectedFilter;
-    allTransactions = allTransactions.filter(tx => tx.group === filterValue);
+    // Handle both single string and array of types
+    const filterValues = Array.isArray(selectedFilter) ? selectedFilter : [selectedFilter];
+
+    // Map WSOL_DIRECT to actual wrapped SOL address
+    const mappedFilters = filterValues.map(f =>
+      f === 'WSOL_DIRECT' ? 'So11111111111111111111111111111111111111112' : f
+    );
+
+    // Filter transactions that match ANY of the filter values
+    allTransactions = allTransactions.filter(tx => mappedFilters.includes(tx.group));
   }
 
-  const top10 = allTransactions
+  // Deduplicate by signature (same transaction might appear in multiple groups)
+  const seenSignatures = new Set<string>();
+  const uniqueTransactions = allTransactions.filter(tx => {
+    if (seenSignatures.has(tx.signature)) {
+      return false;
+    }
+    seenSignatures.add(tx.signature);
+    return true;
+  });
+
+  const top10 = uniqueTransactions
     .sort((a, b) => b.amount - a.amount)
     .slice(0, 10);
 
@@ -120,9 +135,12 @@ export default function TopTransactionsTable({
             <th style={{ textAlign: 'left', padding: '12px 8px', fontWeight: 600 }}>Rank</th>
             <th style={{ textAlign: 'left', padding: '12px 8px', fontWeight: 600 }}>Amount</th>
             <th style={{ textAlign: 'left', padding: '12px 8px', fontWeight: 600 }}>Date</th>
-            <th style={{ textAlign: 'left', padding: '12px 8px', fontWeight: 600 }}>Type</th>
-            <th style={{ textAlign: 'left', padding: '12px 8px', fontWeight: 600 }}>{groupLabel}</th>
-            <th style={{ textAlign: 'left', padding: '12px 8px', fontWeight: 600 }}>Pool</th>
+            {groupMode === 'token' && <th style={{ textAlign: 'left', padding: '12px 8px', fontWeight: 600 }}>Token</th>}
+            {groupMode === 'type' && <th style={{ textAlign: 'left', padding: '12px 8px', fontWeight: 600 }}>Type</th>}
+            {groupMode === 'pool' && <th style={{ textAlign: 'left', padding: '12px 8px', fontWeight: 600 }}>Pool</th>}
+            {groupMode !== 'type' && <th style={{ textAlign: 'left', padding: '12px 8px', fontWeight: 600 }}>Type</th>}
+            {groupMode !== 'pool' && <th style={{ textAlign: 'left', padding: '12px 8px', fontWeight: 600 }}>Pool</th>}
+            {groupMode !== 'token' && <th style={{ textAlign: 'left', padding: '12px 8px', fontWeight: 600 }}>Token</th>}
             <th style={{ textAlign: 'left', padding: '12px 8px', fontWeight: 600 }}>Signature</th>
           </tr>
         </thead>
@@ -147,44 +165,103 @@ export default function TopTransactionsTable({
               <td style={{ padding: '12px 8px', color: 'var(--ifm-color-secondary)' }}>
                 {formatDate(tx.timestamp)}
               </td>
-              <td style={{ padding: '12px 8px' }}>
-                <div style={{
-                  fontSize: '13px',
-                  maxWidth: '150px',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                }}>
-                  {tx.label}
-                </div>
-              </td>
-              <td style={{ padding: '12px 8px' }}>
-                <div
-                  style={{
+
+              {/* Primary column (first): Token, Type, or Pool based on groupMode */}
+              {groupMode === 'token' && (
+                <td style={{ padding: '12px 8px' }}>
+                  <div
+                    style={{
+                      fontSize: '13px',
+                      maxWidth: '150px',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                      cursor: 'help',
+                    }}
+                    title={tx.mint}
+                  >
+                    {tx.token_name || mintToName[tx.mint] || tx.mint}
+                  </div>
+                </td>
+              )}
+              {groupMode === 'type' && (
+                <td style={{ padding: '12px 8px' }}>
+                  <div style={{
                     fontSize: '13px',
                     maxWidth: '150px',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
-                    cursor: groupMode === 'token' ? 'help' : 'default',
-                  }}
-                  title={groupMode === 'token' ? tx.group : undefined}
-                >
-                  {groupMode === 'token' ? (mintToName[tx.group] || tx.group) : tx.group}
-                </div>
-              </td>
-              <td style={{ padding: '12px 8px' }}>
-                <div style={{
-                  fontSize: '12px',
-                  color: 'var(--ifm-color-secondary)',
-                  maxWidth: '200px',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                }}>
-                  {tx.pool_label}
-                </div>
-              </td>
+                  }}>
+                    {tx.label}
+                  </div>
+                </td>
+              )}
+              {groupMode === 'pool' && (
+                <td style={{ padding: '12px 8px' }}>
+                  <div style={{
+                    fontSize: '12px',
+                    color: 'var(--ifm-color-secondary)',
+                    maxWidth: '200px',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}>
+                    {tx.pool_label.replace(/<br>/g, ' ')}
+                  </div>
+                </td>
+              )}
+
+              {/* Type column (if not primary) */}
+              {groupMode !== 'type' && (
+                <td style={{ padding: '12px 8px' }}>
+                  <div style={{
+                    fontSize: '13px',
+                    maxWidth: '150px',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}>
+                    {tx.label}
+                  </div>
+                </td>
+              )}
+
+              {/* Pool column (if not primary) */}
+              {groupMode !== 'pool' && (
+                <td style={{ padding: '12px 8px' }}>
+                  <div style={{
+                    fontSize: '12px',
+                    color: 'var(--ifm-color-secondary)',
+                    maxWidth: '200px',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}>
+                    {tx.pool_label.replace(/<br>/g, ' ')}
+                  </div>
+                </td>
+              )}
+
+              {/* Token column (if not primary) */}
+              {groupMode !== 'token' && (
+                <td style={{ padding: '12px 8px' }}>
+                  <div
+                    style={{
+                      fontSize: '13px',
+                      maxWidth: '150px',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                      cursor: 'help',
+                    }}
+                    title={tx.mint}
+                  >
+                    {tx.token_name || mintToName[tx.mint] || tx.mint}
+                  </div>
+                </td>
+              )}
+
               <td style={{ padding: '12px 8px' }}>
                 <a
                   href={`https://solscan.io/tx/${tx.signature}`}
@@ -203,7 +280,7 @@ export default function TopTransactionsTable({
                     e.currentTarget.style.textDecoration = 'none';
                   }}
                 >
-                  {tx.signature.slice(0, 8)}...{tx.signature.slice(-8)}
+                  {tx.signature.slice(0, 5)}...{tx.signature.slice(-5)}
                 </a>
               </td>
             </tr>

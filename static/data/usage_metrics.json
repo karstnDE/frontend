@@ -1,0 +1,1274 @@
+{
+  "generated_at": "2025-10-25T20:11:11.830121+00:00",
+  "date_range": {
+    "start": "2025-07-27",
+    "end": "2025-10-22"
+  },
+  "summary": {
+    "transactions_scanned": 130282,
+    "staker_unique_addresses": 4711,
+    "daily_active_unique_addresses": 27625
+  },
+  "stakers": {
+    "daily_counts": [
+      {
+        "date": "2025-07-27",
+        "count": 542
+      },
+      {
+        "date": "2025-07-28",
+        "count": 565
+      },
+      {
+        "date": "2025-07-29",
+        "count": 204
+      },
+      {
+        "date": "2025-07-30",
+        "count": 1900
+      },
+      {
+        "date": "2025-07-31",
+        "count": 937
+      },
+      {
+        "date": "2025-08-01",
+        "count": 550
+      },
+      {
+        "date": "2025-08-02",
+        "count": 351
+      },
+      {
+        "date": "2025-08-03",
+        "count": 255
+      },
+      {
+        "date": "2025-08-04",
+        "count": 237
+      },
+      {
+        "date": "2025-08-05",
+        "count": 230
+      },
+      {
+        "date": "2025-08-06",
+        "count": 137
+      },
+      {
+        "date": "2025-08-07",
+        "count": 154
+      },
+      {
+        "date": "2025-08-08",
+        "count": 122
+      },
+      {
+        "date": "2025-08-09",
+        "count": 121
+      },
+      {
+        "date": "2025-08-10",
+        "count": 96
+      },
+      {
+        "date": "2025-08-11",
+        "count": 196
+      },
+      {
+        "date": "2025-08-12",
+        "count": 225
+      },
+      {
+        "date": "2025-08-13",
+        "count": 213
+      },
+      {
+        "date": "2025-08-14",
+        "count": 168
+      },
+      {
+        "date": "2025-08-15",
+        "count": 132
+      },
+      {
+        "date": "2025-08-16",
+        "count": 267
+      },
+      {
+        "date": "2025-08-17",
+        "count": 202
+      },
+      {
+        "date": "2025-08-18",
+        "count": 172
+      },
+      {
+        "date": "2025-08-19",
+        "count": 248
+      },
+      {
+        "date": "2025-08-20",
+        "count": 209
+      },
+      {
+        "date": "2025-08-21",
+        "count": 119
+      },
+      {
+        "date": "2025-08-22",
+        "count": 160
+      },
+      {
+        "date": "2025-08-23",
+        "count": 220
+      },
+      {
+        "date": "2025-08-24",
+        "count": 230
+      },
+      {
+        "date": "2025-08-25",
+        "count": 246
+      },
+      {
+        "date": "2025-08-26",
+        "count": 180
+      },
+      {
+        "date": "2025-08-27",
+        "count": 178
+      },
+      {
+        "date": "2025-08-28",
+        "count": 124
+      },
+      {
+        "date": "2025-08-29",
+        "count": 135
+      },
+      {
+        "date": "2025-08-30",
+        "count": 134
+      },
+      {
+        "date": "2025-08-31",
+        "count": 132
+      },
+      {
+        "date": "2025-09-01",
+        "count": 87
+      },
+      {
+        "date": "2025-09-02",
+        "count": 100
+      },
+      {
+        "date": "2025-09-03",
+        "count": 115
+      },
+      {
+        "date": "2025-09-04",
+        "count": 117
+      },
+      {
+        "date": "2025-09-05",
+        "count": 135
+      },
+      {
+        "date": "2025-09-06",
+        "count": 167
+      },
+      {
+        "date": "2025-09-07",
+        "count": 119
+      },
+      {
+        "date": "2025-09-08",
+        "count": 122
+      },
+      {
+        "date": "2025-09-09",
+        "count": 139
+      },
+      {
+        "date": "2025-09-10",
+        "count": 107
+      },
+      {
+        "date": "2025-09-11",
+        "count": 155
+      },
+      {
+        "date": "2025-09-12",
+        "count": 173
+      },
+      {
+        "date": "2025-09-13",
+        "count": 133
+      },
+      {
+        "date": "2025-09-14",
+        "count": 124
+      },
+      {
+        "date": "2025-09-15",
+        "count": 110
+      },
+      {
+        "date": "2025-09-16",
+        "count": 91
+      },
+      {
+        "date": "2025-09-17",
+        "count": 113
+      },
+      {
+        "date": "2025-09-18",
+        "count": 118
+      },
+      {
+        "date": "2025-09-19",
+        "count": 88
+      },
+      {
+        "date": "2025-09-20",
+        "count": 101
+      },
+      {
+        "date": "2025-09-21",
+        "count": 86
+      },
+      {
+        "date": "2025-09-22",
+        "count": 107
+      },
+      {
+        "date": "2025-09-23",
+        "count": 92
+      },
+      {
+        "date": "2025-09-24",
+        "count": 113
+      },
+      {
+        "date": "2025-09-25",
+        "count": 91
+      },
+      {
+        "date": "2025-09-26",
+        "count": 93
+      },
+      {
+        "date": "2025-09-27",
+        "count": 58
+      },
+      {
+        "date": "2025-09-28",
+        "count": 60
+      },
+      {
+        "date": "2025-09-29",
+        "count": 68
+      },
+      {
+        "date": "2025-09-30",
+        "count": 54
+      },
+      {
+        "date": "2025-10-01",
+        "count": 65
+      },
+      {
+        "date": "2025-10-02",
+        "count": 77
+      },
+      {
+        "date": "2025-10-03",
+        "count": 63
+      },
+      {
+        "date": "2025-10-04",
+        "count": 61
+      },
+      {
+        "date": "2025-10-05",
+        "count": 76
+      },
+      {
+        "date": "2025-10-06",
+        "count": 78
+      },
+      {
+        "date": "2025-10-07",
+        "count": 87
+      },
+      {
+        "date": "2025-10-08",
+        "count": 81
+      },
+      {
+        "date": "2025-10-09",
+        "count": 68
+      },
+      {
+        "date": "2025-10-10",
+        "count": 90
+      },
+      {
+        "date": "2025-10-11",
+        "count": 101
+      },
+      {
+        "date": "2025-10-12",
+        "count": 60
+      },
+      {
+        "date": "2025-10-13",
+        "count": 69
+      },
+      {
+        "date": "2025-10-14",
+        "count": 62
+      },
+      {
+        "date": "2025-10-15",
+        "count": 55
+      },
+      {
+        "date": "2025-10-16",
+        "count": 68
+      },
+      {
+        "date": "2025-10-17",
+        "count": 83
+      },
+      {
+        "date": "2025-10-18",
+        "count": 60
+      },
+      {
+        "date": "2025-10-19",
+        "count": 51
+      },
+      {
+        "date": "2025-10-20",
+        "count": 65
+      },
+      {
+        "date": "2025-10-21",
+        "count": 58
+      },
+      {
+        "date": "2025-10-22",
+        "count": 42
+      }
+    ],
+    "top_wallets": [
+      {
+        "address": "ExFcWT2snFVAHa7hFhFbhE8sHyEcMcvAcy6nr4jQRbeF",
+        "tx_count": 293,
+        "days_active": 74,
+        "first_seen": "2025-07-28",
+        "last_seen": "2025-10-22"
+      },
+      {
+        "address": "CiVSK81H4kuC4LRiRb93fPLoxFmW5YfCKxnKJsvzzPza",
+        "tx_count": 308,
+        "days_active": 71,
+        "first_seen": "2025-07-28",
+        "last_seen": "2025-10-22"
+      },
+      {
+        "address": "Eef4P5aFkZAoudhV7qvmxYJaLuxpBLLQek6oCh4jSbrp",
+        "tx_count": 86,
+        "days_active": 59,
+        "first_seen": "2025-08-01",
+        "last_seen": "2025-10-22"
+      },
+      {
+        "address": "ECyvtxvY4KNBt5vfLtdsMrp77mKjL3JD6aha9m3aXBvd",
+        "tx_count": 173,
+        "days_active": 55,
+        "first_seen": "2025-08-11",
+        "last_seen": "2025-10-22"
+      },
+      {
+        "address": "4t6cFgFThjH2HrgAxnVtvTVkDmDoPAHGy9RfSoprsJRa",
+        "tx_count": 100,
+        "days_active": 51,
+        "first_seen": "2025-07-28",
+        "last_seen": "2025-10-22"
+      },
+      {
+        "address": "6yA7bhwaZQUv2VFPeHFBsPUwr2pv4hLVCfBg4iYK3wLa",
+        "tx_count": 103,
+        "days_active": 45,
+        "first_seen": "2025-08-21",
+        "last_seen": "2025-10-20"
+      },
+      {
+        "address": "PsZoZgAzF5qM4gL5ZczPkdSTSDFEvcvKMUGgHsuYP77",
+        "tx_count": 82,
+        "days_active": 44,
+        "first_seen": "2025-07-31",
+        "last_seen": "2025-10-20"
+      },
+      {
+        "address": "3ovDaHpvxoVQ9EycH2HGo8bsbAy49CnU5VAHR1wmVypN",
+        "tx_count": 55,
+        "days_active": 43,
+        "first_seen": "2025-07-30",
+        "last_seen": "2025-10-21"
+      },
+      {
+        "address": "6szPPBa2qrM3RK952aYChXEZ6CjJScQ4HtrSYBqwv4yn",
+        "tx_count": 76,
+        "days_active": 42,
+        "first_seen": "2025-07-30",
+        "last_seen": "2025-10-21"
+      },
+      {
+        "address": "6VTAjq7RvPxwo2P7hJ1odaz2tu8QRZRSjg34HCezWnH7",
+        "tx_count": 48,
+        "days_active": 41,
+        "first_seen": "2025-07-27",
+        "last_seen": "2025-10-20"
+      }
+    ]
+  },
+  "daily_users": {
+    "daily_counts": [
+      {
+        "date": "2025-07-31",
+        "count": 468
+      },
+      {
+        "date": "2025-08-01",
+        "count": 745
+      },
+      {
+        "date": "2025-08-02",
+        "count": 486
+      },
+      {
+        "date": "2025-08-03",
+        "count": 374
+      },
+      {
+        "date": "2025-08-04",
+        "count": 618
+      },
+      {
+        "date": "2025-08-05",
+        "count": 783
+      },
+      {
+        "date": "2025-08-06",
+        "count": 688
+      },
+      {
+        "date": "2025-08-07",
+        "count": 718
+      },
+      {
+        "date": "2025-08-08",
+        "count": 630
+      },
+      {
+        "date": "2025-08-09",
+        "count": 634
+      },
+      {
+        "date": "2025-08-10",
+        "count": 563
+      },
+      {
+        "date": "2025-08-11",
+        "count": 761
+      },
+      {
+        "date": "2025-08-12",
+        "count": 692
+      },
+      {
+        "date": "2025-08-13",
+        "count": 972
+      },
+      {
+        "date": "2025-08-14",
+        "count": 908
+      },
+      {
+        "date": "2025-08-15",
+        "count": 620
+      },
+      {
+        "date": "2025-08-16",
+        "count": 693
+      },
+      {
+        "date": "2025-08-17",
+        "count": 540
+      },
+      {
+        "date": "2025-08-18",
+        "count": 484
+      },
+      {
+        "date": "2025-08-19",
+        "count": 493
+      },
+      {
+        "date": "2025-08-20",
+        "count": 432
+      },
+      {
+        "date": "2025-08-21",
+        "count": 466
+      },
+      {
+        "date": "2025-08-22",
+        "count": 618
+      },
+      {
+        "date": "2025-08-23",
+        "count": 604
+      },
+      {
+        "date": "2025-08-24",
+        "count": 560
+      },
+      {
+        "date": "2025-08-25",
+        "count": 747
+      },
+      {
+        "date": "2025-08-26",
+        "count": 504
+      },
+      {
+        "date": "2025-08-27",
+        "count": 583
+      },
+      {
+        "date": "2025-08-28",
+        "count": 787
+      },
+      {
+        "date": "2025-08-29",
+        "count": 632
+      },
+      {
+        "date": "2025-08-30",
+        "count": 420
+      },
+      {
+        "date": "2025-08-31",
+        "count": 318
+      },
+      {
+        "date": "2025-09-01",
+        "count": 364
+      },
+      {
+        "date": "2025-09-02",
+        "count": 349
+      },
+      {
+        "date": "2025-09-03",
+        "count": 431
+      },
+      {
+        "date": "2025-09-04",
+        "count": 361
+      },
+      {
+        "date": "2025-09-05",
+        "count": 499
+      },
+      {
+        "date": "2025-09-06",
+        "count": 370
+      },
+      {
+        "date": "2025-09-07",
+        "count": 297
+      },
+      {
+        "date": "2025-09-08",
+        "count": 549
+      },
+      {
+        "date": "2025-09-09",
+        "count": 465
+      },
+      {
+        "date": "2025-09-10",
+        "count": 574
+      },
+      {
+        "date": "2025-09-11",
+        "count": 594
+      },
+      {
+        "date": "2025-09-12",
+        "count": 898
+      },
+      {
+        "date": "2025-09-13",
+        "count": 432
+      },
+      {
+        "date": "2025-09-14",
+        "count": 633
+      },
+      {
+        "date": "2025-09-15",
+        "count": 585
+      },
+      {
+        "date": "2025-09-16",
+        "count": 489
+      },
+      {
+        "date": "2025-09-17",
+        "count": 469
+      },
+      {
+        "date": "2025-09-18",
+        "count": 755
+      },
+      {
+        "date": "2025-09-19",
+        "count": 453
+      },
+      {
+        "date": "2025-09-20",
+        "count": 327
+      },
+      {
+        "date": "2025-09-21",
+        "count": 374
+      },
+      {
+        "date": "2025-09-22",
+        "count": 708
+      },
+      {
+        "date": "2025-09-23",
+        "count": 386
+      },
+      {
+        "date": "2025-09-24",
+        "count": 415
+      },
+      {
+        "date": "2025-09-25",
+        "count": 445
+      },
+      {
+        "date": "2025-09-26",
+        "count": 411
+      },
+      {
+        "date": "2025-09-27",
+        "count": 232
+      },
+      {
+        "date": "2025-09-28",
+        "count": 236
+      },
+      {
+        "date": "2025-09-29",
+        "count": 404
+      },
+      {
+        "date": "2025-09-30",
+        "count": 286
+      },
+      {
+        "date": "2025-10-01",
+        "count": 372
+      },
+      {
+        "date": "2025-10-02",
+        "count": 413
+      },
+      {
+        "date": "2025-10-03",
+        "count": 332
+      },
+      {
+        "date": "2025-10-04",
+        "count": 251
+      },
+      {
+        "date": "2025-10-05",
+        "count": 294
+      },
+      {
+        "date": "2025-10-06",
+        "count": 292
+      },
+      {
+        "date": "2025-10-07",
+        "count": 367
+      },
+      {
+        "date": "2025-10-08",
+        "count": 360
+      },
+      {
+        "date": "2025-10-09",
+        "count": 305
+      },
+      {
+        "date": "2025-10-10",
+        "count": 558
+      },
+      {
+        "date": "2025-10-11",
+        "count": 602
+      },
+      {
+        "date": "2025-10-12",
+        "count": 447
+      },
+      {
+        "date": "2025-10-13",
+        "count": 514
+      },
+      {
+        "date": "2025-10-14",
+        "count": 438
+      },
+      {
+        "date": "2025-10-15",
+        "count": 492
+      },
+      {
+        "date": "2025-10-16",
+        "count": 488
+      },
+      {
+        "date": "2025-10-17",
+        "count": 475
+      },
+      {
+        "date": "2025-10-18",
+        "count": 297
+      },
+      {
+        "date": "2025-10-19",
+        "count": 251
+      },
+      {
+        "date": "2025-10-20",
+        "count": 384
+      },
+      {
+        "date": "2025-10-21",
+        "count": 404
+      },
+      {
+        "date": "2025-10-22",
+        "count": 351
+      }
+    ],
+    "top_wallets": [
+      {
+        "address": "9j6dHYVg6jkWX2Ejp1i6M4HkzRqKtVdWfLNE9ZUhsUxM",
+        "tx_count": 59161,
+        "days_active": 84,
+        "first_seen": "2025-07-31",
+        "last_seen": "2025-10-22"
+      },
+      {
+        "address": "4mfejFGRr7YnN18Pyk6cnEE1DcngMQpuVmLLNE2gQVzw",
+        "tx_count": 3633,
+        "days_active": 84,
+        "first_seen": "2025-07-31",
+        "last_seen": "2025-10-22"
+      },
+      {
+        "address": "4ZbyCVeco39vbKmT6kL2xCa2ZzG8DUSH4XiBRE6g6FyS",
+        "tx_count": 179,
+        "days_active": 82,
+        "first_seen": "2025-07-31",
+        "last_seen": "2025-10-22"
+      },
+      {
+        "address": "9Ti7d3CRZPr7uz4qXFW14VrTc5YJQvkK8jfzGFE2e3Nj",
+        "tx_count": 384,
+        "days_active": 80,
+        "first_seen": "2025-07-31",
+        "last_seen": "2025-10-22"
+      },
+      {
+        "address": "FRMKytYJ93LDPcY2itZkewfGBCQ25FRyd5SEhQ7XG7EJ",
+        "tx_count": 412,
+        "days_active": 79,
+        "first_seen": "2025-07-31",
+        "last_seen": "2025-10-22"
+      },
+      {
+        "address": "HzfgzoEdCudib7pE99ABJch8ontDnF2h3yqRnK5J9TTF",
+        "tx_count": 266,
+        "days_active": 78,
+        "first_seen": "2025-08-01",
+        "last_seen": "2025-10-22"
+      },
+      {
+        "address": "9uVU6RhD4Z9fLQNeiLdQRMmfLwmGaS46KxTHotKACspX",
+        "tx_count": 372,
+        "days_active": 77,
+        "first_seen": "2025-07-31",
+        "last_seen": "2025-10-22"
+      },
+      {
+        "address": "9UoziQxdUg1DFb1eezpAdbWa7gRM6ktX1GKdBhMyNbuD",
+        "tx_count": 278,
+        "days_active": 76,
+        "first_seen": "2025-07-31",
+        "last_seen": "2025-10-22"
+      },
+      {
+        "address": "84nnhicpKP5DeUVHyqV1FFRfsecDohYkXFfuj1LSa6cK",
+        "tx_count": 264,
+        "days_active": 75,
+        "first_seen": "2025-07-31",
+        "last_seen": "2025-10-22"
+      },
+      {
+        "address": "C8Vheda4gm2PtBysNNGzP2TKDZyKxLRoXtvzqBchN5C9",
+        "tx_count": 274,
+        "days_active": 74,
+        "first_seen": "2025-07-31",
+        "last_seen": "2025-10-22"
+      }
+    ]
+  },
+  "weekly_users": {
+    "rolling_counts": [
+      {
+        "date": "2025-07-31",
+        "count": 468
+      },
+      {
+        "date": "2025-08-01",
+        "count": 1121
+      },
+      {
+        "date": "2025-08-02",
+        "count": 1473
+      },
+      {
+        "date": "2025-08-03",
+        "count": 1727
+      },
+      {
+        "date": "2025-08-04",
+        "count": 2191
+      },
+      {
+        "date": "2025-08-05",
+        "count": 2797
+      },
+      {
+        "date": "2025-08-06",
+        "count": 3294
+      },
+      {
+        "date": "2025-08-07",
+        "count": 3467
+      },
+      {
+        "date": "2025-08-08",
+        "count": 3347
+      },
+      {
+        "date": "2025-08-09",
+        "count": 3449
+      },
+      {
+        "date": "2025-08-10",
+        "count": 3589
+      },
+      {
+        "date": "2025-08-11",
+        "count": 3704
+      },
+      {
+        "date": "2025-08-12",
+        "count": 3604
+      },
+      {
+        "date": "2025-08-13",
+        "count": 3846
+      },
+      {
+        "date": "2025-08-14",
+        "count": 4012
+      },
+      {
+        "date": "2025-08-15",
+        "count": 4019
+      },
+      {
+        "date": "2025-08-16",
+        "count": 4130
+      },
+      {
+        "date": "2025-08-17",
+        "count": 4126
+      },
+      {
+        "date": "2025-08-18",
+        "count": 3910
+      },
+      {
+        "date": "2025-08-19",
+        "count": 3760
+      },
+      {
+        "date": "2025-08-20",
+        "count": 3324
+      },
+      {
+        "date": "2025-08-21",
+        "count": 2943
+      },
+      {
+        "date": "2025-08-22",
+        "count": 2934
+      },
+      {
+        "date": "2025-08-23",
+        "count": 2820
+      },
+      {
+        "date": "2025-08-24",
+        "count": 2833
+      },
+      {
+        "date": "2025-08-25",
+        "count": 3039
+      },
+      {
+        "date": "2025-08-26",
+        "count": 3057
+      },
+      {
+        "date": "2025-08-27",
+        "count": 3168
+      },
+      {
+        "date": "2025-08-28",
+        "count": 3412
+      },
+      {
+        "date": "2025-08-29",
+        "count": 3420
+      },
+      {
+        "date": "2025-08-30",
+        "count": 3268
+      },
+      {
+        "date": "2025-08-31",
+        "count": 3073
+      },
+      {
+        "date": "2025-09-01",
+        "count": 2764
+      },
+      {
+        "date": "2025-09-02",
+        "count": 2652
+      },
+      {
+        "date": "2025-09-03",
+        "count": 2518
+      },
+      {
+        "date": "2025-09-04",
+        "count": 2176
+      },
+      {
+        "date": "2025-09-05",
+        "count": 2051
+      },
+      {
+        "date": "2025-09-06",
+        "count": 2019
+      },
+      {
+        "date": "2025-09-07",
+        "count": 2007
+      },
+      {
+        "date": "2025-09-08",
+        "count": 2129
+      },
+      {
+        "date": "2025-09-09",
+        "count": 2207
+      },
+      {
+        "date": "2025-09-10",
+        "count": 2325
+      },
+      {
+        "date": "2025-09-11",
+        "count": 2546
+      },
+      {
+        "date": "2025-09-12",
+        "count": 2839
+      },
+      {
+        "date": "2025-09-13",
+        "count": 2886
+      },
+      {
+        "date": "2025-09-14",
+        "count": 3113
+      },
+      {
+        "date": "2025-09-15",
+        "count": 3170
+      },
+      {
+        "date": "2025-09-16",
+        "count": 3223
+      },
+      {
+        "date": "2025-09-17",
+        "count": 3149
+      },
+      {
+        "date": "2025-09-18",
+        "count": 3262
+      },
+      {
+        "date": "2025-09-19",
+        "count": 2912
+      },
+      {
+        "date": "2025-09-20",
+        "count": 2844
+      },
+      {
+        "date": "2025-09-21",
+        "count": 2675
+      },
+      {
+        "date": "2025-09-22",
+        "count": 2805
+      },
+      {
+        "date": "2025-09-23",
+        "count": 2736
+      },
+      {
+        "date": "2025-09-24",
+        "count": 2702
+      },
+      {
+        "date": "2025-09-25",
+        "count": 2471
+      },
+      {
+        "date": "2025-09-26",
+        "count": 2449
+      },
+      {
+        "date": "2025-09-27",
+        "count": 2381
+      },
+      {
+        "date": "2025-09-28",
+        "count": 2270
+      },
+      {
+        "date": "2025-09-29",
+        "count": 2013
+      },
+      {
+        "date": "2025-09-30",
+        "count": 1937
+      },
+      {
+        "date": "2025-10-01",
+        "count": 1872
+      },
+      {
+        "date": "2025-10-02",
+        "count": 1824
+      },
+      {
+        "date": "2025-10-03",
+        "count": 1744
+      },
+      {
+        "date": "2025-10-04",
+        "count": 1752
+      },
+      {
+        "date": "2025-10-05",
+        "count": 1781
+      },
+      {
+        "date": "2025-10-06",
+        "count": 1676
+      },
+      {
+        "date": "2025-10-07",
+        "count": 1737
+      },
+      {
+        "date": "2025-10-08",
+        "count": 1737
+      },
+      {
+        "date": "2025-10-09",
+        "count": 1654
+      },
+      {
+        "date": "2025-10-10",
+        "count": 1862
+      },
+      {
+        "date": "2025-10-11",
+        "count": 2155
+      },
+      {
+        "date": "2025-10-12",
+        "count": 2277
+      },
+      {
+        "date": "2025-10-13",
+        "count": 2461
+      },
+      {
+        "date": "2025-10-14",
+        "count": 2523
+      },
+      {
+        "date": "2025-10-15",
+        "count": 2645
+      },
+      {
+        "date": "2025-10-16",
+        "count": 2776
+      },
+      {
+        "date": "2025-10-17",
+        "count": 2678
+      },
+      {
+        "date": "2025-10-18",
+        "count": 2429
+      },
+      {
+        "date": "2025-10-19",
+        "count": 2273
+      },
+      {
+        "date": "2025-10-20",
+        "count": 2163
+      },
+      {
+        "date": "2025-10-21",
+        "count": 2137
+      },
+      {
+        "date": "2025-10-22",
+        "count": 2021
+      }
+    ],
+    "top_wallets": [
+      {
+        "address": "9j6dHYVg6jkWX2Ejp1i6M4HkzRqKtVdWfLNE9ZUhsUxM",
+        "tx_count": 59161,
+        "days_active": 84,
+        "first_seen": "2025-07-31",
+        "last_seen": "2025-10-22",
+        "active_weeks": 13
+      },
+      {
+        "address": "4mfejFGRr7YnN18Pyk6cnEE1DcngMQpuVmLLNE2gQVzw",
+        "tx_count": 3633,
+        "days_active": 84,
+        "first_seen": "2025-07-31",
+        "last_seen": "2025-10-22",
+        "active_weeks": 13
+      },
+      {
+        "address": "4ZbyCVeco39vbKmT6kL2xCa2ZzG8DUSH4XiBRE6g6FyS",
+        "tx_count": 179,
+        "days_active": 82,
+        "first_seen": "2025-07-31",
+        "last_seen": "2025-10-22",
+        "active_weeks": 13
+      },
+      {
+        "address": "9Ti7d3CRZPr7uz4qXFW14VrTc5YJQvkK8jfzGFE2e3Nj",
+        "tx_count": 384,
+        "days_active": 80,
+        "first_seen": "2025-07-31",
+        "last_seen": "2025-10-22",
+        "active_weeks": 13
+      },
+      {
+        "address": "FRMKytYJ93LDPcY2itZkewfGBCQ25FRyd5SEhQ7XG7EJ",
+        "tx_count": 412,
+        "days_active": 79,
+        "first_seen": "2025-07-31",
+        "last_seen": "2025-10-22",
+        "active_weeks": 13
+      },
+      {
+        "address": "HzfgzoEdCudib7pE99ABJch8ontDnF2h3yqRnK5J9TTF",
+        "tx_count": 266,
+        "days_active": 78,
+        "first_seen": "2025-08-01",
+        "last_seen": "2025-10-22",
+        "active_weeks": 13
+      },
+      {
+        "address": "9uVU6RhD4Z9fLQNeiLdQRMmfLwmGaS46KxTHotKACspX",
+        "tx_count": 372,
+        "days_active": 77,
+        "first_seen": "2025-07-31",
+        "last_seen": "2025-10-22",
+        "active_weeks": 13
+      },
+      {
+        "address": "9UoziQxdUg1DFb1eezpAdbWa7gRM6ktX1GKdBhMyNbuD",
+        "tx_count": 278,
+        "days_active": 76,
+        "first_seen": "2025-07-31",
+        "last_seen": "2025-10-22",
+        "active_weeks": 13
+      },
+      {
+        "address": "84nnhicpKP5DeUVHyqV1FFRfsecDohYkXFfuj1LSa6cK",
+        "tx_count": 264,
+        "days_active": 75,
+        "first_seen": "2025-07-31",
+        "last_seen": "2025-10-22",
+        "active_weeks": 13
+      },
+      {
+        "address": "C8Vheda4gm2PtBysNNGzP2TKDZyKxLRoXtvzqBchN5C9",
+        "tx_count": 274,
+        "days_active": 74,
+        "first_seen": "2025-07-31",
+        "last_seen": "2025-10-22",
+        "active_weeks": 13
+      }
+    ]
+  }
+}

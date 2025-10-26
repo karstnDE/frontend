@@ -1,0 +1,58 @@
+---
+id: usage-statistics-weekly
+title: Weekly Active Users
+---
+
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
+
+# Weekly Active Users
+
+<BrowserOnly fallback={<LoadingSpinner />}>
+  {() => {
+    const UsageTimeSeriesChart = require('@site/src/components/Usage/UsageTimeSeriesChart').default;
+    const UsageTopAddresses = require('@site/src/components/Usage/UsageTopAddresses').default;
+    const { useUsageMetrics } = require('@site/src/hooks/useUsageMetrics');
+
+    function WeeklyActiveUsersPage() {
+      const { data, loading, error } = useUsageMetrics();
+
+      if (loading) {
+        return <LoadingSpinner />;
+      }
+
+      if (error || !data) {
+        return (
+          <div className="alert alert--danger" role="alert">
+            <strong>Could not load usage metrics.</strong> {error || 'Unknown error'}
+          </div>
+        );
+      }
+
+      const { weekly_users } = data;
+
+      return (
+        <>
+          <p>
+            Weekly actives measure the union of addresses that participated at least once in the trailing seven days. This
+            smooths single-day spikes and reveals sustained participation.
+          </p>
+          <UsageTimeSeriesChart
+            title="Weekly Active Users (7-day trailing union)"
+            data={weekly_users.rolling_counts}
+            yAxisLabel="Wallets"
+            description="Each point counts distinct wallets that executed a fee-generating action within the preceding seven days."
+          />
+          <UsageTopAddresses
+            title="Top Weekly Active Wallets"
+            rows={weekly_users.top_wallets}
+            showWeeks
+            description="Ranked by the number of ISO weeks in which a wallet appeared in the active set."
+          />
+        </>
+      );
+    }
+
+    return <WeeklyActiveUsersPage />;
+  }}
+</BrowserOnly>

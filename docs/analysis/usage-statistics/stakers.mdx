@@ -1,0 +1,57 @@
+---
+id: usage-statistics-stakers
+title: Stakers
+---
+
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
+
+# Stakers
+
+<BrowserOnly fallback={<LoadingSpinner />}>
+  {() => {
+    const UsageTimeSeriesChart = require('@site/src/components/Usage/UsageTimeSeriesChart').default;
+    const UsageTopAddresses = require('@site/src/components/Usage/UsageTopAddresses').default;
+    const { useUsageMetrics } = require('@site/src/hooks/useUsageMetrics');
+
+    function StakerUsagePage() {
+      const { data, loading, error } = useUsageMetrics();
+
+      if (loading) {
+        return <LoadingSpinner />;
+      }
+
+      if (error || !data) {
+        return (
+          <div className="alert alert--danger" role="alert">
+            <strong>Could not load usage metrics.</strong> {error || 'Unknown error'}
+          </div>
+        );
+      }
+
+      const { stakers } = data;
+
+      return (
+        <>
+          <p>
+            Stakers are wallets interacting with the staking program (stake, unstake, withdraw or manage rewards). Tracking
+            these addresses highlights how capital allocates into and out of DefiTuna staking.
+          </p>
+          <UsageTimeSeriesChart
+            title="Daily Stakers"
+            data={stakers.daily_counts}
+            yAxisLabel="Wallets"
+            description="Unique wallets performing staking operations per UTC day."
+          />
+          <UsageTopAddresses
+            title="Top Staker Wallets"
+            rows={stakers.top_wallets}
+            description="Ranked by the number of distinct days a wallet executed staking instructions."
+          />
+        </>
+      );
+    }
+
+    return <StakerUsagePage />;
+  }}
+</BrowserOnly>

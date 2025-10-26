@@ -20,6 +20,7 @@ export interface Transaction {
   label: string;
   type: string;
   mint: string;
+  token_name?: string;  // Readable token name (e.g., "PUMP" instead of mint address)
   pool_id: string;
   pool_label: string;
 }
@@ -56,8 +57,9 @@ export interface SummaryData {
     total_sol: number;
   }>;
   top_types_by_value: Array<{
-    type: string;
-    label?: string;
+    type: string;           // Display name (primary identifier)
+    types?: string[];       // Array of technical types (for filtering)
+    label?: string;         // Same as type (for consistency)
     total_sol: number;
   }>;
 }
