@@ -1,7 +1,7 @@
 {
   "date_range": {
     "start": "2025-07-27",
-    "end": "2025-10-22"
+    "end": "2025-10-25"
   },
   "daily_apy": [
     {
@@ -1257,12 +1257,57 @@
       "annualized_revenue_sol": 25734.22,
       "tuna_price_sol": 0.0004480049695697983,
       "revenue_per_tuna_sol": 2.5734224352880337e-05,
-      "daily_revenue_sol": 12.5
+      "daily_revenue_sol": 12.5,
+      "usd_sol_rate": 182.84,
+      "rolling_revenue_usdc": 386733.89,
+      "daily_revenue_usdc": 2284.6,
+      "annualized_revenue_usdc": 4705262.31,
+      "revenue_per_tuna_usdc": 0.004705262310256448
+    },
+    {
+      "date": "2025-10-23",
+      "apy_percent": 6.4,
+      "rolling_days": 30,
+      "rolling_revenue_sol": 2081.12,
+      "annualized_revenue_sol": 25320.26,
+      "tuna_price_sol": 0.0003956412543219228,
+      "revenue_per_tuna_sol": 2.5320263755996337e-05,
+      "daily_revenue_sol": 11.81,
+      "usd_sol_rate": 189.65,
+      "rolling_revenue_usdc": 394681.4,
+      "daily_revenue_usdc": 2239.72,
+      "annualized_revenue_usdc": 4801957.01,
+      "revenue_per_tuna_usdc": 0.004801957006567982
+    },
+    {
+      "date": "2025-10-24",
+      "apy_percent": 5.98,
+      "rolling_days": 30,
+      "rolling_revenue_sol": 1989.16,
+      "annualized_revenue_sol": 24201.51,
+      "tuna_price_sol": 0.0004046842168223726,
+      "revenue_per_tuna_sol": 2.4201505542273836e-05,
+      "daily_revenue_sol": 13.35,
+      "usd_sol_rate": 191.88,
+      "rolling_revenue_usdc": 381675.8,
+      "daily_revenue_usdc": 2562.38,
+      "annualized_revenue_usdc": 4643722.17,
+      "revenue_per_tuna_usdc": 0.004643722173428699
+    },
+    {
+      "date": "2025-10-25",
+      "apy_percent": 5.52,
+      "rolling_days": 30,
+      "rolling_revenue_sol": 1792.91,
+      "annualized_revenue_sol": 21813.78,
+      "tuna_price_sol": 0.00039535271181697154,
+      "revenue_per_tuna_sol": 2.1813777672741337e-05,
+      "daily_revenue_sol": 10.29
     }
   ],
   "summary": {
-    "current_apy": 5.74,
-    "average_apy": 4.8,
+    "current_apy": 5.52,
+    "average_apy": 4.84,
     "max_apy": 18.29,
     "min_apy": 1.32
   }
