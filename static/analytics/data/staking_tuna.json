@@ -1,8 +1,8 @@
 {
-  "generated_at": "2025-10-26T22:28:18.950389+00:00",
+  "generated_at": "2025-10-27T03:59:21.243522+00:00",
   "date_range": {
     "start": "2025-07-24",
-    "end": "2025-10-25"
+    "end": "2025-10-26"
   },
   "supply": {
     "max": 1000000000.0
@@ -10,839 +10,847 @@
   "daily": [
     {
       "date": "2025-07-24",
-      "staked": 502500016.2074,
-      "unstaked": 355999982.511797,
-      "total": 858499998.719197,
+      "staked": 825181102.733739,
+      "unstaked": 1885072.550819,
+      "total": 827066175.284558,
       "staked_delta": 0.0,
       "total_delta": 0.0
     },
     {
       "date": "2025-07-25",
-      "staked": 502500016.2074,
-      "unstaked": 355999982.511797,
-      "total": 858499998.719197,
-      "staked_delta": 502500016.2074,
-      "total_delta": 858499998.719197
+      "staked": 825181102.733739,
+      "unstaked": 1885072.550819,
+      "total": 827066175.284558,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-07-26",
-      "staked": 497500016.2074,
-      "unstaked": 364999982.511797,
-      "total": 862499998.719197,
-      "staked_delta": -5000000.0,
-      "total_delta": 4000000.0
+      "staked": 825181102.733739,
+      "unstaked": 1885072.550819,
+      "total": 827066175.284558,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-07-27",
-      "staked": 497500016.2074,
-      "unstaked": 364999982.511797,
-      "total": 862499998.719197,
+      "staked": 825181102.733739,
+      "unstaked": 1885072.550819,
+      "total": 827066175.284558,
       "staked_delta": 0.0,
       "total_delta": 0.0
     },
     {
       "date": "2025-07-28",
-      "staked": 497500016.2074,
-      "unstaked": 364999982.511797,
-      "total": 862499998.719197,
+      "staked": 825181102.733739,
+      "unstaked": 1885072.550819,
+      "total": 827066175.284558,
       "staked_delta": 0.0,
       "total_delta": 0.0
     },
     {
       "date": "2025-07-29",
-      "staked": 497500016.2074,
-      "unstaked": 364999982.511797,
-      "total": 862499998.719197,
+      "staked": 825181102.733739,
+      "unstaked": 1885072.550819,
+      "total": 827066175.284558,
       "staked_delta": 0.0,
       "total_delta": 0.0
     },
     {
       "date": "2025-07-30",
-      "staked": 460181120.221942,
-      "unstaked": 366885055.062616,
+      "staked": 825181102.733739,
+      "unstaked": 1885072.550819,
       "total": 827066175.284558,
       "staked_delta": -37318895.985458,
-      "total_delta": -35433823.434639
+      "total_delta": 827066175.284558
     },
     {
       "date": "2025-07-31",
-      "staked": 461290215.111288,
-      "unstaked": 367377351.390741,
+      "staked": 826290197.623085,
+      "unstaked": 2377368.878944,
       "total": 828667566.502029,
       "staked_delta": 1109094.889346,
       "total_delta": 1601391.217471
     },
     {
       "date": "2025-08-01",
-      "staked": 464824873.421608,
-      "unstaked": 367940057.049132,
+      "staked": 829824855.933405,
+      "unstaked": 2940074.537335,
       "total": 832764930.47074,
       "staked_delta": 3534658.31032,
       "total_delta": 4097363.968711
     },
     {
       "date": "2025-08-02",
-      "staked": 465721167.901723,
-      "unstaked": 368143279.854264,
+      "staked": 830721150.41352,
+      "unstaked": 3143297.342467,
       "total": 833864447.755987,
       "staked_delta": 896294.480115,
       "total_delta": 1099517.285247
     },
     {
       "date": "2025-08-03",
-      "staked": 466022613.225401,
-      "unstaked": 368162944.306956,
+      "staked": 831022595.737198,
+      "unstaked": 3162961.795159,
       "total": 834185557.532357,
       "staked_delta": 301445.323678,
       "total_delta": 321109.77637
     },
     {
       "date": "2025-08-04",
-      "staked": 466708043.69935,
-      "unstaked": 368198042.649983,
+      "staked": 831708026.211147,
+      "unstaked": 3198060.138186,
       "total": 834906086.349333,
       "staked_delta": 685430.473949,
       "total_delta": 720528.816976
     },
     {
       "date": "2025-08-05",
-      "staked": 467889448.406456,
-      "unstaked": 368787092.678848,
+      "staked": 832889430.918253,
+      "unstaked": 3787110.167051,
       "total": 836676541.085304,
       "staked_delta": 1181404.707106,
       "total_delta": 1770454.735971
     },
     {
       "date": "2025-08-06",
-      "staked": 467667382.423507,
-      "unstaked": 368826427.505712,
+      "staked": 832667364.935304,
+      "unstaked": 3826444.993915,
       "total": 836493809.929219,
       "staked_delta": -222065.982949,
       "total_delta": -182731.156085
     },
     {
       "date": "2025-08-07",
-      "staked": 466545617.222534,
-      "unstaked": 369036573.670999,
+      "staked": 831545599.734331,
+      "unstaked": 4036591.159202,
       "total": 835582190.893533,
       "staked_delta": -1121765.200973,
       "total_delta": -911619.035686
     },
     {
       "date": "2025-08-08",
-      "staked": 465770342.520839,
-      "unstaked": 369049422.660976,
+      "staked": 830770325.032636,
+      "unstaked": 4049440.149179,
       "total": 834819765.181815,
       "staked_delta": -775274.701695,
       "total_delta": -762425.711718
     },
     {
       "date": "2025-08-09",
-      "staked": 464697846.808923,
-      "unstaked": 369065212.334024,
+      "staked": 829697829.32072,
+      "unstaked": 4065229.822227,
       "total": 833763059.142947,
       "staked_delta": -1072495.711916,
       "total_delta": -1056706.038868
     },
     {
       "date": "2025-08-10",
-      "staked": 463489205.230699,
-      "unstaked": 369094152.158916,
+      "staked": 828489187.742496,
+      "unstaked": 4094169.647119,
       "total": 832583357.389615,
       "staked_delta": -1208641.578224,
       "total_delta": -1179701.753332
     },
     {
       "date": "2025-08-11",
-      "staked": 465527087.675384,
-      "unstaked": 370953562.091517,
+      "staked": 830527070.187181,
+      "unstaked": 5953579.57972,
       "total": 836480649.766901,
       "staked_delta": 2037882.444685,
       "total_delta": 3897292.377286
     },
     {
       "date": "2025-08-12",
-      "staked": 465083027.219083,
-      "unstaked": 371048018.656232,
+      "staked": 830083009.73088,
+      "unstaked": 6048036.144435,
       "total": 836131045.875315,
       "staked_delta": -444060.456301,
       "total_delta": -349603.891586
     },
     {
       "date": "2025-08-13",
-      "staked": 463225255.901725,
-      "unstaked": 371111087.274802,
+      "staked": 828225238.413522,
+      "unstaked": 6111104.763005,
       "total": 834336343.176527,
       "staked_delta": -1857771.317358,
       "total_delta": -1794702.698788
     },
     {
       "date": "2025-08-14",
-      "staked": 465606108.545836,
-      "unstaked": 371178629.736131,
+      "staked": 830606091.057633,
+      "unstaked": 6178647.224334,
       "total": 836784738.281967,
       "staked_delta": 2380852.644111,
       "total_delta": 2448395.10544
     },
     {
       "date": "2025-08-15",
-      "staked": 470293051.516007,
-      "unstaked": 372134004.116449,
+      "staked": 835293034.027804,
+      "unstaked": 7134021.604652,
       "total": 842427055.632456,
       "staked_delta": 4686942.970171,
       "total_delta": 5642317.350489
     },
     {
       "date": "2025-08-16",
-      "staked": 471132013.902473,
-      "unstaked": 374238651.630938,
+      "staked": 836131996.41427,
+      "unstaked": 9238669.119141,
       "total": 845370665.533411,
       "staked_delta": 838962.386466,
       "total_delta": 2943609.900955
     },
     {
       "date": "2025-08-17",
-      "staked": 467970993.161573,
-      "unstaked": 374423784.94746,
+      "staked": 832970975.67337,
+      "unstaked": 9423802.435663,
       "total": 842394778.109033,
       "staked_delta": -3161020.7409,
       "total_delta": -2975887.424378
     },
     {
       "date": "2025-08-18",
-      "staked": 466047256.785155,
-      "unstaked": 374762207.220987,
+      "staked": 831047239.296952,
+      "unstaked": 9762224.70919,
       "total": 840809464.006142,
       "staked_delta": -1923736.376418,
       "total_delta": -1585314.102891
     },
     {
       "date": "2025-08-19",
-      "staked": 461500956.084017,
-      "unstaked": 375042406.650137,
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
       "total": 836543362.734154,
       "staked_delta": -4546300.701138,
       "total_delta": -4266101.271988
     },
     {
       "date": "2025-08-20",
-      "staked": 460018314.131165,
-      "unstaked": 375212465.210526,
-      "total": 835230779.341691,
-      "staked_delta": -1482641.952852,
-      "total_delta": -1312583.392463
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-08-21",
-      "staked": 455665052.882123,
-      "unstaked": 375483907.374292,
-      "total": 831148960.256415,
-      "staked_delta": -4353261.249042,
-      "total_delta": -4081819.085276
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-08-22",
-      "staked": 455537755.77501,
-      "unstaked": 375972157.317829,
-      "total": 831509913.092839,
-      "staked_delta": -127297.107113,
-      "total_delta": 360952.836424
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-08-23",
-      "staked": 456502586.582276,
-      "unstaked": 376904359.279018,
-      "total": 833406945.861294,
-      "staked_delta": 964830.807266,
-      "total_delta": 1897032.768455
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-08-24",
-      "staked": 456300181.108507,
-      "unstaked": 377552336.686386,
-      "total": 833852517.794893,
-      "staked_delta": -202405.473769,
-      "total_delta": 445571.933599
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-08-25",
-      "staked": 455571069.849056,
-      "unstaked": 380108125.045269,
-      "total": 835679194.894325,
-      "staked_delta": -729111.259451,
-      "total_delta": 1826677.099432
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-08-26",
-      "staked": 455322845.872676,
-      "unstaked": 380747148.840657,
-      "total": 836069994.713333,
-      "staked_delta": -248223.97638,
-      "total_delta": 390799.819008
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-08-27",
-      "staked": 453684693.305863,
-      "unstaked": 380849342.627247,
-      "total": 834534035.93311,
-      "staked_delta": -1638152.566813,
-      "total_delta": -1535958.780223
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-08-28",
-      "staked": 456525326.044798,
-      "unstaked": 380993821.382963,
-      "total": 837519147.427761,
-      "staked_delta": 2840632.738935,
-      "total_delta": 2985111.494651
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-08-29",
-      "staked": 456314872.338264,
-      "unstaked": 381034381.419933,
-      "total": 837349253.758197,
-      "staked_delta": -210453.706534,
-      "total_delta": -169893.669564
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-08-30",
-      "staked": 456128441.822867,
-      "unstaked": 381072980.753649,
-      "total": 837201422.576516,
-      "staked_delta": -186430.515397,
-      "total_delta": -147831.181681
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-08-31",
-      "staked": 455318009.787777,
-      "unstaked": 381377057.556383,
-      "total": 836695067.34416,
-      "staked_delta": -810432.03509,
-      "total_delta": -506355.232356
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-09-01",
-      "staked": 455549449.654607,
-      "unstaked": 381414542.377117,
-      "total": 836963992.031724,
-      "staked_delta": 231439.86683,
-      "total_delta": 268924.687564
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-09-02",
-      "staked": 452674211.560889,
-      "unstaked": 381473658.394301,
-      "total": 834147869.95519,
-      "staked_delta": -2875238.093718,
-      "total_delta": -2816122.076534
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-09-03",
-      "staked": 453008227.589839,
-      "unstaked": 381802044.035493,
-      "total": 834810271.625332,
-      "staked_delta": 334016.02895,
-      "total_delta": 662401.670142
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-09-04",
-      "staked": 453183456.410037,
-      "unstaked": 381812881.828141,
-      "total": 834996338.238178,
-      "staked_delta": 175228.820198,
-      "total_delta": 186066.612846
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-09-05",
-      "staked": 453669290.813184,
-      "unstaked": 381873236.508409,
-      "total": 835542527.321593,
-      "staked_delta": 485834.403147,
-      "total_delta": 546189.083415
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-09-06",
-      "staked": 453750049.842895,
-      "unstaked": 382402900.894233,
-      "total": 836152950.737128,
-      "staked_delta": 80759.029711,
-      "total_delta": 610423.415535
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-09-07",
-      "staked": 452166736.289184,
-      "unstaked": 382737487.539136,
-      "total": 834904223.82832,
-      "staked_delta": -1583313.553711,
-      "total_delta": -1248726.908808
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-09-08",
-      "staked": 452045983.586903,
-      "unstaked": 382882328.858528,
-      "total": 834928312.445431,
-      "staked_delta": -120752.702281,
-      "total_delta": 24088.617111
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-09-09",
-      "staked": 450984332.79252,
-      "unstaked": 382931199.439878,
-      "total": 833915532.232398,
-      "staked_delta": -1061650.794383,
-      "total_delta": -1012780.213033
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-09-10",
-      "staked": 453385753.76514,
-      "unstaked": 383119401.467079,
-      "total": 836505155.232219,
-      "staked_delta": 2401420.97262,
-      "total_delta": 2589622.999821
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-09-11",
-      "staked": 456666782.204837,
-      "unstaked": 383718961.744859,
-      "total": 840385743.949696,
-      "staked_delta": 3281028.439697,
-      "total_delta": 3880588.717477
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-09-12",
-      "staked": 455589899.978011,
-      "unstaked": 384304389.526878,
-      "total": 839894289.504889,
-      "staked_delta": -1076882.226826,
-      "total_delta": -491454.444807
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-09-13",
-      "staked": 455190009.351947,
-      "unstaked": 384313602.206083,
-      "total": 839503611.55803,
-      "staked_delta": -399890.626064,
-      "total_delta": -390677.946859
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-09-14",
-      "staked": 455304100.127979,
-      "unstaked": 384370435.768647,
-      "total": 839674535.896626,
-      "staked_delta": 114090.776032,
-      "total_delta": 170924.338596
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-09-15",
-      "staked": 455098764.652272,
-      "unstaked": 384377975.841236,
-      "total": 839476740.493508,
-      "staked_delta": -205335.475707,
-      "total_delta": -197795.403118
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-09-16",
-      "staked": 455236217.979443,
-      "unstaked": 384442606.778458,
-      "total": 839678824.757901,
-      "staked_delta": 137453.327171,
-      "total_delta": 202084.264393
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-09-17",
-      "staked": 455254324.037354,
-      "unstaked": 384448080.957685,
-      "total": 839702404.995039,
-      "staked_delta": 18106.057911,
-      "total_delta": 23580.237138
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-09-18",
-      "staked": 455678221.967081,
-      "unstaked": 384490109.529963,
-      "total": 840168331.497044,
-      "staked_delta": 423897.929727,
-      "total_delta": 465926.502005
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-09-19",
-      "staked": 455357952.792772,
-      "unstaked": 384696693.56251,
-      "total": 840054646.355282,
-      "staked_delta": -320269.174309,
-      "total_delta": -113685.141762
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-09-20",
-      "staked": 454883072.716689,
-      "unstaked": 384746402.82915,
-      "total": 839629475.545839,
-      "staked_delta": -474880.076083,
-      "total_delta": -425170.809443
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-09-21",
-      "staked": 454011132.8966,
-      "unstaked": 384750026.010889,
-      "total": 838761158.907489,
-      "staked_delta": -871939.820089,
-      "total_delta": -868316.63835
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-09-22",
-      "staked": 455585623.341815,
-      "unstaked": 384855264.493773,
-      "total": 840440887.835588,
-      "staked_delta": 1574490.445215,
-      "total_delta": 1679728.928099
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-09-23",
-      "staked": 455143087.646768,
-      "unstaked": 384856326.044906,
-      "total": 839999413.691674,
-      "staked_delta": -442535.695047,
-      "total_delta": -441474.143914
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-09-24",
-      "staked": 455202963.840829,
-      "unstaked": 384951730.50395,
-      "total": 840154694.344779,
-      "staked_delta": 59876.194061,
-      "total_delta": 155280.653105
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-09-25",
-      "staked": 455467005.012542,
-      "unstaked": 387187798.642929,
-      "total": 842654803.655471,
-      "staked_delta": 264041.171713,
-      "total_delta": 2500109.310692
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-09-26",
-      "staked": 455445694.659427,
-      "unstaked": 387443459.992148,
-      "total": 842889154.651575,
-      "staked_delta": -21310.353115,
-      "total_delta": 234350.996104
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-09-27",
-      "staked": 455254369.115347,
-      "unstaked": 387740990.005807,
-      "total": 842995359.121154,
-      "staked_delta": -191325.54408,
-      "total_delta": 106204.469579
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-09-28",
-      "staked": 454474098.718575,
-      "unstaked": 387783650.572817,
-      "total": 842257749.291392,
-      "staked_delta": -780270.396772,
-      "total_delta": -737609.829762
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-09-29",
-      "staked": 454451738.388935,
-      "unstaked": 387786170.745992,
-      "total": 842237909.134927,
-      "staked_delta": -22360.32964,
-      "total_delta": -19840.156465
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-09-30",
-      "staked": 454388080.945311,
-      "unstaked": 385294688.49247,
-      "total": 839682769.437781,
-      "staked_delta": -63657.443624,
-      "total_delta": -2555139.697146
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-10-01",
-      "staked": 454348316.104239,
-      "unstaked": 385806358.143742,
-      "total": 840154674.247981,
-      "staked_delta": -39764.841072,
-      "total_delta": 471904.8102
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-10-02",
-      "staked": 454501511.532674,
-      "unstaked": 385882480.210781,
-      "total": 840383991.743455,
-      "staked_delta": 153195.428435,
-      "total_delta": 229317.495474
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-10-03",
-      "staked": 454550102.069816,
-      "unstaked": 385887245.707405,
-      "total": 840437347.777221,
-      "staked_delta": 48590.537142,
-      "total_delta": 53356.033766
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-10-04",
-      "staked": 454284469.312255,
-      "unstaked": 385894059.297955,
-      "total": 840178528.61021,
-      "staked_delta": -265632.757561,
-      "total_delta": -258819.167011
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-10-05",
-      "staked": 454282268.850977,
-      "unstaked": 385894927.983831,
-      "total": 840177196.834808,
-      "staked_delta": -2200.461278,
-      "total_delta": -1331.775402
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-10-06",
-      "staked": 453351789.352618,
-      "unstaked": 385897267.770595,
-      "total": 839249057.123213,
-      "staked_delta": -930479.498359,
-      "total_delta": -928139.711595
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-10-07",
-      "staked": 454624718.763403,
-      "unstaked": 385930988.384722,
-      "total": 840555707.148125,
-      "staked_delta": 1272929.410785,
-      "total_delta": 1306650.024912
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-10-08",
-      "staked": 474401951.085102,
-      "unstaked": 386720899.860692,
-      "total": 861122850.945794,
-      "staked_delta": 19777232.321699,
-      "total_delta": 20567143.797669
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-10-09",
-      "staked": 472455311.289235,
-      "unstaked": 386795009.879743,
-      "total": 859250321.168978,
-      "staked_delta": -1946639.795867,
-      "total_delta": -1872529.776816
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-10-10",
-      "staked": 472324971.418247,
-      "unstaked": 387971390.642321,
-      "total": 860296362.060568,
-      "staked_delta": -130339.870988,
-      "total_delta": 1046040.89159
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-10-11",
-      "staked": 472886478.36014,
-      "unstaked": 388074973.945749,
-      "total": 860961452.305889,
-      "staked_delta": 561506.941893,
-      "total_delta": 665090.245321
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-10-12",
-      "staked": 473024051.498191,
-      "unstaked": 388102025.668158,
-      "total": 861126077.166349,
-      "staked_delta": 137573.138051,
-      "total_delta": 164624.86046
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-10-13",
-      "staked": 473120297.876175,
-      "unstaked": 388102025.628816,
-      "total": 861222323.504991,
-      "staked_delta": 96246.377984,
-      "total_delta": 96246.338642
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-10-14",
-      "staked": 472991808.461428,
-      "unstaked": 388165366.305801,
-      "total": 861157174.767229,
-      "staked_delta": -128489.414747,
-      "total_delta": -65148.737762
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-10-15",
-      "staked": 472872056.522138,
-      "unstaked": 388189436.340738,
-      "total": 861061492.862876,
-      "staked_delta": -119751.93929,
-      "total_delta": -95681.904353
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-10-16",
-      "staked": 472943845.422172,
-      "unstaked": 388374628.245388,
-      "total": 861318473.66756,
-      "staked_delta": 71788.900034,
-      "total_delta": 256980.804684
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-10-17",
-      "staked": 472807435.18727,
-      "unstaked": 388414423.923135,
-      "total": 861221859.110405,
-      "staked_delta": -136410.234902,
-      "total_delta": -96614.557155
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-10-18",
-      "staked": 473036284.991626,
-      "unstaked": 388428029.147952,
-      "total": 861464314.139578,
-      "staked_delta": 228849.804356,
-      "total_delta": 242455.029173
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-10-19",
-      "staked": 473206594.976824,
-      "unstaked": 388434078.34996,
-      "total": 861640673.326784,
-      "staked_delta": 170309.985198,
-      "total_delta": 176359.187206
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-10-20",
-      "staked": 472599216.369062,
-      "unstaked": 388445419.838923,
-      "total": 861044636.207985,
-      "staked_delta": -607378.607762,
-      "total_delta": -596037.118799
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-10-21",
-      "staked": 472953076.886848,
-      "unstaked": 388527708.744461,
-      "total": 861480785.631309,
-      "staked_delta": 353860.517786,
-      "total_delta": 436149.423324
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-10-22",
-      "staked": 472931017.124263,
-      "unstaked": 388537661.455145,
-      "total": 861468678.579408,
-      "staked_delta": -22059.762585,
-      "total_delta": -12107.051901
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-10-23",
-      "staked": 472658128.815973,
-      "unstaked": 388538187.452198,
-      "total": 861196316.268171,
-      "staked_delta": -272888.30829,
-      "total_delta": -272362.311237
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-10-24",
-      "staked": 472498988.261462,
-      "unstaked": 388649304.463541,
-      "total": 861148292.725003,
-      "staked_delta": -159140.554511,
-      "total_delta": -48023.543168
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
     },
     {
       "date": "2025-10-25",
-      "staked": 472484939.561783,
-      "unstaked": 388664644.308936,
-      "total": 861149583.870719,
-      "staked_delta": -14048.699679,
-      "total_delta": 1291.145716
+      "staked": 826500938.595814,
+      "unstaked": 10042424.13834,
+      "total": 836543362.734154,
+      "staked_delta": 0.0,
+      "total_delta": 0.0
+    },
+    {
+      "date": "2025-10-26",
+      "staked": 825128489.949327,
+      "unstaked": 10091310.989939,
+      "total": 835219800.939266,
+      "staked_delta": -1372448.646487,
+      "total_delta": -1323561.794888
     }
   ],
   "top_stakers_7d": [
     {
-      "address": "Hs3mar9YRrNumYfRnZfk2boCcbkPrKhSL8E5YrrWonFr",
-      "amount": 451383.393627
+      "address": "BEQ69QeAr4ixs2ZjGBqQ5nogHktgDfvSr1M1Co7nWNZh",
+      "amount": 87850.949731
     },
     {
-      "address": "ACJzMoin1yVGB57jKyBGHP2yD4ciPrsikarQsSpoPGVo",
-      "amount": 249686.421683
+      "address": "ECyvtxvY4KNBt5vfLtdsMrp77mKjL3JD6aha9m3aXBvd",
+      "amount": 36188.170523
     },
     {
-      "address": "CEV9pcc3Y9i9JCpsEADT36DoGHjWyKHkqGo7UK633Ds3",
-      "amount": 128685.0
+      "address": "H6Gv7LSe3XwHhtiVRDCdQABcmAtNZFAqaMwizngyWtuX",
+      "amount": 35796.019381
     },
     {
-      "address": "kMJnKn23UrcJUMd4qt1ubhuUGkiziAQWsMDf7K2E1wC",
-      "amount": 63397.08841
+      "address": "6zFMEj2774nXzwDAm1Humty3h18B4xKh7aX96WrADbkW",
+      "amount": 28465.613845
     },
     {
-      "address": "7iMWCxXH6hL1FuRse6vXLMYJd1i3KJrcWmpx19o69vQz",
-      "amount": 60287.626067
+      "address": "3XU5wermxiNk3TCPxvn4WUBmxeUFesVYjvDzkJKkc9Pb",
+      "amount": 25061.45673
     },
     {
-      "address": "5wBWySrTZqXtQGYrj6B5UtdAyuyRoHumQ4NYHNB6Ug9y",
-      "amount": 58526.506992
+      "address": "BFMBeabf3RYjQjFqBNLkmqTU28Ax2Fa1nwcnLKJThxbe",
+      "amount": 23805.927554
     },
     {
-      "address": "8BT4dADS8mT4f9e8Dw8esnQmdH4ipQC28ZhVyycec4Z4",
-      "amount": 57763.704412
-    },
-    {
-      "address": "7cVXhaf3GtLRnHjBerQjq7MND7Kn1EqFTrPLKaUapRpS",
-      "amount": 42775.311983
+      "address": "8y7CDcRQBYPZamAkApSG1czrj5rJgudcE39sBpVVUj9m",
+      "amount": 23124.013501
     },
     {
       "address": "8AKrTEJSysDdi4ZBAdimkQe6d2wrBVF9K9vLPuBwKQqy",
-      "amount": 38146.053789
+      "amount": 14321.988756
     },
     {
       "address": "6szPPBa2qrM3RK952aYChXEZ6CjJScQ4HtrSYBqwv4yn",
-      "amount": 34204.654624
+      "amount": 11782.318838
+    },
+    {
+      "address": "7LCC4JvaaKySg29Wzvny6YpHN2Yp2pKFWWThungo27Fz",
+      "amount": 8465.442218
     }
   ],
   "top_withdrawers_7d": [
     {
-      "address": "HzNQySHBkiFQ2oFX6xtk9q59JJbJVPiA7HKCK78K83Qz",
-      "amount": 465479.358326
+      "address": "Hs3mar9YRrNumYfRnZfk2boCcbkPrKhSL8E5YrrWonFr",
+      "amount": 1047440.119826
     },
     {
-      "address": "2rB99VfvravgV1Mghoi4S6behTp68veEZUnz9Tj4FtHL",
-      "amount": 392059.055926
+      "address": "7GEg8W1PrG76MckTS5LT8G7X8QJUzEsm1pfgJ7rM6V8a",
+      "amount": 549126.033664
     },
     {
-      "address": "3Z5rXg2WaaciKCBghEgzMQk1hcRhymJqWE1bVjzatec2",
-      "amount": 209760.888974
+      "address": "BEQ69QeAr4ixs2ZjGBqQ5nogHktgDfvSr1M1Co7nWNZh",
+      "amount": 87850.949731
     },
     {
-      "address": "6Ugwr1iK6MUobWprDrmg1EfHAPkjweV6fPYXaqvH85n6",
-      "amount": 164379.464046
+      "address": "9eUdZFKUXiaxmd4UbQF7dJZBo6vtfoABytmkgrdvKiVT",
+      "amount": 10596.719387
     },
     {
-      "address": "FExmuKVdk4TqK6Tg81ua5NCyprAZkBFWqBrXKLgR9iWA",
-      "amount": 102848.741135
+      "address": "9fFm8j2pXBcWMy3pdXA8g1KGy2AS3jt9WN6Eh2Hw7inC",
+      "amount": 5000.0
     },
     {
-      "address": "8LcwWnYyL4QeQfgTDpgu3JsAHTvSs9gvPLMKMJfty6qM",
-      "amount": 75164.83134
+      "address": "8ZiMoxcmoFGLbYUi93NtYs2R7TmL76dBsSVmQhJgHmuz",
+      "amount": 3426.287505
     },
     {
-      "address": "8BT4dADS8mT4f9e8Dw8esnQmdH4ipQC28ZhVyycec4Z4",
-      "amount": 64223.830078
+      "address": "AmtE5Zv7rmjTBQcMWhSx3MM9ooA1wQcF15QpFiLFLzaM",
+      "amount": 1961.503841
     },
     {
-      "address": "ECpQMmcGN5Zuw6mFvEnL4ehii5BPmLCrzV8N27oWF3jR",
-      "amount": 59844.6247
+      "address": "GXo1NAvsHvQ2dUrbHc32TDwqPLXzK6UWBWJxykZ4yQFB",
+      "amount": 1000.002424
     },
     {
-      "address": "5wBWySrTZqXtQGYrj6B5UtdAyuyRoHumQ4NYHNB6Ug9y",
-      "amount": 58526.506992
+      "address": "D4SNGnHM29vcvWApgVhTiKmcZoiWb91G8LRLDo2hifNH",
+      "amount": 880.251801
     },
     {
-      "address": "4aUhpwZCrd3paaUEj4FEeEbpAq76kG4PmuDJp59fksrM",
-      "amount": 53125.0
+      "address": "3AG6abLF93Y116X9WAuHDxfJ4z2pG5bXwxa4SJG6CweK",
+      "amount": 198.952286
     }
   ]
 }
