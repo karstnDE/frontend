@@ -1,59 +1,59 @@
 {
-  "generated_at": "2025-10-27T03:59:28.825246+00:00",
+  "generated_at": "2025-10-28T22:13:33.280039+00:00",
   "date_range": {
     "start": "2025-07-24",
-    "end": "2025-10-26"
+    "end": "2025-10-27"
   },
   "summary": {
-    "total_users": 833,
+    "total_users": 837,
     "compound_only_users": 209,
-    "claim_only_users": 517,
-    "mixed_users": 107,
-    "total_rewards_sol": 824.1704051969998,
-    "total_compounded_sol": 39.45054320999995,
-    "total_claimed_sol": 784.7198619869998,
-    "compound_rate": 4.786697382147587,
-    "loyalty_score": 25.090036014405765
+    "claim_only_users": 524,
+    "mixed_users": 104,
+    "total_rewards_sol": 963.6910977739998,
+    "total_compounded_sol": 39.63340833799997,
+    "total_claimed_sol": 924.0576894359998,
+    "compound_rate": 4.112667267503866,
+    "loyalty_score": 24.970131421744323
   },
   "user_segments": {
     "by_behavior": {
       "compound_only": {
         "count": 209,
-        "percentage": 25.090036014405765
+        "percentage": 24.970131421744323
       },
       "claim_only": {
-        "count": 517,
-        "percentage": 62.064825930372145
+        "count": 524,
+        "percentage": 62.60454002389486
       },
       "mixed": {
-        "count": 107,
-        "percentage": 12.845138055222089
+        "count": 104,
+        "percentage": 12.425328554360812
       }
     },
     "by_reward_size": {
       "whales": {
         "label": "Whales (>10 SOL)",
         "user_count": 5,
-        "avg_compound_rate": 0.14064394050431317,
-        "total_rewards": 747.861482533
+        "avg_compound_rate": 0.14028671448986726,
+        "total_rewards": 886.7732637119999
       },
       "large": {
         "label": "Large (1-10 SOL)",
         "user_count": 17,
-        "avg_compound_rate": 0.42007536206139856,
-        "total_rewards": 46.586226913
+        "avg_compound_rate": 0.419805460340469,
+        "total_rewards": 47.35437713100001
       },
       "medium": {
         "label": "Medium (0.1-1 SOL)",
-        "user_count": 79,
-        "avg_compound_rate": 0.379261993985932,
-        "total_rewards": 20.989300717000006
+        "user_count": 76,
+        "avg_compound_rate": 0.3843971565108812,
+        "total_rewards": 20.844220962000005
       },
       "small": {
         "label": "Small (<0.1 SOL)",
-        "user_count": 730,
-        "avg_compound_rate": 0.30451706910956017,
-        "total_rewards": 8.733395033999999
+        "user_count": 737,
+        "avg_compound_rate": 0.30200306501500584,
+        "total_rewards": 8.719235969000003
       }
     }
   },
@@ -87,11 +87,11 @@
       "compound_rate": 6.262143139110401
     },
     {
-      "week": "2025-W43",
-      "claim_amount": 0.852711619,
-      "compound_amount": 0.5559343630000002,
-      "total_amount": 1.4086459820000004,
-      "compound_rate": 39.46586794012522
+      "week": "2025-W44",
+      "claim_amount": 140.19053906799996,
+      "compound_amount": 0.7387994909999999,
+      "total_amount": 140.92933855899997,
+      "compound_rate": 0.5242339874395294
     }
   ]
 }
