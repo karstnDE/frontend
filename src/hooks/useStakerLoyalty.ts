@@ -24,6 +24,16 @@ export interface RewardSizeSegment {
   total_rewards: number;
 }
 
+export interface StakeSizeSegment {
+  label: string;
+  user_count: number;
+  avg_compound_rate: number;
+  total_staked_tuna: number;
+  compound_only_users: number;
+  claim_only_users: number;
+  mixed_users: number;
+}
+
 export interface UserSegments {
   by_behavior: {
     compound_only: BehaviorSegment;
@@ -36,6 +46,12 @@ export interface UserSegments {
     medium: RewardSizeSegment;
     small: RewardSizeSegment;
   };
+  by_stake_size?: {
+    mega: StakeSizeSegment;
+    large: StakeSizeSegment;
+    medium: StakeSizeSegment;
+    small: StakeSizeSegment;
+  };
 }
 
 export interface WeeklyTrend {
@@ -44,6 +60,27 @@ export interface WeeklyTrend {
   compound_amount: number;
   total_amount: number;
   compound_rate: number;
+}
+
+export interface StakeDistributionBucket {
+  min: number;
+  max: number | null;
+  label: string;
+  count: number;
+  total_tuna: number;
+}
+
+export interface CompoundVsStakePoint {
+  stake_tuna: number;
+  compound_rate: number;
+  total_rewards_sol: number;
+  behavior: 'compound_only' | 'claim_only' | 'mixed';
+  address_short: string;
+}
+
+export interface Visualizations {
+  stake_distribution: StakeDistributionBucket[];
+  compound_vs_stake: CompoundVsStakePoint[];
 }
 
 export interface StakerLoyaltyData {
@@ -55,6 +92,7 @@ export interface StakerLoyaltyData {
   summary: LoyaltySummary;
   user_segments: UserSegments;
   weekly_trends: WeeklyTrend[];
+  visualizations?: Visualizations;
 }
 
 export interface UseStakerLoyaltyResult {

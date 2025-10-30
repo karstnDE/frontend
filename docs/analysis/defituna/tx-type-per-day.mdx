@@ -9,25 +9,11 @@ import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
 
 <BrowserOnly fallback={<LoadingSpinner />}>
   {() => {
-    const { useState } = require('react');
     const { useDashboardData } = require('@site/src/components/Dashboard/useDashboardData');
-    const BreakdownChart = require('@site/src/components/Dashboard/BreakdownChart').default;
-    const TopTransactionsTable = require('@site/src/components/Dashboard/TopTransactionsTable').default;
+    const DailyStackedBarChart = require('@site/src/components/Dashboard/DailyStackedBarChart').default;
     
     function RevenueDashboard() {
       const data = useDashboardData();
-      const [selectedId, setSelectedId] = useState(null);
-      const [selectedLabel, setSelectedLabel] = useState(null);
-
-      const handleBarClick = (id, label) => {
-        setSelectedId(id);
-        setSelectedLabel(label);
-      };
-
-      const clearFilter = () => {
-        setSelectedId(null);
-        setSelectedLabel(null);
-      };
 
       if (data.loading) {
         return <LoadingSpinner />;
@@ -48,55 +34,13 @@ import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
         );
       }
 
-      const summary = data.summary;
-      if (!summary) {
-        return <div>No data available</div>;
+      if (!data.dailyByType || data.dailyByType.length === 0) {
+        return <div>No daily transaction type data available</div>;
       }
 
       return (
         <div style={{ padding: '24px 0' }}>
-          <BreakdownChart
-            summary={summary}
-            groupMode="type"
-            onBarClick={handleBarClick}
-          />
-
-          {selectedLabel && (
-            <div style={{
-              marginBottom: '16px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px'
-            }}>
-              <span style={{ fontSize: '14px', color: 'var(--ifm-color-secondary)' }}>
-                Filtered by: <strong>{selectedLabel}</strong>
-              </span>
-              <button
-                onClick={clearFilter}
-                style={{
-                  padding: '6px 12px',
-                  fontSize: '13px',
-                  background: 'var(--ifm-color-emphasis-200)',
-                  border: '1px solid var(--ifm-toc-border-color)',
-                  borderRadius: 'var(--ifm-global-radius)',
-                  cursor: 'pointer',
-                  color: 'var(--ifm-font-color-base)',
-                }}
-              >
-                Clear Filter
-              </button>
-            </div>
-          )}
-
-          <TopTransactionsTable
-            topTransactionsToken={data.topTransactionsToken}
-            topTransactionsType={data.topTransactionsType}
-            topTransactionsPool={data.topTransactionsPool}
-            groupMode="type"
-            selectedFilter={selectedId}
-            selectedFilterLabel={selectedLabel}
-            summary={summary}
-          />
+          <DailyStackedBarChart data={data.dailyByType} />
         </div>
       );
     }

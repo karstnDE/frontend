@@ -29,43 +29,62 @@ export default function DailyStackedChart({ data }: DailyStackedChartProps): Rea
   }
 
   const dates = data.map(d => d.date);
-  const orcaSol = data.map(d => d.orca_sol || 0);
-  const fusionSol = data.map(d => d.fusion_sol || 0);
-  const otherSol = data.map(d => d.other_sol || 0);
+  
+  // Calculate cumulative values for Orca (including Other) and Fusion
+  let cumulativeOrca = 0;
+  let cumulativeFusion = 0;
+  
+  const orcaCumulative = data.map(d => {
+    cumulativeOrca += (d.orca_sol || 0) + (d.other_sol || 0);
+    return cumulativeOrca;
+  });
+  
+  const fusionCumulative = data.map(d => {
+    cumulativeFusion += (d.fusion_sol || 0);
+    return cumulativeFusion;
+  });
+
+  // Calculate Fusion dominance (Fusion / Total) for secondary y-axis
+  const fusionDominance = fusionCumulative.map((fusion, i) => {
+    const orca = orcaCumulative[i];
+    const total = orca + fusion;
+    return total > 0 ? (fusion / total) * 100 : 0;
+  });
 
   const traces: any[] = [
     {
       x: dates,
-      y: orcaSol,
-      name: 'Orca SOL',
+      y: orcaCumulative,
+      name: 'Orca',
       type: 'scatter',
-      mode: 'lines',
+      mode: 'none',
       stackgroup: 'one',
-      fillcolor: 'rgba(20, 188, 205, 0.5)',
-      line: { width: 0.5, color: 'rgba(20, 188, 205, 1)' },
-      hovertemplate: '<b>Orca SOL</b><br>%{y:.2f} SOL<br>%{x}<extra></extra>',
+      fillcolor: 'rgba(255, 193, 7, 0.6)', // Yellow-ish color
+      line: { width: 0, color: 'rgba(255, 193, 7, 1)' },
+      hovertemplate: '<b>%{x}</b><br>Orca: %{y:.2f} SOL<extra></extra>',
+      yaxis: 'y',
     },
     {
       x: dates,
-      y: fusionSol,
-      name: 'Fusion SOL',
+      y: fusionCumulative,
+      name: 'Fusion',
       type: 'scatter',
-      mode: 'lines',
+      mode: 'none',
       stackgroup: 'one',
-      fillcolor: 'rgba(0, 163, 180, 0.5)',
-      line: { width: 0.5, color: 'rgba(0, 163, 180, 1)' },
-      hovertemplate: '<b>Fusion SOL</b><br>%{y:.2f} SOL<br>%{x}<extra></extra>',
+      fillcolor: 'rgba(0, 163, 180, 0.6)', // Teal color
+      line: { width: 0, color: 'rgba(0, 163, 180, 1)' },
+      hovertemplate: '<b>%{x}</b><br>Fusion: %{y:.2f} SOL<extra></extra>',
+      yaxis: 'y',
     },
     {
       x: dates,
-      y: otherSol,
-      name: 'Other SOL',
+      y: fusionDominance,
+      name: 'Fusion Dominance',
       type: 'scatter',
       mode: 'lines',
-      stackgroup: 'one',
-      fillcolor: 'rgba(151, 163, 180, 0.5)',
-      line: { width: 0.5, color: 'rgba(151, 163, 180, 1)' },
-      hovertemplate: '<b>Other SOL</b><br>%{y:.2f} SOL<br>%{x}<extra></extra>',
+      line: { width: 2, color: 'rgba(255, 87, 34, 0.8)', dash: 'dash' }, // Orange dashed line
+      hovertemplate: '<b>%{x}</b><br>Fusion Dominance: %{y:.1f}%<extra></extra>',
+      yaxis: 'y2',
     },
   ];
 
@@ -82,17 +101,32 @@ export default function DailyStackedChart({ data }: DailyStackedChartProps): Rea
         layout={{
           ...template.layout,
           title: {
-            text: 'Daily Revenue (Stacked)',
+            text: 'Orca vs. Fusion-generated Protocol Revenue',
             font: { size: 18, weight: 600 },
           },
           xaxis: {
             ...template.layout.xaxis,
-            title: 'Date',
             type: 'date',
           },
           yaxis: {
             ...template.layout.yaxis,
-            title: 'SOL',
+            title: {
+              text: 'Cumulative Revenue (SOL)',
+              font: { size: 12 },
+              standoff: 10,
+            },
+            side: 'left',
+          },
+          yaxis2: {
+            title: {
+              text: 'Fusion Dominance (%)',
+              font: { size: 12 },
+            },
+            overlaying: 'y',
+            side: 'right',
+            range: [0, 100],
+            showgrid: false,
+            automargin: true,
           },
           showlegend: true,
           legend: {

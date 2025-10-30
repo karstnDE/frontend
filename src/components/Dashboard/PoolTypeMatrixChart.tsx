@@ -76,10 +76,33 @@ export default function PoolTypeMatrixChart({ onSegmentClick }: PoolTypeMatrixCh
   // Each type within a pool is a stacked segment
 
   const traces: any[] = [];
-  const colorPalette = [
-    '#00A3B4', '#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A',
-    '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E2', '#F8B195',
+  
+  // Color palette - same as DailyStackedBarChart
+  const nonRedPalette = [
+    'rgba(0, 163, 180, 0.8)',    // teal (accent)
+    'rgba(40, 95, 126, 0.8)',    // dark blue
+    'rgba(26, 188, 156, 0.8)',   // turquoise
+    'rgba(142, 68, 173, 0.8)',   // purple
+    'rgba(44, 62, 80, 0.8)',     // dark gray
+    'rgba(39, 174, 96, 0.8)',    // green
+    'rgba(22, 160, 133, 0.8)',   // dark turquoise
+    'rgba(41, 128, 185, 0.8)',   // blue
   ];
+
+  const redPalette = [
+    'rgba(239, 68, 68, 0.8)',   // red-500
+    'rgba(220, 38, 38, 0.8)',   // red-600
+    'rgba(185, 28, 28, 0.8)',   // red-700
+  ];
+  
+  const getColor = (typeName: string, index: number): string => {
+    // Only types that START with "Liquidate" get red
+    if (typeName.startsWith('Liquidate')) {
+      return redPalette[index % redPalette.length];
+    }
+    // Non-red colors from design palette
+    return nonRedPalette[index % nonRedPalette.length];
+  };
 
   // Get all unique types across all pools for consistent coloring
   const allTypes = new Set<string>();
@@ -89,7 +112,7 @@ export default function PoolTypeMatrixChart({ onSegmentClick }: PoolTypeMatrixCh
   const typesList = Array.from(allTypes);
   const typeColorMap: Record<string, string> = {};
   typesList.forEach((type, idx) => {
-    typeColorMap[type] = colorPalette[idx % colorPalette.length];
+    typeColorMap[type] = getColor(type, idx);
   });
 
   // Calculate cumulative x positions for pools
@@ -126,7 +149,7 @@ export default function PoolTypeMatrixChart({ onSegmentClick }: PoolTypeMatrixCh
         xValues.push(xCenter);
         // Use percentage of pool (0-100) instead of absolute SOL for normalized height
         yValues.push(typeData.share_of_pool * 100);
-        widths.push(poolPos.width * 0.95); // Slight gap between pools
+        widths.push(poolPos.width); // Full width - borders will create gaps
         hoverTexts.push(
           `<b>${pool.pool_label}</b><br>` +
           `Type: ${typeName}<br>` +
@@ -134,8 +157,8 @@ export default function PoolTypeMatrixChart({ onSegmentClick }: PoolTypeMatrixCh
           `${(typeData.share_of_pool * 100).toFixed(1)}% of pool<br>` +
           `${(typeData.share_of_total * 100).toFixed(2)}% of total revenue`
         );
-        // Only show text label if segment is large enough (>8% of pool height)
-        textLabels.push(typeData.share_of_pool * 100 > 8 ? typeName : '');
+        // No text labels
+        textLabels.push('');
         customData.push([pool.pool_id, pool.pool_label, typeName]);
       }
     });
@@ -149,15 +172,11 @@ export default function PoolTypeMatrixChart({ onSegmentClick }: PoolTypeMatrixCh
         name: typeName,
         text: textLabels,
         textposition: 'inside',
-        textfont: {
-          size: 9,
-          color: '#ffffff',
-        },
         marker: {
           color: typeColorMap[typeName],
           line: {
             color: isDark ? '#1a1a1a' : '#ffffff',
-            width: 1,
+            width: 1,  // Same thin border for both vertical and horizontal
           },
         },
         hovertemplate: '%{hovertext}<extra></extra>',

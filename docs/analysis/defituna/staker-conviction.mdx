@@ -12,7 +12,11 @@ Understanding protocol loyalty through reward behavior analysis.
 Stakers can choose to **compound** their rewards (reinvesting back into TUNA) or **claim** them (taking profits). This analysis examines **1,749 stakers who actively managed their rewards** (claimed or compounded) between July 27 - October 25, 2025.
 
 :::info Data Scope
-This represents stakers with observable reward activity in our on-chain data. The total staker population may be larger.
+Out of **8,003 total unique stakers** (ever staked since July 25 launch), **4,055 currently hold active stakes** (as of October 27, 2025). This analysis focuses on the 1,749 who actively managed rewards, representing **21.8% of all stakers** or **43.1% of current active stakers**.
+:::
+
+:::warning Stake Size Visualization Scope
+The stake distribution and scatter plot visualizations are based on a subset of users with both position data and reward activity (approximately 599 wallets). This represents users who have both staking positions AND have claimed/compounded rewards. More comprehensive per-user position tracking is in development to include all 4,055 current active stakers.
 :::
 
 **Key Insight**: The data reveals a surprising "Inverse Whale Effect" - medium-tier stakers demonstrate the highest conviction, not the largest holders.
@@ -26,6 +30,8 @@ This represents stakers with observable reward activity in our on-chain data. Th
       InverseWhaleChart,
       WeeklyTrendsChart,
       BehaviorSegmentsTable,
+      StakeDistributionHistogram,
+      CompoundVsStakeScatter,
     } = require('@site/src/components/Loyalty');
 
     function StakerConvictionPage() {
@@ -43,7 +49,7 @@ This represents stakers with observable reward activity in our on-chain data. Th
         );
       }
 
-      const { summary, user_segments, weekly_trends, date_range } = data;
+      const { summary, user_segments, weekly_trends, date_range, visualizations } = data;
 
       return (
         <>
@@ -51,17 +57,47 @@ This represents stakers with observable reward activity in our on-chain data. Th
 
           <BehaviorPieChart userSegments={user_segments} totalUsers={summary.total_users} />
 
+          {visualizations && (
+            <>
+              <div style={{ marginBottom: '32px' }}>
+                <h3>Position Size Distribution</h3>
+                <p>
+                  Understanding how TUNA holdings are distributed across the staker base reveals the
+                  protocol's user composition and potential concentration risks.
+                </p>
+              </div>
+
+              <StakeDistributionHistogram visualizations={visualizations} />
+            </>
+          )}
+
           <div style={{ marginBottom: '32px' }}>
             <h3>What This Tells Us</h3>
             <p>
-              Nearly <strong>60% of stakers never compound their rewards</strong>, treating staking
-              primarily as yield farming rather than long-term investment. However, a dedicated core of{' '}
-              <strong>23.6% (412 users)</strong> exclusively compound, demonstrating strong protocol
-              conviction.
+              Nearly <strong>60% of active reward managers never compound their rewards</strong>, treating
+              staking primarily as yield farming rather than long-term investment. However, a dedicated core
+              of <strong>23.6% (412 users)</strong> exclusively compound, demonstrating strong protocol
+              conviction. Note: The remaining ~2,300 current stakers either haven't claimed rewards yet or
+              are passively holding their positions.
             </p>
           </div>
 
           <InverseWhaleChart userSegments={user_segments} />
+
+          {visualizations && (
+            <>
+              <div style={{ marginBottom: '32px' }}>
+                <h3>Individual Position Analysis</h3>
+                <p>
+                  Examining the relationship between stake size and compound behavior at the
+                  individual wallet level reveals the "Inverse Whale Effect" - larger holders show
+                  weaker conviction than medium-tier stakers.
+                </p>
+              </div>
+
+              <CompoundVsStakeScatter visualizations={visualizations} />
+            </>
+          )}
 
           <div style={{ marginBottom: '32px' }}>
             <h3>Understanding the Paradox</h3>
@@ -81,7 +117,9 @@ This represents stakers with observable reward activity in our on-chain data. Th
             </ul>
             <p>
               This pattern suggests your <strong>most loyal community is in the middle tier</strong> -
-              these are the users most aligned with protocol success.
+              these are the users most aligned with protocol success. Among the 4,055 current active
+              stakers, the 1,749 who actively manage rewards represent the most engaged segment of the
+              protocol.
             </p>
           </div>
 
@@ -158,6 +196,25 @@ This represents stakers with observable reward activity in our on-chain data. Th
                 Reward amounts are extracted from transaction logs (ClaimReward and CompoundReward
                 instructions) and tracked per unique wallet address (fee payer). The data is updated as
                 part of the daily analytics pipeline.
+              </p>
+
+              <h4>Staker Population Context</h4>
+
+              <p>
+                <strong>Total Stakers Ever</strong>: 8,003 unique wallets have staked since the July 25,
+                2025 public sale (includes 6,776 auto-staked participants + 2,008 manual stakers, with 781
+                overlap).
+              </p>
+
+              <p>
+                <strong>Current Active Stakers</strong>: 4,055 wallets currently hold non-zero staking
+                balances (as of October 27, 2025). This represents 50.6% retention from the initial cohort.
+              </p>
+
+              <p>
+                <strong>Reward Active Stakers</strong>: 1,749 wallets (21.8% of total, 43.1% of current
+                active) have claimed or compounded rewards during the analysis period. These represent the
+                most engaged users who actively manage their positions.
               </p>
             </div>
           </details>

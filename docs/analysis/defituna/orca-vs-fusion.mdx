@@ -16,10 +16,10 @@ This dashboard compares the **cumulative revenue performance** of the two main l
     const { useState } = require('react');
     const { useDashboardData } = require('@site/src/components/Dashboard/useDashboardData');
     const DashboardControlsComponent = require('@site/src/components/Dashboard/DashboardControls').default;
-    const CumulativeChart = require('@site/src/components/Dashboard/CumulativeChart').default;
+    const DailyStackedChart = require('@site/src/components/Dashboard/DailyStackedChart').default;
     const TopTransactionsTable = require('@site/src/components/Dashboard/TopTransactionsTable').default;
 
-    function CumulativeRevenueDashboard() {
+    function DailyRevenueDashboard() {
       const data = useDashboardData();
 
       const [controls, setControls] = useState({
@@ -55,7 +55,7 @@ This dashboard compares the **cumulative revenue performance** of the two main l
       }
 
       if (!data.dailyStacked || data.dailyStacked.length === 0) {
-        return <div>No cumulative data available</div>;
+        return <div>No daily data available</div>;
       }
 
       return (
@@ -77,7 +77,7 @@ This dashboard compares the **cumulative revenue performance** of the two main l
 
           <DashboardControlsComponent controls={controls} onChange={setControls} />
 
-          <CumulativeChart data={data.dailyStacked} />
+          <DailyStackedChart data={data.dailyStacked} />
 
           <TopTransactionsTable
             topTransactionsToken={data.topTransactionsToken}
@@ -89,13 +89,13 @@ This dashboard compares the **cumulative revenue performance** of the two main l
       );
     }
 
-    return <CumulativeRevenueDashboard />;
+    return <DailyRevenueDashboard />;
   }}
 </BrowserOnly>
 
 ## Understanding the Comparison
 
-The cumulative revenue chart allows direct comparison between Orca and Fusion pool ecosystems:
+The cumulative revenue chart shows the stacked area comparison between Orca and Fusion pool ecosystems:
 
 ### Chart Elements
 

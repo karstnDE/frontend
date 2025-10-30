@@ -8,13 +8,14 @@ const config: Config = {
   favicon: 'img/logo.svg',
 
   // Set the production url of your site here
-  url: 'https://your-domain.com',
+  url: 'https://karstenalytics.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   baseUrl: '/',
 
   // GitHub pages deployment config.
   organizationName: 'karstenalytics',
-  projectName: 'analytics',
+  projectName: 'karstenalytics.github.io',
+  deploymentBranch: 'gh-pages',
 
   onBrokenLinks: 'throw',
 
