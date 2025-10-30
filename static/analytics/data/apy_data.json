@@ -2,6 +2,7 @@
   "date_range": {
     "start": "2025-07-24",
     "end": "2025-10-29"
+    "end": "2025-10-29"
   },
   "daily_apy": [
     {
@@ -1311,7 +1312,7 @@
     },
     {
       "date": "2025-10-26",
-      "apy_percent": 6.13,
+      "apy_percent": 4.99,
       "rolling_days": 30,
       "rolling_revenue_sol": 1782.7,
       "annualized_revenue_sol": 21689.56,
