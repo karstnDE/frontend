@@ -6,6 +6,9 @@ import {
   NewspaperClipping,
   ChartLineUp,
   type IconProps,
+  LighthouseIcon,
+  ChartBarIcon,
+  NotepadIcon,
 } from '@phosphor-icons/react';
 import './styles.css';
 
@@ -21,19 +24,19 @@ const tabs: NavTab[] = [
     label: 'Intro',
     to: '/',
     activePattern: /^\/(intro\/)?$/,
-    Icon: HouseSimple,
+    Icon: LighthouseIcon,
   },
   {
     label: 'Blog',
     to: '/blog/general',
     activePattern: /^\/blog\//,
-    Icon: NewspaperClipping,
+    Icon: NotepadIcon,
   },
   {
     label: 'Analysis',
     to: '/analysis/overview',
     activePattern: /^\/analysis\//,
-    Icon: ChartLineUp,
+    Icon: ChartBarIcon,
   },
 ];
 
