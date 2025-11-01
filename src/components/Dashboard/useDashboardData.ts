@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { DashboardData, SummaryData, DailyDataPoint, TopTransactionsData } from './types';
 
-const BASE_PATH = '/analytics/data';
+const BASE_PATH = '/data';
 
 /**
  * Custom hook to load all dashboard data from JSON files

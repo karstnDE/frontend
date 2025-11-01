@@ -25,8 +25,8 @@ This page shows the **two-dimensional revenue distribution** using a Marimekko c
 
       useEffect(() => {
         Promise.all([
-          fetch('/analytics/data/top_transactions_pool.json').then(res => res.json()),
-          fetch('/analytics/data/summary.json').then(res => res.json())
+          fetch('/data/top_transactions_pool.json').then(res => res.json()),
+          fetch('/data/summary.json').then(res => res.json())
         ])
           .then(([poolData, summaryData]) => {
             setTopTransactionsPool(poolData);
@@ -39,8 +39,8 @@ This page shows the **two-dimensional revenue distribution** using a Marimekko c
           });
       }, []);
 
-      const handleSegmentClick = (poolId, poolLabel) => {
-        setSelectedSegment({ poolId, poolLabel });
+      const handleSegmentClick = (poolId, poolLabel, typeName) => {
+        setSelectedSegment({ poolId, poolLabel, typeName });
       };
 
       const handleClearFilter = () => {
@@ -60,7 +60,15 @@ This page shows the **two-dimensional revenue distribution** using a Marimekko c
               marginBottom: '24px',
             }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span><strong>Filtered by:</strong> {selectedSegment.poolLabel}</span>
+                <span>
+                  <strong>Filtered by:</strong> {selectedSegment.poolLabel}
+                  {selectedSegment.typeName && (
+                    <>
+                      <span style={{ margin: '0 8px', color: 'var(--ifm-color-secondary)' }}>→</span>
+                      <span style={{ color: 'var(--accent)' }}>{selectedSegment.typeName}</span>
+                    </>
+                  )}
+                </span>
                 <button
                   onClick={handleClearFilter}
                   style={{
@@ -87,6 +95,7 @@ This page shows the **two-dimensional revenue distribution** using a Marimekko c
               groupMode="pool"
               selectedFilter={selectedSegment?.poolId}
               selectedFilterLabel={selectedSegment?.poolLabel}
+              typeFilter={selectedSegment?.typeName}
               summary={summary}
             />
           )}

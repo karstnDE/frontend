@@ -8,6 +8,7 @@ interface TopTransactionsTableProps {
   groupMode: GroupMode;
   selectedFilter?: string | string[] | null;
   selectedFilterLabel?: string | null;
+  typeFilter?: string | null;
   summary?: SummaryData;
 }
 
@@ -18,6 +19,7 @@ export default function TopTransactionsTable({
   groupMode,
   selectedFilter,
   selectedFilterLabel,
+  typeFilter,
   summary,
 }: TopTransactionsTableProps): React.ReactElement {
   // Create mint-to-name mapping from summary
@@ -72,6 +74,11 @@ export default function TopTransactionsTable({
     allTransactions = allTransactions.filter(tx => mappedFilters.includes(tx.group));
   }
 
+  // Apply additional type filter if provided (for dual filtering: pool AND type)
+  if (typeFilter) {
+    allTransactions = allTransactions.filter(tx => tx.type === typeFilter);
+  }
+
   // Deduplicate by signature (same transaction might appear in multiple groups)
   const seenSignatures = new Set<string>();
   const uniqueTransactions = allTransactions.filter(tx => {
@@ -107,6 +114,31 @@ export default function TopTransactionsTable({
       month: 'short',
       day: 'numeric',
     });
+  };
+
+  // Helper to abbreviate mint addresses (first 5 + last 5 chars)
+  const abbreviateMint = (mint: string): string => {
+    if (!mint || mint.length <= 10) return mint;
+    return `${mint.slice(0, 5)}...${mint.slice(-5)}`;
+  };
+
+  // Helper to check if a string looks like a mint address (long alphanumeric)
+  const isMintAddress = (str: string): boolean => {
+    return str && str.length > 30 && /^[A-Za-z0-9]+$/.test(str);
+  };
+
+  // Helper to display token name or abbreviated mint
+  const getTokenDisplay = (tx: any): string => {
+    // Check if token_name exists and is NOT a mint address
+    if (tx.token_name && !isMintAddress(tx.token_name)) {
+      return tx.token_name;
+    }
+    // Check if we have a mapped name that is NOT a mint address
+    if (mintToName[tx.mint] && !isMintAddress(mintToName[tx.mint])) {
+      return mintToName[tx.mint];
+    }
+    // Otherwise, abbreviate the mint address
+    return abbreviateMint(tx.mint);
   };
 
   const tableTitle = selectedFilter
@@ -169,29 +201,34 @@ export default function TopTransactionsTable({
               {/* Primary column (first): Token, Type, or Pool based on groupMode */}
               {groupMode === 'token' && (
                 <td style={{ padding: '12px 8px' }}>
-                  <div
+                  <a
+                    href={`https://solscan.io/token/${tx.mint}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     style={{
-                      fontSize: '13px',
-                      maxWidth: '150px',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
-                      cursor: 'help',
+                      fontSize: '12px',
+                      color: 'var(--accent)',
+                      textDecoration: 'none',
+                      display: 'block',
                     }}
                     title={tx.mint}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.textDecoration = 'underline';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.textDecoration = 'none';
+                    }}
                   >
-                    {tx.token_name || mintToName[tx.mint] || tx.mint}
-                  </div>
+                    {getTokenDisplay(tx)}
+                  </a>
                 </td>
               )}
               {groupMode === 'type' && (
                 <td style={{ padding: '12px 8px' }}>
                   <div style={{
-                    fontSize: '13px',
-                    maxWidth: '150px',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
+                    fontSize: '12px',
+                    color: 'var(--ifm-color-secondary)',
+                    maxWidth: '200px',
                   }}>
                     {tx.label}
                   </div>
@@ -216,11 +253,9 @@ export default function TopTransactionsTable({
               {groupMode !== 'type' && (
                 <td style={{ padding: '12px 8px' }}>
                   <div style={{
-                    fontSize: '13px',
-                    maxWidth: '150px',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
+                    fontSize: '12px',
+                    color: 'var(--ifm-color-secondary)',
+                    maxWidth: '200px',
                   }}>
                     {tx.label}
                   </div>
@@ -246,19 +281,26 @@ export default function TopTransactionsTable({
               {/* Token column (if not primary) */}
               {groupMode !== 'token' && (
                 <td style={{ padding: '12px 8px' }}>
-                  <div
+                  <a
+                    href={`https://solscan.io/token/${tx.mint}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     style={{
-                      fontSize: '13px',
-                      maxWidth: '150px',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
-                      cursor: 'help',
+                      fontSize: '12px',
+                      color: 'var(--accent)',
+                      textDecoration: 'none',
+                      display: 'block',
                     }}
                     title={tx.mint}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.textDecoration = 'underline';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.textDecoration = 'none';
+                    }}
                   >
-                    {tx.token_name || mintToName[tx.mint] || tx.mint}
-                  </div>
+                    {getTokenDisplay(tx)}
+                  </a>
                 </td>
               )}
 

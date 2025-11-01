@@ -17,7 +17,7 @@ interface PoolTypeData {
 }
 
 interface PoolTypeMatrixChartProps {
-  onSegmentClick?: (poolId: string, poolLabel: string) => void;
+  onSegmentClick?: (poolId: string, poolLabel: string, typeName: string) => void;
 }
 
 export default function PoolTypeMatrixChart({ onSegmentClick }: PoolTypeMatrixChartProps): React.ReactElement {
@@ -235,7 +235,7 @@ export default function PoolTypeMatrixChart({ onSegmentClick }: PoolTypeMatrixCh
           if (event.points && event.points.length > 0 && onSegmentClick) {
             const point = event.points[0];
             const [poolId, poolLabel, typeName] = point.customdata;
-            onSegmentClick(poolId, poolLabel);
+            onSegmentClick(poolId, poolLabel, typeName);
           }
         }}
       />

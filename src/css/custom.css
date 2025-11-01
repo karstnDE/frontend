@@ -703,21 +703,28 @@ textarea:focus {
 }
 
 .staking-top-table table {
+  display: table;
   width: 100%;
+  min-width: 100%;
   border-collapse: collapse;
+  font-size: 14px;
 }
 
 .staking-top-table thead th {
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  text-align: left;
+  padding: 12px 8px;
+  font-weight: 600;
+  font-size: 14px;
+  border-bottom: 2px solid var(--ifm-toc-border-color);
 }
 
 .staking-top-table tbody td {
-  padding: 10px 0;
-  border-bottom: 1px solid var(--ifm-color-emphasis-100);
+  padding: 12px 8px;
+  border-bottom: 1px solid var(--ifm-toc-border-color);
+}
+
+.staking-top-table tbody tr {
+  transition: background 120ms ease;
 }
 
 .staking-top-empty {

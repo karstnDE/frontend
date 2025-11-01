@@ -48,7 +48,7 @@ This dashboard compares the **cumulative revenue performance** of the two main l
             <h3>Error Loading Dashboard</h3>
             <p>{data.error}</p>
             <p style={{ fontSize: '14px', color: 'var(--ifm-color-secondary)', marginTop: '16px' }}>
-              Please ensure the analytics data files are available in <code>/analytics/data/</code>
+              Please ensure the analytics data files are available in <code>/data/</code>
             </p>
           </div>
         );
@@ -60,23 +60,6 @@ This dashboard compares the **cumulative revenue performance** of the two main l
 
       return (
         <div style={{ padding: '24px 0' }}>
-          <div
-            style={{
-              padding: '16px 24px',
-              background: 'var(--ifm-background-surface-color)',
-              border: '1px solid var(--ifm-toc-border-color)',
-              borderRadius: 'var(--ifm-global-radius)',
-              marginBottom: '24px',
-              fontSize: '14px',
-              color: 'var(--ifm-color-secondary)',
-            }}>
-            <strong>Treasury Address:</strong> G9XfJoY81n8A9bZKaJFhJYomRrcvFkuJ22em2g8rZuCh
-            <span style={{ margin: '0 16px' }}>│</span>
-            <strong>Total Days:</strong> {data.dailyStacked.length}
-          </div>
-
-          <DashboardControlsComponent controls={controls} onChange={setControls} />
-
           <DailyStackedChart data={data.dailyStacked} />
 
           <TopTransactionsTable

@@ -22,11 +22,14 @@ export default function StakingBalanceChart({
   const unstaked = sorted.map((point) => point.unstaked);
   const totals = sorted.map((point) => point.total ?? point.staked + point.unstaked);
   const hasData = sorted.length > 0;
-  const [minTotal, maxTotal] = hasData
-    ? [Math.min(...totals), Math.max(...totals)]
+  const [minStaked, maxTotal] = hasData
+    ? [Math.min(...staked), Math.max(...totals)]
     : [0, 0];
-  const padding = hasData ? Math.max(1, (maxTotal - minTotal) * 0.1) : 0;
-  const yRange = hasData ? [Math.max(0, minTotal - padding), maxTotal + padding] : undefined;
+  // Dynamic buffer: subtract 50M from lowest staked value for better visibility
+  const lowerBound = hasData ? Math.max(0, minStaked - 10_000_000) : 0;
+  // Upper buffer: 10% padding above max total
+  const upperBound = hasData ? maxTotal + Math.max(1, maxTotal * 0.01) : 0;
+  const yRange = hasData ? [lowerBound, upperBound] : undefined;
   const latest = hasData ? sorted[sorted.length - 1] : null;
 
   return (
