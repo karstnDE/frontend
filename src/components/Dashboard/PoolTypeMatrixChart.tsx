@@ -51,7 +51,7 @@ export default function PoolTypeMatrixChart({ onSegmentClick }: PoolTypeMatrixCh
   };
 
   useEffect(() => {
-    fetch('/analytics/data/pool_type_summary.json')
+    fetch('/data/pool_type_summary.json')
       .then(response => response.json())
       .then(jsonData => {
         setData(jsonData);

@@ -1,65 +1,59 @@
 ---
 slug: /
-title: Home
+title: Overview
 sidebar_label: Welcome
 sidebar_position: 1
 ---
 
-# karstenalytics Platform
+<p>
+  I'm glad you made it. Make yourself comfortable. This is for sure not the most interesting content on this page, but it seems you're bored or interested enough to continue reading anyhow.
 
-<div class="hero-banner" data-animate>
-  <div class="hero-banner__content">
-    <div class="hero-badges">
-      <span class="hero-badge">Treasury Intelligence</span>
-      <span class="hero-badge">Live Solana Data</span>
-    </div>
-    <h1>Transparent analytics for on-chain treasuries.</h1>
+  I want to briefly summarize three key points I want to bring across: My motivation and pain points I want to address, what the scope of this project will be, and how the technical set-up roughly looks like.
+</p>
+
+[To do: Show cards (like in the dashboards) for number of projects covered, number of transactions, number of charts]: #
+
+<div class="section-grid">
+  <div class="section-card" data-animate>
+    <h3><span class="icon ph ph-rocket-launch"></span>Motivation</h3>
     <p>
-      Monitor inflows, classify on-chain activity, and publish interactive dashboards with a single pipeline.
-      This documentation is your launch pad for automation, audits, and stakeholder updates.
+      First and foremost: I follow Crypto since 2017, and as most of you know, it's a rabbit hole and hard to ignore once you tasted it. I'm strongly convinved that the foundation of our financial systems is being rewired based on what's happening right now. 
+
+      I always considered trying to get a hold in the industry, but life always held me back. Now there's a window of opportunity, as I have a bit of time on my hands for a side project for one year, so I decided to get going and build something. I enjoyed coding before I started my current profession - and here we are.
     </p>
-    <div class="hero-actions">
-      <a class="btn-primary" href="/interactive">Explore dashboards</a>
-      <a class="btn-secondary" href="/analysis/defituna/overview">Understand the methodology</a>
-    </div>
+
+  </div>
+  <div class="section-card" data-animate>
+    <h3><span class="icon ph ph-magnifying-glass-chart"></span> Investigate treasury flows</h3>
+    <p>...</p>
+    <ul>
+      <li>...</li>
+      <li>D....</li>
+    </ul>
   </div>
 </div>
 
-<div class="card-section" data-animate>
-  <h2>Start here</h2>
-  <p>Choose an entry point based on what you need to accomplish today.</p>
-
-  <div class="section-grid">
-    <div class="section-card" data-animate>
-      <h3><span class="icon ph ph-rocket-launch"></span> Ship the latest dashboard</h3>
-      <p>Run the private pipeline, sync the generated bundle into <code>static/analytics/</code>, and publish with <code>npm run deploy</code>.</p>
-      <ul>
-        <li>Review <code>static/data/_manifest.json</code> for timestamps.</li>
-        <li>Use the Quick Publish script or GitHub Action.</li>
-      </ul>
-    </div>
-    <div class="section-card" data-animate>
-      <h3><span class="icon ph ph-magnifying-glass-chart"></span> Investigate treasury flows</h3>
-      <p>Jump into the interactive charts to compare token vs. type outcomes, filter ranges, and trace high impact transactions.</p>
-      <ul>
-        <li>Interactive filtering and drilldowns.</li>
-        <li>Direct Solscan links for transaction-level follow up.</li>
-      </ul>
-    </div>
-    <div class="section-card" data-animate>
-      <h3><span class="icon ph ph-toolbox"></span> Extend the toolkit</h3>
-      <p>Borrow scripts and patterns from the main analytics repository. Keep imports pointed at the packaged <code>solana_analytics</code> modules.</p>
-      <ul>
-        <li>CLI utilities for data fetch &amp; classification.</li>
-        <li>Guidance for new dashboards and runbooks.</li>
-      </ul>
-    </div>
-  </div>
-</div>
+[To do: Educational part/ blogs, writing]: #
 
 <div class="card-section" data-animate>
-  <h2>Operational checklist</h2>
+  <h2>Objectives</h2>
   <div class="section-grid">
+    <p>
+    This project provides on-chain data analytics for Solana DeFi protocols. Analytics for me means coming from the overall objective a protocol has. Which ultimately always is the same: Generating value for users and investors. 
+    Let's say a protocol shares revenue with its investors via staking. What I want to understand is:
+    <ul>
+      <li>Where does the revenue come from?</li>
+      <li>What are the main revenue drivers?</li>
+      <li>How are the main revenue drivers developing so far and most probably going to develop in the future?</li>
+      <li>On-chain data only looks backwards and does not provide complete information. Is there other data we can look at to get a more complete picture (e.g. behaviour of Users or "Whales")</li>
+    </ul>
+    
+    I'm not so much interested in the current price of a protocol's token. This project is more about understanding fundamentals, and for this I want to understand how key metrics I can see on-chain develop.
+    Also, Technical Analysis is something I also like to follow up on (but not create), as I believe it works in some cases (Support, Resistance etc.)
+
+[To do: Size of protocols to cover]: #
+
+  </p>
     <div class="section-card" data-animate>
       <h3><span class="icon ph ph-calendar-check"></span> Daily publish</h3>
       <p>Confirm cache freshness, run the attribution job, sync the <code>build/</code> export, and push to <code>main</code>.</p>

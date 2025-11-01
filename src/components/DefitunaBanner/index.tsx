@@ -18,7 +18,7 @@ export default function DefitunaBanner(): JSX.Element | null {
   useEffect(() => {
     async function loadSummary() {
       try {
-        const response = await fetch('/analytics/data/summary.json');
+        const response = await fetch('/data/summary.json');
         const data: SummaryData = await response.json();
         setDateRange({
           start: data.date_range.start,

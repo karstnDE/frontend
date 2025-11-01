@@ -38,7 +38,7 @@ export default function Dashboard(): React.ReactElement {
         <h3>Error Loading Dashboard</h3>
         <p>{data.error}</p>
         <p style={{ fontSize: '14px', color: 'var(--ifm-color-secondary)', marginTop: '16px' }}>
-          Please ensure the analytics data files are available in <code>/analytics/data/</code>
+          Please ensure the analytics data files are available in <code>/data/</code>
         </p>
       </div>
     );
