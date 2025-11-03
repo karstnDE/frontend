@@ -14,6 +14,7 @@ export default function BreakdownChart({ summary, groupMode, onBarClick }: Break
   const { colorMode } = useColorMode();
   const isDark = colorMode === 'dark';
   const template = getPlotlyTemplate(isDark);
+  const accentColor = isDark ? '#4FD1C5' : '#00A3B4';
 
   // Helper function to format pool labels (prefer swapping pair/protocol for pools)
   const formatPoolLabel = (label: string): string => {
@@ -128,12 +129,14 @@ export default function BreakdownChart({ summary, groupMode, onBarClick }: Break
     y: values,
     type: 'bar',
     marker: {
-      color: 'var(--accent)',
-      opacity: 0.8,
+      color: accentColor,
+      opacity: 1,
+      line: { color: isDark ? '#05080D' : '#FFFFFF', width: 1 },
     },
     hovertemplate: '%{hovertext}<extra></extra>',
     hovertext: hoverTexts,
     customdata: ids, // Store IDs for filtering, not labels
+    width: 0.6,
   };
 
   return (

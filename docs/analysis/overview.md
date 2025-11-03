@@ -69,3 +69,5 @@ For developers and technical users interested in the backend implementation:
 
 Use the sidebar navigation to explore specific analytics for each protocol.
 
+As mentioned above, I have a high priority on data quality and several checks in place. Nevertheless, something might slip through. Feel free to let me know via indicated channels in case you detect something suspicious.
+

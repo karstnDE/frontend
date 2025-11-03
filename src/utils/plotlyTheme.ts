@@ -4,6 +4,15 @@
  */
 
 const ACCENT = '#00A3B4';
+const ACCENT_HOVER = '#14BCCD';
+
+export function getThemeColor(variable: string, fallback: string): string {
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    return fallback;
+  }
+  const value = getComputedStyle(document.documentElement).getPropertyValue(variable);
+  return value ? value.trim() || fallback : fallback;
+}
 
 interface PlotlyColors {
   text: string;
@@ -15,21 +24,23 @@ interface PlotlyColors {
 function getColors(isDark: boolean): PlotlyColors {
   return {
     text: isDark ? '#E6E9EE' : '#111111',
-    grid: isDark ? '#1F2A35' : '#E1E7EE',
-    bg: isDark ? '#0B0F14' : '#FFFFFF',
-    paper: isDark ? '#0F141B' : '#FFFFFF',
+    grid: isDark ? '#3A4A5F' : '#E1E7EE',
+    bg: 'transparent',
+    paper: 'transparent',
   };
 }
 
 export function getPlotlyTemplate(isDark: boolean) {
   const colors = getColors(isDark);
+  const accent = getThemeColor('--accent', ACCENT);
+  const accentAlt = getThemeColor('--accent-hover', ACCENT_HOVER);
 
   return {
     layout: {
       font: { family: 'Inter, Helvetica, Arial, sans-serif', size: 14, color: colors.text },
       colorway: [
-        ACCENT,
-        '#285F7E',
+        accent,
+        accentAlt,
         '#1ABC9C',
         '#8E44AD',
         '#2C3E50',
@@ -88,3 +99,4 @@ export const defaultPlotlyConfig = {
   modeBarButtonsToRemove: ['zoom2d', 'autoscale', 'select2d', 'lasso2d'],
   responsive: true,
 } as const;
+

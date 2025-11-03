@@ -1,0 +1,505 @@
+---
+title: Wallet Timeline
+---
+
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
+
+# Staking Wallet Timeline
+
+Analyze individual wallet staking behavior over time. Track staked and unstaked TUNA balances, realized rewards in SOL, and all staking operations for any wallet address.
+
+## How to Use
+
+1. Enter a Solana wallet address in the search box below
+2. Click "Analyze Wallet" or press Enter
+3. View the wallet's complete staking history with:
+   - **Stacked area chart**: Staked + unstaked TUNA balance over time
+   - **Dashed line**: Realized rewards (claimed + compounded)
+   - **Colored dots**: Individual operations (stake, unstake, compound, claim, withdraw)
+   - **Interactive tooltips**: Click on dots to view transaction details and links to Solscan
+
+**Pro Tip**: You can also share a direct link with a pre-filled wallet address by adding a URL parameter:
+- `?wallet=YOUR_WALLET_ADDRESS` or `?address=YOUR_WALLET_ADDRESS`
+- Example: `/analysis/staking/wallet-timeline?wallet=5MJ6Jx2SJKyTce...`
+- The wallet will be automatically analyzed when the page loads
+
+---
+
+<BrowserOnly fallback={<LoadingSpinner />}>
+  {() => {
+    const { useState, useEffect } = require('react');
+    const { useWalletTimeline } = require('@site/src/hooks/useWalletTimeline');
+    const WalletTimelineChart = require('@site/src/components/Staking/WalletTimelineChart').default;
+
+    function WalletTimelinePage() {
+      const [inputAddress, setInputAddress] = useState('');
+      const [searchAddress, setSearchAddress] = useState(null);
+      const [currentPage, setCurrentPage] = useState(0);
+      const [hoveredRow, setHoveredRow] = useState(null);
+      const { data, loading, error } = useWalletTimeline(searchAddress);
+
+      // Parse URL parameters on mount to auto-fill wallet address
+      useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const walletParam = params.get('wallet') || params.get('address');
+
+        if (walletParam) {
+          const trimmed = walletParam.trim();
+          // Validate address length (32-44 characters for Solana addresses)
+          if (trimmed.length >= 32 && trimmed.length <= 44) {
+            setInputAddress(trimmed);
+            setSearchAddress(trimmed); // Auto-trigger search
+          }
+        }
+      }, []); // Run only on mount
+
+      // Reset pagination when searching new wallet
+      useEffect(() => {
+        setCurrentPage(0);
+      }, [searchAddress]);
+
+      const handleSearch = () => {
+        const trimmed = inputAddress.trim();
+        if (trimmed.length >= 32 && trimmed.length <= 44) {
+          setSearchAddress(trimmed);
+        } else {
+          alert('Please enter a valid Solana wallet address (32-44 characters)');
+        }
+      };
+
+      const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+          handleSearch();
+        }
+      };
+
+      return (
+        <div style={{ padding: '0' }}>
+          {/* Search Input */}
+          <div style={{
+            background: 'var(--ifm-background-surface-color)',
+            border: '1px solid var(--ifm-toc-border-color)',
+            borderRadius: 'var(--ifm-global-radius)',
+            padding: '24px',
+            marginBottom: '24px',
+          }}>
+            <label style={{
+              display: 'block',
+              marginBottom: '12px',
+              fontWeight: 600,
+              fontSize: '14px',
+            }}>
+              Wallet Address
+            </label>
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <input
+                type="text"
+                value={inputAddress}
+                onChange={(e) => setInputAddress(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="Enter Solana wallet address (e.g., 5MJ6Jx2SJKyTce...)"
+                style={{
+                  flex: 1,
+                  padding: '12px 16px',
+                  fontSize: '14px',
+                  fontFamily: 'var(--ifm-font-family-monospace)',
+                  border: '1px solid var(--ifm-toc-border-color)',
+                  borderRadius: 'var(--ifm-global-radius)',
+                  background: 'var(--ifm-background-color)',
+                  color: 'var(--ifm-font-color-base)',
+                }}
+              />
+              <button
+                onClick={handleSearch}
+                disabled={loading}
+                style={{
+                  padding: '12px 32px',
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  color: 'white',
+                  background: loading ? '#9CA3AF' : 'var(--accent)',
+                  border: 'none',
+                  borderRadius: 'var(--ifm-global-radius)',
+                  cursor: loading ? 'not-allowed' : 'pointer',
+                  transition: 'background 120ms ease',
+                }}
+                onMouseEnter={(e) => {
+                  if (!loading) e.currentTarget.style.background = 'var(--accent-hover)';
+                }}
+                onMouseLeave={(e) => {
+                  if (!loading) e.currentTarget.style.background = 'var(--accent)';
+                }}
+              >
+                {loading ? 'Loading...' : 'Analyze Wallet'}
+              </button>
+            </div>
+            <p style={{
+              marginTop: '12px',
+              marginBottom: 0,
+              fontSize: '13px',
+              color: 'var(--ifm-color-secondary)',
+            }}>
+              Enter any wallet address from the staking cache ({loading ? '...' : '7,861 wallets available'})
+            </p>
+          </div>
+
+          {/* Loading State */}
+          {loading && (
+            <div style={{
+              padding: '48px',
+              textAlign: 'center',
+              background: 'var(--ifm-background-surface-color)',
+              border: '1px solid var(--ifm-toc-border-color)',
+              borderRadius: 'var(--ifm-global-radius)',
+            }}>
+              <LoadingSpinner />
+              <p style={{ marginTop: '16px', color: 'var(--ifm-color-secondary)' }}>
+                Loading wallet timeline...
+              </p>
+            </div>
+          )}
+
+          {/* Error State */}
+          {error && !loading && (
+            <div style={{
+              padding: '24px',
+              background: 'var(--ifm-background-surface-color)',
+              border: '1px solid var(--ifm-color-danger)',
+              borderRadius: 'var(--ifm-global-radius)',
+              color: 'var(--ifm-color-danger)',
+            }}>
+              <h3 style={{ marginTop: 0 }}>Error Loading Wallet</h3>
+              <p>{error}</p>
+              <p style={{ fontSize: '14px', color: 'var(--ifm-color-secondary)', marginTop: '16px', marginBottom: 0 }}>
+                Please check the wallet address and try again. The wallet must exist in the staking cache (active from 2025-07-25 onwards).
+              </p>
+            </div>
+          )}
+
+          {/* Chart and Summary */}
+          {data && data.found && !loading && (
+            <>
+              <WalletTimelineChart data={data} />
+
+              {/* Transactions Table */}
+              {(() => {
+                const pageSize = 10;
+                const totalPages = Math.ceil(data.operations.length / pageSize);
+                const startIdx = currentPage * pageSize;
+                const endIdx = startIdx + pageSize;
+                const pageOperations = data.operations.slice(startIdx, endIdx);
+
+                const operationColors = {
+                  initialize: '#8B5CF6',
+                  stake: '#10B981',
+                  unstake: '#EF4444',
+                  compound: '#3B82F6',
+                  claim: '#F59E0B',
+                  withdraw: '#F97316',
+                  unknown: '#6B7280',
+                };
+
+                return (
+                  <div className="wallet-transactions-table" style={{
+                    background: 'var(--ifm-background-surface-color)',
+                    border: '1px solid var(--ifm-toc-border-color)',
+                    borderRadius: 'var(--ifm-global-radius)',
+                    padding: '24px',
+                    marginBottom: '24px',
+                  }}>
+                    <h3 style={{ marginTop: 0, marginBottom: '16px' }}>All Transactions ({data.operations.length})</h3>
+
+                    <div style={{ overflowX: 'auto' }}>
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th style={{ textAlign: 'right' }}>Amount</th>
+                            <th>Transaction</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {pageOperations.map((op, idx) => {
+                            const globalIdx = startIdx + idx;
+                            const unit = (op.type === 'compound' || op.type === 'claim') ? 'SOL' : 'TUNA';
+                            const decimals = (op.type === 'compound' || op.type === 'claim') ? 4 : 2;
+                            const isHovered = hoveredRow === globalIdx;
+
+                            return (
+                              <tr
+                                key={globalIdx}
+                                style={{
+                                  background: isHovered ? 'var(--ifm-menu-color-background-hover)' : 'transparent',
+                                }}
+                                onMouseEnter={() => setHoveredRow(globalIdx)}
+                                onMouseLeave={() => setHoveredRow(null)}
+                              >
+                                <td style={{ color: 'var(--ifm-color-secondary)' }}>
+                                  #{globalIdx + 1}
+                                </td>
+                                <td style={{ fontSize: '12px', fontFamily: 'var(--ifm-font-family-monospace)' }}>
+                                  {new Date(op.date).toLocaleString()}
+                                </td>
+                                <td>
+                                  <span style={{
+                                    display: 'inline-block',
+                                    padding: '4px 8px',
+                                    borderRadius: '4px',
+                                    fontSize: '12px',
+                                    fontWeight: 600,
+                                    color: 'white',
+                                    background: operationColors[op.type] || operationColors.unknown,
+                                  }}>
+                                    {op.type_label}
+                                  </span>
+                                </td>
+                                <td style={{ textAlign: 'right', fontWeight: 600 }}>
+                                  {op.amount.toLocaleString(undefined, { minimumFractionDigits: decimals, maximumFractionDigits: decimals })} {unit}
+                                </td>
+                                <td>
+                                  <a
+                                    href={op.solscan_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{
+                                      color: 'var(--accent)',
+                                      textDecoration: 'none',
+                                      fontSize: '12px',
+                                      fontFamily: 'var(--ifm-font-family-monospace)',
+                                    }}
+                                  >
+                                    {op.signature.slice(0, 8)}...{op.signature.slice(-8)}
+                                  </a>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    {/* Pagination */}
+                    {totalPages > 1 && (
+                      <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        marginTop: '16px',
+                        paddingTop: '16px',
+                        borderTop: '1px solid var(--ifm-toc-border-color)',
+                      }}>
+                        <div style={{ fontSize: '14px', color: 'var(--ifm-color-secondary)' }}>
+                          Showing {startIdx + 1}-{Math.min(endIdx, data.operations.length)} of {data.operations.length}
+                        </div>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                          <button
+                            onClick={() => setCurrentPage(Math.max(0, currentPage - 1))}
+                            disabled={currentPage === 0}
+                            style={{
+                              padding: '8px 16px',
+                              fontSize: '14px',
+                              fontWeight: 600,
+                              color: currentPage === 0 ? 'var(--ifm-color-secondary)' : 'var(--ifm-font-color-base)',
+                              background: 'var(--ifm-background-surface-color)',
+                              border: '1px solid var(--ifm-toc-border-color)',
+                              borderRadius: 'var(--ifm-global-radius)',
+                              cursor: currentPage === 0 ? 'not-allowed' : 'pointer',
+                            }}
+                          >
+                            Previous
+                          </button>
+                          <div style={{
+                            padding: '8px 16px',
+                            fontSize: '14px',
+                            color: 'var(--ifm-color-secondary)',
+                          }}>
+                            Page {currentPage + 1} of {totalPages}
+                          </div>
+                          <button
+                            onClick={() => setCurrentPage(Math.min(totalPages - 1, currentPage + 1))}
+                            disabled={currentPage === totalPages - 1}
+                            style={{
+                              padding: '8px 16px',
+                              fontSize: '14px',
+                              fontWeight: 600,
+                              color: currentPage === totalPages - 1 ? 'var(--ifm-color-secondary)' : 'var(--ifm-font-color-base)',
+                              background: 'var(--ifm-background-surface-color)',
+                              border: '1px solid var(--ifm-toc-border-color)',
+                              borderRadius: 'var(--ifm-global-radius)',
+                              cursor: currentPage === totalPages - 1 ? 'not-allowed' : 'pointer',
+                            }}
+                          >
+                            Next
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
+
+
+              {/* Summary Stats */}
+              <div style={{
+                background: 'var(--ifm-background-surface-color)',
+                border: '1px solid var(--ifm-toc-border-color)',
+                borderRadius: 'var(--ifm-global-radius)',
+                padding: '24px',
+              }}>
+                <h3 style={{ marginTop: 0, marginBottom: '16px' }}>Wallet Summary</h3>
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+                  gap: '16px',
+                }}>
+                  <div>
+                    <div style={{ fontSize: '13px', color: 'var(--ifm-color-secondary)', marginBottom: '4px' }}>
+                      Current Staked
+                    </div>
+                    <div style={{ fontSize: '20px', fontWeight: 600, color: 'var(--accent)' }}>
+                      {data.summary.current_staked.toLocaleString(undefined, { maximumFractionDigits: 2 })} TUNA
+                    </div>
+                  </div>
+
+                  <div>
+                    <div style={{ fontSize: '13px', color: 'var(--ifm-color-secondary)', marginBottom: '4px' }}>
+                      Current Unstaked
+                    </div>
+                    <div style={{ fontSize: '20px', fontWeight: 600 }}>
+                      {data.summary.current_unstaked.toLocaleString(undefined, { maximumFractionDigits: 2 })} TUNA
+                    </div>
+                  </div>
+
+                  <div>
+                    <div style={{ fontSize: '13px', color: 'var(--ifm-color-secondary)', marginBottom: '4px' }}>
+                      Realized Rewards
+                    </div>
+                    <div style={{ fontSize: '20px', fontWeight: 600, color: '#F59E0B' }}>
+                      {data.summary.realized_rewards.toLocaleString(undefined, { maximumFractionDigits: 4 })} SOL
+                    </div>
+                    <div style={{ fontSize: '12px', color: 'var(--ifm-color-secondary)', marginTop: '4px' }}>
+                      Claimed + Compounded
+                    </div>
+                  </div>
+
+                  <div>
+                    <div style={{ fontSize: '13px', color: 'var(--ifm-color-secondary)', marginBottom: '4px' }}>
+                      Total Operations
+                    </div>
+                    <div style={{ fontSize: '20px', fontWeight: 600 }}>
+                      {data.summary.total_operations.toLocaleString()}
+                    </div>
+                  </div>
+
+                  <div>
+                    <div style={{ fontSize: '13px', color: 'var(--ifm-color-secondary)', marginBottom: '4px' }}>
+                      Active Since
+                    </div>
+                    <div style={{ fontSize: '16px', fontWeight: 600 }}>
+                      {new Date(data.summary.first_stake_date).toLocaleDateString()}
+                    </div>
+                    <div style={{ fontSize: '12px', color: 'var(--ifm-color-secondary)', marginTop: '4px' }}>
+                      {data.summary.days_active} days
+                    </div>
+                  </div>
+
+                  <div>
+                    <div style={{ fontSize: '13px', color: 'var(--ifm-color-secondary)', marginBottom: '4px' }}>
+                      Last Activity
+                    </div>
+                    <div style={{ fontSize: '16px', fontWeight: 600 }}>
+                      {new Date(data.summary.last_activity_date).toLocaleDateString()}
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{
+                  marginTop: '16px',
+                  padding: '12px',
+                  background: 'var(--ifm-background-color)',
+                  borderRadius: '6px',
+                  fontSize: '13px',
+                  color: 'var(--ifm-color-secondary)',
+                }}>
+                  ℹ️ <strong>Note:</strong> Realized rewards are shown in SOL (claimed and compounded amounts). Unclaimed rewards are not shown (planned for Phase 2).
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* Wallet Not Found */}
+          {data && !data.found && !loading && !error && (
+            <div style={{
+              padding: '48px',
+              textAlign: 'center',
+              background: 'var(--ifm-background-surface-color)',
+              border: '1px solid var(--ifm-toc-border-color)',
+              borderRadius: 'var(--ifm-global-radius)',
+            }}>
+              <h3>Wallet Not Found</h3>
+              <p style={{ color: 'var(--ifm-color-secondary)' }}>
+                {data.error || 'This wallet is not in the staking cache.'}
+              </p>
+              <p style={{ fontSize: '14px', color: 'var(--ifm-color-secondary)' }}>
+                The cache contains 7,861 wallets active from 2025-07-25 onwards.
+              </p>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    return <WalletTimelinePage />;
+  }}
+</BrowserOnly>
+
+## Understanding the Chart
+
+### Chart Elements
+
+- **Stacked Area (Teal + Gray)**: Shows your TUNA balance split between staked (bottom, teal) and unstaked (top, gray) portions
+- **Dashed Gold Line (Right Y-axis)**: Cumulative realized rewards in SOL (claimed + compounded)
+- **Colored Dots**: Individual staking operations
+  - 🟣 Purple diamond = Initialize Position
+  - 🟢 Green circle = Stake
+  - 🔴 Red circle = Unstake
+  - 🔵 Blue triangle = Compound
+  - 🟡 Gold star = Claim Rewards
+  - 🟠 Orange square = Withdraw
+
+### Interactive Features
+
+- **Hover over areas**: See exact balance amounts at any point in time
+- **Hover over dots**: View operation details (type, amount, transaction signature)
+- **Click "View on Solscan"**: Opens the transaction in Solscan block explorer
+- **Zoom & Pan**: Use mouse to zoom into specific time periods
+- **Toggle legend**: Click legend items to show/hide specific data series
+
+### Data Limitations
+
+- **Date Range**: Data available from 2025-07-25 onwards (when staker cache tracking began)
+- **Pre-existing Balances**: Wallets with positions before 2025-07-25 may show incomplete balance history
+- **Realized Rewards Only**: Currently shows only claimed + compounded rewards in SOL (MVP)
+- **Unclaimed Rewards**: Not included in this version (planned for Phase 2)
+- **Cache Updates**: Data is updated when the staker cache is rebuilt (not real-time)
+
+## Use Cases
+
+### Whale Tracking
+Monitor large stakers to understand their behavior patterns, commitment levels, and reward strategies.
+
+### Portfolio Analysis
+Analyze your own wallet or institutional holdings to track performance and engagement over time.
+
+### Behavior Patterns
+Identify different staker archetypes:
+- **Compounders**: Frequently compound rewards back into staked position
+- **Claimers**: Regularly claim rewards without compounding
+- **HODLers**: Stake once and hold without frequent operations
+- **Active Traders**: Frequent stake/unstake operations
+
+### Performance Benchmarking
+Compare wallet performance against your own strategy or identify successful patterns to emulate.

@@ -18,7 +18,8 @@ function renderTable(title: string, rows: StakingTopEntry[], emptyMessage: strin
             <tr style={{ borderBottom: '2px solid var(--ifm-toc-border-color)' }}>
               <th style={{ textAlign: 'left', padding: '12px 8px', fontWeight: 600 }}>Rank</th>
               <th style={{ textAlign: 'left', padding: '12px 8px', fontWeight: 600 }}>Address</th>
-              <th style={{ textAlign: 'right', padding: '12px 8px', fontWeight: 600 }}>TUNA</th>
+              <th style={{ textAlign: 'left', padding: '12px 8px', fontWeight: 600 }}>TUNA</th>
+              <th style={{ textAlign: 'center', padding: '12px 8px', fontWeight: 600 }}>Staking Timeline</th>
             </tr>
           </thead>
           <tbody>
@@ -62,6 +63,34 @@ function renderTable(title: string, rows: StakingTopEntry[], emptyMessage: strin
                 <td style={{ padding: '12px 8px', fontWeight: 600, color: 'var(--accent)' }}>
                   {row.amount.toLocaleString(undefined, { maximumFractionDigits: 2 })} TUNA
                 </td>
+                <td style={{ padding: '12px 8px', textAlign: 'center' }}>
+                  <a
+                    href={`/analysis/staking/wallet-timeline?wallet=${row.address}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      color: 'var(--accent)',
+                      textDecoration: 'none',
+                      fontSize: '13px',
+                      fontWeight: 600,
+                      padding: '6px 12px',
+                      border: '1px solid var(--accent)',
+                      borderRadius: '4px',
+                      display: 'inline-block',
+                      transition: 'all 120ms ease',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'var(--accent)';
+                      e.currentTarget.style.color = 'white';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'transparent';
+                      e.currentTarget.style.color = 'var(--accent)';
+                    }}
+                  >
+                    See details
+                  </a>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -81,4 +110,5 @@ export default function StakingTopTables({ topStakers, topWithdrawers }: Staking
       {renderTable('Top Withdrawers (last 7 days)', safeWithdrawers, 'No withdrawals recorded in the past week.')}
     </div>
   );
-}
+}
+

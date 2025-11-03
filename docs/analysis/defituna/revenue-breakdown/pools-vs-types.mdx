@@ -39,8 +39,8 @@ This page shows the **two-dimensional revenue distribution** using a Marimekko c
           });
       }, []);
 
-      const handleSegmentClick = (poolId, poolLabel, typeName) => {
-        setSelectedSegment({ poolId, poolLabel, typeName });
+      const handleSegmentClick = (poolId, poolLabel, displayName, technicalTypes) => {
+        setSelectedSegment({ poolId, poolLabel, displayName, technicalTypes });
       };
 
       const handleClearFilter = () => {
@@ -62,10 +62,10 @@ This page shows the **two-dimensional revenue distribution** using a Marimekko c
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span>
                   <strong>Filtered by:</strong> {selectedSegment.poolLabel}
-                  {selectedSegment.typeName && (
+                  {selectedSegment.displayName && (
                     <>
                       <span style={{ margin: '0 8px', color: 'var(--ifm-color-secondary)' }}>→</span>
-                      <span style={{ color: 'var(--accent)' }}>{selectedSegment.typeName}</span>
+                      <span style={{ color: 'var(--accent)' }}>{selectedSegment.displayName}</span>
                     </>
                   )}
                 </span>
@@ -95,7 +95,7 @@ This page shows the **two-dimensional revenue distribution** using a Marimekko c
               groupMode="pool"
               selectedFilter={selectedSegment?.poolId}
               selectedFilterLabel={selectedSegment?.poolLabel}
-              typeFilter={selectedSegment?.typeName}
+              typeFilter={selectedSegment?.technicalTypes}
               summary={summary}
             />
           )}

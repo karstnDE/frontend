@@ -12,6 +12,7 @@ export default function CumulativeChart({ data }: CumulativeChartProps): React.R
   const { colorMode } = useColorMode();
   const isDark = colorMode === 'dark';
   const template = getPlotlyTemplate(isDark);
+  const accentColor = isDark ? '#4FD1C5' : '#00A3B4';
 
   if (data.length === 0) {
     return (
@@ -44,7 +45,7 @@ export default function CumulativeChart({ data }: CumulativeChartProps): React.R
     mode: 'lines',
     fill: 'tozeroy',
     fillcolor: 'rgba(0, 163, 180, 0.2)',
-    line: { width: 3, color: 'var(--accent)' },
+    line: { width: 3, color: accentColor },
     hovertemplate: '<b>Cumulative</b><br>%{y:.2f} SOL<br>%{x}<extra></extra>',
   };
 

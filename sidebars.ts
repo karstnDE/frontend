@@ -25,9 +25,6 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Treasury Analysis',
       items: [
-        'analysis/defituna/staking-apy',
-        'analysis/defituna/staked-tuna',
-        'analysis/defituna/staker-conviction',
         {
           type: 'category',
           label: 'Revenue Breakdown',
@@ -36,6 +33,12 @@ const sidebars: SidebarsConfig = {
             'analysis/defituna/revenue-breakdown/by-type',
             'analysis/defituna/revenue-breakdown/by-pool',
             'analysis/defituna/revenue-breakdown/pools-vs-types',
+            {
+              type: 'doc',
+              id: 'analysis/defituna/tx-type-per-day',
+              label: 'Types per Day',
+            },
+            'analysis/defituna/orca-vs-fusion',
           ],
         },
         {
@@ -48,8 +51,17 @@ const sidebars: SidebarsConfig = {
             'analysis/usage-statistics/usage-statistics-weekly',
           ],
         },
-        'analysis/defituna/tx-type-per-day',
-        'analysis/defituna/orca-vs-fusion',
+        {
+          type: 'category',
+          label: 'Staking Analysis',
+          items: [
+            'analysis/defituna/staked-tuna',
+            'analysis/defituna/staker-conviction',
+            'analysis/staking/wallet-timeline',
+          ],
+        },
+        'analysis/defituna/staking-apy',
+        'analysis/defituna/pool-ramp-up',
       ],
     },
   ],

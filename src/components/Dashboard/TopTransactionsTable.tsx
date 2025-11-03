@@ -8,7 +8,7 @@ interface TopTransactionsTableProps {
   groupMode: GroupMode;
   selectedFilter?: string | string[] | null;
   selectedFilterLabel?: string | null;
-  typeFilter?: string | null;
+  typeFilter?: string | string[] | null;
   summary?: SummaryData;
 }
 
@@ -76,7 +76,8 @@ export default function TopTransactionsTable({
 
   // Apply additional type filter if provided (for dual filtering: pool AND type)
   if (typeFilter) {
-    allTransactions = allTransactions.filter(tx => tx.type === typeFilter);
+    const typeFilterValues = Array.isArray(typeFilter) ? typeFilter : [typeFilter];
+    allTransactions = allTransactions.filter(tx => typeFilterValues.includes(tx.type));
   }
 
   // Deduplicate by signature (same transaction might appear in multiple groups)
@@ -89,6 +90,7 @@ export default function TopTransactionsTable({
     return true;
   });
 
+  const totalMatching = uniqueTransactions.length;
   const top10 = uniqueTransactions
     .sort((a, b) => b.amount - a.amount)
     .slice(0, 10);
@@ -103,7 +105,7 @@ export default function TopTransactionsTable({
         border: '1px solid var(--ifm-toc-border-color)',
         borderRadius: 'var(--ifm-global-radius)',
       }}>
-        No transaction data available
+        No transaction data available for this filter combination
       </div>
     );
   }
@@ -145,6 +147,12 @@ export default function TopTransactionsTable({
     ? `Top 10 Transactions for ${selectedFilterLabel || selectedFilter}`
     : 'Top 10 Transactions';
 
+  const subtitle = totalMatching > 10
+    ? `Showing top 10 of ${totalMatching.toLocaleString()} matching transactions`
+    : totalMatching < 10
+    ? `Showing all ${totalMatching} matching transactions`
+    : `Showing all ${totalMatching} matching transactions`;
+
   return (
     <div style={{
       background: 'var(--ifm-background-surface-color)',
@@ -153,7 +161,16 @@ export default function TopTransactionsTable({
       padding: '24px',
       marginBottom: '24px',
     }}>
-      <h3 style={{ marginTop: 0, marginBottom: '20px' }}>{tableTitle}</h3>
+      <h3 style={{ marginTop: 0, marginBottom: '4px' }}>{tableTitle}</h3>
+      {(selectedFilter || typeFilter) && (
+        <div style={{
+          fontSize: '13px',
+          color: 'var(--ifm-color-secondary)',
+          marginBottom: '16px'
+        }}>
+          {subtitle}
+        </div>
+      )}
       <div style={{ overflowX: 'auto' }}>
         <table style={{
           display: 'table',

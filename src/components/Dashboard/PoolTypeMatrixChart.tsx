@@ -17,7 +17,42 @@ interface PoolTypeData {
 }
 
 interface PoolTypeMatrixChartProps {
-  onSegmentClick?: (poolId: string, poolLabel: string, typeName: string) => void;
+  onSegmentClick?: (poolId: string, poolLabel: string, typeName: string, technicalTypes?: string[]) => void;
+}
+
+// Type name mapping - technical to display names (same as DailyStackedBarChart)
+const TYPE_DISPLAY_NAMES: Record<string, string> = {
+  'liquidate_position_orca_liquidation': 'Liquidate LP Position (Orca)',
+  'tuna_liquidatetunalppositionorca': 'Liquidate LP Position (Orca)',
+  'fusion_collectprotocolfees': 'Collect Protocol Fees (Fusion)',
+  'openpositionwithliquidity': 'Open Position w. Liq. (Orca)',
+  'tuna_liquidatepositionfusion': 'Liquidate LP Position (Fusion)',
+  'tuna_liquidatetunalppositionfusion': 'Liquidate LP Position (Fusion)',
+  'token_transfer': 'Token Transfer',
+  'compound_fees_tuna': 'Collect & Compound (Orca)',
+  'tuna_collectandcompoundfeesfusion': 'Collect & Compound (Fusion)',
+  'liquidate_position_orca_sl_tp': 'Position SL/TP (Orca)',
+  'tuna_increasetunalppositionfusion': 'Increase LP Position (Fusion)',
+  'tuna_openandincreasetunalppositionfusion': 'Open & Increase LP (Fusion)',
+  'tuna_increasetunalppositionorca': 'Increase LP Position (Orca)',
+  'tuna_openandincreasetunalppositionorca': 'Open & Increase LP (Orca)',
+  'liquidity_add_tuna': 'Add Liquidity (Tuna)',
+  'tuna_addliquidityfusion': 'Add Liquidity (Fusion)',
+  'tuna_addliquidityorca': 'Add Liquidity (Orca)',
+  'tuna_openpositionwithliquidityfusion': 'Open Position w. Liq. (Fusion)',
+  'TunaIncreasetunaspotpositionfusion': 'Increase Spot Position (Fusion)',
+  'TunaOpenandincreasetunaspotpositionfusion': 'Open & Increase Spot (Fusion)',
+  'TunaDecreasetunaspotpositionfusion': 'Decrease Spot Position (Fusion)',
+  'TunaLiquidatetunaspotpositionfusion': 'Liquidate Spot Position (Fusion)',
+  'ExcludedNonRevenue': 'Non-Revenue',
+  'Unattributed': 'Unattributed',
+};
+
+function getDisplayName(technicalType: string): string {
+  return TYPE_DISPLAY_NAMES[technicalType] || technicalType
+    .split('_')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
 }
 
 export default function PoolTypeMatrixChart({ onSegmentClick }: PoolTypeMatrixChartProps): React.ReactElement {
@@ -95,24 +130,35 @@ export default function PoolTypeMatrixChart({ onSegmentClick }: PoolTypeMatrixCh
     'rgba(185, 28, 28, 0.8)',   // red-700
   ];
   
-  const getColor = (typeName: string, index: number): string => {
+  const getColor = (displayName: string, index: number): string => {
     // Only types that START with "Liquidate" get red
-    if (typeName.startsWith('Liquidate')) {
+    if (displayName.startsWith('Liquidate')) {
       return redPalette[index % redPalette.length];
     }
     // Non-red colors from design palette
     return nonRedPalette[index % nonRedPalette.length];
   };
 
-  // Get all unique types across all pools for consistent coloring
-  const allTypes = new Set<string>();
+  // Group technical types by display name
+  const displayNameGroups = new Map<string, string[]>();
   data.forEach(pool => {
-    pool.types.forEach(t => allTypes.add(t.type));
+    pool.types.forEach(t => {
+      const displayName = getDisplayName(t.type);
+      if (!displayNameGroups.has(displayName)) {
+        displayNameGroups.set(displayName, []);
+      }
+      if (!displayNameGroups.get(displayName)!.includes(t.type)) {
+        displayNameGroups.get(displayName)!.push(t.type);
+      }
+    });
   });
-  const typesList = Array.from(allTypes);
-  const typeColorMap: Record<string, string> = {};
-  typesList.forEach((type, idx) => {
-    typeColorMap[type] = getColor(type, idx);
+
+  // Assign colors to each display name
+  const displayNameToColor: Record<string, string> = {};
+  let colorIndex = 0;
+  Array.from(displayNameGroups.keys()).forEach((displayName) => {
+    displayNameToColor[displayName] = getColor(displayName, colorIndex);
+    colorIndex++;
   });
 
   // Calculate cumulative x positions for pools
@@ -130,36 +176,72 @@ export default function PoolTypeMatrixChart({ onSegmentClick }: PoolTypeMatrixCh
     cumulativeX += width;
   });
 
-  // Create traces for each type (so they stack properly across pools)
-  typesList.forEach(typeName => {
+  // Calculate the actual range needed to show all bars fully
+  const maxX = cumulativeX;
+
+  // Create annotations for all pools (45° rotated labels)
+  const annotations = poolPositions.map((poolPos) => {
+    // Remove line breaks for rotated labels
+    const labelText = poolPos.pool.replace(/<br>/g, ' ');
+    return {
+      x: poolPos.xStart + poolPos.width / 2,
+      y: -0.02,  // Position just below the x-axis
+      xref: 'x',
+      yref: 'paper',
+      text: labelText,
+      showarrow: false,
+      textangle: -45,
+      font: { size: 11 },
+      xanchor: 'right',
+      yanchor: 'top',
+    };
+  });
+
+  // Create traces for each display name (combining technical types with same display name)
+  displayNameGroups.forEach((technicalTypes, displayName) => {
     const xValues: number[] = [];
     const yValues: number[] = [];
     const widths: number[] = [];
     const hoverTexts: string[] = [];
     const textLabels: string[] = [];
-    const customData: Array<[string, string, string]> = [];  // [pool_id, pool_label, type]
+    const customData: Array<[string, string, string, string[]]> = [];  // [pool_id, pool_label, display_name, technical_types]
 
     poolPositions.forEach((poolPos, poolIdx) => {
       const pool = data[poolIdx];
-      const typeData = pool.types.find(t => t.type === typeName);
 
-      if (typeData) {
+      // Sum up all technical types that map to this display name for this pool
+      let totalShareOfPool = 0;
+      let totalSolEquivalent = 0;
+      let totalShareOfTotal = 0;
+
+      technicalTypes.forEach(technicalType => {
+        const typeData = pool.types.find(t => t.type === technicalType);
+        if (typeData) {
+          totalShareOfPool += typeData.share_of_pool;
+          totalSolEquivalent += typeData.sol_equivalent;
+          totalShareOfTotal += typeData.share_of_total;
+        }
+      });
+
+      // Only add a bar if there's data for this display name in this pool
+      if (totalSolEquivalent > 0) {
         // Position bar at center of pool's x range
         const xCenter = poolPos.xStart + poolPos.width / 2;
         xValues.push(xCenter);
         // Use percentage of pool (0-100) instead of absolute SOL for normalized height
-        yValues.push(typeData.share_of_pool * 100);
+        yValues.push(totalShareOfPool * 100);
         widths.push(poolPos.width); // Full width - borders will create gaps
         hoverTexts.push(
           `<b>${pool.pool_label}</b><br>` +
-          `Type: ${typeName}<br>` +
-          `${typeData.sol_equivalent.toFixed(2)} SOL<br>` +
-          `${(typeData.share_of_pool * 100).toFixed(1)}% of pool<br>` +
-          `${(typeData.share_of_total * 100).toFixed(2)}% of total revenue`
+          `Type: ${displayName}<br>` +
+          `${totalSolEquivalent.toFixed(2)} SOL<br>` +
+          `${(totalShareOfPool * 100).toFixed(1)}% of pool<br>` +
+          `${(totalShareOfTotal * 100).toFixed(2)}% of total revenue`
         );
         // No text labels
         textLabels.push('');
-        customData.push([pool.pool_id, pool.pool_label, typeName]);
+        // Store both display name and technical types for filtering
+        customData.push([pool.pool_id, pool.pool_label, displayName, technicalTypes]);
       }
     });
 
@@ -169,13 +251,13 @@ export default function PoolTypeMatrixChart({ onSegmentClick }: PoolTypeMatrixCh
         x: xValues,
         y: yValues,
         width: widths,
-        name: typeName,
+        name: displayName,
         text: textLabels,
         textposition: 'inside',
         marker: {
-          color: typeColorMap[typeName],
+          color: displayNameToColor[displayName],
           line: {
-            color: isDark ? '#1a1a1a' : '#ffffff',
+            color: isDark ? '#05080D' : '#ffffff',
             width: 1,  // Same thin border for both vertical and horizontal
           },
         },
@@ -204,13 +286,12 @@ export default function PoolTypeMatrixChart({ onSegmentClick }: PoolTypeMatrixCh
           },
           xaxis: {
             ...template.layout.xaxis,
-            title: 'Liquidity Pools (width = share of total revenue)',
-            tickmode: 'array',
-            tickvals: poolPositions.map(p => p.xStart + p.width / 2),
-            ticktext: poolPositions.map(p => p.pool),
-            tickangle: 0,
-            tickfont: { size: 11 },
-            range: [-0.05, 1.05],
+            title: {
+              text: 'Liquidity Pools (width = share of total revenue)',
+              standoff: 120,  // Add more space between axis and title
+            },
+            showticklabels: false,  // Hide tick labels, using annotations instead
+            range: [0, maxX],
           },
           yaxis: {
             ...template.layout.yaxis,
@@ -221,11 +302,12 @@ export default function PoolTypeMatrixChart({ onSegmentClick }: PoolTypeMatrixCh
           barmode: 'stack',
           showlegend: false,
           hovermode: 'closest',
+          annotations: annotations,
           margin: {
             l: 60,
             r: 40,
             t: 60,
-            b: 120,
+            b: 140,  // Increased bottom margin for diagonal labels
           },
         }}
         config={defaultPlotlyConfig}
@@ -234,8 +316,8 @@ export default function PoolTypeMatrixChart({ onSegmentClick }: PoolTypeMatrixCh
         onClick={(event: any) => {
           if (event.points && event.points.length > 0 && onSegmentClick) {
             const point = event.points[0];
-            const [poolId, poolLabel, typeName] = point.customdata;
-            onSegmentClick(poolId, poolLabel, typeName);
+            const [poolId, poolLabel, displayName, technicalTypes] = point.customdata;
+            onSegmentClick(poolId, poolLabel, displayName, technicalTypes);
           }
         }}
       />
