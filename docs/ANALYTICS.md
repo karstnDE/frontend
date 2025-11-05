@@ -809,7 +809,7 @@ if (isAnalyticsAvailable()) {
 If you encounter issues not covered in this guide:
 
 1. Check the [GoatCounter documentation](https://www.goatcounter.com/help)
-2. Review the [implementation plan](GOATCOUNTER_IMPLEMENTATION_PLAN.md)
+2. Review the implementation plan (`GOATCOUNTER_IMPLEMENTATION_PLAN.md` in the frontend root)
 3. Inspect browser console for errors
 4. Test in a clean browser profile (no extensions)
 5. Compare your implementation to working examples in `src/components/`
