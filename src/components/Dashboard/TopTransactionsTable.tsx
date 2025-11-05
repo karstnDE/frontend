@@ -5,6 +5,7 @@ interface TopTransactionsTableProps {
   topTransactionsToken: TopTransactionsData;
   topTransactionsType: TopTransactionsData;
   topTransactionsPool: TopTransactionsData;
+  topTransactionsPoolType: TopTransactionsData;
   groupMode: GroupMode;
   selectedFilter?: string | string[] | null;
   selectedFilterLabel?: string | null;
@@ -16,6 +17,7 @@ export default function TopTransactionsTable({
   topTransactionsToken,
   topTransactionsType,
   topTransactionsPool,
+  topTransactionsPoolType,
   groupMode,
   selectedFilter,
   selectedFilterLabel,
@@ -36,48 +38,66 @@ export default function TopTransactionsTable({
     return mapping;
   }, [summary]);
 
-  // Select data based on group mode
+  // Check if we should use pool×type specific data
+  // This happens when both pool filter and type filter are present (single values)
+  const usePoolTypeData =
+    selectedFilter &&
+    !Array.isArray(selectedFilter) &&
+    typeFilter &&
+    !Array.isArray(typeFilter);
+
+  // Select data based on group mode or use pool×type data
   let topTransactions: TopTransactionsData = {};
   let groupLabel = '';
+  let allTransactions: Array<any> = [];
 
-  switch (groupMode) {
-    case 'token':
-      topTransactions = topTransactionsToken;
-      groupLabel = 'Token';
-      break;
-    case 'type':
-      topTransactions = topTransactionsType;
-      groupLabel = 'Type';
-      break;
-    case 'pool':
-      topTransactions = topTransactionsPool;
-      groupLabel = 'Pool';
-      break;
-  }
+  if (usePoolTypeData) {
+    // Use pre-computed pool×type data with composite key
+    const poolTypeKey = `${selectedFilter}_${typeFilter}`;
+    const poolTypeTransactions = topTransactionsPoolType[poolTypeKey] || [];
+    allTransactions = poolTypeTransactions.map(tx => ({ ...tx, group: selectedFilter }));
+    groupLabel = 'Pool×Type';
+  } else {
+    // Standard mode - select data based on group mode
+    switch (groupMode) {
+      case 'token':
+        topTransactions = topTransactionsToken;
+        groupLabel = 'Token';
+        break;
+      case 'type':
+        topTransactions = topTransactionsType;
+        groupLabel = 'Type';
+        break;
+      case 'pool':
+        topTransactions = topTransactionsPool;
+        groupLabel = 'Pool';
+        break;
+    }
 
-  // Flatten and sort all transactions by amount
-  let allTransactions = Object.entries(topTransactions).flatMap(([group, txs]) =>
-    txs.map(tx => ({ ...tx, group }))
-  );
-
-  // Apply filter if selectedFilter is provided
-  if (selectedFilter) {
-    // Handle both single string and array of types
-    const filterValues = Array.isArray(selectedFilter) ? selectedFilter : [selectedFilter];
-
-    // Map WSOL_DIRECT to actual wrapped SOL address
-    const mappedFilters = filterValues.map(f =>
-      f === 'WSOL_DIRECT' ? 'So11111111111111111111111111111111111111112' : f
+    // Flatten and sort all transactions by amount
+    allTransactions = Object.entries(topTransactions).flatMap(([group, txs]) =>
+      txs.map(tx => ({ ...tx, group }))
     );
 
-    // Filter transactions that match ANY of the filter values
-    allTransactions = allTransactions.filter(tx => mappedFilters.includes(tx.group));
-  }
+    // Apply filter if selectedFilter is provided
+    if (selectedFilter) {
+      // Handle both single string and array of types
+      const filterValues = Array.isArray(selectedFilter) ? selectedFilter : [selectedFilter];
 
-  // Apply additional type filter if provided (for dual filtering: pool AND type)
-  if (typeFilter) {
-    const typeFilterValues = Array.isArray(typeFilter) ? typeFilter : [typeFilter];
-    allTransactions = allTransactions.filter(tx => typeFilterValues.includes(tx.type));
+      // Map WSOL_DIRECT to actual wrapped SOL address
+      const mappedFilters = filterValues.map(f =>
+        f === 'WSOL_DIRECT' ? 'So11111111111111111111111111111111111111112' : f
+      );
+
+      // Filter transactions that match ANY of the filter values
+      allTransactions = allTransactions.filter(tx => mappedFilters.includes(tx.group));
+    }
+
+    // Apply additional type filter if provided (for dual filtering: pool AND type)
+    if (typeFilter) {
+      const typeFilterValues = Array.isArray(typeFilter) ? typeFilter : [typeFilter];
+      allTransactions = allTransactions.filter(tx => typeFilterValues.includes(tx.type));
+    }
   }
 
   // Deduplicate by signature (same transaction might appear in multiple groups)
@@ -96,16 +116,45 @@ export default function TopTransactionsTable({
     .slice(0, 10);
 
   if (top10.length === 0) {
+    // Determine why there are no transactions
+    const isPoolAndTypeFilter = selectedFilter && typeFilter;
+
     return (
       <div style={{
-        padding: '48px',
+        padding: '48px 24px',
         textAlign: 'center',
         color: 'var(--ifm-color-secondary)',
         background: 'var(--ifm-background-surface-color)',
         border: '1px solid var(--ifm-toc-border-color)',
         borderRadius: 'var(--ifm-global-radius)',
       }}>
-        No transaction data available for this filter combination
+        <div style={{ fontSize: '16px', marginBottom: '8px', color: 'var(--ifm-font-color-base)' }}>
+          No transactions found for this combination
+        </div>
+        <div style={{ fontSize: '14px', lineHeight: '1.6' }}>
+          {isPoolAndTypeFilter ? (
+            <>
+              This pool-type combination has no transactions in the displayed data set.
+              <br />
+              This could mean:
+              <ul style={{
+                textAlign: 'left',
+                display: 'inline-block',
+                marginTop: '12px',
+                paddingLeft: '20px'
+              }}>
+                <li>The transaction type doesn't occur in this pool's top transactions</li>
+                <li>This is a rare transaction type for this pool</li>
+                <li>The filter combination is very specific and has limited activity</li>
+              </ul>
+              <div style={{ marginTop: '12px', fontSize: '13px' }}>
+                Try selecting just the pool (without the type) to see all transactions for this pool.
+              </div>
+            </>
+          ) : (
+            <>No transaction data available for this filter</>
+          )}
+        </div>
       </div>
     );
   }

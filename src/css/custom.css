@@ -163,12 +163,13 @@ body {
 }
 
 .navbar__logo {
-  height: 24px;
+  height: 32px;
   margin-right: 12px;
 }
 
 .navbar__logo img {
-  height: 24px;
+  height: 52px;
+  width: auto;
 }
 
 .navbar__title {

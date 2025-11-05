@@ -11,3 +11,7 @@ node_modules/
 
 # Old MkDocs build
 site/
+
+# Generated data files (avoid conflicts with automated pipeline)
+static/data/*.json
+static/data/*.json.gz

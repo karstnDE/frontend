@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Plot from 'react-plotly.js';
 import { useColorMode } from '@docusaurus/theme-common';
 import { getPlotlyTemplate, defaultPlotlyConfig } from '@site/src/utils/plotlyTheme';
+import { useChartTracking } from '@site/src/hooks/useChartTracking';
 
 // Daily by type data comes in "long format"
 interface DailyTypeDataPoint {
@@ -50,13 +51,20 @@ function getDisplayName(technicalType: string): string {
     .join(' ');
 }
 
-export default function DailyStackedBarChart({ 
-  data, 
-  title = 'Transaction Types per Day' 
+export default function DailyStackedBarChart({
+  data,
+  title = 'Transaction Types per Day'
 }: DailyStackedBarChartProps): React.ReactElement {
   const { colorMode } = useColorMode();
   const isDark = colorMode === 'dark';
   const template = getPlotlyTemplate(isDark);
+
+  const plotRef = useRef<HTMLDivElement>(null);
+  useChartTracking(plotRef, {
+    chartName: 'Daily Revenue Bar',
+    trackClick: true,
+    trackZoom: true,
+  });
 
   if (!data || data.length === 0) {
     return <div>No daily data available</div>;
@@ -191,7 +199,7 @@ export default function DailyStackedBarChart({
   }
 
   return (
-    <div style={{
+    <div ref={plotRef} style={{
       background: 'var(--ifm-background-surface-color)',
       border: '1px solid var(--ifm-toc-border-color)',
       borderRadius: 'var(--ifm-global-radius)',

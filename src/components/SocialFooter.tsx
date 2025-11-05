@@ -1,5 +1,5 @@
 import React from 'react';
-import { DiscordLogo, DiscordLogoIcon, EnvelopeIcon, HeartStraight, TwitterLogo, XLogoIcon } from '@phosphor-icons/react';
+import { DiscordLogo, DiscordLogoIcon, EnvelopeIcon, HeartIcon, HeartStraight, TwitterLogo, XLogoIcon } from '@phosphor-icons/react';
 
 const LINKS = [
   {
@@ -16,7 +16,7 @@ const LINKS = [
   },
 ];
 
-const DONATION_PLACEHOLDER = 'So11111111111111111111111111111111111111112';
+const DONATION_PLACEHOLDER = '7bYtEL23TT9YeELjSaNLi59PHwerNw9woMacYXefr6RF';
 
 export default function SocialFooter(): React.ReactElement {
   return (
@@ -36,7 +36,7 @@ export default function SocialFooter(): React.ReactElement {
           </a>
         ))}
         <div className="social-footer__donate" title="Solana donation address placeholder">
-          <HeartStraight size={18} weight="regular" />
+          <HeartIcon size={18} weight="regular" />
           <span>Donate (SOL): {DONATION_PLACEHOLDER}</span>
         </div>
       </div>

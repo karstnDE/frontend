@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Plot from 'react-plotly.js';
 import { useColorMode } from '@docusaurus/theme-common';
 import { getPlotlyTemplate, defaultPlotlyConfig } from '@site/src/utils/plotlyTheme';
+import { useChartTracking } from '@site/src/hooks/useChartTracking';
 import LoadingSpinner from '../common/LoadingSpinner';
 
 interface PoolDay {
@@ -47,6 +48,13 @@ export default function PoolRampUpChart(): React.ReactElement {
   const [maxDays, setMaxDays] = useState(90);
   const [plotRevision, setPlotRevision] = useState(0);
   const [poolVisibility, setPoolVisibility] = useState<Record<string, boolean>>({});
+
+  const plotRef = useRef<HTMLDivElement>(null);
+  useChartTracking(plotRef, {
+    chartName: 'Pool Ramp Up',
+    trackClick: true,
+    trackZoom: true,
+  });
 
   useEffect(() => {
     fetch('/data/pool_ramp_up.json')
@@ -185,7 +193,7 @@ export default function PoolRampUpChart(): React.ReactElement {
   return (
     <>
       {/* Chart */}
-      <div style={{
+      <div ref={plotRef} style={{
         background: 'var(--ifm-background-surface-color)',
         border: '1px solid var(--ifm-toc-border-color)',
         borderRadius: 'var(--ifm-global-radius)',

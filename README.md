@@ -93,6 +93,19 @@ frontend/
   - H3: 19px
   - H4: 16px
 
+## Analytics
+
+This site uses [GoatCounter](https://www.goatcounter.com/), a privacy-friendly web analytics platform that:
+- Does not use cookies
+- Does not track across websites
+- Does not collect personal information
+- Stores only anonymized aggregated data
+- Is GDPR and CCPA compliant
+
+All Plotly charts track user interactions (views, clicks, zooms) to help understand which visualizations are most useful. For details on adding analytics to new components, see [docs/ANALYTICS.md](docs/ANALYTICS.md).
+
+**Analytics Dashboard:** https://karstenalytics.goatcounter.com
+
 ## Local Development
 
 **Prerequisites:**

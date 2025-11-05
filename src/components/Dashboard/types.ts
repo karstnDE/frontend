@@ -82,6 +82,7 @@ export interface DashboardData {
   topTransactionsToken: TopTransactionsData;
   topTransactionsType: TopTransactionsData;
   topTransactionsPool: TopTransactionsData;
+  topTransactionsPoolType: TopTransactionsData;
   poolTypeSummary: any | null; // Will be defined as needed
   dailyByPoolType: DailyDataPoint[];
   loading: boolean;

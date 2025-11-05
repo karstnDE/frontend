@@ -20,16 +20,19 @@ This page shows the **two-dimensional revenue distribution** using a Marimekko c
     function PoolTypeMatrix() {
       const [selectedSegment, setSelectedSegment] = useState(null);
       const [topTransactionsPool, setTopTransactionsPool] = useState({});
+      const [topTransactionsPoolType, setTopTransactionsPoolType] = useState({});
       const [summary, setSummary] = useState(null);
       const [loading, setLoading] = useState(true);
 
       useEffect(() => {
         Promise.all([
           fetch('/data/top_transactions_pool.json').then(res => res.json()),
+          fetch('/data/top_transactions_pool_type.json').then(res => res.json()),
           fetch('/data/summary.json').then(res => res.json())
         ])
-          .then(([poolData, summaryData]) => {
+          .then(([poolData, poolTypeData, summaryData]) => {
             setTopTransactionsPool(poolData);
+            setTopTransactionsPoolType(poolTypeData);
             setSummary(summaryData);
             setLoading(false);
           })
@@ -92,6 +95,7 @@ This page shows the **two-dimensional revenue distribution** using a Marimekko c
               topTransactionsToken={{}}
               topTransactionsType={{}}
               topTransactionsPool={topTransactionsPool}
+              topTransactionsPoolType={topTransactionsPoolType}
               groupMode="pool"
               selectedFilter={selectedSegment?.poolId}
               selectedFilterLabel={selectedSegment?.poolLabel}

@@ -1,7 +1,8 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
 import Plot from 'react-plotly.js';
 import { useColorMode } from '@docusaurus/theme-common';
 import { getPlotlyTemplate, defaultPlotlyConfig } from '@site/src/utils/plotlyTheme';
+import { useChartTracking } from '@site/src/hooks/useChartTracking';
 import type { WalletTimelineData } from '@site/src/hooks/useWalletTimeline';
 
 interface WalletTimelineChartProps {
@@ -22,6 +23,13 @@ export default function WalletTimelineChart({ data }: WalletTimelineChartProps):
   const { colorMode } = useColorMode();
   const isDark = colorMode === 'dark';
   const template = getPlotlyTemplate(isDark);
+
+  const plotRef = useRef<HTMLDivElement>(null);
+  useChartTracking(plotRef, {
+    chartName: 'Wallet Timeline',
+    trackClick: true,
+    trackZoom: true,
+  });
 
   // Prepare chart data
   const chartData = useMemo(() => {
@@ -181,6 +189,7 @@ export default function WalletTimelineChart({ data }: WalletTimelineChartProps):
 
   return (
     <div
+      ref={plotRef}
       style={{
         background: 'var(--ifm-background-surface-color)',
         border: '1px solid var(--ifm-toc-border-color)',

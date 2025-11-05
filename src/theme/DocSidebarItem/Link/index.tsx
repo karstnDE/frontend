@@ -7,7 +7,7 @@ import Link from '@docusaurus/Link';
 import isInternalUrl from '@docusaurus/isInternalUrl';
 import IconExternalLink from '@theme/Icon/ExternalLink';
 import styles from './styles.module.css';
-import {FileText, type IconProps as PhosphorIconProps} from '@phosphor-icons/react';
+import {FileText, House, Gear, User, ChartBar, Info, TrendUp, Percent, Article, Newspaper, type IconProps as PhosphorIconProps} from '@phosphor-icons/react';
 
 function LinkLabel({
   label,
@@ -34,12 +34,40 @@ function LinkLabel({
   );
 }
 
-function getLinkIcon(level: number, isActive: boolean): ReactNode | null {
+function getLinkIcon(level: number, isActive: boolean, customProps?: {icon?: string}): ReactNode | null {
   const common: PhosphorIconProps = {
     size: level === 1 ? 16 : 14,
     weight: 'regular',
     'aria-hidden': true,
   };
+
+  // If custom Phosphor icon name is provided in frontmatter, use it
+  if (customProps?.icon) {
+    switch (customProps.icon) {
+      case 'House':
+        return <House {...common} />;
+      case 'Gear':
+        return <Gear {...common} />;
+      case 'User':
+        return <User {...common} />;
+      case 'ChartBar':
+        return <ChartBar {...common} />;
+      case 'Info':
+        return <Info {...common} />;
+      case 'TrendUp':
+        return <TrendUp {...common} />;
+      case 'Percent':
+        return <Percent {...common} />;
+      case 'Article':
+        return <Article {...common} />;
+      case 'Newspaper':
+        return <Newspaper {...common} />;
+      default:
+        break;
+    }
+  }
+
+  // Otherwise use default icon for level 1 items
   if (level === 1) {
     return <FileText {...common} />;
   }
@@ -57,10 +85,10 @@ export default function DocSidebarItemLink({
   index,
   ...props
 }: Props): ReactNode {
-  const {href, label, className, autoAddBaseUrl} = item;
+  const {href, label, className, autoAddBaseUrl, customProps} = item;
   const isActive = isActiveSidebarItem(item, activePath);
   const isInternalLink = isInternalUrl(href);
-  const icon = getLinkIcon(level, isActive);
+  const icon = getLinkIcon(level, isActive, customProps as {icon?: string});
   const showPlaceholder = level === 1;
 
   return (

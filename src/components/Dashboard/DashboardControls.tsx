@@ -1,5 +1,6 @@
 import React from 'react';
 import type { DashboardControls, GroupMode } from './types';
+import { trackCustomEvent } from '@site/src/utils/analytics';
 
 interface DashboardControlsProps {
   controls: DashboardControls;
@@ -12,6 +13,8 @@ export default function DashboardControlsComponent({
 }: DashboardControlsProps): React.ReactElement {
   const handleGroupModeChange = (groupMode: GroupMode) => {
     onChange({ ...controls, groupMode });
+    // Track filter changes
+    trackCustomEvent('Dashboard', 'filter-change', `group-${groupMode}`);
   };
 
   return (

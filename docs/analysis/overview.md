@@ -1,5 +1,7 @@
 ---
 title: Analysis Overview
+sidebar_custom_props:
+  icon: ChartBar
 ---
 
 # Analysis Overview

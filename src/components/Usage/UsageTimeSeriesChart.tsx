@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Plot from 'react-plotly.js';
 import { useColorMode } from '@docusaurus/theme-common';
 import { getPlotlyTemplate, defaultPlotlyConfig } from '@site/src/utils/plotlyTheme';
+import { useChartTracking } from '@site/src/hooks/useChartTracking';
 import type { UsageDailyRecord } from '@site/src/hooks/useUsageMetrics';
 
 interface UsageTimeSeriesChartProps {
@@ -20,12 +21,20 @@ export default function UsageTimeSeriesChart({
   const { colorMode } = useColorMode();
   const template = getPlotlyTemplate(colorMode === 'dark');
 
+  const plotRef = useRef<HTMLDivElement>(null);
+  useChartTracking(plotRef, {
+    chartName: 'Usage Time Series',
+    trackClick: true,
+    trackZoom: true,
+  });
+
   const sorted = [...(data || [])].sort((a, b) => a.date.localeCompare(b.date));
   const x = sorted.map((entry) => entry.date);
   const y = sorted.map((entry) => entry.count);
 
   return (
     <div
+      ref={plotRef}
       style={{
         background: 'var(--ifm-background-surface-color)',
         border: '1px solid var(--ifm-color-emphasis-200)',

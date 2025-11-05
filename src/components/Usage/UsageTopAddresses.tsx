@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import type { UsageTopWallet } from '@site/src/hooks/useUsageMetrics';
+import { trackCustomEvent } from '@site/src/utils/analytics';
 
 interface UsageTopAddressesProps {
   rows: UsageTopWallet[];
@@ -23,6 +24,13 @@ export default function UsageTopAddresses({
   description,
 }: UsageTopAddressesProps): React.ReactElement {
   const data = rows || [];
+
+  // Track when table is viewed with data
+  useEffect(() => {
+    if (data.length > 0) {
+      trackCustomEvent('Usage', 'view-top-addresses', title);
+    }
+  }, [data.length, title]);
 
   return (
     <div

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Plot from 'react-plotly.js';
 import { useColorMode } from '@docusaurus/theme-common';
 import { getPlotlyTemplate, defaultPlotlyConfig } from '@site/src/utils/plotlyTheme';
+import { useChartTracking } from '@site/src/hooks/useChartTracking';
 import type { SummaryData, GroupMode } from './types';
 
 interface BreakdownChartProps {
@@ -15,6 +16,13 @@ export default function BreakdownChart({ summary, groupMode, onBarClick }: Break
   const isDark = colorMode === 'dark';
   const template = getPlotlyTemplate(isDark);
   const accentColor = isDark ? '#4FD1C5' : '#00A3B4';
+
+  const plotRef = useRef<HTMLDivElement>(null);
+  useChartTracking(plotRef, {
+    chartName: `Revenue Breakdown - ${groupMode}`,
+    trackClick: true,
+    trackZoom: true,
+  });
 
   // Helper function to format pool labels (prefer swapping pair/protocol for pools)
   const formatPoolLabel = (label: string): string => {
@@ -140,7 +148,7 @@ export default function BreakdownChart({ summary, groupMode, onBarClick }: Break
   };
 
   return (
-    <div style={{
+    <div ref={plotRef} style={{
       background: 'var(--ifm-background-surface-color)',
       border: '1px solid var(--ifm-toc-border-color)',
       borderRadius: 'var(--ifm-global-radius)',

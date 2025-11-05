@@ -1,5 +1,7 @@
 ﻿---
 title: Blog - General
+sidebar_custom_props:
+  icon: Newspaper
 ---
 
 # General updates

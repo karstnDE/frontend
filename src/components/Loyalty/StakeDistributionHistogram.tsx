@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Plot from 'react-plotly.js';
 import { useColorMode } from '@docusaurus/theme-common';
 import { getPlotlyTemplate, defaultPlotlyConfig } from '@site/src/utils/plotlyTheme';
+import { useChartTracking } from '@site/src/hooks/useChartTracking';
 import type { Visualizations } from '@site/src/hooks/useStakerLoyalty';
 
 interface StakeDistributionHistogramProps {
@@ -13,6 +14,13 @@ export default function StakeDistributionHistogram({
 }: StakeDistributionHistogramProps): React.ReactElement {
   const { colorMode } = useColorMode();
   const template = getPlotlyTemplate(colorMode === 'dark');
+
+  const plotRef = useRef<HTMLDivElement>(null);
+  useChartTracking(plotRef, {
+    chartName: 'Stake Distribution',
+    trackClick: true,
+    trackZoom: true,
+  });
 
   const { stake_distribution } = visualizations;
 
@@ -42,6 +50,7 @@ export default function StakeDistributionHistogram({
 
   return (
     <div
+      ref={plotRef}
       style={{
         background: 'var(--ifm-background-surface-color)',
         border: '1px solid var(--ifm-color-emphasis-200)',

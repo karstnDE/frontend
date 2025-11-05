@@ -5,7 +5,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 const config: Config = {
   title: 'karstenalytics',
   tagline: 'On-chain Treasury Analytics for Solana',
-  favicon: 'img/logo.svg',
+  favicon: 'img/logo.png',
 
   // Set the production url of your site here
   url: 'https://karstenalytics.github.io',
@@ -27,6 +27,15 @@ const config: Config = {
     defaultLocale: 'en',
     locales: ['en'],
   },
+
+  // GoatCounter analytics - privacy-friendly, GDPR-compliant
+  scripts: [
+    {
+      src: 'https://karstenalytics.goatcounter.com/count.js',
+      async: true,
+      'data-goatcounter': 'https://karstenalytics.goatcounter.com/count',
+    },
+  ],
 
   presets: [
     [
@@ -60,12 +69,13 @@ const config: Config = {
 
   themeConfig: {
     // Replace with your project's social card
-    image: 'img/logo.svg',
+    image: 'img/logo.png',
     navbar: {
-      title: 'karstenalytics',
+      title: '',
       logo: {
         alt: 'karstenalytics Logo',
-        src: 'img/logo.svg',
+        src: 'img/logo.png',
+        srcDark: 'img/logo_dark.png',
       },
       hideOnScroll: false,
       items: [

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import type { UserSegments } from '@site/src/hooks/useStakerLoyalty';
+import { trackCustomEvent } from '@site/src/utils/analytics';
 
 interface BehaviorSegmentsTableProps {
   userSegments: UserSegments;
@@ -11,6 +12,11 @@ export default function BehaviorSegmentsTable({
   totalUsers,
 }: BehaviorSegmentsTableProps): React.ReactElement {
   const { by_behavior, by_reward_size } = userSegments;
+
+  // Track when segment tables are viewed
+  useEffect(() => {
+    trackCustomEvent('Loyalty', 'view-segments', 'behavior-breakdown');
+  }, []);
 
   const rows = [
     {

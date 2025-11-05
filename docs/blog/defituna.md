@@ -1,5 +1,7 @@
 ﻿---
 title: Blog - Treasury
+sidebar_custom_props:
+  icon: Article
 ---
 
 # Treasury insights

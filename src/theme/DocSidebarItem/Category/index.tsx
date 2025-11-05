@@ -30,7 +30,7 @@ import type {
   PropSidebarItemLink,
 } from '@docusaurus/plugin-content-docs';
 import styles from './styles.module.css';
-import {Folder, type IconProps as PhosphorIconProps} from '@phosphor-icons/react';
+import {Folder, Vault, ChartPieSlice, ChartLineUp, Stack, type IconProps as PhosphorIconProps} from '@phosphor-icons/react';
 
 function useAutoExpandActiveCategory({
   isActive,
@@ -183,12 +183,31 @@ function DocSidebarItemCategoryEmpty(props: Props): ReactNode {
 function getCategoryIcon(
   level: number,
   isActive: boolean,
+  customProps?: {icon?: string},
 ): ReactNode | null {
   const common: PhosphorIconProps = {
     size: level === 1 ? 18 : 16,
     weight: 'regular',
     'aria-hidden': true,
   };
+
+  // If custom Phosphor icon name is provided, use it
+  if (customProps?.icon) {
+    switch (customProps.icon) {
+      case 'Vault':
+        return <Vault {...common} />;
+      case 'ChartPieSlice':
+        return <ChartPieSlice {...common} />;
+      case 'ChartLineUp':
+        return <ChartLineUp {...common} />;
+      case 'Stack':
+        return <Stack {...common} />;
+      default:
+        break;
+    }
+  }
+
+  // Default icons by level
   if (level === 1) {
     return <Folder {...common} />;
   }
@@ -206,7 +225,7 @@ function DocSidebarItemCategoryCollapsible({
   index,
   ...props
 }: Props): ReactNode {
-  const {items, label, collapsible, className, href} = item;
+  const {items, label, collapsible, className, href, customProps} = item;
   const {
     docs: {
       sidebar: {autoCollapseCategories},
@@ -216,7 +235,7 @@ function DocSidebarItemCategoryCollapsible({
 
   const isActive = isActiveSidebarItem(item, activePath);
   const isCurrentPage = isSamePath(href, activePath);
-  const icon = getCategoryIcon(level, isActive);
+  const icon = getCategoryIcon(level, isActive, customProps as {icon?: string});
   const showPlaceholder = level === 1;
 
   const {collapsed, setCollapsed} = useCollapsible({

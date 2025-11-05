@@ -178,6 +178,7 @@ export default function Dashboard(): React.ReactElement {
         topTransactionsToken={data.topTransactionsToken}
         topTransactionsType={data.topTransactionsType}
         topTransactionsPool={data.topTransactionsPool}
+        topTransactionsPoolType={data.topTransactionsPoolType}
         groupMode={controls.groupMode}
       />
 

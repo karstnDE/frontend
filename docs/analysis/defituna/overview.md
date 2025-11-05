@@ -1,5 +1,7 @@
 ﻿---
 title: Overview & Intro
+sidebar_custom_props:
+  icon: Info
 ---
 
 import BrowserOnly from '@docusaurus/BrowserOnly';

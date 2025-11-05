@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Plot from 'react-plotly.js';
 import { useColorMode } from '@docusaurus/theme-common';
 import { getPlotlyTemplate, defaultPlotlyConfig } from '@site/src/utils/plotlyTheme';
 import LoadingSpinner from '../common/LoadingSpinner';
+import { useChartTracking } from '@site/src/hooks/useChartTracking';
+import { trackCustomEvent } from '@site/src/utils/analytics';
 
 interface ApyDataPoint {
   date: string;
@@ -46,6 +48,14 @@ export default function ApyChart(): React.ReactElement {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [entryPriceInput, setEntryPriceInput] = useState<string>('0.05');
+
+  // Chart tracking
+  const plotRef = useRef<HTMLDivElement>(null);
+  useChartTracking(plotRef, {
+    chartName: 'APY Chart',
+    trackClick: true,
+    trackZoom: true,
+  });
 
   // Load user entry price from localStorage on mount, default to 0.05 (public pre-sale price)
   useEffect(() => {
@@ -216,6 +226,12 @@ export default function ApyChart(): React.ReactElement {
     setEntryPriceInput(normalised);
     localStorage.setItem('tunaEntryPrice', normalised);
     window.dispatchEvent(new Event('tunaEntryPriceChanged'));
+
+    // Track custom price usage
+    const parsed = Number.parseFloat(normalised);
+    if (Number.isFinite(parsed) && parsed > 0) {
+      trackCustomEvent('APY', 'custom-price-set', String(parsed));
+    }
   };
 
   const handleClearEntryPrice = () => {
@@ -226,7 +242,7 @@ export default function ApyChart(): React.ReactElement {
 
   return (
     <>
-      <div style={{
+      <div ref={plotRef} style={{
         background: 'var(--ifm-background-surface-color)',
         border: '1px solid var(--ifm-toc-border-color)',
         borderRadius: 'var(--ifm-global-radius)',

@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Plot from 'react-plotly.js';
 import { useColorMode } from '@docusaurus/theme-common';
 import { getPlotlyTemplate, defaultPlotlyConfig } from '@site/src/utils/plotlyTheme';
+import { useChartTracking } from '@site/src/hooks/useChartTracking';
 
 interface PoolTypeData {
   pool_id: string;
@@ -62,6 +63,13 @@ export default function PoolTypeMatrixChart({ onSegmentClick }: PoolTypeMatrixCh
 
   const [data, setData] = useState<PoolTypeData[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const plotRef = useRef<HTMLDivElement>(null);
+  useChartTracking(plotRef, {
+    chartName: 'Pool Type Matrix',
+    trackClick: true,
+    trackZoom: true,
+  });
 
   // Helper function to format pool labels (prefer swapping pair/protocol for pools)
   const formatPoolLabel = (label: string): string => {
@@ -269,7 +277,7 @@ export default function PoolTypeMatrixChart({ onSegmentClick }: PoolTypeMatrixCh
   });
 
   return (
-    <div style={{
+    <div ref={plotRef} style={{
       background: 'var(--ifm-background-surface-color)',
       border: '1px solid var(--ifm-toc-border-color)',
       borderRadius: 'var(--ifm-global-radius)',

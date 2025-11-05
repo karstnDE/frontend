@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Plot from 'react-plotly.js';
 import { useColorMode } from '@docusaurus/theme-common';
 import { getPlotlyTemplate, defaultPlotlyConfig } from '@site/src/utils/plotlyTheme';
+import { useChartTracking } from '@site/src/hooks/useChartTracking';
 import type { DailyDataPoint } from './types';
 
 interface CumulativeChartProps {
@@ -13,6 +14,13 @@ export default function CumulativeChart({ data }: CumulativeChartProps): React.R
   const isDark = colorMode === 'dark';
   const template = getPlotlyTemplate(isDark);
   const accentColor = isDark ? '#4FD1C5' : '#00A3B4';
+
+  const plotRef = useRef<HTMLDivElement>(null);
+  useChartTracking(plotRef, {
+    chartName: 'Cumulative Revenue',
+    trackClick: true,
+    trackZoom: true,
+  });
 
   if (data.length === 0) {
     return (
@@ -50,7 +58,7 @@ export default function CumulativeChart({ data }: CumulativeChartProps): React.R
   };
 
   return (
-    <div style={{
+    <div ref={plotRef} style={{
       background: 'var(--ifm-background-surface-color)',
       border: '1px solid var(--ifm-toc-border-color)',
       borderRadius: 'var(--ifm-global-radius)',

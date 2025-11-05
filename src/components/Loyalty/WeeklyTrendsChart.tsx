@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Plot from 'react-plotly.js';
 import { useColorMode } from '@docusaurus/theme-common';
 import { getPlotlyTemplate, defaultPlotlyConfig } from '@site/src/utils/plotlyTheme';
+import { useChartTracking } from '@site/src/hooks/useChartTracking';
 import type { WeeklyTrend } from '@site/src/hooks/useStakerLoyalty';
 
 interface WeeklyTrendsChartProps {
@@ -14,6 +15,13 @@ export default function WeeklyTrendsChart({
   const { colorMode } = useColorMode();
   const template = getPlotlyTemplate(colorMode === 'dark');
 
+  const plotRef = useRef<HTMLDivElement>(null);
+  useChartTracking(plotRef, {
+    chartName: 'Weekly Loyalty Trends',
+    trackClick: true,
+    trackZoom: true,
+  });
+
   const sorted = [...weeklyTrends].sort((a, b) => a.week.localeCompare(b.week));
 
   const weeks = sorted.map((t) => t.week);
@@ -23,6 +31,7 @@ export default function WeeklyTrendsChart({
 
   return (
     <div
+      ref={plotRef}
       style={{
         background: 'var(--ifm-background-surface-color)',
         border: '1px solid var(--ifm-color-emphasis-200)',

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Plot from 'react-plotly.js';
 import { useColorMode } from '@docusaurus/theme-common';
 import { getPlotlyTemplate, defaultPlotlyConfig } from '@site/src/utils/plotlyTheme';
+import { useChartTracking } from '@site/src/hooks/useChartTracking';
 import type { StakingDailyRecord } from '@site/src/hooks/useStakingMetrics';
 
 interface StakingBalanceChartProps {
@@ -15,6 +16,13 @@ export default function StakingBalanceChart({
 }: StakingBalanceChartProps): React.ReactElement {
   const { colorMode } = useColorMode();
   const template = getPlotlyTemplate(colorMode === 'dark');
+
+  const plotRef = useRef<HTMLDivElement>(null);
+  useChartTracking(plotRef, {
+    chartName: 'Staking Balance',
+    trackClick: true,
+    trackZoom: true,
+  });
 
   const sorted = [...(data || [])].sort((a, b) => a.date.localeCompare(b.date));
   const x = sorted.map((point) => point.date);
@@ -34,6 +42,7 @@ export default function StakingBalanceChart({
 
   return (
     <div
+      ref={plotRef}
       style={{
         background: 'var(--ifm-background-surface-color)',
         border: '1px solid var(--ifm-color-emphasis-200)',
