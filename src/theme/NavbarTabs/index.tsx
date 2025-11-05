@@ -28,8 +28,8 @@ const tabs: NavTab[] = [
   },
   {
     label: 'Blog',
-    to: '/blog/general',
-    activePattern: /^\/blog\//,
+    to: '/blog',
+    activePattern: /^\/blog/,
     Icon: NotepadIcon,
   },
   {

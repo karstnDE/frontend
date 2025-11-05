@@ -7,12 +7,6 @@ const sidebars: SidebarsConfig = {
     'intro/about',
   ],
 
-  // Blog sidebar
-  blogSidebar: [
-    'blog/general',
-    'blog/defituna',
-  ],
-
   // Analysis sidebar
   analysisSidebar: [
     'analysis/overview',
