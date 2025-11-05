@@ -1,7 +1,7 @@
 {
   "date_range": {
     "start": "2025-07-24",
-    "end": "2025-11-02"
+    "end": "2025-11-04"
   },
   "daily_apy": [
     {
@@ -1428,11 +1428,41 @@
       "daily_revenue_usdc": 815.94,
       "annualized_revenue_usdc": 3793126.51,
       "revenue_per_tuna_usdc": 0.003793126509542017
+    },
+    {
+      "date": "2025-11-03",
+      "apy_percent": 6.48,
+      "rolling_days": 30,
+      "rolling_revenue_sol": 1784.86,
+      "annualized_revenue_sol": 21715.81,
+      "tuna_price_sol": 0.0003353093052511008,
+      "revenue_per_tuna_sol": 2.1715806820054165e-05,
+      "daily_revenue_sol": 124.11,
+      "usd_sol_rate": 170.31,
+      "rolling_revenue_usdc": 303985.48,
+      "daily_revenue_usdc": 21137.29,
+      "annualized_revenue_usdc": 3698490.0,
+      "revenue_per_tuna_usdc": 0.0036984899952156726
+    },
+    {
+      "date": "2025-11-04",
+      "apy_percent": 6.37,
+      "rolling_days": 30,
+      "rolling_revenue_sol": 1925.26,
+      "annualized_revenue_sol": 23424.05,
+      "tuna_price_sol": 0.0003675899940358086,
+      "revenue_per_tuna_sol": 2.3424051067337328e-05,
+      "daily_revenue_sol": 177.01,
+      "usd_sol_rate": 151.71,
+      "rolling_revenue_usdc": 292078.86,
+      "daily_revenue_usdc": 26853.98,
+      "annualized_revenue_usdc": 3553626.17,
+      "revenue_per_tuna_usdc": 0.0035536261663776307
     }
   ],
   "summary": {
-    "current_apy": 6.41,
-    "average_apy": 4.84,
+    "current_apy": 6.37,
+    "average_apy": 4.88,
     "max_apy": 12.8,
     "min_apy": 2.58
   }
