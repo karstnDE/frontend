@@ -47,7 +47,19 @@ const config: Config = {
           // Remove this to remove the "edit this page" links.
           editUrl: undefined,
         },
-        blog: false,
+        blog: {
+          showReadingTime: true,
+          feedOptions: {
+            type: ['rss', 'atom'],
+          },
+          blogTitle: 'karstenalytics Blog',
+          blogDescription: 'Insights and updates on Solana treasury analytics',
+          blogSidebarTitle: 'Recent posts',
+          blogSidebarCount: 5,
+          postsPerPage: 10,
+          // Remove edit links for blog posts
+          editUrl: undefined,
+        },
         theme: {
           customCss: './src/css/custom.css',
         },
