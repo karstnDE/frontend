@@ -16,6 +16,7 @@ const sidebars: SidebarsConfig = {
       value: '<span class="sidebar-heading">DEFITUNA</span>',
     },
     'analysis/defituna/overview',
+    'analysis/methodology',
     {
       type: 'category',
       label: 'Treasury Analysis',
