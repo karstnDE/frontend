@@ -17,6 +17,7 @@ const sidebars: SidebarsConfig = {
     },
     'analysis/defituna/overview',
     'analysis/methodology',
+    'analysis/defituna/methodology',
     {
       type: 'category',
       label: 'Treasury Analysis',

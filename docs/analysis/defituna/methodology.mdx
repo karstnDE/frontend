@@ -1,0 +1,730 @@
+---
+title: DefiTuna Methodology
+---
+
+# DefiTuna Methodology
+
+This page documents protocol-specific data processing for DefiTuna treasury analytics. For general platform architecture, see the [Platform Methodology](../methodology) page.
+
+## Overview
+
+DefiTuna analytics cover three major areas:
+
+1. **Treasury Revenue Attribution** - Multi-dimensional revenue tracking across tokens, types, and pools
+2. **Staking Analytics** - TUNA staking metrics, APY calculations, and loyalty scoring
+3. **Usage Statistics** - Daily/weekly active users and transaction activity
+
+Each area uses specialized processing pipelines built on the general platform architecture.
+
+---
+
+## Treasury Revenue Attribution
+
+**⚠️ CRITICAL SYSTEM: 100% Accuracy Standard**
+
+The revenue attribution system is the core of DefiTuna treasury analytics. It achieves **100% attribution accuracy** by reconciling two independent accounting methods.
+
+**Warning from `tools/generate_realized_types.py`:**
+```
+⚠️  CRITICAL WARNING: WORKING REVENUE ATTRIBUTION SYSTEM
+
+THIS SYSTEM ACHIEVES 0.01% ACCURACY vs BENCHMARK. DO NOT MODIFY WITHOUT EXTREME CAUTION.
+Verified working on 2025-08-12: 185.96 SOL vs 185.98 SOL benchmark (0.01% difference)
+
+See docs/REVENUE_ATTRIBUTION_SYSTEM.md for full documentation before making ANY changes.
+```
+
+**Core Engine:** `tools/generate_realized_types.py`
+
+**Primary Function:** `_compute_day_realized_types` (line 398)
+
+---
+
+### The Attribution Challenge
+
+**Problem:**
+
+Treasury receives revenue in two forms:
+1. **Direct WSOL/SOL** - Immediately countable
+2. **Other tokens (USDC, JUP, TUNA, etc.)** - Must be converted to SOL via SwapReward transactions
+
+**Challenge:** SwapReward transactions convert accumulated tokens to SOL, but we need to attribute that SOL back to the original revenue-generating transaction types.
+
+**Solution:** Track token accumulation by transaction type using a **pending ledger**, then attribute SwapReward conversions back to their sources.
+
+---
+
+### The Dual Verification System
+
+The system uses **two independent methods** to calculate revenue, which must match exactly:
+
+#### 1. Simple Method (`wsol_direct` field)
+
+- Counts all direct WSOL inflows to treasury
+- Includes native SOL transfers
+- Straightforward accounting
+- Used for verification only
+
+#### 2. Realized Types Method (`realized_by_type` field)
+
+- Tracks which transaction types generated each SOL
+- Handles token-to-SOL attribution via ledger
+- Used for reporting and visualization
+- **Must match Simple Method exactly**
+
+**Verification Rule:** If `sum(realized_by_type.values())` ≠ `wsol_direct`, attribution is broken
+
+---
+
+### The Ledger System
+
+**Data Structure:** `pending_ata_by_mint` (three-level nested dictionary)
+
+```python
+pending_ata_by_mint: Dict[mint -> Dict[pool_id -> Dict[tx_type -> amount]]]
+```
+
+**Three-Level Nesting:**
+- **Level 1 (mint):** Which token (USDC, JUP, etc.)
+- **Level 2 (pool):** Which pool generated it
+- **Level 3 (tx_type):** Which transaction type earned it
+
+**Why Three Levels?**
+
+Enables accurate attribution when tokens are swapped:
+- Know which token (for conversion rate)
+- Know which pool (for pool analytics)
+- Know which type (for revenue attribution)
+
+---
+
+### Chronological Processing
+
+The system processes transactions in timestamp order:
+
+**For Each Transaction:**
+
+**If NOT SwapReward:**
+1. Extract token inflows to treasury
+2. Classify transaction type
+3. Identify pool
+4. Add to pending ledger:
+   ```python
+   pending_ata_by_mint[mint][pool][tx_type] += amount
+   ```
+5. If direct WSOL: Also count in `wsol_direct`
+
+**If SwapReward:**
+1. Get tokens OUT of treasury (USDC, JUP, etc.)
+2. Get WSOL IN to treasury
+3. Calculate conversion rate: `rate = wsol_in / tokens_out`
+4. For each source token:
+   - Look up pending amounts by tx_type from ledger
+   - Calculate attributed SOL: `attributed_sol = pending_amount * rate`
+   - Add to `realized_by_type[tx_type]`
+   - Subtract from pending ledger (consumed)
+
+---
+
+### Example Attribution Flow
+
+```
+Day 1, Transaction A:
+- Type: CollectProtocolFees
+- Pool: Orca SOL-USDC
+- Inflow: 100 USDC to treasury
+- Action: pending_ata_by_mint[USDC][Orca SOL-USDC][CollectProtocolFees] = 100
+
+Day 1, Transaction B:
+- Type: OpenPositionWithLiquidityOrca
+- Pool: Orca SOL-USDC
+- Inflow: 50 USDC to treasury
+- Action: pending_ata_by_mint[USDC][Orca SOL-USDC][OpenPositionWithLiquidityOrca] = 50
+
+Day 2, Transaction C (SwapReward):
+- Tokens OUT: 150 USDC from treasury
+- WSOL IN: 0.75 SOL to treasury
+- Conversion rate: 0.75 / 150 = 0.005 SOL per USDC
+- Attribution:
+  - CollectProtocolFees: 100 * 0.005 = 0.5 SOL
+  - OpenPositionWithLiquidityOrca: 50 * 0.005 = 0.25 SOL
+- Result:
+  - realized_by_type[CollectProtocolFees] += 0.5
+  - realized_by_type[OpenPositionWithLiquidityOrca] += 0.25
+  - wsol_direct += 0.75 (for verification)
+  - Ledger cleared: pending_ata_by_mint[USDC][Orca SOL-USDC] = {}
+```
+
+**Verification:**
+- `sum(realized_by_type.values())` = 0.5 + 0.25 = 0.75 ✓
+- `wsol_direct` = 0.75 ✓
+- **Attribution successful:** Both methods match
+
+---
+
+### Cross-Day Attribution & Ledger Persistence
+
+**The 1.88 SOL Problem:**
+
+Before ledger persistence, the system had 1.88 SOL unattributed. Why?
+
+**Problem:** Tokens accumulated on Day N but swapped on Day N+1 (or later)
+
+**Original Behavior:**
+- Day N: Process transactions, track pending tokens
+- Day N ends: Pending ledger discarded ❌
+- Day N+1: Process transactions with empty ledger
+- SwapReward on Day N+1: Can't attribute to Day N sources → **UNATTRIBUTED**
+
+**Solution: Ledger Persistence**
+
+**Implementation:** `tools/generate_realized_types.py`
+
+**Key Functions:**
+- `_load_ledger_state` (line 273)
+- `_save_ledger_state` (line 352)
+
+**How It Works:**
+
+**At End of Day N:**
+1. Day processing complete
+2. `pending_ata_by_mint` contains unswapped tokens
+3. Save to `cache/.../YYYY-MM-DD.ledger_state.json`:
+   ```json
+   {
+     "address": "G9XfJoY81n8A9bZKaJFhJYomRrcvFkuJ22em2g8rZuCh",
+     "date": "2025-09-15",
+     "ending_balances": {
+       "USDC_mint": {
+         "Orca_pool": {
+           "CollectProtocolFees": 100.5,
+           "OpenPositionWithLiquidityOrca": 50.2
+         }
+       }
+     }
+   }
+   ```
+
+**At Start of Day N+1:**
+1. Load Day N's ledger state
+2. Initialize `pending_ata_by_mint` with carried-forward balances
+3. Process Day N+1 transactions
+4. SwapReward can now attribute using both N and N+1 sources
+
+**Impact:**
+
+| Before Ledger Persistence | After Ledger Persistence |
+|---------------------------|--------------------------|
+| 99.913% attribution       | **100% attribution**     |
+| 1.88 SOL unattributed     | **0.00 SOL unattributed** |
+| Cross-day swaps lost      | All swaps attributed ✓   |
+
+**When Enabled:**
+
+Ledger persistence is **enabled by default** in `full_cache_reload.py` (line 777):
+- Flag: `--enable-ledger-persistence` (default: True)
+- Opt-out: `--disable-ledger-persistence` (not recommended)
+
+**File Format:** See the "Revenue Attribution Output" section earlier on this page for the complete `.ledger_state.json` structure
+
+**Why This Feature is Critical:**
+
+1. **Fixes 1.88 SOL gap** - Achieves 100% accuracy
+2. **Handles multi-day operations** - Tokens accumulate over days
+3. **Enables verification** - Dual-method validation works
+4. **Provides auditability** - Every SOL traceable through ledger files
+
+---
+
+### Revenue Attribution Output
+
+**File:** `cache/{address}/YYYY/MM/YYYY-MM-DD.realized.json`
+
+**Structure:**
+
+```json
+{
+  "address": "G9XfJoY81n8A9bZKaJFhJYomRrcvFkuJ22em2g8rZuCh",
+  "day": "2025-09-15",
+  "wsol_direct": 51.44012078,
+  "realized_by_mint": {
+    "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v": 26.676659,
+    "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB": 0.142611
+  },
+  "realized_by_pool": {
+    "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE": 17.289298,
+    "7VuKeevbvbQQcxz6N4SNLmuq6PYy4AcGQRDssoqo4t65": 31.757510
+  },
+  "realized_by_pool_type": {
+    "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE": {
+      "compound_fees_tuna": 0.075538,
+      "openpositionwithliquidity": 12.489087,
+      "liquidity_add_tuna": 3.459503,
+      "tuna_liquidatetunalppositionorca": 1.265169
+    }
+  }
+}
+```
+
+**Key Fields:**
+- `wsol_direct` - Simple Method (verification)
+- `realized_by_mint` - Revenue by token mint
+- `realized_by_pool` - Revenue by pool
+- `realized_by_pool_type` - Revenue by pool + transaction type (most granular)
+
+**This "consolidated format"** replaces the old two-file system (separate mint and type files).
+
+---
+
+## Staking Analytics
+
+**Purpose:** Track TUNA token staking activity and metrics
+
+**Data Source:** Same `.jsonl.gz` transaction files, separate processing pipeline
+
+**Staking Program ID:** `tUnst2Y2sbmgSgARBpSBZhqPzpoy2iUsdCwb5ToYVJa` (`constants.py:16`)
+
+---
+
+### Processing Scripts
+
+1. **`tools/compute_tuna_staking_metrics.py`** - Main staking metrics
+   - Function: `generate_tuna_staking_metrics`
+   - Daily staking balances
+   - APY calculation inputs
+
+2. **`tools/build_staker_cache.py`** - Staker wallet cache
+   - Tracks individual wallet positions
+   - Historical stake/unstake events
+
+3. **`tools/compute_staker_loyalty_metrics.py`** - Conviction scoring
+   - Staker behavior analysis
+   - Loyalty/conviction metrics
+
+4. **`tools/compute_apy_data.py`** - APY calculations
+   - Reference APR and Your APR curves
+   - Documented in `docs/APY_CALCULATION_SYSTEM.md`
+
+---
+
+### What is Tracked
+
+#### 1. Stake / Unstake Instructions
+
+- Detected via log-based classifier
+- `config/transaction_types_config.json` marks all staking opcodes as `include_in_revenue: false`
+- Types: `staking_stake`, `staking_unstake`, `staking_withdraw`, `staking_claim`, swap-reward helpers
+- `tools/build_staker_cache.py` stores each event with `EVENT_TYPE_NAMES`
+- Enables replay of stake, unstake, claim, compound without re-reading cache
+
+#### 2. Daily Balances & APY Inputs
+
+- `generate_tuna_staking_metrics` reads `.jsonl.gz`, accumulates per-day balances
+- Back-fills gaps so charts never drop to zero on missing days
+- Queries `https://api.defituna.com/api/v1/staking/treasury` for latest total
+- Re-applies staked/unstaked ratio across history
+- Matches APY calculation in `docs/APY_CALCULATION_SYSTEM.md` and frontend `ApyChart`
+
+**Outputs:**
+- `daily` - Staked/unstaked totals + deltas
+- `top_stakers_7d` - Top stakers in last 7 days
+- `top_withdrawers_7d` - Top unstakers in last 7 days
+
+#### 3. Wallet-Level Positions
+
+- `tools/build_staker_cache.py` materializes wallet position history
+- `events` array keyed by date
+- Enables loyalty pipeline without RPC calls
+- Wallets include: current stake, first/last activity, rolling deltas
+
+#### 4. Conviction & Segmentation
+
+`tools/compute_staker_loyalty_metrics.py` analyzes claim vs compound behavior:
+
+- Counts reward amounts per wallet, per ISO week
+- Generates:
+  - Histogram of stake sizes
+  - Scatter plot (stake_tuna vs compound_rate) for conviction bubbles
+  - Stake-based cohorts:
+    - Mega: &gt;10M TUNA
+    - Large: 1-10M TUNA
+    - Medium: 100K-1M TUNA
+    - Small: &lt;100K TUNA
+  - Compound-only, claim-only, and mixed counts per cohort
+
+**Outputs:**
+- `summary` - Loyalty score, compound rate, total users
+- Weekly time series - Claims vs compounds
+
+#### 5. APY + Staker-Focused Charts
+
+- `tools/compute_apy_data.py` builds dual curves:
+  - **Reference APR** - Protocol-wide staking return
+  - **Your APR** - User-specific return based on stake timing
+- Visualized by `Dashboard/ApyChart.tsx`
+- Documented in `docs/APY_CALCULATION_SYSTEM.md`
+
+---
+
+### Time Series Aggregation
+
+**Daily Metrics:** `staking_tuna.json`
+```json
+{
+  "daily": [
+    {
+      "date": "2025-09-15",
+      "staked_tuna": 1234567.89,
+      "unstaked_tuna": 987654.32,
+      "stake_delta": 5000.00,
+      "unstake_delta": -2000.00
+    }
+  ],
+  "top_stakers_7d": [],
+  "top_withdrawers_7d": []
+}
+```
+
+**Loyalty Metrics:** `staker_loyalty.json`
+```json
+{
+  "summary": {
+    "loyalty_score": 0.75,
+    "compound_rate": 0.68,
+    "total_users": 1234
+  },
+  "weekly": [],
+  "cohorts": {
+    "mega": { "compound_only": 5, "claim_only": 2, "mixed": 3 }
+  },
+  "scatter_data": []
+}
+```
+
+**Wallet Analysis:** `wallet_revenue_attribution.json`
+- Combines staking and revenue views
+- Used by Wallet Timeline page
+
+---
+
+### Related Pages
+
+- [Staked TUNA](./staked-tuna) - Staking balances over time
+- [Staker Conviction](./staker-conviction) - Loyalty metrics
+- [Wallet Timeline](../staking/wallet-timeline) - Individual wallet analysis
+- [Staking APY](./staking-apy) - APY calculations
+
+**Related Files:**
+- Metrics: `tools/compute_tuna_staking_metrics.py`
+- Wallet cache: `tools/build_staker_cache.py`
+- Loyalty: `tools/compute_staker_loyalty_metrics.py`
+- Documentation: `docs/APY_CALCULATION_SYSTEM.md`, `docs/staker_cache.md`
+
+---
+
+## Usage Statistics
+
+**Purpose:** Track user activity metrics
+
+**Data Source:** Derived from transaction data (same `.jsonl.gz` files)
+
+**Processing Script:** `tools/compute_usage_metrics.py`
+
+**Function:** `generate_usage_metrics`
+
+---
+
+### User Definition
+
+**User = Unique wallet address** interacting with protocol
+- Extracted from transaction `feePayer` or account data
+- No session concept (blockchain-level tracking)
+
+---
+
+### Activities Tracked
+
+**Stakers:** Wallets with staking transactions
+- Types: `staking_stake`, `staking_unstake`, `staking_withdraw`, `staking_claim_reward`
+- See `STAKER_TYPES` in script
+- Each signer counted once per day
+
+**Daily Active Users:** Wallets with revenue-generating activity
+- Transaction names containing: `collect`, `compound`, `open`, `liquidate`, `add`, `increase`, `decrease`, `close`, `remove`
+- Excludes: `token_transfer`, `unknown`
+- Captures fee-generating adjustments without double-counting transfers
+
+---
+
+### Aggregation Logic
+
+**Process:**
+1. Iterate day-by-day over `.jsonl.gz` files
+2. Call `classify_tx` for each transaction
+3. Extract signers via `_extract_signers` (fee payer + message signers)
+4. Build maps:
+   - `staker_daily[date]` - Set of staker addresses
+   - `daily_users[date]` - Set of active user addresses
+
+**Outputs:**
+- `stakers.daily_counts` - Per-day unique staker counts
+- `daily_users.daily_counts` - Per-day active wallet counts
+- `weekly_users.rolling_counts` - 7-day rolling windows
+- `top_wallets` - Top 10 wallets per cohort
+  - Ranked by: `days_active`, `iso_weeks`, total transactions
+  - Uses `_serialize_top_addresses`
+
+**Summary:**
+- `transactions_scanned`
+- `staker_unique_addresses`
+- `daily_active_unique_addresses`
+
+---
+
+### User Classification / Filtering
+
+**No "New vs Returning" Concept:**
+- Datasets are pure distinct-address counts
+- No temporal segmentation in current implementation
+
+**Bot Filtering:**
+- No dedicated filter exists
+- Inputs use signer sets (not transfer destinations)
+- Obvious sybil patterns can be reviewed manually if needed
+
+---
+
+### Outputs & Consumers
+
+**File:** `frontend/static/data/usage_metrics.json`
+
+**Structure:**
+```json
+{
+  "summary": {
+    "transactions_scanned": 12345,
+    "staker_unique_addresses": 1234,
+    "daily_active_unique_addresses": 2345
+  },
+  "stakers": {
+    "daily_counts": [
+      { "date": "2025-09-15", "count": 145 }
+    ]
+  },
+  "daily_users": {
+    "daily_counts": []
+  },
+  "weekly_users": {
+    "rolling_counts": []
+  },
+  "top_wallets": {
+    "stakers": [],
+    "daily_users": []
+  }
+}
+```
+
+**Frontend Components:**
+- `UsageTimeSeriesChart.tsx` - Daily/weekly activity charts
+- `UsageTopAddresses.tsx` - Top wallet tables
+
+---
+
+### Related Pages
+
+- [Daily Users](../usage-statistics/usage-statistics-daily) - Daily activity metrics
+- [Weekly Users](../usage-statistics/usage-statistics-weekly) - Weekly active users
+- [Stakers](../usage-statistics/usage-statistics-stakers) - Staker-specific metrics
+
+**Related Files:**
+- Main script: `tools/compute_usage_metrics.py`
+- Frontend: `frontend/src/components/Usage/*`
+
+---
+
+## Data Quality Specific to DefiTuna
+
+### Revenue Attribution Verification
+
+**100% Accuracy Standard:**
+
+Every data update must satisfy:
+```
+sum(realized_by_type.values()) == wsol_direct
+```
+
+**Tolerance:** ≤ 0.01 SOL (rounding errors)
+
+**Verification Script:** `comprehensive_realized_sol_check.py`
+
+**Current Status:** 25/25 test fixture days at 100% match
+
+**If Discrepancy Found:**
+1. Run `scripts/compare_attribution_day.py {date}` for details
+2. Check ledger persistence is enabled
+3. Verify no classification changes mid-range
+4. Review SwapReward attribution logic
+5. DO NOT publish until fixed
+
+---
+
+### Test Fixtures
+
+**Location:** `tests/fixtures/daily_realized_sol.json`
+
+**Purpose:** Manually verified revenue benchmarks
+
+**Structure:**
+```json
+{
+  "description": "Expected daily realized SOL from treasury revenue attribution",
+  "last_verified": "2025-09-20",
+  "expected_total_sol": {
+    "2025-09-15": 51.440120783,
+    "2025-09-16": 48.234567123
+  }
+}
+```
+
+**Verification Status:** 25/25 dates at 100% fixture match
+
+**⚠️ NEVER modify fixtures to make tests pass** - Fix code to match fixtures
+
+---
+
+### Staking Data Validation
+
+**Cross-Check with API:**
+
+Staking metrics cross-validated against:
+- `https://api.defituna.com/api/v1/staking/treasury`
+- Ensures on-chain data matches protocol API
+- Discrepancies investigated and resolved
+
+**Balance Consistency:**
+
+- Daily totals must sum correctly
+- Stake + unstake deltas must reconcile
+- No missing dates in time series
+
+---
+
+### Usage Data Validation
+
+**Transaction Coverage:**
+
+- All transactions in date range scanned
+- No missing `.jsonl.gz` files
+- Classification success rate tracked
+
+**Signer Extraction:**
+
+- All fee payers captured
+- Message signers included
+- No duplicates in daily sets
+
+---
+
+## DefiTuna-Specific Configuration
+
+### Monitored Accounts
+
+**Treasury PDA:**
+- Address: `G9XfJoY81n8A9bZKaJFhJYomRrcvFkuJ22em2g8rZuCh`
+- Configuration: `constants.py:11` (`TREASURY_PDA`)
+
+**Token Mints:**
+- WSOL: `So11111111111111111111111111111111111111112`
+- TUNA: `TUNAfXDZEdQizTMTh3uEvNvYqJmqFHZbEJt8joP4cyx`
+
+**Programs:**
+- Staking: `tUnst2Y2sbmgSgARBpSBZhqPzpoy2iUsdCwb5ToYVJa`
+- Orca, Fusion programs (identified via logs)
+
+---
+
+### Revenue Exclusions
+
+**Non-Revenue Transactions:**
+
+From `config/transaction_types_config.json`:
+- All staking operations (`include_in_revenue: false`)
+- System transactions
+- SwapReward (handled separately by attribution)
+
+**Staking Keywords:**
+- "staking", "stake", "unstake", "withdraw", "claim"
+
+---
+
+### Data Update Schedule
+
+**Current:**
+- Revenue attribution: Daily (manual)
+- Staking metrics: Daily (manual)
+- Usage stats: Daily (manual)
+
+**Future:** Automated GitHub Actions (planned)
+
+---
+
+## Protocol Evolution Notes
+
+**Historical Changes:**
+
+1. **Ledger Persistence** (2025-01)
+   - Fixed 1.88 SOL attribution gap
+   - Enabled 100% accuracy
+   - Retroactive reprocessing required
+
+2. **Consolidated Format** (2025-10)
+   - Merged `.realized.json` and `.realized_types.json`
+   - Single file with mint + type data
+   - Simplified aggregation pipeline
+
+3. **Staking Enhancements** (2025-11)
+   - Added loyalty metrics
+   - Conviction scoring
+   - Cohort analysis
+
+**Future Planned:**
+- Real-time data updates
+- Historical position tracking
+- Advanced wallet segmentation
+
+See `docs/TODO.md` for active development tasks
+
+---
+
+## Related Documentation
+
+**DefiTuna-Specific:**
+- **`docs/REVENUE_ATTRIBUTION_SYSTEM.md`** - ⚠️ CRITICAL - Deep dive on attribution
+- **`docs/APY_CALCULATION_SYSTEM.md`** - APY calculation details
+- **`docs/staker_cache.md`** - Staker cache structure
+- **`docs/staking_wallet_timeline.md`** - Wallet timeline methodology
+
+**General Platform:**
+- **[Platform Methodology](../methodology)** - Data collection, classification, aggregation
+
+**Operational:**
+- **`docs/DAILY_WORKFLOW.md`** - Step-by-step operational guide
+- **`docs/DEPLOYMENT_BLUEPRINT.md`** - Automation plans
+
+---
+
+## Questions or Feedback?
+
+**For general platform questions:** See [Platform Methodology](../methodology)
+
+**For revenue attribution questions:** Read `docs/REVENUE_ATTRIBUTION_SYSTEM.md` first
+
+**Found a discrepancy?** Run verification scripts before reporting
+
+**Want to understand a metric?** Check related documentation links above
+
+---
+
+*Last Updated: 2025-11-07*
+*Protocol: DefiTuna*
+*Methodology Version: 2.0*

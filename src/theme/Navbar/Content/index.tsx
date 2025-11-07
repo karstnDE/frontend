@@ -82,6 +82,19 @@ export default function NavbarContent(): ReactNode {
 
   const searchBarItem = items.find((item) => item.type === 'search');
 
+  // Check if data is from yesterday or today (UTC) - yesterday is the last complete day
+  const isLive = React.useMemo(() => {
+    if (!timestamp) return false;
+    const dataDate = new Date(timestamp + 'T00:00:00Z'); // Parse as UTC
+    const todayUTC = new Date();
+    todayUTC.setUTCHours(0, 0, 0, 0);
+    const yesterdayUTC = new Date(todayUTC);
+    yesterdayUTC.setUTCDate(yesterdayUTC.getUTCDate() - 1);
+
+    return dataDate.getTime() === todayUTC.getTime() ||
+           dataDate.getTime() === yesterdayUTC.getTime();
+  }, [timestamp]);
+
   return (
     <NavbarContentLayout
       left={
@@ -102,9 +115,22 @@ export default function NavbarContent(): ReactNode {
               fontSize: '13px',
               color: 'var(--ifm-color-secondary)',
               marginLeft: '12px',
-              whiteSpace: 'nowrap'
+              marginRight: '16px',
+              whiteSpace: 'nowrap',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
             }}>
-              Last updated: {timestamp}
+              <span
+                className={isLive ? styles.liveIndicator : styles.staleIndicator}
+                style={{
+                  width: '8px',
+                  height: '8px',
+                  borderRadius: '50%',
+                  display: 'inline-block'
+                }}
+              />
+              Last full day available: {timestamp}
             </span>
           )}
           <NavbarColorModeToggle className={styles.colorModeToggle} />
