@@ -16,7 +16,8 @@ const LINKS = [
   },
 ];
 
-const DONATION_PLACEHOLDER = '7bYtEL23TT9YeELjSaNLi59PHwerNw9woMacYXefr6RF';
+const DONATION_ADDRESS = '7bYtEL23TT9YeELjSaNLi59PHwerNw9woMacYXefr6RF';
+const DONATION_DISPLAY = `${DONATION_ADDRESS.slice(0, 5)}...${DONATION_ADDRESS.slice(-5)}`;
 
 export default function SocialFooter(): React.ReactElement {
   return (
@@ -35,10 +36,16 @@ export default function SocialFooter(): React.ReactElement {
             <span>{label}</span>
           </a>
         ))}
-        <div className="social-footer__donate" title="Solana donation address placeholder">
+        <a
+          className="social-footer__link social-footer__donate"
+          href={`https://solscan.io/account/${DONATION_ADDRESS}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          title={`Donate SOL to ${DONATION_ADDRESS}`}
+        >
           <HeartIcon size={18} weight="regular" />
-          <span>Donate (SOL): {DONATION_PLACEHOLDER}</span>
-        </div>
+          <span>Donate (SOL): {DONATION_DISPLAY}</span>
+        </a>
       </div>
     </div>
   );

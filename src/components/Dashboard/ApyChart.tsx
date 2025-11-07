@@ -6,37 +6,41 @@ import LoadingSpinner from '../common/LoadingSpinner';
 import { useChartTracking } from '@site/src/hooks/useChartTracking';
 import { trackCustomEvent } from '@site/src/utils/analytics';
 
-interface ApyDataPoint {
+interface AprDataPoint {
   date: string;
-  apy_percent: number;
+  reference_apr_percent: number;
+  your_apr_percent: number;
   rolling_days: number;
   rolling_revenue_sol: number;
+  rolling_revenue_usd: number;
   annualized_revenue_sol: number;
-  tuna_price_sol: number;
-  revenue_per_tuna_sol: number;
+  annualized_revenue_usd: number;
+  tuna_price_usd: number;
+  tuna_price_source: string;
+  revenue_per_tuna_usd: number;
   daily_revenue_sol: number;
-  // USD fields (optional)
-  wsol_usdc_price?: number;
-  rolling_revenue_usdc?: number;
-  daily_revenue_usdc?: number;
-  annualized_revenue_usdc?: number;
-  revenue_per_tuna_usdc?: number;
+  daily_revenue_usd: number;
+  usd_sol_rate: number;
 }
 
-interface ApySummary {
-  current_apy: number;
-  average_apy: number;
-  max_apy: number;
-  min_apy: number;
+interface AprSummary {
+  current_reference_apr: number;
+  current_your_apr: number;
+  average_reference_apr: number;
+  average_your_apr: number;
+  max_reference_apr: number;
+  max_your_apr: number;
+  min_reference_apr: number;
+  min_your_apr: number;
 }
 
-interface ApyData {
+interface AprData {
   date_range: {
     start: string;
     end: string;
   };
-  daily_apy: ApyDataPoint[];
-  summary: ApySummary;
+  daily_apr: AprDataPoint[];
+  summary: AprSummary;
 }
 
 export default function ApyChart(): React.ReactElement {
@@ -44,7 +48,7 @@ export default function ApyChart(): React.ReactElement {
   const isDark = colorMode === 'dark';
   const template = getPlotlyTemplate(isDark);
 
-  const [data, setData] = useState<ApyData | null>(null);
+  const [data, setData] = useState<AprData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [entryPriceInput, setEntryPriceInput] = useState<string>('0.05');
@@ -52,7 +56,7 @@ export default function ApyChart(): React.ReactElement {
   // Chart tracking
   const plotRef = useRef<HTMLDivElement>(null);
   useChartTracking(plotRef, {
-    chartName: 'APY Chart',
+    chartName: 'APR Chart',
     trackClick: true,
     trackZoom: true,
   });
@@ -71,19 +75,19 @@ export default function ApyChart(): React.ReactElement {
   }, []);
 
   useEffect(() => {
-    fetch('/data/apy_data.json')
+    fetch('/data/apr_data.json')
       .then(response => {
         if (!response.ok) {
-          throw new Error(`Failed to load APY data: ${response.status}`);
+          throw new Error(`Failed to load APR data: ${response.status}`);
         }
         return response.json();
       })
-      .then((jsonData: ApyData) => {
+      .then((jsonData: AprData) => {
         setData(jsonData);
         setLoading(false);
       })
       .catch(err => {
-        console.error('Error loading APY data:', err);
+        console.error('Error loading APR data:', err);
         setError(err.message);
         setLoading(false);
       });
@@ -103,12 +107,12 @@ export default function ApyChart(): React.ReactElement {
         border: '1px solid var(--ifm-toc-border-color)',
         borderRadius: 'var(--ifm-global-radius)',
       }}>
-        Error loading APY data: {error}
+        Error loading APR data: {error}
       </div>
     );
   }
 
-  if (!data || data.daily_apy.length === 0) {
+  if (!data || data.daily_apr.length === 0) {
     return (
       <div style={{
         padding: '48px',
@@ -118,14 +122,15 @@ export default function ApyChart(): React.ReactElement {
         border: '1px solid var(--ifm-toc-border-color)',
         borderRadius: 'var(--ifm-global-radius)',
       }}>
-        No APY data available
+        No APR data available
       </div>
     );
   }
 
   // Extract data for chart
-  const dates = data.daily_apy.map(d => d.date);
-  const apyValues = data.daily_apy.map(d => d.apy_percent);
+  const dates = data.daily_apr.map(d => d.date);
+  const referenceAprValues = data.daily_apr.map(d => d.reference_apr_percent);
+  const yourAprValues = data.daily_apr.map(d => d.your_apr_percent);
 
   const parsedEntryPrice = (() => {
     const trimmed = entryPriceInput.trim();
@@ -136,34 +141,33 @@ export default function ApyChart(): React.ReactElement {
     return Number.isFinite(parsed) ? parsed : null;
   })();
 
-  // Calculate personalized APY if user has entered a price
-  const personalizedApyValues = parsedEntryPrice !== null && parsedEntryPrice > 0 ? data.daily_apy.map(d => {
-    if (d.revenue_per_tuna_usdc) {
-      return (d.revenue_per_tuna_usdc / parsedEntryPrice) * 100;
+  // Calculate custom APR if user has entered a different price than default ($0.05)
+  const customAprValues = parsedEntryPrice !== null && parsedEntryPrice > 0 ? data.daily_apr.map(d => {
+    if (d.revenue_per_tuna_usd) {
+      return (d.revenue_per_tuna_usd / parsedEntryPrice) * 100;
     }
     return null;
   }) : null;
 
   // Create hover template with detailed information
-  const hoverTemplate = data.daily_apy.map((d, i) => {
+  const hoverTemplate = data.daily_apr.map((d, i) => {
     let template = `<b>Date:</b> ${d.date}<br>` +
-      `<b>Market APY:</b> ${d.apy_percent.toFixed(2)}%<br>`;
+      `<b>Reference APR:</b> ${d.reference_apr_percent.toFixed(2)}%<br>`;
 
-    // Add personalized APY if available
-    if (personalizedApyValues && personalizedApyValues[i] !== null) {
-      template += `<b>Custom APY:</b> ${personalizedApyValues[i].toFixed(2)}%<br>`;
+    // Add custom APR if user changed entry price, otherwise show "Your APR"
+    if (customAprValues && customAprValues[i] !== null && parsedEntryPrice !== 0.05) {
+      template += `<b>Custom APR:</b> ${customAprValues[i].toFixed(2)}%<br>`;
+    } else {
+      template += `<b>Your APR:</b> ${d.your_apr_percent.toFixed(2)}%<br>`;
     }
 
     template += `<b>Rolling Days:</b> ${d.rolling_days}<br>`;
 
-    // Show rolling revenue in both SOL and USD if available
-    if (d.rolling_revenue_usdc) {
-      template += `<b>Rolling Revenue:</b> ${d.rolling_revenue_sol.toFixed(2)} SOL ($${d.rolling_revenue_usdc.toFixed(0)})<br>`;
-    } else {
-      template += `<b>Rolling Revenue:</b> ${d.rolling_revenue_sol.toFixed(2)} SOL<br>`;
-    }
+    // Show rolling revenue in both SOL and USD
+    template += `<b>Rolling Revenue:</b> ${d.rolling_revenue_sol.toFixed(2)} SOL ($${d.rolling_revenue_usd.toFixed(0)})<br>`;
 
-    template += `<b>TUNA Price:</b> ${d.tuna_price_sol.toFixed(6)} SOL<br>`;
+    // Show TUNA price in USD with source
+    template += `<b>TUNA Price:</b> $${d.tuna_price_usd.toFixed(4)} (${d.tuna_price_source})<br>`;
     template += `<extra></extra>`;
 
     return template;
@@ -173,10 +177,10 @@ export default function ApyChart(): React.ReactElement {
   const traces: any[] = [
     {
       x: dates,
-      y: apyValues,
+      y: referenceAprValues,
       type: 'scatter',
       mode: 'lines+markers',
-      name: 'Market APY',
+      name: 'Reference APR',
       line: {
         color: 'rgba(0, 163, 180, 1)',  // Teal accent
         width: 2,
@@ -189,26 +193,27 @@ export default function ApyChart(): React.ReactElement {
     }
   ];
 
-  // Add personalized APY trace if available
-  if (personalizedApyValues) {
-    traces.push({
-      x: dates,
-      y: personalizedApyValues,
-      type: 'scatter',
-      mode: 'lines+markers',
-      name: 'Custom APY',
-      line: {
-        color: 'rgba(34, 197, 94, 1)',  // Green
-        width: 2,
-        dash: 'dash',
-      },
-      marker: {
-        color: 'rgba(34, 197, 94, 0.8)',
-        size: 4,
-      },
-      hovertemplate: hoverTemplate,
-    });
-  }
+  // Add Your/Custom APR trace (always show, either default $0.05 or custom price)
+  const yourAprTraceValues = customAprValues && parsedEntryPrice !== 0.05 ? customAprValues : yourAprValues;
+  const yourAprTraceName = customAprValues && parsedEntryPrice !== 0.05 ? 'Custom APR' : 'Your APR';
+
+  traces.push({
+    x: dates,
+    y: yourAprTraceValues,
+    type: 'scatter',
+    mode: 'lines+markers',
+    name: yourAprTraceName,
+    line: {
+      color: 'rgba(34, 197, 94, 1)',  // Green
+      width: 2,
+      dash: 'dash',
+    },
+    marker: {
+      color: 'rgba(34, 197, 94, 0.8)',
+      size: 4,
+    },
+    hovertemplate: hoverTemplate,
+  });
 
   const handleEntryPriceChange = (value: string) => {
     if (value === '') {
@@ -254,7 +259,7 @@ export default function ApyChart(): React.ReactElement {
           layout={{
             ...template.layout,
             title: {
-              text: 'TUNA Staking APY Over Time',
+              text: 'TUNA Staking APR Over Time',
               font: { size: 18, weight: 600 },
             },
             xaxis: {
@@ -264,15 +269,15 @@ export default function ApyChart(): React.ReactElement {
             },
             yaxis: {
               ...template.layout.yaxis,
-              title: 'APY (%)',
+              title: 'APR (%)',
             },
-            showlegend: personalizedApyValues ? true : false,
-            legend: personalizedApyValues ? {
+            showlegend: true,
+            legend: {
               orientation: 'h',
               y: -0.15,
               x: 0.5,
               xanchor: 'center',
-            } : undefined,
+            },
             hovermode: 'closest',
           }}
           config={defaultPlotlyConfig}
@@ -281,7 +286,7 @@ export default function ApyChart(): React.ReactElement {
         />
       </div>
 
-      {/* Personalized APY Input */}
+      {/* Your TUNA Entry Price Input */}
       <div style={{
         marginBottom: '24px',
         padding: '20px',
@@ -296,7 +301,7 @@ export default function ApyChart(): React.ReactElement {
           fontWeight: 600,
           color: 'var(--ifm-font-color-base)',
         }}>
-          Calculate Custom APY
+          Your TUNA Entry Price
         </label>
         <div style={{
           display: 'flex',
@@ -306,7 +311,7 @@ export default function ApyChart(): React.ReactElement {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ fontSize: '14px', color: 'var(--ifm-color-secondary)' }}>
-              Custom TUNA Entry Price:
+              Your Entry Price:
             </span>
             <span style={{ fontSize: '20px', fontWeight: 600, color: 'var(--ifm-font-color-base)' }}>$</span>
             <input
@@ -349,8 +354,8 @@ export default function ApyChart(): React.ReactElement {
           marginTop: '8px',
           lineHeight: '1.5',
         }}>
-          Enter the USD price you paid per TUNA to see your custom APY based on actual protocol revenue. Defaults to $0.05 (public pre-sale price).
-          {parsedEntryPrice !== null && ` Custom entry price: $${parsedEntryPrice.toFixed(4)}`}
+          Enter the USD price you paid per TUNA to see your custom APR based on actual protocol revenue. Defaults to $0.05 (public pre-sale price).
+          {parsedEntryPrice !== null && ` Your entry price: $${parsedEntryPrice.toFixed(4)}`}
         </div>
       </div>
     </>

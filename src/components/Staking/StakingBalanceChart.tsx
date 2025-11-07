@@ -72,7 +72,7 @@ export default function StakingBalanceChart({
           <div className="badge badge--info" style={{ padding: '12px 16px', fontSize: '14px' }}>
             <strong>{latest.unstaked.toLocaleString(undefined, { maximumFractionDigits: 2 })}</strong> unstaked TUNA
           </div>
-          <div className="badge badge--secondary" style={{ padding: '12px 16px', fontSize: '14px' }}>
+          <div className="badge badge--secondary" style={{ padding: '12px 16px', fontSize: '14px', color: 'white' }}>
             <strong>{latest.total.toLocaleString(undefined, { maximumFractionDigits: 2 })}</strong> total TUNA
           </div>
         </div>
@@ -93,7 +93,7 @@ export default function StakingBalanceChart({
               stackgroup: 'one',
               line: { color: 'var(--onum-accent)' },
               fillcolor: 'var(--onum-accent-transparent)',
-              hovertemplate: '%{x}<br><b>%{y:.2f}</b> staked<extra></extra>',
+              hovertemplate: '%{x}<br><b>%{y:,.2f}</b> staked<extra></extra>',
             },
             {
               x,
@@ -102,9 +102,9 @@ export default function StakingBalanceChart({
               mode: 'lines',
               name: 'Unstaked TUNA',
               stackgroup: 'one',
-              line: { color: 'var(--ifm-color-primary)' },
-              fillcolor: 'rgba(0, 163, 180, 0.25)',
-              hovertemplate: '%{x}<br><b>%{y:.2f}</b> unstaked<extra></extra>',
+              line: { color: '#94A3B8' },
+              fillcolor: 'rgba(148, 163, 184, 0.3)',
+              hovertemplate: '%{x}<br><b>%{y:,.2f}</b> unstaked<extra></extra>',
             },
           ]}
           layout={{
@@ -114,7 +114,6 @@ export default function StakingBalanceChart({
             margin: { l: 64, r: 24, t: 16, b: 48 },
             hovermode: 'x unified',
             xaxis: {
-              title: 'Date (UTC)',
               type: 'date',
             },
             yaxis: {
@@ -123,7 +122,9 @@ export default function StakingBalanceChart({
             },
             legend: {
               orientation: 'h',
-              y: -0.15,
+              y: -0.2,
+              x: 0.5,
+              xanchor: 'center',
             },
           }}
           config={defaultPlotlyConfig}

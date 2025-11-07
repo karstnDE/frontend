@@ -51,6 +51,10 @@
   --doc-sidebar-width: 290px !important;
   --ifm-global-radius: 12px;
   --ifm-code-border-radius: 6px;
+
+  /* Sticky position offsets */
+  --sidebar-sticky-top: calc(var(--ifm-navbar-height) + 34px); /* 56px + 34px = 90px */
+  --toc-sticky-top: calc(var(--ifm-navbar-height) + 76px); /* 56px + 76px = 132px */
   --max-content-width: min(1896px, calc(100vw - 64px)); /* Allow docs layout to breathe on wide screens while keeping a 32px gutter */
   --ifm-container-width: var(--max-content-width);
   --ifm-container-width-xl: var(--max-content-width);
@@ -129,6 +133,11 @@ html[data-theme='dark'] .menu__link--sublist::before {
 /* ========================
    Global styles
    ======================== */
+
+html {
+  scroll-padding-top: calc(var(--ifm-navbar-height) + 20px);
+  scroll-behavior: smooth;
+}
 
 body {
   font-family: var(--ifm-font-family-base);
@@ -376,6 +385,30 @@ body {
 @media (min-width: 997px) {
   .theme-doc-sidebar-container {
     margin-left: -40px;
+  }
+
+  /* Fix sidebar sticky position to stay below navbar */
+  [class*="sidebarViewport"] {
+    position: sticky !important;
+    top: var(--sidebar-sticky-top) !important;
+    bottom: auto !important;
+    max-height: calc(100vh - var(--sidebar-sticky-top)) !important;
+  }
+
+  /* Fix TOC sticky position to stay below navbar */
+  [class*="tocCollapsible"] {
+    top: var(--toc-sticky-top) !important;
+    max-height: calc(100vh - var(--toc-sticky-top)) !important;
+    align-self: flex-start !important;
+  }
+
+  .theme-doc-toc-desktop {
+    top: var(--toc-sticky-top) !important;
+    align-self: flex-start !important;
+  }
+
+  [class*="tableOfContents"] {
+    top: var(--toc-sticky-top) !important;
   }
 }
 
@@ -657,6 +690,9 @@ textarea:focus {
 @media (max-width: 768px) {
   :root {
     --ifm-navbar-height: 48px;
+    /* Recalculate sticky offsets for mobile navbar */
+    --sidebar-sticky-top: calc(var(--ifm-navbar-height) + 34px); /* 48px + 34px = 82px */
+    --toc-sticky-top: calc(var(--ifm-navbar-height) + 76px); /* 48px + 76px = 124px */
   }
   .navbar {
     height: 48px;
@@ -766,3 +802,254 @@ textarea:focus {
   color: var(--ifm-color-emphasis-600);
   margin: 0;
 }
+
+/* ========================
+   Blog Visual Consistency
+   ========================
+
+   These scoped rules ensure blog pages match Intro/Analysis (docs) sections
+   exactly in visual appearance while maintaining their chronological structure.
+
+   All rules are scoped under .blog-layout wrapper to prevent affecting docs.
+*/
+
+.blog-layout {
+  /* Blog already inherits most styling via shared classes:
+     - .theme-doc-sidebar-container (sidebar)
+     - article (content card)
+     - .markdown (typography)
+
+     These scoped rules ensure perfect visual consistency and future-proof
+     against Docusaurus updates that might affect one plugin but not the other.
+  */
+}
+
+/* ========================
+   Blog Sidebar Consistency
+   ======================== */
+
+@media (min-width: 997px) {
+  /* Target blog pages using Docusaurus's built-in wrapper classes */
+  [class*="blogPages"] [class*="docSidebarContainer"],
+  [class*="blogPages"] .theme-doc-sidebar-container,
+  .blog-wrapper [class*="docSidebarContainer"],
+  .blog-wrapper .theme-doc-sidebar-container {
+    /* Match the negative margin that pulls sidebar beneath navbar */
+    margin-top: calc(-1 * var(--ifm-navbar-height)) !important;
+    /* Force width to match Analysis sidebar */
+    width: 330px !important;
+    flex: 0 0 330px !important;
+  }
+}
+
+.blog-layout .theme-doc-sidebar-container {
+  /* Explicitly inherit all doc sidebar styling */
+  background: var(--ifm-background-surface-color);
+  width: var(--doc-sidebar-width) !important;
+  padding: 36px var(--ifm-spacing-horizontal) 32px calc(var(--sidebar-rail-offset) + 32px);
+  box-sizing: border-box;
+  position: relative;
+  border-right: none !important;
+  border-left: none !important;
+}
+
+.blog-layout .menu__link,
+.blog-layout .menu__caret {
+  /* Ensure blog sidebar links match doc sidebar links exactly */
+  position: relative;
+  border-radius: 0;
+  padding: 8px 16px 8px calc(var(--rail-position, var(--sidebar-rail-offset)) + 14px);
+  color: var(--sidebar-link-color);
+  font-size: 14px;
+  font-weight: 400;
+  transition: color 120ms ease;
+  background: transparent !important;
+  z-index: 0;
+}
+
+.blog-layout .menu__link:hover,
+.blog-layout .menu__caret:hover {
+  color: var(--sidebar-link-color);
+  text-decoration: none;
+  background: transparent !important;
+}
+
+.blog-layout .menu__link--active {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.blog-layout .menu__link--active::before {
+  /* Teal active indicator bar (matches docs) */
+  content: "";
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: calc(var(--rail-position, var(--sidebar-rail-offset)) - 1px);
+  width: 3px;
+  border-radius: 2px;
+  background: var(--accent);
+  z-index: 1;
+}
+
+.blog-layout .menu__link::after {
+  /* Hover highlight background (matches docs) */
+  content: "";
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: calc(var(--rail-position, var(--sidebar-rail-offset)) + 1px);
+  right: 12px;
+  background: transparent;
+  border-radius: 0 12px 12px 0;
+  opacity: 0;
+  transition: background 140ms ease, opacity 140ms ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.blog-layout .menu__link:hover::after {
+  background: var(--ifm-menu-color-background-hover);
+  opacity: 1;
+}
+
+.blog-layout .menu__link--active:hover::after {
+  background: var(--sidebar-highlight-hover);
+  opacity: 1;
+}
+
+.blog-layout .sidebar-heading {
+  /* Sidebar section headings (e.g., "Recent posts") */
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  font-weight: 600;
+  color: var(--ifm-font-color-base);
+  margin: 20px 0 12px;
+  padding-left: calc(var(--sidebar-rail-offset) + 16px);
+}
+
+/* ========================
+   Blog Article Consistency
+   ======================== */
+
+.blog-layout article {
+  /* Ensure blog articles match doc article cards exactly */
+  background: var(--ifm-background-surface-color);
+  border: none;
+  border-radius: var(--ifm-global-radius);
+  box-shadow: 0 0px 0px rgba(12, 30, 43, 0.06);
+  padding: -20px 24px;
+  margin: 24px 0;
+}
+
+[data-theme='dark'] .blog-layout article {
+  box-shadow: 0 0px 0px rgba(0, 0, 0, 0.35);
+}
+
+/* ========================
+   Blog Typography Consistency
+   ======================== */
+
+.blog-layout .markdown h1 {
+  font-size: var(--ifm-h1-font-size);
+  letter-spacing: -0.02em;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.blog-layout .markdown h2 {
+  font-size: var(--ifm-h2-font-size);
+  font-weight: 600;
+  margin-top: 36px;
+  margin-bottom: 16px;
+}
+
+.blog-layout .markdown h3 {
+  font-size: var(--ifm-h3-font-size);
+  font-weight: 600;
+  margin-top: 28px;
+  margin-bottom: 12px;
+}
+
+.blog-layout .markdown p {
+  margin-bottom: 16px;
+}
+
+/* ========================
+   Blog Container Layout
+   ======================== */
+
+/* Shift blog main content to the right to make room for sidebar */
+@media (min-width: 997px) {
+  /* Target the blog content column (col--7) */
+  /* Small gap between sidebar (320px) and content */
+  [class*="blogPages"] .col--7,
+  .blog-wrapper .col--7 {
+    margin-left: 22px !important;
+  }
+}
+
+@media (max-width: 996px) {
+  [class*="blogPages"] .col--7,
+  .blog-wrapper .col--7 {
+    margin-left: 0 !important;
+  }
+}
+
+.blog-layout .container {
+  /* Ensure blog container spacing matches docs */
+  max-width: var(--ifm-container-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--ifm-spacing-horizontal);
+  padding-right: var(--ifm-spacing-horizontal);
+}
+
+.blog-layout .col {
+  /* Match column padding to docs */
+  padding-left: var(--ifm-spacing-horizontal);
+  padding-right: var(--ifm-spacing-horizontal);
+}
+
+/* ========================
+   Blog TOC Consistency
+   ======================== */
+
+.blog-layout [class*="tableOfContents"] {
+  /* Ensure blog TOC matches doc TOC styling */
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.blog-layout [class*="tableOfContents"] a {
+  color: var(--ifm-font-color-base);
+  transition: color 120ms ease;
+}
+
+.blog-layout [class*="tableOfContents"] a:hover {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.blog-layout [class*="tableOfContents"] .table-of-contents__link--active {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* ========================
+   Blog Responsive Behavior
+   ======================== */
+
+@media (max-width: 996px) {
+  .blog-layout article {
+    padding: 24px;
+    margin: 16px;
+  }
+
+  .blog-layout .theme-doc-sidebar-container {
+    /* Mobile sidebar adjustments */
+    padding-left: var(--ifm-spacing-horizontal);
+  }
+}
+

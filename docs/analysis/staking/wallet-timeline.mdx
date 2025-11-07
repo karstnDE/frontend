@@ -9,21 +9,6 @@ import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
 
 Analyze individual wallet staking behavior over time. Track staked and unstaked TUNA balances, realized rewards in SOL, and all staking operations for any wallet address.
 
-## How to Use
-
-1. Enter a Solana wallet address in the search box below
-2. Click "Analyze Wallet" or press Enter
-3. View the wallet's complete staking history with:
-   - **Stacked area chart**: Staked + unstaked TUNA balance over time
-   - **Dashed line**: Realized rewards (claimed + compounded)
-   - **Colored dots**: Individual operations (stake, unstake, compound, claim, withdraw)
-   - **Interactive tooltips**: Click on dots to view transaction details and links to Solscan
-
-**Pro Tip**: You can also share a direct link with a pre-filled wallet address by adding a URL parameter:
-- `?wallet=YOUR_WALLET_ADDRESS` or `?address=YOUR_WALLET_ADDRESS`
-- Example: `/analysis/staking/wallet-timeline?wallet=5MJ6Jx2SJKyTce...`
-- The wallet will be automatically analyzed when the page loads
-
 ---
 
 <BrowserOnly fallback={<LoadingSpinner />}>
@@ -180,15 +165,104 @@ Analyze individual wallet staking behavior over time. Track staked and unstaked 
           {/* Chart and Summary */}
           {data && data.found && !loading && (
             <>
+              {/* Summary Stats */}
+              <div style={{
+                background: 'var(--ifm-background-surface-color)',
+                border: '1px solid var(--ifm-toc-border-color)',
+                borderRadius: 'var(--ifm-global-radius)',
+                padding: '24px',
+                marginBottom: '24px',
+              }}>
+                <h3 style={{ marginTop: 0, marginBottom: '16px' }}>Wallet Summary</h3>
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+                  gap: '16px',
+                }}>
+                  <div>
+                    <div style={{ fontSize: '13px', color: 'var(--ifm-color-secondary)', marginBottom: '4px' }}>
+                      Current Staked
+                    </div>
+                    <div style={{ fontSize: '20px', fontWeight: 600, color: 'var(--accent)' }}>
+                      {data.summary.current_staked.toLocaleString(undefined, { maximumFractionDigits: 2 })} TUNA
+                    </div>
+                  </div>
+
+                  <div>
+                    <div style={{ fontSize: '13px', color: 'var(--ifm-color-secondary)', marginBottom: '4px' }}>
+                      Current Unstaked
+                    </div>
+                    <div style={{ fontSize: '20px', fontWeight: 600 }}>
+                      {data.summary.current_unstaked.toLocaleString(undefined, { maximumFractionDigits: 2 })} TUNA
+                    </div>
+                  </div>
+
+                  <div>
+                    <div style={{ fontSize: '13px', color: 'var(--ifm-color-secondary)', marginBottom: '4px' }}>
+                      Realized Rewards
+                    </div>
+                    <div style={{ fontSize: '20px', fontWeight: 600, color: '#F59E0B' }}>
+                      {data.summary.realized_rewards.toLocaleString(undefined, { maximumFractionDigits: 4 })} SOL
+                    </div>
+                    <div style={{ fontSize: '12px', color: 'var(--ifm-color-secondary)', marginTop: '4px' }}>
+                      Claimed + Compounded
+                    </div>
+                  </div>
+
+                  <div>
+                    <div style={{ fontSize: '13px', color: 'var(--ifm-color-secondary)', marginBottom: '4px' }}>
+                      Total Operations
+                    </div>
+                    <div style={{ fontSize: '20px', fontWeight: 600 }}>
+                      {data.summary.total_operations.toLocaleString()}
+                    </div>
+                  </div>
+
+                  <div>
+                    <div style={{ fontSize: '13px', color: 'var(--ifm-color-secondary)', marginBottom: '4px' }}>
+                      Active Since
+                    </div>
+                    <div style={{ fontSize: '16px', fontWeight: 600 }}>
+                      {new Date(data.summary.first_stake_date).toLocaleDateString()}
+                    </div>
+                    <div style={{ fontSize: '12px', color: 'var(--ifm-color-secondary)', marginTop: '4px' }}>
+                      {data.summary.days_active} days
+                    </div>
+                  </div>
+
+                  <div>
+                    <div style={{ fontSize: '13px', color: 'var(--ifm-color-secondary)', marginBottom: '4px' }}>
+                      Last Activity
+                    </div>
+                    <div style={{ fontSize: '16px', fontWeight: 600 }}>
+                      {new Date(data.summary.last_activity_date).toLocaleDateString()}
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{
+                  marginTop: '16px',
+                  padding: '12px',
+                  background: 'var(--ifm-background-color)',
+                  borderRadius: '6px',
+                  fontSize: '13px',
+                  color: 'var(--ifm-color-secondary)',
+                }}>
+                  ℹ️ <strong>Note:</strong> Realized rewards are shown in SOL (claimed and compounded amounts). Unclaimed rewards are not shown (planned for Phase 2).
+                </div>
+              </div>
+
               <WalletTimelineChart data={data} />
 
               {/* Transactions Table */}
               {(() => {
+                // Reverse operations to show newest first
+                const reversedOperations = [...data.operations].reverse();
                 const pageSize = 10;
-                const totalPages = Math.ceil(data.operations.length / pageSize);
+                const totalPages = Math.ceil(reversedOperations.length / pageSize);
                 const startIdx = currentPage * pageSize;
                 const endIdx = startIdx + pageSize;
-                const pageOperations = data.operations.slice(startIdx, endIdx);
+                const pageOperations = reversedOperations.slice(startIdx, endIdx);
 
                 const operationColors = {
                   initialize: '#8B5CF6',
@@ -208,7 +282,7 @@ Analyze individual wallet staking behavior over time. Track staked and unstaked 
                     padding: '24px',
                     marginBottom: '24px',
                   }}>
-                    <h3 style={{ marginTop: 0, marginBottom: '16px' }}>All Transactions ({data.operations.length})</h3>
+                    <h3 style={{ marginTop: 0, marginBottom: '16px' }}>Wallet Transactions ({reversedOperations.length}) — Newest First</h3>
 
                     <div style={{ overflowX: 'auto' }}>
                       <table>
@@ -292,7 +366,7 @@ Analyze individual wallet staking behavior over time. Track staked and unstaked 
                         borderTop: '1px solid var(--ifm-toc-border-color)',
                       }}>
                         <div style={{ fontSize: '14px', color: 'var(--ifm-color-secondary)' }}>
-                          Showing {startIdx + 1}-{Math.min(endIdx, data.operations.length)} of {data.operations.length}
+                          Showing {startIdx + 1}-{Math.min(endIdx, reversedOperations.length)} of {reversedOperations.length}
                         </div>
                         <div style={{ display: 'flex', gap: '8px' }}>
                           <button
@@ -340,93 +414,6 @@ Analyze individual wallet staking behavior over time. Track staked and unstaked 
                   </div>
                 );
               })()}
-
-
-              {/* Summary Stats */}
-              <div style={{
-                background: 'var(--ifm-background-surface-color)',
-                border: '1px solid var(--ifm-toc-border-color)',
-                borderRadius: 'var(--ifm-global-radius)',
-                padding: '24px',
-              }}>
-                <h3 style={{ marginTop: 0, marginBottom: '16px' }}>Wallet Summary</h3>
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-                  gap: '16px',
-                }}>
-                  <div>
-                    <div style={{ fontSize: '13px', color: 'var(--ifm-color-secondary)', marginBottom: '4px' }}>
-                      Current Staked
-                    </div>
-                    <div style={{ fontSize: '20px', fontWeight: 600, color: 'var(--accent)' }}>
-                      {data.summary.current_staked.toLocaleString(undefined, { maximumFractionDigits: 2 })} TUNA
-                    </div>
-                  </div>
-
-                  <div>
-                    <div style={{ fontSize: '13px', color: 'var(--ifm-color-secondary)', marginBottom: '4px' }}>
-                      Current Unstaked
-                    </div>
-                    <div style={{ fontSize: '20px', fontWeight: 600 }}>
-                      {data.summary.current_unstaked.toLocaleString(undefined, { maximumFractionDigits: 2 })} TUNA
-                    </div>
-                  </div>
-
-                  <div>
-                    <div style={{ fontSize: '13px', color: 'var(--ifm-color-secondary)', marginBottom: '4px' }}>
-                      Realized Rewards
-                    </div>
-                    <div style={{ fontSize: '20px', fontWeight: 600, color: '#F59E0B' }}>
-                      {data.summary.realized_rewards.toLocaleString(undefined, { maximumFractionDigits: 4 })} SOL
-                    </div>
-                    <div style={{ fontSize: '12px', color: 'var(--ifm-color-secondary)', marginTop: '4px' }}>
-                      Claimed + Compounded
-                    </div>
-                  </div>
-
-                  <div>
-                    <div style={{ fontSize: '13px', color: 'var(--ifm-color-secondary)', marginBottom: '4px' }}>
-                      Total Operations
-                    </div>
-                    <div style={{ fontSize: '20px', fontWeight: 600 }}>
-                      {data.summary.total_operations.toLocaleString()}
-                    </div>
-                  </div>
-
-                  <div>
-                    <div style={{ fontSize: '13px', color: 'var(--ifm-color-secondary)', marginBottom: '4px' }}>
-                      Active Since
-                    </div>
-                    <div style={{ fontSize: '16px', fontWeight: 600 }}>
-                      {new Date(data.summary.first_stake_date).toLocaleDateString()}
-                    </div>
-                    <div style={{ fontSize: '12px', color: 'var(--ifm-color-secondary)', marginTop: '4px' }}>
-                      {data.summary.days_active} days
-                    </div>
-                  </div>
-
-                  <div>
-                    <div style={{ fontSize: '13px', color: 'var(--ifm-color-secondary)', marginBottom: '4px' }}>
-                      Last Activity
-                    </div>
-                    <div style={{ fontSize: '16px', fontWeight: 600 }}>
-                      {new Date(data.summary.last_activity_date).toLocaleDateString()}
-                    </div>
-                  </div>
-                </div>
-
-                <div style={{
-                  marginTop: '16px',
-                  padding: '12px',
-                  background: 'var(--ifm-background-color)',
-                  borderRadius: '6px',
-                  fontSize: '13px',
-                  color: 'var(--ifm-color-secondary)',
-                }}>
-                  ℹ️ <strong>Note:</strong> Realized rewards are shown in SOL (claimed and compounded amounts). Unclaimed rewards are not shown (planned for Phase 2).
-                </div>
-              </div>
             </>
           )}
 
@@ -456,7 +443,21 @@ Analyze individual wallet staking behavior over time. Track staked and unstaked 
   }}
 </BrowserOnly>
 
-## Understanding the Chart
+## How to Use
+
+1. Enter a Solana wallet address in the search box above
+2. Click "Analyze Wallet" or press Enter
+3. View the wallet's complete staking history with:
+   - **Wallet Summary**: Key metrics including current staked/unstaked balances, realized rewards, and activity timeline
+   - **Staked Timeline Chart**: Visual representation of balance changes over time
+   - **Wallet Transactions**: Complete list of all staking operations (sorted newest first)
+
+**Pro Tip**: You can share a direct link with a pre-filled wallet address by adding a URL parameter:
+- `?wallet=YOUR_WALLET_ADDRESS` or `?address=YOUR_WALLET_ADDRESS`
+- Example: `/analysis/staking/wallet-timeline?wallet=5MJ6Jx2SJKyTce...`
+- The wallet will be automatically analyzed when the page loads
+
+## How to Read the Chart
 
 ### Chart Elements
 

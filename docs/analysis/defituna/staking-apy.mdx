@@ -1,13 +1,13 @@
 ---
-title: TUNA Staking APY
+title: TUNA Staking APR
 ---
 
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
 
-# TUNA Staking APY
+# TUNA Staking APR
 
-This dashboard shows the historical development of the Annual Percentage Yield (APY) for staking TUNA tokens, calculated based on the DefiTuna protocol's treasury revenue.
+This dashboard shows the historical development of the Annual Percentage Rate (APR) for staking TUNA tokens, calculated based on the DefiTuna protocol's treasury revenue.
 
 ## Current Statistics
 
@@ -21,15 +21,15 @@ This dashboard shows the historical development of the Annual Percentage Yield (
       const [userEntryPrice, setUserEntryPrice] = useState(null);
 
       useEffect(() => {
-        // Load APY data
-        fetch('/data/apy_data.json')
+        // Load APR data
+        fetch('/data/apr_data.json')
           .then(response => response.json())
           .then(jsonData => {
             setData(jsonData);
             setLoading(false);
           })
           .catch(err => {
-            console.error('Error loading APY summary:', err);
+            console.error('Error loading APR summary:', err);
             setLoading(false);
           });
 
@@ -71,24 +71,24 @@ This dashboard shows the historical development of the Annual Percentage Yield (
 
       const summary = data.summary;
 
-      // Calculate personalized APY stats if user entry price is available
-      let personalizedStats = null;
-      if (userEntryPrice !== null && userEntryPrice > 0 && data.daily_apy) {
-        const personalizedApyValues = data.daily_apy
-          .filter(d => d.revenue_per_tuna_usdc)
-          .map(d => (d.revenue_per_tuna_usdc / userEntryPrice) * 100);
+      // Calculate custom APR stats if user entry price differs from default
+      let customStats = null;
+      if (userEntryPrice !== null && userEntryPrice > 0 && userEntryPrice !== 0.05 && data.daily_apr) {
+        const customAprValues = data.daily_apr
+          .filter(d => d.revenue_per_tuna_usd)
+          .map(d => (d.revenue_per_tuna_usd / userEntryPrice) * 100);
 
-        if (personalizedApyValues.length > 0) {
-          personalizedStats = {
-            current: personalizedApyValues[personalizedApyValues.length - 1],
-            average: personalizedApyValues.reduce((a, b) => a + b, 0) / personalizedApyValues.length,
-            max: Math.max(...personalizedApyValues),
-            min: Math.min(...personalizedApyValues),
+        if (customAprValues.length > 0) {
+          customStats = {
+            current: customAprValues[customAprValues.length - 1],
+            average: customAprValues.reduce((a, b) => a + b, 0) / customAprValues.length,
+            max: Math.max(...customAprValues),
+            min: Math.min(...customAprValues),
           };
         }
       }
 
-      const StatCard = ({ label, marketValue, personalizedValue }) => (
+      const StatCard = ({ label, referenceValue, yourValue, customValue }) => (
         <div style={{
           padding: '24px',
           background: 'var(--ifm-background-surface-color)',
@@ -96,14 +96,15 @@ This dashboard shows the historical development of the Annual Percentage Yield (
           borderRadius: 'var(--ifm-global-radius)',
         }}>
           <div style={{ fontSize: '14px', color: 'var(--ifm-color-secondary)', marginBottom: '8px' }}>{label}</div>
-          <div style={{ fontSize: '28px', fontWeight: '600', color: label.includes('Current') ? 'var(--accent)' : 'inherit' }}>
-            {marketValue?.toFixed(2)}%
+          <div style={{ fontSize: '14px', color: 'var(--ifm-color-secondary)', marginTop: '4px' }}>
+            Reference: {referenceValue?.toFixed(2)}%
           </div>
-          {personalizedValue !== null && personalizedValue !== undefined && (
-            <div style={{ fontSize: '16px', fontWeight: '500', color: 'rgba(34, 197, 94, 1)', marginTop: '8px' }}>
-              Custom APY: {personalizedValue.toFixed(2)}%
-            </div>
-          )}
+          <div style={{ fontSize: '28px', fontWeight: '600', color: label.includes('Current') ? 'var(--accent)' : 'rgba(34, 197, 94, 1)', marginTop: '4px' }}>
+            {customValue !== null && customValue !== undefined ? `${customValue.toFixed(2)}%` : `${yourValue?.toFixed(2)}%`}
+          </div>
+          <div style={{ fontSize: '12px', color: 'var(--ifm-color-secondary)', marginTop: '2px' }}>
+            {customValue !== null && customValue !== undefined ? 'Custom APR' : 'Your APR'}
+          </div>
         </div>
       );
 
@@ -115,24 +116,28 @@ This dashboard shows the historical development of the Annual Percentage Yield (
           marginBottom: '32px',
         }}>
           <StatCard
-            label="Current APY"
-            marketValue={summary.current_apy}
-            personalizedValue={personalizedStats?.current}
+            label="Current APR"
+            referenceValue={summary.current_reference_apr}
+            yourValue={summary.current_your_apr}
+            customValue={customStats?.current}
           />
           <StatCard
-            label="Average APY"
-            marketValue={summary.average_apy}
-            personalizedValue={personalizedStats?.average}
+            label="Average APR"
+            referenceValue={summary.average_reference_apr}
+            yourValue={summary.average_your_apr}
+            customValue={customStats?.average}
           />
           <StatCard
-            label="Maximum APY"
-            marketValue={summary.max_apy}
-            personalizedValue={personalizedStats?.max}
+            label="Maximum APR"
+            referenceValue={summary.max_reference_apr}
+            yourValue={summary.max_your_apr}
+            customValue={customStats?.max}
           />
           <StatCard
-            label="Minimum APY"
-            marketValue={summary.min_apy}
-            personalizedValue={personalizedStats?.min}
+            label="Minimum APR"
+            referenceValue={summary.min_reference_apr}
+            yourValue={summary.min_your_apr}
+            customValue={customStats?.min}
           />
         </div>
       );
@@ -142,7 +147,7 @@ This dashboard shows the historical development of the Annual Percentage Yield (
   }}
 </BrowserOnly>
 
-## APY Development Over Time
+## APR Development Over Time
 
 <BrowserOnly fallback={<LoadingSpinner />}>
   {() => {
@@ -153,48 +158,62 @@ This dashboard shows the historical development of the Annual Percentage Yield (
 
 ## Methodology
 
-The TUNA staking APY is calculated using the following approach:
+The TUNA staking APR is calculated using the following approach:
 
 ### Key Parameters
 
 - **TUNA Supply**: Fixed at 1,000,000,000 tokens
 - **Rolling Window**: Up to 30 days of historical revenue data
 - **Revenue Source**: Treasury WSOL inflows (validated against DefiTuna API)
-- **TUNA Price**: Latest available TUNA/SOL price from swap data
+- **TUNA Price Source**:
+  - **Historical** (before 2025-11-01): `manual_tuna_prices.csv` - manually captured prices
+  - **Current/Future** (2025-11-01 onwards): Oracle API snapshots from nightly updates
+- **Default Entry Price**: $0.05 (public pre-sale price)
+- **USD/SOL Rates**: Daily spot rates derived from DefiTuna staking revenue API
 
 ### Calculation Formula
 
-The APY calculation follows these steps:
+The APR calculation follows these steps:
 
 1. **Rolling Revenue Sum**: Sum of treasury WSOL inflows over the last 30 days (or fewer for early dates)
 
-2. **Annualized Revenue**:
+2. **Annualized Revenue (USD)**:
    ```
-   Annualized Revenue = (Rolling Revenue Sum / Days in Window) × 365
-   ```
-
-3. **Revenue per TUNA**:
-   ```
-   Revenue per TUNA = Annualized Revenue / 1,000,000,000
+   Annualized Revenue USD = (Rolling Revenue Sum USD / Days in Window) × 365
    ```
 
-4. **APY**:
+3. **Revenue per TUNA (USD)**:
    ```
-   APY (%) = (Revenue per TUNA / TUNA Price in SOL) × 100
+   Revenue per TUNA USD = Annualized Revenue USD / 1,000,000,000
+   ```
+
+4. **Reference APR** (based on current market price):
+   ```
+   Reference APR (%) = (Revenue per TUNA USD / Current TUNA Price USD) × 100
+   ```
+
+5. **Your APR** (based on your entry price):
+   ```
+   Your APR (%) = (Revenue per TUNA USD / Your Entry Price USD) × 100
    ```
 
 ### Example Calculation
 
 For a given day with the following data:
-- 30-day rolling revenue: 10,000 SOL
-- TUNA price: 0.0005 SOL
+- 30-day rolling revenue: $1,850,787 USD
+- Current TUNA price: $0.0624 USD (from oracle)
+- Your entry price: $0.05 USD (default)
 
-The APY would be calculated as:
+The APR would be calculated as:
 ```
-Annualized Revenue = (10,000 / 30) × 365 = 121,667 SOL
-Revenue per TUNA = 121,667 / 1,000,000,000 = 0.00012167 SOL
-APY = (0.00012167 / 0.0005) × 100 = 24.33%
+Annualized Revenue = ($1,850,787 / 30) × 365 = $22,509,605 USD
+Revenue per TUNA = $22,509,605 / 1,000,000,000 = $0.02251 USD
+
+Reference APR = ($0.02251 / $0.0624) × 100 = 36.07%
+Your APR = ($0.02251 / $0.05) × 100 = 45.02%
 ```
+
+This shows how early investors with a lower entry price achieve higher APR on the same protocol revenue.
 
 ### USD Conversion Methodology
 
@@ -212,8 +231,10 @@ As of January 2025, USD values are calculated using **daily spot market rates** 
 
 ### Data Notes
 
-- **Early History**: For dates with less than 30 days of historical data, the APY is calculated using all available days and annualized accordingly.
-- **Price Data**: TUNA/SOL prices are sourced from the same data used for SwapReward ATA conversion logic, ensuring consistency with the revenue attribution system.
+- **Early History**: For dates with less than 30 days of historical data, the APR is calculated using all available days and annualized accordingly.
+- **Price Data Sources**:
+  - **Historical** (before 2025-11-01): `manual_tuna_prices.csv` with manually captured TUNA prices in USD
+  - **Current/Future** (2025-11-01 onwards): Oracle API snapshots from nightly updates
 - **Revenue Validation**: All revenue figures are validated against the DefiTuna public API to ensure 100% accuracy.
 - **USD Values**: Calculated using daily spot market rates from the DefiTuna API, ensuring exact match with protocol's official USD values.
 
@@ -221,27 +242,31 @@ As of January 2025, USD values are calculated using **daily spot market rates** 
 
 The chart displays:
 - **X-axis**: Date
-- **Y-axis**: APY in percentage
+- **Y-axis**: APR in percentage
+- **Traces**:
+  - **Reference APR** (teal line): APR based on current market price
+  - **Your APR / Custom APR** (green dashed line): APR based on your entry price (default $0.05)
 - **Hover**: Shows detailed breakdown including:
-  - APY percentage
+  - Reference APR and Your/Custom APR percentages
   - Number of days in rolling window
-  - Daily revenue for that date
-  - TUNA price in SOL
+  - Rolling revenue (SOL and USD)
+  - TUNA price in USD with source (csv or oracle)
 
-The APY naturally fluctuates based on:
+The APR naturally fluctuates based on:
 1. **Treasury Revenue**: Higher protocol activity increases treasury inflows
-2. **TUNA Price**: Price movements affect the yield calculation
-3. **Historical Window**: Early days with less historical data may show higher volatility
+2. **TUNA Price**: Price movements affect the Reference APR calculation
+3. **Your Entry Price**: Lower entry prices result in higher Your APR for the same revenue
+4. **Historical Window**: Early days with less historical data may show higher volatility
 
-## Personalized APY Feature
+## Personalized APR Feature
 
-The dashboard allows you to calculate your personalized APY based on your actual TUNA entry price.
+The dashboard allows you to calculate your personalized APR based on your actual TUNA entry price.
 
 ### How It Works
 
 **Formula**:
 ```
-Custom APY (%) = (Revenue per TUNA in USD / Your Entry Price in USD) × 100
+Custom APR (%) = (Revenue per TUNA in USD / Your Entry Price in USD) × 100
 ```
 
 **Default**: If no price is entered, defaults to $0.05 (public pre-sale price).
@@ -251,20 +276,20 @@ Custom APY (%) = (Revenue per TUNA in USD / Your Entry Price in USD) × 100
 - Your entry price: $0.05
 - Revenue per TUNA: $0.012
 
-Market APY: ($0.012 / $0.20) × 100 = **6.0%**
-Custom APY: ($0.012 / $0.05) × 100 = **24.0%**
+Reference APR: ($0.012 / $0.20) × 100 = **6.0%**
+Custom APR: ($0.012 / $0.05) × 100 = **24.0%**
 
 ### Features
 
 - **Interactive Input**: Enter your entry price below the chart
-- **Dual Chart Traces**: Green dashed line shows your personalized APY
-- **Summary Stats**: Each stat card displays both market and Custom APY
+- **Dual Chart Traces**: Green dashed line shows your personalized APR
+- **Summary Stats**: Each stat card displays both Reference and Custom APR
 - **localStorage Persistence**: Your entry price is saved across sessions
 - **Real-time Updates**: Chart updates immediately when you change the price
 
 ### Why This Matters
 
-If you purchased TUNA at a lower price than the current market price, your effective APY is higher because:
+If you purchased TUNA at a lower price than the current market price, your effective APR is higher because:
 - The protocol revenue is the same
 - But your cost basis was lower
 - Therefore, your return on investment is higher
@@ -273,17 +298,20 @@ This feature helps you understand your actual yield based on your investment, no
 
 ## Technical Details
 
-For developers and technical users interested in how the APY calculation works:
+For developers and technical users interested in how the APR calculation works:
 
-- **Backend Documentation**: See [APY Calculation System](https://github.com/yourusername/solana_analytics/blob/main/docs/APY_CALCULATION_SYSTEM.md) in the `solana_analytics` repository for complete technical details
+- **Backend Documentation**: See `docs/APY_CALCULATION_SYSTEM.md` in the `solana_analytics` repository for complete technical details
 - **Component Source**: `frontend/src/components/Dashboard/ApyChart.tsx`
-- **Data Source**: `frontend/static/data/apy_data.json` (generated by `tools/compute_apy_data.py`)
+- **Data Source**: `frontend/static/data/apr_data.json` (generated by `tools/compute_apy_data.py`)
+- **Price Sources**:
+  - Historical: `analysis/manual_tuna_prices.csv`
+  - Current/Future: `cache/api_snapshots/{date}.json` (oracle data)
 
 ### Data Update Frequency
 
-The APY data is manually updated when:
+The APR data is manually updated when:
 - New treasury transaction data is loaded
-- TUNA price data is updated
+- TUNA price data is updated (CSV or oracle snapshots)
 - USD/SOL exchange rates change significantly
 
 For the most current data, check the "Last updated" timestamp in the site header.

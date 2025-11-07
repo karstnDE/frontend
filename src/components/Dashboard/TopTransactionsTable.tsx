@@ -38,26 +38,32 @@ export default function TopTransactionsTable({
     return mapping;
   }, [summary]);
 
-  // Check if we should use pool×type specific data
-  // This happens when both pool filter and type filter are present (single values)
-  const usePoolTypeData =
-    selectedFilter &&
-    !Array.isArray(selectedFilter) &&
-    typeFilter &&
-    !Array.isArray(typeFilter);
+  // Prepare pool/type filters
+  const poolIdFilter = selectedFilter && !Array.isArray(selectedFilter) ? selectedFilter : null;
+  const typeFilterArray = typeFilter
+    ? Array.isArray(typeFilter)
+      ? typeFilter.filter(Boolean)
+      : [typeFilter]
+    : [];
+  const hasPoolTypeFilter = Boolean(poolIdFilter && typeFilterArray.length > 0);
 
-  // Select data based on group mode or use pool×type data
+  // Select data based on group mode or pool/type filters
   let topTransactions: TopTransactionsData = {};
   let groupLabel = '';
   let allTransactions: Array<any> = [];
 
-  if (usePoolTypeData) {
-    // Use pre-computed pool×type data with composite key
-    const poolTypeKey = `${selectedFilter}_${typeFilter}`;
-    const poolTypeTransactions = topTransactionsPoolType[poolTypeKey] || [];
-    allTransactions = poolTypeTransactions.map(tx => ({ ...tx, group: selectedFilter }));
-    groupLabel = 'Pool×Type';
-  } else {
+  if (hasPoolTypeFilter) {
+    const combinedTransactions = typeFilterArray.flatMap((type) =>
+      topTransactionsPoolType[`${poolIdFilter}_${type}`] || []
+    );
+
+    if (combinedTransactions.length > 0) {
+      allTransactions = combinedTransactions.map((tx) => ({ ...tx, group: poolIdFilter }));
+      groupLabel = 'Pool-Type';
+    }
+  }
+
+  if (!hasPoolTypeFilter || allTransactions.length === 0) {
     // Standard mode - select data based on group mode
     switch (groupMode) {
       case 'token':
@@ -94,9 +100,8 @@ export default function TopTransactionsTable({
     }
 
     // Apply additional type filter if provided (for dual filtering: pool AND type)
-    if (typeFilter) {
-      const typeFilterValues = Array.isArray(typeFilter) ? typeFilter : [typeFilter];
-      allTransactions = allTransactions.filter(tx => typeFilterValues.includes(tx.type));
+    if (typeFilterArray.length > 0) {
+      allTransactions = allTransactions.filter(tx => typeFilterArray.includes(tx.type));
     }
   }
 
@@ -210,7 +215,13 @@ export default function TopTransactionsTable({
       padding: '24px',
       marginBottom: '24px',
     }}>
-      <h3 style={{ marginTop: 0, marginBottom: '4px' }}>{tableTitle}</h3>
+      <div style={{
+        marginTop: 0,
+        marginBottom: '4px',
+        fontSize: '1.25rem',
+        fontWeight: 600,
+        lineHeight: 1.25
+      }}>{tableTitle}</div>
       {(selectedFilter || typeFilter) && (
         <div style={{
           fontSize: '13px',

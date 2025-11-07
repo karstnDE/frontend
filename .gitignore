@@ -9,9 +9,5 @@ node_modules/
 # macOS
 .DS_Store
 
-# Old MkDocs build
-site/
-
 # Generated data files (avoid conflicts with automated pipeline)
-static/data/*.json
-static/data/*.json.gz
+static/data/

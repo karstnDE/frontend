@@ -54,7 +54,7 @@ const config: Config = {
           },
           blogTitle: 'karstenalytics Blog',
           blogDescription: 'Insights and updates on Solana treasury analytics',
-          blogSidebarTitle: 'Recent posts',
+          blogSidebarTitle: 'RECENT POSTS',
           blogSidebarCount: 5,
           postsPerPage: 10,
           // Remove edit links for blog posts

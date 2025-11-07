@@ -1,7 +1,8 @@
 # Chart Page Structure Guidelines
 
-**Version:** 1.0
+**Version:** 1.1
 **Date:** 2025-11-05
+**Status:** Updated based on by-token.mdx implementation feedback
 **Purpose:** Standardize the structure of all analytics chart pages for optimal user experience
 
 ---
@@ -52,12 +53,12 @@ Every chart page should follow this structure:
 
 ```
 1. Title (H1)
-2. TL;DR Summary (1-2 sentences)
+2. TL;DR Summary (1-2 sentences, include key interactions)
 3. Key Metrics (Optional - only if relevant)
-4. The Chart (H2)
-5. How to Read This Chart (H2)
-6. Key Insights (H2)
-7. Use Cases (H2 - Optional)
+4. Data (H2) - The Chart
+5. Use Cases (H2 - Recommended for complex charts)
+6. How to Read This Chart (H2)
+7. Additional Data Sections (H2) - Tables, secondary charts, etc.
 8. Methodology (H2 - Collapsible)
 ```
 
@@ -65,36 +66,39 @@ Every chart page should follow this structure:
 
 #### 1. Title (H1)
 ```markdown
-# Revenue Breakdown: By Token
+# Revenue Breakdown by Token
 ```
 
 **Guidelines:**
 - Clear, descriptive, specific
 - Use title case
-- Include context if needed (e.g., "Revenue Breakdown: By Token" not just "By Token")
+- No colons in titles
+- Include context if needed (e.g., "Revenue Breakdown by Token" not just "By Token")
 - Keep under 60 characters
 
 ---
 
 #### 2. TL;DR Summary
 ```markdown
-See which tokens contribute most to DefiTuna treasury revenue and identify concentration risks or diversification opportunities.
+Displays protocol revenue contribution across different tokens. Click on a token bar to display the top 10 contributing transactions for this token.
 ```
 
 **Guidelines:**
 - 1-2 sentences maximum
-- Answer: "What does this show and why should I care?"
-- Focus on user benefit, not technical details
-- Use active voice
+- Neutral, factual description of what the page displays
+- Include key interaction if central to the page
+- No interpretation or commentary
 - NO methodology here
 
 **Good examples:**
-- ✅ "Track daily staking APY based on protocol revenue and TUNA price to understand your yield over time."
-- ✅ "See which wallets are most active in the staking ecosystem and identify power users."
+- ✅ "Displays protocol revenue contribution across different tokens. Click on a token bar to display the top 10 contributing transactions for this token."
+- ✅ "Shows daily staking APY calculated from protocol revenue and TUNA price."
+- ✅ "Lists active stakers sorted by stake amount. Click a row to view staking history."
 
 **Bad examples:**
-- ❌ "This chart uses the DefiTuna API to calculate..." (too technical)
-- ❌ "A visualization of..." (passive, unclear benefit)
+- ❌ "See which tokens contribute most..." (interpretive, not neutral)
+- ❌ "Identify concentration risks..." (analytical conclusion, not data description)
+- ❌ "This chart uses the DefiTuna API to calculate..." (methodology belongs in Methodology section)
 
 ---
 
@@ -132,106 +136,39 @@ See which tokens contribute most to DefiTuna treasury revenue and identify conce
 
 ---
 
-#### 4. The Chart
+#### 4. Data
 
 **Section heading:**
 ```markdown
-## APY Development Over Time
-## Revenue Distribution
-## Daily Active Stakers
+## Data
 ```
 
 **Guidelines:**
-- Use descriptive H2 heading (not just "Chart")
+- Use simple "Data" heading for chart sections
 - Chart component immediately after heading
-- Optional: Brief caption underneath (1 sentence, italics)
+- No caption (removed for cleaner look)
 
 **Format:**
 ```markdown
-## Revenue Distribution
+## Data
 
-<BrowserOnly fallback={<LoadingSpinner />}>
+<BrowserOnly fallback={<div style={{ minHeight: '600px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><LoadingSpinner /></div>}>
   {() => {
     const ChartComponent = require('@site/src/components/...').default;
     return <ChartComponent />;
   }}
 </BrowserOnly>
-
-*This Marimekko chart shows token revenue share by width, with internal breakdown by height.*
 ```
 
-**Caption guidelines:**
-- 1 sentence maximum
-- Explain the visual encoding (what width/height/color mean)
-- Use italics
-- Optional but recommended for complex charts
+**Note:**
+- If page has multiple charts, use descriptive names: "Revenue Data", "Transaction Data", etc.
+- **Always wrap LoadingSpinner in a div with minHeight** to prevent layout shift during hydration (this fixes TOC navigation issues)
 
 ---
 
-#### 5. How to Read This Chart
+#### 5. Use Cases (Optional but Recommended)
 
-```markdown
-## How to Read This Chart
-
-- **X-axis**: Date (daily intervals)
-- **Y-axis**: APY percentage
-- **Line color**: Teal = market APY, Green (dashed) = your custom APY
-- **Interactions**:
-  - Hover over points to see detailed breakdown
-  - Click and drag to zoom into a date range
-  - Double-click to reset zoom
-```
-
-**Guidelines:**
-- Bullet points for scannability
-- Bold the element being explained
-- Plain language (no jargon)
-- List all interactive features
-- Include any non-obvious encodings
-
-**What to explain:**
-- Axis meanings
-- Color coding
-- Size encodings (bubble charts, Marimekko)
-- Interactive features (click, hover, zoom, filter)
-- Any non-standard chart elements
-
----
-
-#### 6. Key Insights
-
-```markdown
-## Key Insights
-
-What patterns should you notice in this data:
-
-- **WSOL dominates**: Direct SOL deposits account for 65% of total revenue
-- **Stablecoin stability**: USDC/USDT provide consistent baseline revenue
-- **Long tail matters**: 20+ smaller tokens collectively contribute 15%
-- **Diversification improving**: Token concentration decreasing over time
-```
-
-**Guidelines:**
-- 2-5 bullet points
-- Bold the key takeaway
-- Provide context/explanation
-- Focus on patterns, trends, anomalies
-- Answer: "What should users learn from this?"
-
-**Good insights:**
-- ✅ Patterns: "APY decreases as TUNA price increases (inverse correlation)"
-- ✅ Trends: "Staking participation up 40% month-over-month"
-- ✅ Anomalies: "Spike on Oct 15 due to large liquidation event"
-- ✅ Comparisons: "Weekend activity 20% lower than weekdays"
-
-**Bad insights:**
-- ❌ Just describing what's visible: "The chart shows tokens"
-- ❌ Methodology: "We calculate this using..."
-- ❌ Obvious statements: "Different tokens have different values"
-
----
-
-#### 7. Use Cases (Optional)
+**Placed BEFORE "How to Read" to prioritize user workflows over technical details.**
 
 ```markdown
 ## Use Cases
@@ -258,6 +195,56 @@ This chart helps you:
 - Bold the use case category
 - Explain the value/outcome
 - Think: "A user would visit this page to..."
+- Use analytical action language, not interpretive statements
+- Include cross-references to related pages
+
+---
+
+#### 6. How to Read This Chart
+
+```markdown
+## How to Read This Chart
+
+- **Bar height**: Each token's total revenue contribution in SOL
+- **X-axis**: Token mints (labels may be truncated for display)
+- **Y-axis**: Revenue amount in SOL
+- **Interactions**:
+  - Click on bars to filter the transaction table below
+  - Hover over segments to see exact SOL amounts
+```
+
+**Guidelines:**
+- Bullet points for scannability
+- Bold the element being explained
+- Plain language (no jargon)
+- Keep concise - only essential visual encodings
+- List all interactive features
+- Do NOT include cross-references (those go in Use Cases)
+
+**What to explain:**
+- Axis meanings (if relevant)
+- Color coding (if used)
+- Size encodings (bubble charts, Marimekko)
+- Interactive features (click, hover, zoom, filter)
+- Any non-standard chart elements
+
+---
+
+#### 7. Additional Data Sections (Optional)
+
+**Section heading:**
+```markdown
+## Top Transactions Table
+## Secondary Data
+## Detailed Breakdown
+```
+
+**Guidelines:**
+- Treat tables and secondary visualizations as additional data sections
+- Use descriptive H2 headings
+- Explain what the section displays
+- Document any filtering or interaction between primary and secondary data
+- Include column/field descriptions if helpful
 
 ---
 
@@ -269,13 +256,13 @@ This chart helps you:
 <details>
 <summary>Click to expand technical details</summary>
 
-### Data Sources
+**Data Sources**
 
 - **Treasury transactions**: On-chain data from DefiTuna treasury wallet
 - **TUNA prices**: Swap data from Orca/Raydium pools
 - **USD conversion**: Daily spot rates from DefiTuna API
 
-### Calculation Method
+**Calculation Method**
 
 APY is calculated using a 30-day rolling window:
 
@@ -285,12 +272,11 @@ Revenue per TUNA = Annualized Revenue / 1,000,000,000
 APY (%) = (Revenue per TUNA / TUNA Price) × 100
 \`\`\`
 
-### Update Frequency
+**Update Frequency**
 
-- **Data refresh**: Manual updates when new treasury data is processed
-- **Last updated**: Check timestamp in site header
+Data is manually updated when new treasury data is processed. Check the "Last updated" timestamp in the site header for data freshness.
 
-### Known Limitations
+**Known Limitations**
 
 - Early dates (< 30 days history) use partial window
 - USD values based on daily spot rates (may not reflect exact transaction rates)
@@ -302,6 +288,7 @@ APY (%) = (Revenue per TUNA / TUNA Price) × 100
 **Guidelines:**
 - **ALWAYS use `<details>` tag** for progressive disclosure
 - Summary text: "Click to expand technical details"
+- **Use bold text for subsections, NOT H3 headings** (H3 inside details breaks TOC)
 - Include subsections:
   - Data Sources
   - Calculation Method (with formulas)
@@ -331,7 +318,7 @@ import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
 
 # [Chart Name]
 
-[1-2 sentence TL;DR explaining what this shows and why it matters. Focus on user benefit.]
+[1-2 sentence factual description. Include key interaction if relevant. No commentary.]
 
 ## Current Metrics
 
@@ -342,53 +329,49 @@ import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
   }}
 </BrowserOnly>
 
-## [Descriptive Chart Section Name]
+## Data
 
-<BrowserOnly fallback={<LoadingSpinner />}>
+<BrowserOnly fallback={<div style={{ minHeight: '600px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><LoadingSpinner /></div>}>
   {() => {
     const ChartComponent = require('@site/src/components/...').default;
     return <ChartComponent />;
   }}
 </BrowserOnly>
 
-*[Optional: One sentence caption explaining the visual encoding]*
-
-## How to Read This Chart
-
-- **X-axis**: [What it represents]
-- **Y-axis**: [What it represents]
-- **Colors/Size**: [What they represent]
-- **Interactions**:
-  - [Interaction 1]
-  - [Interaction 2]
-
-## Key Insights
-
-What patterns or findings should you notice:
-
-- **[Pattern 1]**: [Explanation and context]
-- **[Pattern 2]**: [Explanation and context]
-- **[Pattern 3]**: [Explanation and context]
-
 ## Use Cases
 
 This chart helps you:
 
-- **[Use case 1]**: [Value/outcome]
-- **[Use case 2]**: [Value/outcome]
-- **[Use case 3]**: [Value/outcome]
+- **[Analytical action 1]**: [What you can do/analyze]
+- **[Analytical action 2]**: [What you can do/analyze]
+- **[Analytical action 3]**: [What you can do/analyze]
+- **[Cross-reference]**: Link to [related page](./path)
+
+## How to Read This Chart
+
+- **[Visual element 1]**: [What it represents]
+- **[Visual element 2]**: [What it represents]
+- **Interactions**:
+  - [Interaction 1]
+  - [Interaction 2]
+
+## [Additional Data Section Name]
+
+[Description of table/secondary chart]
+
+[Component or table here]
 
 ## Methodology
 
 <details>
 <summary>Click to expand technical details</summary>
 
-### Data Sources
+**Data Sources**
 
 - [Source 1]
 - [Source 2]
 
-### Calculation Method
+**Calculation Method**
 
 [Formulas, algorithms, step-by-step process]
 
@@ -396,11 +379,11 @@ This chart helps you:
 [Code or mathematical formulas]
 \`\`\`
 
-### Update Frequency
+**Update Frequency**
 
 [How often data refreshes]
 
-### Known Limitations
+**Known Limitations**
 
 - [Limitation 1]
 - [Limitation 2]
@@ -419,13 +402,12 @@ This chart helps you:
 ```
 Title
 TL;DR
-Chart
+Data
 How to Read
-Key Insights
 Methodology (collapsible)
 ```
 
-**Skip:** Key Metrics (unless current value is critical), Use Cases (usually obvious)
+**Skip:** Key Metrics (unless current value is critical), Use Cases (usually obvious for simple time series)
 
 ---
 
@@ -437,8 +419,8 @@ Methodology (collapsible)
 **Emphasis:**
 - Detailed "How to Read" section
 - Interaction instructions
-- Multiple insights (3-5)
-- Clear use cases
+- Clear use cases for analytical workflows
+- Comprehensive methodology
 
 ---
 
@@ -461,10 +443,9 @@ Methodology (collapsible)
 ```
 Title
 TL;DR
-Chart
+Data
+Use Cases (when to analyze each dimension)
 How to Read
-Key Insights (focus on differences)
-Use Cases (when to use each)
 Methodology (collapsible)
 ```
 
@@ -485,20 +466,21 @@ Methodology (collapsible)
 
 **Bold for:**
 - Metric labels
-- Key terms in insights
 - Use case categories
 - Axis names in "How to Read"
-
-**Italics for:**
-- Chart captions
-- Emphasis within sentences
-- Secondary information
+- Column names in table descriptions
 
 **Code blocks for:**
 - Mathematical formulas
 - Technical terms (SOL, WSOL, APY)
 - Code examples
 - API endpoints
+
+**Blank Lines (CRITICAL for TOC):**
+- **Always add blank line before H2 headings** (`##`)
+- Required after paragraphs, before headings
+- Required after closing JSX tags (`</BrowserOnly>`, `</details>`), before headings
+- Without blank lines, TOC links will break
 
 ### Language
 
@@ -567,10 +549,9 @@ H2 Section (How to Read)
 **Target:** Casual users who want quick insights
 
 ### Tier 2: Scannable (Added Value)
-- Key Insights
 - Use Cases
 
-**Target:** Users who want to understand patterns and applications
+**Target:** Users who want to understand applications and workflows
 
 ### Tier 3: Collapsible (Deep Dive)
 - Methodology
@@ -593,18 +574,21 @@ H2 Section (How to Read)
 
 When creating or updating a chart page:
 
-- [ ] **Title** - Descriptive and under 60 characters
-- [ ] **TL;DR** - 1-2 sentences, benefit-focused
+- [ ] **Title** - Descriptive and under 60 characters, no colons
+- [ ] **TL;DR** - 1-2 sentences, factual description, include key interaction if relevant
 - [ ] **Key Metrics** - Only if relevant (2-4 cards max)
-- [ ] **Chart Section** - H2 heading, chart, optional caption
-- [ ] **How to Read** - Bullet points explaining all visual encodings and interactions
-- [ ] **Key Insights** - 2-5 patterns/trends with context
-- [ ] **Use Cases** - 3-5 use cases if not obvious
-- [ ] **Methodology** - Inside `<details>` tag with subsections
+- [ ] **Data Section** - Use "Data" as H2 heading, no caption
+- [ ] **Use Cases** - 3-5 analytical actions, comes BEFORE "How to Read"
+- [ ] **How to Read** - Simplified bullet points, essential encodings only
+- [ ] **Additional Data Sections** - Tables or secondary charts with descriptive headings
+- [ ] **Methodology** - Inside `<details>` tag with bold subsections (NOT H3 headings)
 - [ ] **BrowserOnly** - All React components wrapped
-- [ ] **LoadingSpinner** - Fallback for all dynamic content
-- [ ] **Links** - Cross-reference related pages
-- [ ] **Formatting** - Bold key terms, italics for captions, code for technical terms
+- [ ] **LoadingSpinner** - Fallback with minHeight wrapper to prevent layout shifts
+- [ ] **Cross-references** - In Use Cases section, NOT in How to Read
+- [ ] **Formatting** - Bold key terms, code for technical terms
+- [ ] **No Commentary** - Data presentation only, no interpretive insights
+- [ ] **Blank Lines** - Always add blank line before each H2 heading (required for TOC)
+- [ ] **No H3 in Details** - Use bold text for subsections inside `<details>` tags (prevents TOC issues)
 
 ---
 
@@ -646,17 +630,17 @@ This page shows how treasury revenue is distributed across different **token min
 
 ```markdown
 ---
-title: Revenue Breakdown: By Token
+title: Revenue by Token
 ---
 
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
 
-# Revenue Breakdown: By Token
+# Revenue Breakdown by Token
 
-See which tokens contribute most to DefiTuna treasury revenue and identify concentration risks or diversification opportunities.
+Displays protocol revenue contribution across different tokens. Click on a token bar to display the top 10 contributing transactions for this token.
 
-## Revenue Distribution
+## Data
 
 <BrowserOnly fallback={<LoadingSpinner />}>
   {() => {
@@ -665,32 +649,29 @@ See which tokens contribute most to DefiTuna treasury revenue and identify conce
   }}
 </BrowserOnly>
 
-*Width represents each token's revenue share; height shows internal breakdown by transaction type.*
-
-## How to Read This Chart
-
-- **Width**: Each token's relative contribution to total revenue
-- **Height**: Breakdown within each token (by transaction type or pool)
-- **Area**: Token's share of overall treasury revenue
-- **Interactions**:
-  - Click segments to filter the transaction table below
-  - Hover to see exact SOL amounts and percentages
-
-## Key Insights
-
-- **WSOL dominates**: Direct SOL deposits account for 65% of total revenue
-- **Stablecoin stability**: USDC/USDT together provide 20% baseline revenue
-- **Long tail contribution**: 20+ smaller tokens collectively contribute 15%
-- **Diversification trend**: Token concentration decreasing month-over-month
-
 ## Use Cases
 
 This chart helps you:
 
-- **Assess concentration risk**: Determine if revenue depends too heavily on one token
-- **Track diversification**: Monitor how the token mix evolves
-- **Identify opportunities**: Spot emerging revenue sources
-- **Evaluate sustainability**: Understand protocol revenue stability
+- **Analyze revenue composition**: Track which tokens contribute to treasury inflows over time
+- **Investigate specific tokens**: Click bars to examine individual transactions for any token
+- **Compare token contributions**: Evaluate relative contribution across different token mints
+- **Cross-reference revenue sources**: Link token data with [transaction type](./by-type) and [pool](./by-pool) breakdowns
+
+## How to Read This Chart
+
+- **Bar height**: Each token's total revenue contribution in SOL
+- **X-axis**: Token mints (labels may be truncated for display)
+- **Y-axis**: Revenue amount in SOL
+- **Interactions**:
+  - Click on bars to filter the transaction table below
+  - Hover over segments to see exact SOL amounts
+
+## Top Transactions Table
+
+The table displays individual transactions contributing to treasury revenue. By default, it shows all transactions across all tokens, sorted by SOL amount.
+
+**Filtering**: Click any bar in the chart above to filter the table to that specific token's transactions.
 
 ## Methodology
 
@@ -721,12 +702,15 @@ Data is manually updated when new treasury transactions are processed. Check the
 ```
 
 **Improvements:**
-- ✅ Clear hierarchy
-- ✅ Context before chart
-- ✅ Actionable insights
-- ✅ Progressive disclosure
-- ✅ Clear use cases
+- ✅ Single title (no duplication)
+- ✅ Factual TL;DR with interaction hint
+- ✅ Simple "Data" section heading
+- ✅ Use Cases BEFORE How to Read (user-focused ordering)
+- ✅ Simplified "How to Read" (essential encodings only)
+- ✅ Table as separate data section
+- ✅ Cross-references in Use Cases (not in How to Read)
 - ✅ Methodology collapsed
+- ✅ No commentary (data presentation only)
 
 ---
 
@@ -749,16 +733,16 @@ Data is manually updated when new treasury transactions are processed. Check the
 ### Medium Priority (Missing Sections)
 
 4. **docs/analysis/usage-statistics/stakers.mdx**
-   - Missing: How to Read, Key Insights
+   - Missing: How to Read, Use Cases
    - Action: Add missing sections
 
 5. **docs/analysis/usage-statistics/daily-users.mdx**
-   - Missing: Key Insights, Use Cases
-   - Action: Add insights
+   - Missing: Use Cases, Methodology
+   - Action: Add missing sections
 
 6. **docs/analysis/usage-statistics/weekly-users.mdx**
-   - Missing: Key Insights
-   - Action: Add insights
+   - Missing: Use Cases, Methodology
+   - Action: Add missing sections
 
 7. **docs/analysis/defituna/staker-conviction.mdx**
    - Missing: Structure check needed
@@ -772,7 +756,7 @@ Data is manually updated when new treasury transactions are processed. Check the
 
 9. **docs/analysis/defituna/staked-tuna.mdx**
    - Issue: Minimal content
-   - Action: Add insights and use cases
+   - Action: Add use cases section
 
 10. **All other .mdx files**
     - Action: Audit against checklist, add missing sections

@@ -5,15 +5,19 @@ title: Revenue by Token
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
 
-# Revenue Breakdown: By Token
+# Revenue Breakdown by Token
 
-<BrowserOnly fallback={<LoadingSpinner />}>
+Displays protocol revenue contribution across different tokens. Click on a token bar to display the top 10 contributing transactions for this token. Signature and token mint address are linked to Solscan.
+
+## Data {#data}
+
+<BrowserOnly fallback={<div style={{ minHeight: '800px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><LoadingSpinner /></div>}>
   {() => {
-    const { useState } = require('react');
+    const { useState, useEffect } = require('react');
     const { useDashboardData } = require('@site/src/components/Dashboard/useDashboardData');
     const BreakdownChart = require('@site/src/components/Dashboard/BreakdownChart').default;
     const TopTransactionsTable = require('@site/src/components/Dashboard/TopTransactionsTable').default;
-    
+
     function RevenueDashboard() {
       const data = useDashboardData();
       const [selectedId, setSelectedId] = useState(null);
@@ -29,6 +33,19 @@ import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
         setSelectedLabel(null);
       };
 
+      // Fix scroll position after component loads
+      useEffect(() => {
+        if (!data.loading && window.location.hash) {
+          setTimeout(() => {
+            const id = window.location.hash.slice(1);
+            const element = document.getElementById(id);
+            if (element) {
+              element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }, 100);
+        }
+      }, [data.loading]);
+
       if (data.loading) {
         return <LoadingSpinner />;
       }
@@ -42,7 +59,7 @@ import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
             borderRadius: 'var(--ifm-global-radius)',
             color: 'var(--ifm-color-danger)',
           }}>
-            <h3>Error Loading Dashboard</h3>
+            <div style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '8px' }}>Error Loading Dashboard</div>
             <p>{data.error}</p>
           </div>
         );
@@ -54,7 +71,7 @@ import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
       }
 
       return (
-        <div style={{ padding: '24px 0' }}>
+        <div>
           <BreakdownChart
             summary={summary}
             groupMode="token"
@@ -64,6 +81,7 @@ import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
           {selectedLabel && (
             <div style={{
               marginBottom: '16px',
+              marginTop: '24px',
               display: 'flex',
               alignItems: 'center',
               gap: '12px'
@@ -88,109 +106,76 @@ import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
             </div>
           )}
 
-          <TopTransactionsTable
-            topTransactionsToken={data.topTransactionsToken}
-            topTransactionsType={data.topTransactionsType}
-            topTransactionsPool={data.topTransactionsPool}
-            groupMode="token"
-            selectedFilter={selectedId}
-            selectedFilterLabel={selectedLabel}
-            summary={summary}
-          />
+          <div style={{ marginTop: '32px' }}>
+            <TopTransactionsTable
+              topTransactionsToken={data.topTransactionsToken}
+              topTransactionsType={data.topTransactionsType}
+              topTransactionsPool={data.topTransactionsPool}
+              groupMode="token"
+              selectedFilter={selectedId}
+              selectedFilterLabel={selectedLabel}
+              summary={summary}
+            />
+          </div>
         </div>
       );
     }
-    
+
     return <RevenueDashboard />;
   }}
 </BrowserOnly>
 
-# Revenue Breakdown: By Token
+## Use Cases {#use-cases}
 
-This page shows how treasury revenue is distributed across different **token mints**, revealing which tokens contribute most to the protocol's earnings.
+This chart helps you:
 
-## Overview
+- **Analyze revenue composition**: Track which tokens contribute to treasury inflows over time
+- **Investigate specific tokens**: Click bars to examine individual transactions for any token
+- **Compare token contributions**: Evaluate relative contribution across different token mints
+- **Cross-reference revenue sources**: Link token data with [transaction type](./by-type) and [pool](./by-pool) breakdowns
+- **Export transaction details**: Use the table to identify and investigate specific revenue events
 
-<BrowserOnly fallback={<LoadingSpinner />}>
-  {() => {
-  }}
-</BrowserOnly>
+## How to Read This Chart {#how-to-read}
 
-## Understanding Token Revenue
+- **Bar height**: Each token's total revenue contribution in SOL
+- **X-axis**: Token mints (labels may be truncated for display)
+- **Y-axis**: Revenue amount in SOL
+- **Interactions**:
+  - Click on bars to filter the transaction table below
+  - Hover over segments to see exact SOL amounts
 
-The Marimekko chart above visualizes revenue distribution across tokens with:
+## Methodology {#methodology}
 
-- **Width**: Represents each token's relative contribution to total revenue
-- **Height**: Shows the breakdown within each token (by transaction type or pool)
-- **Area**: Total segment area = token's share of overall treasury revenue
+<details>
+<summary>Click to expand technical details</summary>
 
-### Key Insights
+**Data Sources**
 
-This token-based view helps you understand:
+- **Treasury transactions**: On-chain data from DefiTuna treasury PDA (`G9XfJoY81n8A9bZKaJFhJYomRrcvFkuJ22em2g8rZuCh`)
+- **Token conversions**: Conversion rates derived from actual swap transactions in treasury data
+- **Attribution system**: 100% accurate transaction classification using log-based analysis
 
-- **Top Performers**: Which tokens generate the most treasury revenue
-- **Diversification**: How dependent the protocol is on specific tokens
-- **Long-tail Contributions**: Cumulative impact of smaller token inflows
-- **Token Composition**: How each token's revenue breaks down by source
+**Calculation Method**
 
-### Interactive Features
+All token revenues are converted to SOL equivalents using same-day conversion rates from actual swap transactions recorded in the treasury. This approach ensures:
 
-- **Click on segments**: View the top transactions for that specific token in the table below
-- **Hover**: See exact SOL amounts and percentages for each token
-- **Cross-reference**: Compare with [By Type](./by-type) and [By Pool](./by-pool) views
+1. **Timing accuracy**: Conversion rates reflect the market conditions when transactions occurred
+2. **Real rates**: Uses actual swap rates rather than external price feeds
+3. **Cross-token comparability**: All values normalized to SOL for consistent comparison
 
-## Top Tokens
+**Revenue Classification**
 
-The largest contributors typically include:
+Each transaction is classified using the [revenue attribution system](/analysis/defituna/revenue-breakdown/by-type), which achieves 100% attribution accuracy through log-based pattern matching.
 
-- **WSOL**: Direct SOL deposits to the treasury
-- **USDC/USDT**: Stablecoin revenues from trading fees or liquidations
-- **Protocol Tokens**: Partner protocol tokens from liquidity provision
-- **Volatile Assets**: Tokens from liquidations or trading activity
+**Update Frequency**
 
-Each token's contribution is converted to SOL equivalents using the conversion rates from the revenue attribution system.
+Data is manually updated when new treasury transactions are processed. Check the "Last updated" timestamp in the site header for data freshness.
 
-## Conversion Methodology
+**Known Limitations**
 
-Token revenues are converted to SOL using:
+- Conversion rates based on treasury swap prices (may differ from market mid-price by a few basis points)
+- Small tokens contributing less than 0.1% of total revenue may be grouped into "Other" category
+- Historical view shows cumulative data; individual transaction dates available in the table
+- Does not include unrealized gains from currently held token positions
 
-1. **Real-time Rates**: Conversion rates from actual swap transactions in the treasury data
-2. **Same-day Pricing**: Uses the rate active when the transaction occurred
-3. **100% Accuracy**: All conversions validated against on-chain data
-
-This ensures that cross-token comparisons reflect true economic value.
-
-## Top Transactions Table
-
-The table below shows:
-- **Default**: Top transactions across all tokens
-- **Filtered**: When you click a token segment, see that token's largest revenue events
-
-This drill-down capability lets you investigate:
-- Unusual spikes in specific token inflows
-- Largest individual contributions per token
-- Timing and context of major token revenue events
-
-## Analysis Tips
-
-### Identifying Anomalies
-
-Look for:
-- Tokens with unusually high single-day contributions (potential liquidations)
-- Gradual shifts in token composition over time
-- New tokens appearing (protocol integrations or partnerships)
-
-### Risk Assessment
-
-Use this view to evaluate:
-- **Concentration Risk**: Is too much revenue from one token?
-- **Volatility Risk**: Are high-revenue tokens stable or volatile?
-- **Diversification**: Is the token mix healthy for protocol sustainability?
-
-### Cross-referencing
-
-Compare this token view with:
-- **[By Type](./by-type)**: See which transaction types generate token revenues
-- **[By Pool](./by-pool)**: Understand which pools trade which tokens
-- **[Tx Type per Day](../tx-type-per-day)**: Track token evolution over time
-
+</details>
