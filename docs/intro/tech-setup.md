@@ -1,134 +1,113 @@
 ---
-title: Tech Set-up
+title: Technical Foundation
 sidebar_position: 2
 sidebar_custom_props:
   icon: Gear
 ---
 
-# Tech Set-up
+# Technical Foundation and Design Principles
 
-## How This Works
+I've built this project on a carefully selected set of technologies chosen for transparency, function, and cost-effectiveness. I'm not saying there aren't better choices for what I'm trying to achieve, but for now it works for me. Storing data in JSON format for sure isn't state-of-the-art. I will adjust as required on-the-fly.
 
-This platform provides transparent, on-chain analytics for Solana DeFi protocols. All data comes directly from the blockchain—there's no opinion, just raw facts about how protocols generate revenue, how users interact, and how the ecosystem evolves.
+Please note that below you find a high-level overview, further details about the data pipeline works, and specifics about the projects I cover, can be found in the Analysis section.
+
+## Technology Stack
+
+### Data Collection: Helius API
+
+All blockchain data is fetched using the **Helius API**. Helius offers enhanced transaction parsing capabilities that make it easier to extract structured data from Solana's compressed transaction format. The API provides complete transaction history for any on-chain account, enabling full historical backfills from protocol/ address inception to the present day.
+
+So far Helius seems like a pretty good choice for me. They are also constantly improving the API.
+
+### Data Processing: Python
+
+The backend data pipeline is written entirely in **Python** and used for data manipulation and custom classification engines for transaction analysis. Python was chosen for its ecosystem of data science tools, readability, and rapid iteration capabilities. Also, I already used it.
+
+The processing pipeline runs daily to fetch new transactions, classify them using configurable rule sets, attribute activity across multiple dimensions (e.g. token, type, pool), and aggregate everything into structured JSON files. This happens entirely offline—no live database queries, no runtime dependencies. The pipeline simply generates static data files that the frontend can serve.
+
+### Frontend: Docusaurus (React)
+
+The website is built using **Docusaurus**, a static site generator built on React. Docusaurus was chosen because it combines the best of both worlds: rich documentation capabilities (MDX support, versioning, search) with the flexibility of a modern React application. I like the GitBook-like design, but GitBook is out of the questions because I haven't been able to serve the Plotly.js charts with it.
+
+Using Docusaurus allows me to:
+- Write documentation pages in Markdown with embedded React components for interactive charts
+- Maintain clean URLs and navigation structure automatically
+- Deploy a fully static site with no server-side rendering or databases
+- Leverage React component libraries for visualizations without reinventing infrastructure
+
+### Visualizations: Plotly.js
+
+All interactive charts are rendered using **Plotly.js**, a powerful charting library that supports complex visualizations with built-in zooming, panning, hover tooltips, and filtering. Plotly handles both time-series line charts and categorical bar charts with ease, and its theming system integrates cleanly with Docusaurus's light/dark mode switching.
+
+Plotly was selected over alternatives like Chart.js or D3 because I like the look and feel, and from my perception there are more charts available that I typically like to use.
+
+### Analytics: Goatcounter
+
+For privacy-focused web analytics, I use **Goatcounter**, a lightweight, open-source analytics tool. Unlike Google Analytics, Goatcounter doesn't track individual users, doesn't use cookies, and doesn't share data with third parties. It simply counts page views and referrers, providing enough insight to understand what content is useful without compromising visitor privacy.
+
+This choice aligns with the my transparency ethos: if the goal is to provide open data about DeFi protocols, it makes sense to respect user privacy when they visit the site.
+
+### Hosting: GitHub Pages
+
+The entire site is hosted on **GitHub Pages**. Because the project generates a fully static website (HTML, CSS, JavaScript, and JSON data files), there's no need for a traditional web server or database. GitHub Pages simply serves the files directly from the repository.
+
+This approach has several advantages:
+- **Zero hosting costs** - No servers to pay for or maintain
+- **High reliability** - GitHub's infrastructure handles availability and CDN distribution
+- **Easy deployment** - Push to the repo, and the site rebuilds automatically
+- **Auditability** - The entire site source code and data files are public in the repository
+
+### Why a Static Architecture?
+
+The decision to build this as a static site rather than a traditional web application with a backend API and database is intentional. Static architecture offers:
+
+1. **Transparency**: All data is visible as JSON files in the repository. Anyone can inspect, download, or verify the data without reverse-engineering API calls.
+
+2. **Performance**: No database queries mean instant page loads. JSON files are cached by browsers and CDNs, so charts render immediately.
+
+3. **Simplicity**: Fewer moving parts means less complexity, easier debugging, and lower maintenance burden. There's no server to secure, no database to back up, no API rate limits to manage.
+
+4. **Cost-effectiveness**: Running a static site costs nothing beyond the time to generate data files. As the project scales to cover more protocols, hosting costs remain zero.
+
+5. **Auditability**: Because everything is static files in a git repository, every change is version-controlled. Users can see exactly when data was updated, what changed, and review historical versions if needed.
 
 ## The Data Journey
 
-### 1. Collecting Blockchain Data
+The project follows a linear pipeline from blockchain to browser:
 
-Every transaction on Solana is public and permanent. I monitor specific protocol treasury addresses and collect all their transactions:
+1. **Blockchain Monitoring**: I monitor specific Solana accounts (treasury addresses, program IDs, token accounts) and fetch all their transaction history via Helius API.
 
-- **What gets collected**: Every swap, every fee, every stake, every token transfer
-- **Where it comes from**: Solana blockchain via Helius API
-- **How often**: Daily updates with historical backfill to protocol launch
-- **Coverage**: 100% of transactions—nothing is filtered out
+2. **Transaction Classification**: Raw transactions are parsed and classified using a configurable rule engine. Each transaction is labeled by type (e.g., swap fee, staking reward, LP position adjustment) based on instruction logs and account patterns.
 
-### 2. Understanding What Transactions Mean
+3. **Multi-Dimensional Attribution**: Transactions are attributed across multiple dimensions simultaneously—by token, by transaction type, and by pool. This enables flexible aggregation for different analytical views, e.g. for breaking down protocol revenues in a treasury account.
 
-Raw blockchain data is cryptic. A transaction might look like "Program X called instruction Y," but what does that actually mean for revenue?
+4. **Aggregation & Export**: Classified transactions are aggregated into daily time series, top-N rankings, and summary statistics, then exported as JSON files.
 
-I classify each transaction to understand:
-- Is this a revenue event or something else?
-- What type of revenue? (swap fees, liquidity fees, staking rewards, etc.)
-- Which pool or wallet generated it?
-- What tokens were involved?
+5. **Static Deployment**: JSON files are copied into the frontend's `/static/data/` directory, committed to git, and deployed via GitHub Pages.
 
-This classification achieves **100% accuracy**—every SOL is accounted for. If the numbers don't add up perfectly, I don't publish until they do.
+6. **Frontend Loading**: When you visit a chart page, your browser fetches the relevant JSON files, and React components render interactive Plotly charts.
 
-### 3. Turning Data into Insights
+As mentioned - this entire pipeline runs offline—there's no real-time querying, no live API, no server-side computation. Data updates happen daily via scheduled GitHub Action Workflows, and the frontend simply displays pre-computed results.
 
-Once transactions are classified, I aggregate them into meaningful metrics:
+## Data Quality & Verification
 
-- **Daily revenue trends**: Track protocol earnings over time
-- **Revenue by source**: See which pools, tokens, or transaction types drive value
-- **User behavior**: Understand staking patterns, loyalty, and whale activity
-- **APY calculations**: Real, on-chain yield rates based on actual revenue
+I try to maintain high standards for data accuracy by implementing different verification systems. Every data update is tested against publicly available benchmarks if available (such as information from the Websites of the DeFi Protocols, explorers like Solscan, or manually verified totals). If computed results deviate from known values by even 0.1 SOL, it indicates the classification logic is incomplete—not just a rounding error, but a conceptual gap in e.g. how transactions are categorized.
 
-All this happens behind the scenes. When you visit the site, the data is already processed and ready to explore.
-
-### 4. Interactive Visualizations
-
-The dashboards you see are built with:
-- **Interactive charts** that let you zoom, filter, and drill down
-- **Real-time filtering** to focus on specific time periods or metrics
-- **Dark mode support** for comfortable viewing
-- **Direct blockchain links** to verify any transaction yourself
-
-Everything updates daily, and the "Last updated" timestamp shows when data was refreshed.
-
-## Why Trust This Data?
-
-### Transparency
-- All data comes directly from Solana blockchain
-- No third-party APIs for metrics calculations
-- Transaction links let you verify anything on Solana Explorer
-- Open-source code (available on GitHub)
-
-### Accuracy
-- 100% revenue attribution standard
-- Automated verification checks on every update
-- Discrepancies > 0.01 SOL trigger alerts
-- Historical data matches protocol inception
-
-### Objectivity
-- No editorial decisions about what to show/hide
-- No paid promotions or protocol partnerships
-- No opinions—just on-chain facts
-- All transactions included, whether positive or negative
-
-## What Makes This Different
-
-Unlike aggregator platforms that cover thousands of protocols at a high level, this site focuses on **depth over breadth**:
-
-- **Transaction-level analysis** instead of just TVL and volume
-- **Revenue attribution** to specific pools, wallets, and transaction types
-- **User behavior analytics** like loyalty metrics and staking patterns
-- **Custom visualizations** designed for each protocol's unique features
-
-Think of it as the difference between checking a stock price vs reading the company's financial statements.
-
-## Technology Behind the Scenes
-
-For those curious about the technical stack:
-
-**Data Pipeline**
-- Python-based automation for data collection and processing
-- Daily updates via scheduled scripts
-- Local caching for fast reprocessing
-
-**Website**
-- Static site built with Docusaurus (React-based)
-- Plotly.js for interactive charts
-- Hosted on GitHub Pages (free, reliable)
-
-**Why Static?**
-- Fast page loads (no database queries)
-- Easy to audit (just JSON files)
-- Simple deployment
-- Cost-effective at scale
+The verification principle is MECE (Mutually Exclusive, Collectively Exhaustive): every transaction, every revenue contribution must be classified exactly once, and no transactions can be left unclassified. This ensures that aggregated metrics are complete and accurate.
 
 ## Current Coverage
 
-Right now, the platform focuses exclusively on **DefiTuna**, a Solana-based DeFi protocol. This depth-first approach ensures:
-- Complete historical data (from protocol launch)
-- Daily updates
-- High-quality, verified analytics
-- Custom features for protocol-specific insights
+The project currently focuses exclusively on **DefiTuna**, a Solana-based DeFi protocol. This depth-first approach ensures complete historical data from $TUNA token and treasury launch, daily updates, and high-quality verified analytics. Future expansion will add other emerging Solana protocols while maintaining the same standards for accuracy and depth.
 
-Future expansion will add other emerging Solana protocols, maintaining the same standard of quality and depth.
+## Open Source & Data Access
 
-## Data Updates
+The frontend of this project is fully open source:
+- **Frontend repository**: Public on GitHub with all code, documentation, and data files
+- **Static data files**: All processed data is available as JSON files in `/static/data/`
+- **Transparent updates**: All data updates are committed to git with timestamps
 
-- **Frequency**: Daily
-- **Coverage**: Complete history from protocol launch
-- **Latency**: Typically updated within 24 hours of transactions
-- **Verification**: Every update passes accuracy checks before publishing
+The backend data processing pipeline (Python scripts, classification logic, etc.) is **not open source**. However, all the output data is publicly accessible through the static JSON files. If you want to build your own analytics, dashboards, or integrations, you're welcome to use these pre-processed data files—they're free, version-controlled, and updated daily.
 
-Check the "Last updated" timestamp in the site header to see when data was refreshed.
+This approach balances transparency (all results are public and verifiable) with practical considerations (maintaining a one-person project).
 
-## Have Questions?
-
-- Want to see a specific metric? Let me know
-- Notice something that doesn't look right? I want to hear about it
-- Interested in covering a protocol? Reach out
-
-This is a community project, and feedback helps make it better.
+Feedback, suggestions, and questions are always welcome. This is built on the principle that DeFi analytics should be transparent, verifiable, and accessible to everyone.
