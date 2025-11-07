@@ -32,176 +32,179 @@ Each stage is documented in detail below, with clear indicators for information 
 
 ### 1. Data Sources
 
-**[BACKEND REQUIRED]**
+**Primary RPC provider – Helius (paid mainnet endpoint)**  
+- All fetching runs through `https://mainnet.helius-rpc.com/?api-key={API_KEY}` (configured in `solana_analytics/constants.py:8`).  
+- We always request the enhanced JSON-RPC format so `logMessages`, `tokenTransfers`, `loadedAddresses`, and inner instructions are available for the classifier.
 
-*Instructions for backend documentation: Describe the following:*
-- Which Solana RPC endpoints are used (mainnet, specific providers)
-- Primary data sources (which blockchain accounts/programs are monitored)
-- Any additional APIs or data sources beyond Solana RPC
-- Whether you use multiple RPC providers for redundancy
-- Rate limiting or API usage considerations
+**Monitored on-chain accounts**  
+- **Treasury PDA** `G9XfJoY81n8A9bZKaJFhJYomRrcvFkuJ22em2g8rZuCh` – every inflow is attributed back to this wallet.  
+- **Associated Token Accounts (ATAs)** discovered via `getTokenAccountsByOwner`; cached in `cache/.../_verify_addrs.json` so each reload enumerates the same set.  
+- **Program IDs** – DefiTuna staking program `tUnst2Y2sbmgSgARBpSBZhqPzpoy2iUsdCwb5ToYVJa`, Orca/Fusion DEX IDs, and any pool program IDs referenced in logs.  
+- **Token mints** such as WSOL (`So111...112`) and TUNA; mint metadata is used for conversion and labeling.
 
-**Expected information:**
-```
-Example: "We query Solana mainnet via [provider name]. We monitor the following accounts:
-- DefiTuna Treasury wallet: [address]
-- DefiTuna Program ID: [address]
-- Related pool accounts: [how identified]
-RPC calls include: getTransaction, getSignaturesForAddress, getProgramAccounts, etc."
-```
+**Secondary enumeration providers**  
+- `full_cache_reload.py` auto-selects SolanaFM for today/yesterday ranges and Alchemy for older days, falling back to Helius if either provider errors. This keeps signature enumeration fast while preserving full historical coverage.
+
+**Supplemental APIs**  
+- DefiTuna pool metadata (`https://api.defituna.com/api/v1/pools`) and Helius token metadata endpoints to keep `pool_labels.json` and token info fresh.  
+- Manual CSV + oracle prices for the APR tooling (`tools/compute_apy_data.py`) so APY charts can stitch historical and live data.  
+- GoatCounter analytics script in the frontend (`frontend/docusaurus.config.ts:31-36`) for privacy-friendly usage telemetry.
+
+**RPC methods & rate limiting**  
+- Enumeration uses `getSignaturesForAddress` (seeded with previous day’s first signature) and `getTokenAccountsByOwner`.  
+- Transaction fetches use batched `getTransaction` calls (batches of 50, fixed two-second delay between batches, three retries with respect for `Retry-After`).  
+- Occasional `getAccountInfo`/`getProgramAccounts` lookups enrich unknown transactions during classification.  
+- This setup processes ~1.5k transactions in 2–5 minutes and stays within the paid Helius quota.
 
 ### 2. Data Collection & Ingestion
 
-**[BACKEND REQUIRED]**
+`solana_analytics/full_cache_reload.py` is the single entry point for ingesting on-chain data. It is intentionally conservative—no mutable database, only deterministic files under `cache/`.
 
-*Instructions for backend documentation: Explain the collection methodology:*
-- What scripts/modules handle the initial data fetching?
-- How are transactions identified as relevant (filtering logic)?
-- What time range is collected (all historical data vs recent period)?
-- How is data stored initially (database, files, in-memory)?
-- Update frequency (real-time, hourly, daily, manual)?
-- How do you handle gaps or missing data?
-- What metadata is extracted from each transaction?
+**Processing loop (per date):**
+1. **Refresh monitored addresses** via `_refresh_verify_addrs` (PDA + ATAs) and write `_verify_addrs.json` so future runs use the same set.
+2. **Enumerate signatures** with `_collect_signatures_for_day`, honoring `--pda-only` or `--include-atas`, seeding from the prior day’s first signature, and automatically choosing SolanaFM/Alchemy/Helius.
+3. **Fetch transactions** in JSON-RPC batches (`_fetch_transactions_for_signatures`). Responses are filtered to the target UTC day and deduplicated.
+4. **Classify & enrich** transactions through `_classify_transactions`, which performs a log-based pass, enriches “unknown” signatures with standard `getTransaction`, and produces a labeled record per signature.
+5. **Persist raw cache** as `YYYY/MM/DD.jsonl.gz`. Files are sorted chronologically and end with a sentinel metadata row (`termin`, `count`, `first_sig`, etc.) that downstream scripts can validate against.
+6. **Generate attribution** immediately after a successful write by invoking `_generate_realized_types_for_day`, which produces `.realized.json` (and optional `.ledger_state.json` if ledger persistence is enabled).
 
-**Expected information:**
-```
-Example: "The collection process runs via [script name].py which:
-1. Queries getSignaturesForAddress for the treasury wallet
-2. Filters for [specific criteria]
-3. Stores raw data in [storage method]
-4. Runs [frequency] to capture new transactions
-5. Handles blockchain reorganizations by [method]"
-```
+**Scope & cadence**
+- We reload full historical ranges whenever attribution logic changes, and run incremental loads (typically daily) to append new days. `--resume` skips dates that already exist on disk.
+- Because cache files live under versioned directories, regenerations simply overwrite the affected day after copying the previous file into `cache_backup/`.
+- Any gaps (RPC errors, partial days) are surfaced as missing cache files; rerunning `full_cache_reload.py` for that date regenerates both raw and realized data deterministically.
+
+**Metadata captured per transaction**
+- Signature, timestamp (`timestamp` and `blockTime`), `tokenTransfers`, `nativeTransfers`, `logMessages`, `loadedAddresses`, fee payer, status, and the classifier output (`tx_type`, pool annotations, etc.). This rich record allows every downstream tool to work without calling RPC again.
 
 ### 3. Transaction Classification System
 
-**[BACKEND REQUIRED]**
+All labeling happens inside `solana_analytics/tx_classifier.py`. The current engine is 100 % log-based—no brittle instruction parsing or hard-coded account indexes.
 
-*Instructions for backend documentation: Describe the classification engine:*
-- How does the log-based analysis work?
-- What is the structure of `transaction_types_config.json`? (provide example)
-- How are patterns matched (regex, exact match, instruction parsing)?
-- What attributes are used for classification (program IDs, instruction data, log messages)?
-- How do you handle transactions that match multiple patterns?
-- What happens with unclassified transactions?
-- How is the classification config maintained/updated?
+**How it works**
+1. The classifier receives the rich transaction object emitted during ingestion (logs, token transfers, account keys, loaded addresses, fee payer).  
+2. `log_parser.classify_transaction_from_logs` extracts instruction names from `logMessages`. These names are normalized (lowercase, underscores removed) so variants such as `OpenPositionWithLiquidity` and `open_position_with_liquidity` resolve to the same key.  
+3. The normalized name is looked up in the transaction type manager (`config/transaction_types.py`) which loads `config/transaction_types_config.json`. That file defines display names, revenue flags, cluster colors, and optional helpers like variant splitting.  
+4. If multiple detectors could match, priority is resolved by configuration order and explicit `priority` values. If nothing matches, the transaction is tagged as `unknown` and later analysis highlights it.
 
-**Expected information:**
+**Configuration structure (excerpt)**
+```json
+{
+  "CollectProtocolFees": {
+    "display_name": "Collect Protocol Fees",
+    "description": "Revenue from protocol fee collection",
+    "include_in_revenue": true,
+    "cluster": "Protocol fees",
+    "color": "#2E86AB",
+    "priority": 1
+  },
+  "StakingStake": {
+    "display_name": "Staking Stake",
+    "description": "User deposits that remain withdrawable",
+    "include_in_revenue": false,
+    "cluster": "Staking ops",
+    "priority": 50
+  }
+}
 ```
-Example: "Classification uses tx_classifier.py which:
-1. Parses transaction logs for key patterns
-2. Matches against rules in transaction_types_config.json
-3. Config structure:
-   {
-     "SwapReward": {
-       "patterns": ["string to match"],
-       "program_ids": ["..."],
-       "priority": 1
-     }
-   }
-4. Transactions are assigned to the highest priority matching type
-5. Fallback category is 'Unknown'"
-```
 
-**Reference:** The by-type.mdx page mentions this system (lines 138-145) but needs technical details.
+**Maintenance & discovery**
+- `tools/generate_realized_types.py` can optionally persist newly discovered types back into the config (under a gated flag) so analysts can audit them later.  
+- Because the classifier relies on logs, adding a new type typically means capturing the new instruction name, assigning metadata in the config, and re-running `full_cache_reload.py` for affected days.  
+- Unknown counts are printed during reloads (`classification breakdown`), making it obvious when the config lags behind on-chain behavior.
 
 ### 4. Pool Attribution Logic
 
-**[BACKEND REQUIRED]**
+Pool attribution lives in `solana_analytics/config/pools.py` and mirrors how analysts reason about the flows in the dashboard.
 
-*Instructions for backend documentation: Explain pool identification:*
-- How are pool addresses extracted from transactions?
-- What is the structure of `pool_labels.json`? (provide example)
-- How do you identify which protocol a pool belongs to (Orca, Fusion, etc.)?
-- What is the fallback logic for unlabeled pools?
-- How are pool labels maintained and updated?
-- Do you auto-generate labels for new pools?
+**Detection flow**
+1. While processing each transaction, we inspect every account surface: `tokenTransfers.fromUserAccount/toUserAccount`, the main `accountKeys` array, and `loadedAddresses`.  
+2. Any account that matches a known pool ID is captured immediately. If multiple pools appear (e.g., multi-hop operations), the classifier applies deterministic tie-breakers and falls back to `unknown_pool` if ambiguity remains.  
+3. If no explicit match exists, we attempt a mint-based match: when a mint (or mint pair) uniquely maps to a pool in `pool_labels.json`, we attribute the transaction to that pool even if the program-derived vault never exposed its address in the transfer list.
 
-**Expected information:**
+**`pool_labels.json` structure (abridged)**
+```json
+{
+  "overrides": {
+    "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE": {
+      "name": "Orca SOL-USDC Whirlpool",
+      "protocol": "Orca Whirlpool",
+      "aliases": [
+        "EUuUbDcafPrmVTD5M6qoJAoyyNbihBhugADAxRMn5he9"
+      ],
+      "mints": [
+        "So11111111111111111111111111111111111111112",
+        "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+      ]
+    }
+  },
+  "auto_generated": { "...": { "name": "Fusion SOL-USDC", "protocol": "Fusion" } },
+  "mint_overrides": {
+    "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v": [
+      "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE"
+    ]
+  },
+  "defaults": {
+    "fusion": "Fusion pool {short}",
+    "orca whirlpool": "Orca Whirlpool {short}",
+    "default": "Pool {short}"
+  }
+}
 ```
-Example: "Pool attribution process:
-1. Extract pool account from transaction accounts array (position [X])
-2. Look up address in pool_labels.json:
-   {
-     "pool_address": {
-       "label": "SOL-USDC Orca Whirlpool",
-       "protocol": "Orca",
-       "pair": "SOL-USDC"
-     }
-   }
-3. If not found, identify protocol from program ID
-4. Generate temporary label like 'Orca Pool abc123...'
-5. Manual review process adds proper labels"
-```
 
-**Reference:** The by-pool.mdx page outlines this (lines 137-143) but needs implementation details.
+**Label maintenance**
+- `tools/refresh_pool_labels.py` scans the cache and latest `_last_run_realized.json`, merges in DefiTuna pool metadata, and writes new entries under `auto_generated`.  
+- During every frontend export, `tools/precompute_site_data.py` refreshes pool labels first, then recomputes aggregations. That means newly discovered pools appear in charts as soon as the next export runs—no manual edits required unless we want to “pin” a nicer override label.
+
+**Fallback behavior**
+- If a transaction references a pool we have never seen, the system assigns `unknown_pool` so analysts can review it. We treat growing `unknown_pool` totals as a signal to add overrides or extend the heuristics.
 
 ### 5. Token Conversion & Normalization
 
-**[BACKEND REQUIRED]**
+The SOL normalization logic is embedded in `tools/generate_realized_types.py`. Every transaction runs through the same steps, which guarantees that the “By Token” and “By Type” charts reconcile perfectly.
 
-*Instructions for backend documentation: Explain SOL conversion methodology:*
-- How are non-SOL tokens converted to SOL equivalents?
-- Where do conversion rates come from (on-chain swaps, oracles, external APIs)?
-- What does "same-day pricing" mean technically?
-- How do you handle tokens without clear conversion rates?
-- Is there a fallback rate source?
-- How is WSOL handled (1:1 assumption)?
+**Pending-ledger model**
+- Non-WSOL inflows (USDC, JUP, BONK, long-tail tokens) are recorded in a three-level ledger: `pending_ata_by_mint[mint][pool_id][tx_type] = amount`.  
+- When a SwapReward/conversion transaction later swaps those tokens to WSOL, the script distributes the realized SOL back to the original ledger entries proportionally. This prevents double-counting (the swap itself is not revenue; the underlying inflows are).
 
-**Expected information:**
-```
-Example: "Token-to-SOL conversion:
-1. Each token inflow includes timestamp
-2. We extract actual swap rates from treasury's own swap transactions
-3. For token X on day Y, we use the weighted average rate from all swaps that day
-4. If no swap exists for that day, we [fallback method]
-5. WSOL is counted 1:1 with SOL
-6. Conversion rates are stored in [location] for auditability"
-```
+**Price sources**
+- Primary source: the conversion rate observed in the SwapReward transaction itself (WSOL received ÷ tokens spent). That is the definition of “same-day pricing”—we only trust swaps executed by the treasury and only on the day they occur.  
+- Secondary source: if a mint is never swapped (e.g., airdropped tokens), `load_day_assets` + `load_global_price_cache` provides a WSOL- or USD-denominated price for that mint on that day. These caches are refreshed whenever new assets appear.  
+- WSOL is treated as a 1:1 SOL equivalent, so direct WSOL inflows (`wsol_direct`) require no conversion.
 
-**Reference:** The by-token.mdx page has a basic explanation (lines 153-161) that can be expanded.
+**Fallback handling**
+- If neither a swap nor a cached price exists, the amount stays in the ledger until a swap occurs. This is rare because ledger persistence carries balances across days via `*.ledger_state.json`.  
+- The export clearly shows such pending balances (`pending_by_mint` fields) so analysts can spot days where tokens have not yet been realized.
+
+**Auditability**
+- Every `.realized.json` file contains both the mint-level totals (`realized_by_mint`) and the type-level totals (`realized_by_type`), along with any `pending_by_mint` residue. Recomputing SOL equivalents from these files will exactly match the charts served to the frontend.
 
 ### 6. Data Aggregation & Export
 
-**[BACKEND REQUIRED]**
+Aggregation is a two-step process:
 
-*Instructions for backend documentation: Explain aggregation and JSON generation:*
-- What scripts generate the final JSON files?
-- How are aggregations calculated (SQL queries, pandas, custom logic)?
-- What is the logic for "top N" selection (e.g., top tokens by value)?
-- How are daily aggregations performed?
-- What triggers the JSON export process?
-- Where are JSON files written?
-- How is data validated before export?
+1. **`treasury_analytics.py`** scans the realized files and builds `_last_run_realized.json`. This pass:  
+   - Recomputes totals by mint/type/pool/day using streaming dictionaries (no pandas).  
+   - Captures top transactions per mint, type, and pool during the same pass (heap-limited to keep only the largest entries).  
+   - Optionally compares every day against the DefiTuna public API when `--debug-totals` is supplied.  
+   - Stores diagnostic fields (`wsol_direct_total`, `largest_inflow_signature`, etc.) so we can inspect anomalies quickly.
 
-**List the key JSON files and their purposes:**
-- `summary.json` - Contains what?
-- `daily_stacked.json` - Contains what?
-- `daily_by_token.json` - Contains what?
-- `daily_by_type.json` - Contains what?
-- `daily_by_pool.json` - Contains what?
-- `top_transactions_token.json` - Contains what?
-- `top_transactions_type.json` - Contains what?
-- `top_transactions_pool.json` - Contains what?
-- `top_transactions_pool_type.json` - Contains what?
-- `pool_type_summary.json` - Contains what?
-- `daily_by_pool_type.json` - Contains what?
-- `_manifest.json` - Contains timestamp of data generation
+2. **`tools/precompute_site_data.py`** converts `_last_run_realized.json` plus auxiliary caches (staker cache, usage metrics, APR data) into the JSON bundle consumed by the frontend. The script always refreshes pool labels first, then writes into `../frontend/static/data/`.
 
-**Expected information:**
-```
-Example: "JSON generation via [script name].py:
-1. Reads processed data from [source]
-2. Aggregates by dimensions:
-   - By token: GROUP BY mint, SUM(sol_amount)
-   - By type: GROUP BY transaction_type, SUM(sol_amount)
-   - By pool: GROUP BY pool_id, SUM(sol_amount)
-3. Top N selection: ORDER BY total_sol DESC LIMIT N
-4. Daily aggregations: GROUP BY date, dimension
-5. Writes JSON to output/ directory
-6. Validation checks: [list checks]
-7. Updates _manifest.json with generation timestamp"
-```
+**Key outputs**
+- `summary.json` – overall totals, date range, top tokens/pools/types, key metrics (30 d revenue, FDV, weekly wallets, etc.).  
+- `daily_stacked.json` – stacked SOL per source (Orca, Fusion, Other) plus cumulative totals.  
+- `daily_by_token.json` / `daily_by_type.json` / `daily_by_pool.json` / `daily_by_pool_type.json` – day-level time series sliced by the respective dimension.  
+- `top_transactions_token.json` / `top_transactions_type.json` / `top_transactions_pool.json` / `top_transactions_pool_type.json` – for each dimension, the top transactions sorted by SOL, including signature, timestamp, pool label, token name, and type.  
+- `pool_type_summary.json` – Marimekko-style cross-tab of pools vs transaction types, trimmed to keep the UI performant.  
+- `usage_metrics.json`, `staking_tuna.json`, `staker_loyalty.json`, `wallet_revenue_attribution.json`, `pool_ramp_up.json`, `position_metrics.json`, `apy_data.json`, `key_metrics.json` – specialized datasets feeding the Usage, Staking, Wallet, and APR tabs.
+
+**Manifest handling**  
+`_manifest.json` (stored in `frontend/static/data/_manifest.json`) is updated manually after each export and records the ISO timestamp, treasury address, and date range published. The navbar reads this file to show “Last updated”.
+
+**Validation**  
+- Every export reuses the deterministic `.realized.json` files, so rerunning the pipeline produces byte-identical JSON (aside from timestamps).  
+- `treasury_analytics.py --debug-totals` raises alerts when a day deviates from the DefiTuna API by >0.001 SOL.  
+- If any JSON write fails, `precompute_site_data.py` stops with a non-zero exit so we never deploy partial bundles.
 
 **Data Flow Diagram:**
 
@@ -403,8 +406,8 @@ switch (groupMode) {
 
 **Label Formatting:**
 - Pool labels: Swaps protocol and pair for better readability
-  - "Orca (SOL-USDC)" becomes "SOL-USDC<br>Orca"
-- Long labels: Automatically wrapped with `<br>` tags
+  - "Orca (SOL-USDC)" becomes "SOL-USDC<br />Orca"
+- Long labels: Automatically wrapped with `<br />` tags
 - Labels rendered in Plotly with HTML support
 
 **Interactivity:**
@@ -498,134 +501,80 @@ title: Revenue by [Token/Type/Pool]
 
 #### Revenue Attribution System
 
-**[BACKEND REQUIRED]**
+Revenue attribution happens inside `tools/generate_realized_types.py`. The guiding rule is “count every inflow exactly once, classify it once, and attribute it simultaneously to a token, a transaction type, and a pool.”
 
-*Instructions for backend documentation: Explain the revenue attribution methodology:*
-- How are "treasury inflows" defined? (all transfers to treasury wallet?)
-- How do you distinguish revenue vs non-revenue transactions?
-- What makes a transaction count as "revenue"?
-- Are there any exclusions (internal transfers, etc.)?
-- How is attribution by token/type/pool performed simultaneously?
-- What happens if a transaction involves multiple tokens or pools?
+**What counts as revenue?**
+- Any increase in the treasury PDA or its ATAs that originates from protocol activity (fee collections, position adjustments, SwapReward conversions, etc.).  
+- Staking operations, user deposits, authority changes, and internal bookkeeping transactions are explicitly marked `include_in_revenue: false` in `transaction_types_config.json`, so they show up in the cache but never in the SOL totals.
 
-**Expected information:**
-```
-Example: "Revenue attribution process:
-1. Monitor treasury wallet address: [address]
-2. Identify inflow transactions (increases in token balance)
-3. Exclude: [list exclusions like internal transfers]
-4. For each inflow:
-   - Extract token mint (attribute to token dimension)
-   - Classify transaction type via log analysis (attribute to type dimension)
-   - Identify pool from transaction accounts (attribute to pool dimension)
-   - Convert amount to SOL using conversion rates
-5. Each transaction has one token, one type, one pool (or 'Unknown')
-6. Store multi-dimensional attribution for flexible aggregation"
-```
+**Processing steps per transaction**
+1. Load the raw transaction and classify it (Section 3).  
+2. Identify whether tokens or native SOL moved **into** the treasury; ignore outflows.  
+3. Attribute the mint to the token dimension immediately.  
+4. Attribute the log-derived type (e.g., `fusion_collectprotocolfees`, `staking_swaprewardorca`).  
+5. Resolve the pool via `identify_pool_for_transaction`. If no pool matches, default to `unknown_pool` so analysts can backfill later.  
+6. Convert the amount to SOL using the SwapReward rate or the price cache (Section 5) and add it to `realized_by_mint`, `realized_by_type`, and `realized_by_pool` simultaneously.
+
+Because every transaction produces a single token/type/pool triple, the frontend can pivot the same `.realized.json` data into any combination of charts without discrepancies. Ledger persistence (carrying token balances across days) ensures long-lived positions like “collect protocol fees over a month, swap once” still reconcile to 100 % of the treasury inflows.
 
 #### Staking Analytics
 
-**[BACKEND REQUIRED]**
+Staking analytics pull directly from the same raw cache but focus on the staking program rather than treasury inflows.
 
-*Instructions for backend documentation: Explain staking data methodology:*
-- How is staking activity identified on-chain?
-- What defines a "staker" (any wallet that has staked)?
-- How is staked amount calculated (snapshot vs cumulative)?
-- APY calculation methodology
-- Wallet classification approach (whale, regular user, etc.)
-- Conviction scoring system (what is it? how calculated?)
-- Time series aggregation for staking metrics
+**Identification**
+- Any transaction whose classified type starts with `staking_` is treated as a staking event (stake, unstake, withdraw, claim, compound, swapreward helper).  
+- Events are fed into `tools/build_staker_cache.py`, which produces a compact history of every wallet’s stake/unstake timeline.
 
-**Expected information:**
-```
-Example: "Staking analytics:
-1. Monitor staking program: [program ID]
-2. Track stake/unstake instructions
-3. Maintain wallet state:
-   - Current staked amount per wallet
-   - Stake duration
-   - Historical stake/unstake events
-4. APY calculation: [formula]
-5. Wallet classification:
-   - Whale: > X TUNA staked
-   - Regular: Y-X TUNA staked
-   - Small: < Y TUNA staked
-6. Conviction score: [explanation]"
-```
+**Aggregations**
+- `tools/compute_tuna_staking_metrics.py` replays the cache to build `staking_tuna.json`. It tracks daily total balance, estimated staked vs unstaked split, deltas, and top net stakers/withdrawers over the past 7 days. When on-chain deltas cannot determine the exact split, the script fetches the latest total from `https://api.defituna.com/api/v1/staking/treasury` and re-normalizes history so charts stay aligned with reality.  
+- `tools/compute_apy_data.py` uses the same data plus manual/oracle price inputs to produce “Reference APR” and “Your APR”, the two series rendered by `ApyChart`.
 
-**Related Pages:**
-- Staked TUNA analysis
-- Staker Conviction metrics
-- Wallet Timeline view
-- Staking APY calculations
+**Wallet-level insights**
+- `tools/compute_staker_loyalty_metrics.py` combines the staker cache with reward amounts to measure behavior. Outputs include:  
+  - Stake-size cohorts (mega >10 M TUNA, large 1‑10 M, medium 100k‑1 M, small &lt;100k).  
+  - Compound vs claim counts and aggregate rewards per wallet.  
+  - A scatter plot dataset for “compound rate vs stake size” used in the conviction chart.  
+  - Weekly aggregates of claim vs compound volume.
+
+These datasets feed the “Staked TUNA”, “Staker Conviction”, and “Wallet Timeline” pages in the frontend, enabling analysts to trace how staking health evolves over time.
 
 #### Usage Statistics
 
-**[BACKEND REQUIRED]**
+Usage metrics are generated by `tools/compute_usage_metrics.py` and stored in `frontend/static/data/usage_metrics.json`.
 
-*Instructions for backend documentation: Explain usage tracking:*
-- How are "users" identified (wallets, sessions, other)?
-- What activities count as "usage"?
-- Daily/weekly aggregation logic
-- User classification (new vs returning, active vs inactive)
-- How do you handle bot/spam accounts?
-- What metrics are tracked?
-
-**Expected information:**
-```
-Example: "Usage statistics:
-1. User = unique wallet address interacting with protocol
-2. Activities tracked:
-   - Swaps
-   - Stakes/unstakes
-   - Liquidity provisions
-   - [other activities]
-3. Daily aggregation: COUNT DISTINCT wallet_address per day
-4. Weekly aggregation: COUNT DISTINCT wallet_address per week
-5. User classification:
-   - New user: first transaction in period
-   - Returning: prior transaction > 7 days ago
-   - Active: transaction in last 7 days
-6. Bot filtering: [describe approach]"
-```
+- **User definition:** distinct signer addresses (fee payer + message signers) extracted from each classified transaction.  
+- **Cohorts:**  
+  - *Stakers* – signers involved in staking instructions (`staking_stake`, `staking_unstake`, `staking_withdraw`, `staking_claim_reward`).  
+  - *Daily active users* – signers whose classified transaction names include verbs such as `collect`, `compound`, `open`, `liquidate`, `add`, `increase`, `decrease`, `close`, or `remove`, excluding `token_transfer` and `unknown`.  
+- **Daily & weekly aggregation:** sets of addresses per UTC day feed `daily_counts`, and a 7‑day rolling window builds `weekly_users.rolling_counts`.  
+- **Top wallets:** `_serialize_top_addresses` ranks wallets by `days_active`, `iso_weeks`, or total transactions so the frontend can display “Top addresses” tables.  
+- **Bot handling:** there is no automated filter today—suspicious addresses can be removed manually before publishing—but the transparent JSON makes review straightforward.
 
 **Related Pages:**
-- Daily Users metrics
-- Weekly active users
-- User retention analysis
+- Usage time series chart
+- Weekly active wallets metric cards
+- Top addresses tables
 
 ---
 
 ## Part IV: Data Quality & Validation
 
-**[BACKEND REQUIRED]**
+**Automated checks**
+1. `comprehensive_realized_sol_check.py` recomputes WSOL inflows from the raw cache and compares them to the realized totals (tolerance ≤ 0.01 SOL).  
+2. `scripts/compare_attribution_day.py YYYY-MM-DD` highlights any single-day gaps and prints the underlying transactions.  
+3. `treasury_analytics.py --debug-totals` compares each day’s total against the DefiTuna API; divergences > 0.001 SOL halt the pipeline.  
+4. Cache sentinels ensure `.jsonl.gz` files are complete—if the terminating metadata row is missing, downstream scripts refuse to read the file.  
+5. Ledger persistence prevents “lost” SOL across days; `.ledger_state.json` files record every pending token balance.  
+6. Frontend exports only run after all validations pass, ensuring charts always reconcile to 100 % of the treasury inflows.
 
-*Instructions for backend documentation: Explain quality assurance:*
-- What validation checks run before data export?
-- How do you verify 100% attribution (no missing SOL)?
-- What are known data limitations or edge cases?
-- How are errors or anomalies handled?
-- What is the data update schedule?
-- How is historical consistency maintained when logic changes?
+**Known limitations & mitigations**
+- New transaction types initially appear as `unknown` until the classifier is updated; reloads retroactively apply the fix.  
+- If an entirely new pool appears, it is labeled `unknown_pool` until the next pool-label refresh.  
+- `_manifest.json` is updated manually, so the “Last updated” timestamp reflects the human-approved export, not intermediate experiments.
 
-**Expected information:**
-```
-Example: "Data validation:
-1. Pre-export checks:
-   - Sum of all attributions = total treasury inflow
-   - No null values in required fields
-   - All transactions have valid timestamps
-   - Token conversion rates exist for all tokens
-2. Attribution completeness:
-   - Every transaction has exactly one type, one token, one pool
-   - Totals across dimensions match overall total
-3. Known limitations:
-   - [list any known issues or edge cases]
-4. Update schedule: [frequency]
-5. Historical consistency:
-   - When classification logic changes, historical data is reprocessed
-   - Conversion rates remain fixed (no retroactive price updates)"
-```
+**Front-end freshness**
+- `useManifest` reads `/static/data/_manifest.json` and shows the latest `generated_at` timestamp in the navbar.  
+- Because Docusaurus fingerprints static assets, pushing a new export automatically busts browser caches.
 
 ### Frontend Data Freshness
 
@@ -678,76 +627,77 @@ frontend/
 
 **Backend Repository (solana_analytics):**
 
-**[BACKEND REQUIRED]**
-
-*Instructions: Provide the directory structure and key files:*
-- Main entry points (scripts that run the pipeline)
-- Data collection modules
-- Classification engine files
-- Aggregation/export scripts
-- Configuration files
-- Documentation
-
-**Expected information:**
-```
-Example:
+`
 solana_analytics/
-├── collectors/
-│   └── transaction_collector.py    # Fetches blockchain data
-├── processors/
-│   ├── tx_classifier.py            # Classification engine
-│   ├── revenue_attributor.py       # Revenue attribution logic
-│   └── aggregator.py               # Data aggregation
-├── exporters/
-│   └── json_exporter.py            # Generates JSON files
+├── full_cache_reload.py            # Enumerate → fetch → classify → cache
+├── treasury_analytics.py           # Aggregations + API cross-checks
+├── tx_classifier.py                # Log-based classification engine
+├── data_fetcher.py                 # Shared RPC helpers + price/cache loaders
+├── tools/
+│   ├── generate_realized_types.py  # Revenue attribution + ledger state
+│   ├── precompute_site_data.py     # Builds frontend/static/data bundle
+│   ├── compute_usage_metrics.py
+│   ├── compute_tuna_staking_metrics.py
+│   ├── compute_staker_loyalty_metrics.py
+│   └── compute_apy_data.py
 ├── config/
 │   ├── transaction_types_config.json
 │   └── pool_labels.json
-└── [describe structure]
-```
-
+├── docs/ (methodology, revenue attribution, workflows)
+└── cache/ (gitignored deterministic raw/reconciled files)
+`
 ### Key Configuration Files
 
-**[BACKEND REQUIRED]**
+**`config/transaction_types_config.json`**  
+- Defines every transaction label the classifier recognizes: display name, description, `include_in_revenue` flag, color/cluster, and priority.  
+- Example entry shown in Section 3. Updating this file immediately affects the classifier; after editing we rerun `full_cache_reload.py` to apply the change across history.
 
-*Instructions: For each config file, provide:*
-- File path
-- Purpose
-- Structure (example snippet)
-- How it's maintained
-- How to update
+**`config/pool_labels.json`**  
+- Stores manual overrides, auto-generated labels, alias lists, and mint overrides for every known pool.  
+- `tools/refresh_pool_labels.py` and `tools/precompute_site_data.py` keep the `auto_generated` section fresh; analysts only need to edit `overrides` when naming conventions should be fixed permanently.
 
-**Expected files:**
-- `transaction_types_config.json` - Transaction classification rules
-- `pool_labels.json` - Pool address to label mapping
-- [Any other config files]
+**`constants.py`**  
+- Centralizes RPC keys, treasury addresses, program IDs, and default cache paths. Frontend docs reference these values to avoid drift between repos.
+
+**`tools/analysis/manual_tuna_prices.csv` (referenced by APR tooling)**  
+- Houses historical TUNA price captures for periods where the oracle lacked data. `tools/compute_apy_data.py` merges this CSV with live oracle quotes.
 
 ### Data Update Workflow
 
-**[BACKEND REQUIRED]**
+1. **Reload or extend the cache** (manual command when new data is available or logic changed):  
+   ```bash
+   cd solana_analytics
+   python full_cache_reload.py G9XfJoY81n8A9bZKaJFhJYomRrcvFkuJ22em2g8rZuCh \
+     --start-date YYYY-MM-DD --end-date YYYY-MM-DD --cache-dir cache --verbose
+   ```  
+   Typical daily window (1–2 days) finishes in ~3–5 minutes including classification and realized-file generation.
 
-*Instructions: Document the end-to-end update process:*
-1. How is data collection triggered? (manual, cron, CI/CD)
-2. What commands are run?
-3. How long does the process take?
-4. Where are JSON files written?
-5. How are they transferred to frontend repo?
-6. How is the frontend rebuilt and deployed?
-7. What monitoring/alerting exists?
+2. **Regenerate aggregates and top transactions:**  
+   ```bash
+   python treasury_analytics.py --since 2025-07-24 --until 2025-11-07 \
+     --cache-dir cache --debug-totals
+   ```  
+   This produces `_last_run_realized.json` and logs any deviation vs the DefiTuna API.
 
-**Expected information:**
-```
-Example:
-1. Daily cron job at 00:00 UTC runs: python main.py --collect
-2. Collection takes ~10 minutes
-3. Processing runs: python main.py --process
-4. Export runs: python main.py --export --output=./output/
-5. JSON files copied to frontend/static/data/
-6. _manifest.json updated with timestamp
-7. Frontend CI/CD triggered via commit or manual deployment
-8. Site rebuilds in ~5 minutes
-9. New data visible to users
-```
+3. **Export frontend bundle:**  
+   ```bash
+   python tools/precompute_site_data.py G9XfJoY81n8A9bZKaJFhJYomRrcvFkuJ22em2g8rZuCh \
+     --start-date 2025-07-24 --end-date 2025-11-07 \
+     --cache-dir cache --out-dir ../frontend/static
+   ```  
+   Files land in `../frontend/static/data/*.json`. Running this command also refreshes pool labels and auxiliary datasets (usage, staking, APR, wallet attribution).
+
+4. **Update `_manifest.json`:** manually write the new timestamp/date range in `frontend/static/data/_manifest.json` so the navbar reflects the publish time.
+
+5. **Rebuild the site (user-triggered per CLAUDE.md):**  
+   ```bash
+   cd ../frontend
+   npm run build
+   npm run start   # optional local preview
+   ```  
+   Commit the changed JSON + manifest + any doc edits, then push to GitHub Pages (or run `npm run deploy` if desired).
+
+6. **Monitoring:** GoatCounter provides page-level analytics, and the debug logs from steps 1–3 show any anomalies (unknown classifications, API mismatches, missing price data). There is no automated cron—runs are initiated manually to keep costs predictable.
 
 ---
 
@@ -755,7 +705,7 @@ Example:
 
 ### Complete Data Pipeline
 
-**[BACKEND REQUIRED - Can be enhanced with specific script names]**
+(Collector = `full_cache_reload.py`, Classifier = `tx_classifier.py`, Aggregator = `treasury_analytics.py`, Exporter = `tools/precompute_site_data.py`)
 
 ```mermaid
 graph TD
@@ -819,7 +769,7 @@ sequenceDiagram
 
 ### Revenue Attribution Flow
 
-**[BACKEND REQUIRED - Add specific implementation details]**
+(Implementation inside `tools/generate_realized_types.py` – pending ATA ledger + SwapReward redistribution)
 
 ```mermaid
 graph LR
