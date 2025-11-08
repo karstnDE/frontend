@@ -14,6 +14,11 @@ export interface StakingTopEntry {
   amount: number;
 }
 
+export interface ActiveStakersRecord {
+  date: string;
+  count: number;
+}
+
 export interface StakingMetrics {
   generated_at: string;
   date_range: {
@@ -24,6 +29,9 @@ export interface StakingMetrics {
     max: number;
   };
   daily: StakingDailyRecord[];
+  active_stakers?: {
+    daily_counts: ActiveStakersRecord[];
+  };
   top_stakers_7d: StakingTopEntry[];
   top_withdrawers_7d: StakingTopEntry[];
 }

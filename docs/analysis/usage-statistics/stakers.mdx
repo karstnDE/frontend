@@ -12,10 +12,16 @@ import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
   {() => {
     const UsageTimeSeriesChart = require('@site/src/components/Usage/UsageTimeSeriesChart').default;
     const UsageTopAddresses = require('@site/src/components/Usage/UsageTopAddresses').default;
+    const { useStakingMetrics } = require('@site/src/hooks/useStakingMetrics');
     const { useUsageMetrics } = require('@site/src/hooks/useUsageMetrics');
 
     function StakerUsagePage() {
-      const { data, loading, error } = useUsageMetrics();
+      const { data: stakingData, loading: stakingLoading, error: stakingError } = useStakingMetrics();
+      const { data: usageData, loading: usageLoading, error: usageError } = useUsageMetrics();
+
+      const loading = stakingLoading || usageLoading;
+      const error = stakingError || usageError;
+      const data = stakingData && usageData ? { staking: stakingData, usage: usageData } : null;
 
       if (loading) {
         return <LoadingSpinner />;
@@ -24,28 +30,29 @@ import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
       if (error || !data) {
         return (
           <div className="alert alert--danger" role="alert">
-            <strong>Could not load usage metrics.</strong> {error || 'Unknown error'}
+            <strong>Could not load staking metrics.</strong> {error || 'Unknown error'}
           </div>
         );
       }
 
-      const { stakers } = data;
+      const { staking, usage } = data;
+      const activeStakersData = staking.active_stakers?.daily_counts || [];
 
       return (
         <>
           <p>
-            Stakers are wallets interacting with the staking program (stake, unstake, withdraw or manage rewards). Tracking
-            these addresses highlights how capital allocates into and out of DefiTuna staking.
+            This page tracks the number of wallets with active TUNA stakes at each point in time.
+            The count increases when wallets stake and decreases when wallets fully unstake their positions.
           </p>
           <UsageTimeSeriesChart
-            title="Daily Stakers"
-            data={stakers.daily_counts}
-            yAxisLabel="Wallets"
-            description="Unique wallets performing staking operations per UTC day."
+            title="Active Stakers"
+            data={activeStakersData}
+            yAxisLabel="Wallets with Active Stakes"
+            description="Number of unique wallets with staked TUNA balance > 0 at the end of each UTC day."
           />
           <UsageTopAddresses
             title="Top Staker Wallets"
-            rows={stakers.top_wallets}
+            rows={usage.stakers.top_wallets}
             description="Ranked by the number of distinct days a wallet executed staking instructions."
           />
         </>
