@@ -13,8 +13,6 @@ Stakers can choose to **compound** their rewards (reinvesting back into TUNA) or
 
 {/* Note: Statistics below are populated dynamically from the data pipeline */}
 
-**Key Insight**: The data reveals a surprising "Inverse Whale Effect" - medium-tier stakers demonstrate the highest conviction, not the largest holders.
-
 <BrowserOnly fallback={<LoadingSpinner />}>
   {() => {
     const { useStakerLoyalty } = require('@site/src/hooks/useStakerLoyalty');
@@ -87,118 +85,13 @@ Stakers can choose to **compound** their rewards (reinvesting back into TUNA) or
 
           <BehaviorPieChart userSegments={user_segments} totalUsers={summary.total_users} />
 
-          {visualizations && (
-            <>
-              <div style={{ marginBottom: '32px' }}>
-                <h3>Position Size Distribution</h3>
-                <p>
-                  Understanding how TUNA holdings are distributed across the staker base reveals the
-                  protocol's user composition and potential concentration risks.
-                </p>
-              </div>
-
-              <StakeDistributionHistogram visualizations={visualizations} />
-            </>
-          )}
-
-          <div style={{ marginBottom: '32px' }}>
-            <h3>What This Tells Us</h3>
-            <p>
-              Nearly{' '}
-              <strong>
-                {user_segments.by_behavior.claim_only.percentage.toFixed(1)}% of active reward managers never
-                compound their rewards
-              </strong>
-              , treating staking primarily as yield farming rather than long-term investment. However, a
-              dedicated core of{' '}
-              <strong>
-                {user_segments.by_behavior.compound_only.percentage.toFixed(1)}% (
-                {user_segments.by_behavior.compound_only.count.toLocaleString()} users)
-              </strong>{' '}
-              exclusively compound, demonstrating strong protocol conviction.
-              {data.context?.current_active_stakers && (
-                <>
-                  {' '}Note: The remaining ~
-                  {(data.context.current_active_stakers - summary.total_users).toLocaleString()} current
-                  stakers either haven't claimed rewards yet or are passively holding their positions.
-                </>
-              )}
-            </p>
-          </div>
+          {visualizations && <StakeDistributionHistogram visualizations={visualizations} />}
 
           <InverseWhaleChart userSegments={user_segments} />
 
-          {visualizations && (
-            <>
-              <div style={{ marginBottom: '32px' }}>
-                <h3>Individual Position Analysis</h3>
-                <p>
-                  Examining the relationship between stake size and compound behavior at the
-                  individual wallet level reveals the "Inverse Whale Effect" - larger holders show
-                  weaker conviction than medium-tier stakers.
-                </p>
-              </div>
-
-              <CompoundVsStakeScatter visualizations={visualizations} />
-            </>
-          )}
-
-          <div style={{ marginBottom: '32px' }}>
-            <h3>Understanding the Paradox</h3>
-            <p>Why do smaller stakers show more loyalty than whales?</p>
-            <ul>
-              <li>
-                <strong>Medium stakers (0.1-1 SOL)</strong>: Core believers, likely community members
-                invested in long-term success
-              </li>
-              <li>
-                <strong>Whales (&gt;10 SOL)</strong>: More profit-oriented, likely professional yield
-                farmers
-              </li>
-              <li>
-                <strong>Small stakers (&lt;0.1 SOL)</strong>: Experimenting, learning the protocol
-              </li>
-            </ul>
-            <p>
-              This pattern suggests your <strong>most loyal community is in the middle tier</strong> -
-              these are the users most aligned with protocol success.
-              {data.context?.current_active_stakers ? (
-                <>
-                  {' '}Among the {data.context.current_active_stakers.toLocaleString()} current active stakers,
-                  the {summary.total_users.toLocaleString()} who actively manage rewards represent the most
-                  engaged segment of the protocol.
-                </>
-              ) : (
-                <>
-                  {' '}The {summary.total_users.toLocaleString()} users who actively manage rewards represent
-                  the most engaged segment of the protocol.
-                </>
-              )}
-            </p>
-          </div>
+          {visualizations && <CompoundVsStakeScatter visualizations={visualizations} />}
 
           <WeeklyTrendsChart weeklyTrends={weekly_trends} />
-
-          <div style={{ marginBottom: '32px' }}>
-            <h3>Trend Analysis</h3>
-            <p>
-              {(() => {
-                const rates = weekly_trends.map((w) => w.compound_rate);
-                const minRate = Math.min(...rates);
-                const maxRate = Math.max(...rates);
-                const avgRate = rates.reduce((sum, r) => sum + r, 0) / rates.length;
-                return (
-                  <>
-                    The weekly compound rate shows <strong>no clear upward trend</strong>, ranging from{' '}
-                    {minRate.toFixed(1)}% to {maxRate.toFixed(1)}% with an overall average of{' '}
-                    {avgRate.toFixed(1)}%. This suggests current behavior is stable rather than improving,
-                    indicating that compound rates reflect established user preferences rather than market
-                    conditions.
-                  </>
-                );
-              })()}
-            </p>
-          </div>
 
           <BehaviorSegmentsTable userSegments={user_segments} totalUsers={summary.total_users} />
 
@@ -211,7 +104,7 @@ Stakers can choose to **compound** their rewards (reinvesting back into TUNA) or
 
               <p>
                 <strong>Loyalty Score</strong>: Percentage of users who have only compounded rewards
-                (never claimed). These "true believers" demonstrate the highest protocol conviction.
+                (never claimed).
               </p>
 
               <p>
@@ -301,15 +194,13 @@ Stakers can choose to **compound** their rewards (reinvesting back into TUNA) or
                         current active)
                       </>
                     )}
-                    {' '}have claimed or compounded rewards during the analysis period. These represent the
-                    most engaged users who actively manage their positions.
+                    {' '}have claimed or compounded rewards during the analysis period.
                   </p>
                 </>
               ) : (
                 <p>
                   <strong>Reward Active Stakers</strong>: {summary.total_users.toLocaleString()} wallets have
-                  claimed or compounded rewards during the analysis period. These represent the most engaged
-                  users who actively manage their positions.
+                  claimed or compounded rewards during the analysis period.
                 </p>
               )}
             </div>
