@@ -11,12 +11,12 @@ const sidebars: SidebarsConfig = {
   // Analysis sidebar
   analysisSidebar: [
     'analysis/overview',
+    'analysis/methodology',
     {
       type: 'html',
       value: '<span class="sidebar-heading">DEFITUNA</span>',
     },
     'analysis/defituna/overview',
-    'analysis/methodology',
     'analysis/defituna/methodology',
     {
       type: 'category',
