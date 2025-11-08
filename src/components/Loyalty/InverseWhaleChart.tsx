@@ -22,18 +22,23 @@ export default function InverseWhaleChart({
     trackZoom: true,
   });
 
-  const { by_reward_size } = userSegments;
+  const { by_stake_size } = userSegments;
 
-  // Order: Small, Medium, Large, Whales (bottom to top)
+  // If by_stake_size is not available, return null or show error
+  if (!by_stake_size) {
+    return null;
+  }
+
+  // Order: Small, Medium, Large, Mega (bottom to top)
   const segments = [
-    { key: 'small', data: by_reward_size.small },
-    { key: 'medium', data: by_reward_size.medium },
-    { key: 'large', data: by_reward_size.large },
-    { key: 'whales', data: by_reward_size.whales },
+    { key: 'small', data: by_stake_size.small },
+    { key: 'medium', data: by_stake_size.medium },
+    { key: 'large', data: by_stake_size.large },
+    { key: 'mega', data: by_stake_size.mega },
   ];
 
   const labels = segments.map((s) => s.data.label);
-  const rates = segments.map((s) => s.data.avg_compound_rate * 100);
+  const rates = segments.map((s) => s.data.avg_compound_rate); // Already in percentage form
   const userCounts = segments.map((s) => s.data.user_count);
 
   // Highlight medium tier with accent color, others with secondary colors
@@ -52,31 +57,11 @@ export default function InverseWhaleChart({
         marginBottom: '32px',
       }}
     >
-      <h3 style={{ marginTop: 0 }}>Compound Rate by Stake Size - The Loyalty Paradox</h3>
+      <h3 style={{ marginTop: 0 }}>Compound Rate by Stake Size (TUNA)</h3>
 
-      <div
-        style={{
-          background: 'rgba(0, 163, 180, 0.1)',
-          border: '1px solid var(--accent)',
-          borderRadius: 'var(--ifm-global-radius)',
-          padding: '16px',
-          marginBottom: '24px',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-          <span style={{ fontSize: '24px' }}>🔍</span>
-          <div>
-            <strong style={{ color: 'var(--accent)' }}>Key Finding</strong>
-            <p style={{ margin: '8px 0 0 0', color: 'var(--ifm-color-emphasis-800)' }}>
-              Medium-tier stakers (0.1-1 SOL rewards) show the highest conviction at{' '}
-              <strong>{(by_reward_size.medium.avg_compound_rate * 100).toFixed(1)}%</strong> compound
-              rate, while whales compound only{' '}
-              <strong>{(by_reward_size.whales.avg_compound_rate * 100).toFixed(1)}%</strong> of their
-              rewards.
-            </p>
-          </div>
-        </div>
-      </div>
+      <p style={{ color: 'var(--ifm-color-emphasis-700)', marginBottom: '24px' }}>
+        <strong>Compound Rate</strong>: Percentage of total rewards that were reinvested (compounded) rather than claimed.
+      </p>
 
       <Plot
         data={[

@@ -66,20 +66,20 @@ export default function LoyaltyStats({ summary }: LoyaltyStatsProps): React.Reac
       }}
     >
       <StatCard
-        label="Loyalty Score"
+        label="Compound-Only Rate"
         value={`${summary.loyalty_score.toFixed(1)}%`}
-        subtitle="Compound-only users"
+        subtitle="% of active users"
         isPrimary={true}
       />
       <StatCard
         label="Reinvestment Rate"
         value={`${summary.compound_rate.toFixed(1)}%`}
-        subtitle="Rewards compounded"
+        subtitle="% of total rewards"
       />
       <StatCard
-        label="True Believers"
+        label="Compound-Only Users"
         value={summary.compound_only_users.toLocaleString()}
-        subtitle="Never claimed rewards"
+        subtitle="Total count"
       />
     </div>
   );

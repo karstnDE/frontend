@@ -4,11 +4,11 @@ title: Data Pipeline & Methodology
 
 # Data Pipeline & Methodology
 
-This page documents the general approach to analyzing Solana DeFi protocols through on-chain data. For technology stack details, see [Technical Foundation](../../intro/tech-setup).
+This page documents the general approach to analyzing Solana DeFi protocols through on-chain data. For technology stack details, see [Technical Foundation](../../intro/tech-setup). For more details around individual DeFi protocols, check the respective section/ page.
 
 ## Overview
 
-The analysis process transforms raw blockchain transactions into structured insights:
+The end-to-end process transforms raw blockchain transactions into structured data and charts:
 
 1. **Data Collection** - Monitor relevant on-chain accounts and fetch transaction history
 2. **Classification** - Identify what each transaction represents
@@ -16,7 +16,8 @@ The analysis process transforms raw blockchain transactions into structured insi
 4. **Aggregation** - Calculate totals, trends, and patterns
 5. **Visualization** - Present findings through interactive charts
 
-All processing happens offline. The site displays pre-computed results, ensuring fast performance.
+All processing happens offline in another (private) backend repository. The site displays pre-computed results, ensuring fast performance.
+Below you find more details for each of the five points mentioned above.
 
 ---
 
@@ -25,36 +26,47 @@ All processing happens offline. The site displays pre-computed results, ensuring
 ### What Gets Monitored
 
 Analysis focuses on accounts relevant to understanding protocol operations:
-- **Program accounts** - Smart contract interactions revealing protocol activity
+- **Program accounts** - Smart contract interactions revealing protocol activity, e.g. Treasury accounts
 - **Wallet addresses** - Key addresses involved in protocol operations
-- **Token accounts** - Accounts holding protocol-relevant tokens
+- **Token accounts** - Accounts holding protocol-relevant tokens (ATAs)
 
 The specific accounts monitored depend on the analysis objective. Revenue analysis tracks treasury addresses. Staking analysis monitors staking program interactions. Position analysis follows liquidity pool accounts.
 
 ### Data Sources
 
-**Primary:** Helius API provides enhanced transaction data with parsed logs and token transfers, eliminating complex instruction parsing.
+**Primary:** Helius API provides enhanced transaction data with parsed logs and token transfers, eliminating complex instruction parsing. Fallback APIs with free plans but heavy rate limiting are in place.
 
 **Supplemental:** Protocol websites and documentation provide context like token names and pool information.
 
 ### Update Cadence
 
-Data updates run daily, appending new transactions while preserving historical consistency. When analytical methods improve, the entire dataset is reprocessed to maintain uniform standards.
+Data updates usually run daily via the automated GitHub Actions workflow (.github/workflows/daily-data.yml), When analytical methods improve, the entire dataset is reprocessed to maintain uniform standards.
 
 ---
 
 ## Transaction Classification
 
-Understanding what each transaction represents is fundamental to analysis. Classification examines transaction logs to identify transaction purposes.
+Understanding what each transaction represents is fundamental to analysis. Classification examines transaction logs to identify transaction purposes. **The core objective is identifying which Instruction is being executed** from the Program/Account we are observing.
 
 ### Log-Based Classification
 
-Solana programs emit log messages during execution. These logs contain instruction names describing operations. I extract these names and map them to transaction categories based on a predefined configuration.
+**Solana programs themselves emit log messages during execution** as part of the blockchain's native logging system. These logs are not added by Helius, Solscan, or other data providers—they are produced directly by the on-chain programs and included in the transaction results returned by RPC nodes.
+
+These logs contain instruction names describing operations. The classification system:
+1. **Extracts instruction names** from the program logs
+2. **Maps instruction names** to transaction categories based on a predefined configuration
+3. ***Optional (protocol-specific)***: For certain analyses (e.g., staking loyalty) additional decoders parse Anchor IDLs to extract account-level context, but the core classification remains log-based for determinism
+
+**Why Instructions Matter:** Instructions are the atomic operations in Solana programs. Understanding them is critical because:
+- They reveal the exact purpose of each transaction (swap, stake, fee collection, etc.)
+- Different protocols use different instruction names for similar operations
+- IDL decoding provides structured information about parameters and accounts involved
+- Accurate instruction identification enables precise revenue attribution and analytics
 
 For example:
-- A log indicating "CollectFees" might represent fee collection
-- A log indicating "Stake" represents a staking operation
-- Different protocols use different instruction names for similar operations
+- A log containing "Instruction: CollectFees" represents fee collection
+- A log containing "Instruction: Stake" represents a staking operation
+- IDL decoding reveals which accounts received fees or which pools were involved
 
 ### Classification Configuration
 
@@ -85,9 +97,13 @@ Each transaction receives labels for all applicable dimensions, allowing the sam
 
 ### Pool Identification
 
-Pool attribution matches transaction accounts against a registry of known pool addresses. When explicit matches aren't found, token pair analysis can sometimes infer the pool based on the specific tokens involved.
+**Pool identification works automatically** through account-based pattern matching. The system:
 
-The pool registry combines manually curated entries with auto-discovered pools, regularly updated as new pools are encountered.
+1. **Matches transaction accounts** against a registry of known pool addresses
+2. **Auto-discovers new pools** by analyzing account structures and token pair patterns in transactions
+3. **Infers pools from token pairs** when explicit address matches aren't found (e.g., a SOL-USDC swap likely involves the SOL-USDC pool)
+
+The pool registry continuously expands as new pools are encountered, combining auto-discovered entries with manually verified addresses. No manual intervention is required for common pool operations—new pools are identified and tracked automatically during transaction processing.
 
 ---
 
@@ -99,23 +115,30 @@ To compare and aggregate transactions involving different tokens, values are nor
 
 **On-chain rates:** When tokens are swapped, the actual exchange rate provides precise valuation for that moment.
 
-**Same-day pricing:** Conversion rates apply only to transactions from the same time period, preventing retroactive adjustments and maintaining historical accuracy.
+**Same-day pricing:** Conversion rates are applied only to transactions occurring on the same day, ensuring that historical values are never retroactively adjusted based on future price changes.
+
+*Example:* If the treasury receives 100 USDC on Day 1 and swaps it for 0.5 SOL on Day 5, the Day 1 revenue is recorded as 100 USDC (unconverted). On Day 5, the swap reveals the rate (100 USDC = 0.5 SOL), and Day 5's attribution includes both the swap and the converted value. Day 1's historical record remains unchanged as 100 USDC, preserving the actual state of the treasury on that day. This prevents distortions where today's prices misrepresent historical revenue.
 
 **Native token handling:** Wrapped versions of native tokens (like WSOL) convert 1:1 with their native counterparts.
 
 ### Pending Conversions
 
-Tokens not yet converted remain tracked but excluded from normalized totals until conversion occurs. This ensures reported values reflect realized amounts rather than estimates.
+**Context:** This is particularly relevant for **treasury accounts** in DeFi protocols. Treasuries often accumulate diverse tokens (fee revenue in USDC, BONK, various LP tokens, etc.), but **only a specific token is made available for distribution to stakers** (typically the protocol's native token or SOL).
+
+For example, a treasury might receive:
+- 100 USDC from swap fees
+- 500 BONK from referral rewards
+- 10 LP tokens from liquidity provision
+
+But the protocol only distributes SOL to stakers. Until the treasury swaps these tokens for SOL, they remain "pending conversions."
+
+**Accounting Treatment:** Tokens not yet converted remain tracked in their native denomination but excluded from SOL-normalized totals until conversion occurs on-chain. This ensures reported values reflect **realized amounts** (actual conversions that happened) rather than estimates based on external price feeds. When the treasury eventually swaps 100 USDC for 0.5 SOL, that 0.5 SOL is recorded as revenue on the day of the swap, not on the day the USDC was originally received.
 
 ---
 
 ## Data Quality Standards
 
-### MECE Principle
-
-Analysis follows the **Mutually Exclusive, Collectively Exhaustive** principle:
-- **Mutually Exclusive** - Each transaction classified exactly once, preventing double-counting
-- **Collectively Exhaustive** - All transactions accounted for, preventing gaps
+Data Quality is paramount for a project like this. I spend a lot of time on ensuring that the numbers are exact and make sense. There are different ways to make sure the numbers are correct.
 
 ### Verification Methods
 
@@ -127,7 +150,7 @@ Quality is maintained through:
 
 ### Accuracy Standard
 
-Even small discrepancies (0.1 SOL) indicate analytical gaps requiring investigation. Attribution must be complete before publishing results.
+Even small discrepancies (0.1 SOL) indicate analytical gaps requiring investigation. This might seem like minor, but if the root cause is not addressed, a small gap can grow to a big gap and indiates the situation is not fully understood.
 
 ---
 

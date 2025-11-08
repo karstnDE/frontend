@@ -62,6 +62,14 @@ export interface WeeklyTrend {
   compound_rate: number;
 }
 
+export interface DailyTrend {
+  date: string;
+  claim_amount: number;
+  compound_amount: number;
+  total_amount: number;
+  compound_rate: number;
+}
+
 export interface StakeDistributionBucket {
   min: number;
   max: number | null;
@@ -106,6 +114,7 @@ export interface StakerLoyaltyData {
   summary: LoyaltySummary;
   user_segments: UserSegments;
   weekly_trends: WeeklyTrend[];
+  daily_trends?: DailyTrend[];
   visualizations?: Visualizations;
   context?: DataContext;
 }

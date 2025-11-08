@@ -9,27 +9,26 @@ import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
 
 Understanding protocol loyalty through reward behavior analysis.
 
-Stakers can choose to **compound** their rewards (reinvesting back into TUNA) or **claim** them (taking profits). This analysis examines stakers who actively managed their rewards (claimed or compounded) during the analysis period.
+Stakers can choose to **compound** their rewards (reinvesting back into TUNA) or **claim** them (withdrawing rewards). This analysis examines stakers who actively managed their rewards (claimed or compounded) during the analysis period.
 
 {/* Note: Statistics below are populated dynamically from the data pipeline */}
 
 <BrowserOnly fallback={<LoadingSpinner />}>
   {() => {
     const { useStakerLoyalty } = require('@site/src/hooks/useStakerLoyalty');
+    const { useStakingMetrics } = require('@site/src/hooks/useStakingMetrics');
     const {
       LoyaltyStats,
       BehaviorPieChart,
       InverseWhaleChart,
-      WeeklyTrendsChart,
-      BehaviorSegmentsTable,
-      StakeDistributionHistogram,
-      CompoundVsStakeScatter,
+      DailyTrendsChart,
     } = require('@site/src/components/Loyalty');
 
     function StakerConvictionPage() {
       const { data, loading, error } = useStakerLoyalty();
+      const { data: stakingData, loading: stakingLoading, error: stakingError } = useStakingMetrics();
 
-      if (loading) {
+      if (loading || stakingLoading) {
         return <LoadingSpinner />;
       }
 
@@ -41,7 +40,21 @@ Stakers can choose to **compound** their rewards (reinvesting back into TUNA) or
         );
       }
 
-      const { summary, user_segments, weekly_trends, date_range, visualizations } = data;
+      if (stakingError || !stakingData) {
+        return (
+          <div className="alert alert--danger" role="alert">
+            <strong>Could not load staking data.</strong> {stakingError || 'Unknown error'}
+          </div>
+        );
+      }
+
+      const { summary, user_segments, daily_trends, date_range } = data;
+
+      // Get current active stakers from the latest daily count
+      const activeStakersCounts = stakingData.active_stakers?.daily_counts || [];
+      const currentActiveStakers = activeStakersCounts.length > 0
+        ? activeStakersCounts[activeStakersCounts.length - 1].count
+        : undefined;
 
       return (
         <>
@@ -50,50 +63,26 @@ Stakers can choose to **compound** their rewards (reinvesting back into TUNA) or
             <p style={{ marginBottom: 0 }}>
               This analysis examines <strong>{summary.total_users.toLocaleString()} stakers who actively managed their rewards</strong> (claimed or compounded) between{' '}
               <strong>{date_range.start}</strong> and <strong>{date_range.end}</strong>.
-              {data.context && (
+              {currentActiveStakers && (
                 <>
-                  {' '}Out of <strong>{data.context.total_stakers_ever?.toLocaleString() || 'N/A'} total unique stakers</strong> (ever staked since July 25 launch),{' '}
-                  <strong>{data.context.current_active_stakers?.toLocaleString() || 'N/A'} currently hold active stakes</strong>.
-                  This represents{' '}
-                  <strong>
-                    {data.context.total_stakers_ever
-                      ? ((summary.total_users / data.context.total_stakers_ever) * 100).toFixed(1)
-                      : 'N/A'}%
-                  </strong> of all stakers and{' '}
-                  <strong>
-                    {data.context.current_active_stakers
-                      ? ((summary.total_users / data.context.current_active_stakers) * 100).toFixed(1)
-                      : 'N/A'}%
-                  </strong> of current active stakers.
+                  {' '}Out of <strong>{currentActiveStakers.toLocaleString()} wallets currently holding active stakes</strong>,{' '}
+                  this represents <strong>{((summary.total_users / currentActiveStakers) * 100).toFixed(1)}%</strong> who actively manage their rewards.
                 </>
               )}
             </p>
           </div>
 
-          {visualizations?.compound_vs_stake && (
-            <div className="alert alert--warning" role="alert" style={{ marginBottom: '24px' }}>
-              <h4 style={{ marginTop: 0 }}>Stake Size Visualization Scope</h4>
-              <p style={{ marginBottom: 0 }}>
-                The stake distribution and scatter plot visualizations are based on a subset of users with both position data and reward activity{' '}
-                (<strong>{visualizations.compound_vs_stake.length} wallets</strong>). This represents users who have both staking positions AND have claimed/compounded rewards.
-                More comprehensive per-user position tracking is in development to include all current active stakers.
-              </p>
-            </div>
-          )}
-
           <LoyaltyStats summary={summary} />
 
-          <BehaviorPieChart userSegments={user_segments} totalUsers={summary.total_users} />
-
-          {visualizations && <StakeDistributionHistogram visualizations={visualizations} />}
+          <BehaviorPieChart
+            userSegments={user_segments}
+            totalUsers={summary.total_users}
+            currentActiveStakers={currentActiveStakers}
+          />
 
           <InverseWhaleChart userSegments={user_segments} />
 
-          {visualizations && <CompoundVsStakeScatter visualizations={visualizations} />}
-
-          <WeeklyTrendsChart weeklyTrends={weekly_trends} />
-
-          <BehaviorSegmentsTable userSegments={user_segments} totalUsers={summary.total_users} />
+          {daily_trends && <DailyTrendsChart dailyTrends={daily_trends} />}
 
           <details>
             <summary>
@@ -132,15 +121,9 @@ Stakers can choose to **compound** their rewards (reinvesting back into TUNA) or
               </ul>
 
               <p>
-                <strong>Reward Size Tiers</strong>: Users are segmented based on their total rewards
-                earned (compounded + claimed) during the analysis period:
+                <strong>Stake Size Tiers</strong>: Users are segmented based on their staked TUNA
+                holdings to analyze compound behavior patterns.
               </p>
-              <ul>
-                <li>Small: &lt;0.1 SOL</li>
-                <li>Medium: 0.1-1 SOL</li>
-                <li>Large: 1-10 SOL</li>
-                <li>Whales: &gt;10 SOL</li>
-              </ul>
 
               <h4>Data Source</h4>
 
@@ -158,51 +141,27 @@ Stakers can choose to **compound** their rewards (reinvesting back into TUNA) or
 
               <h4>Staker Population Context</h4>
 
-              {data.context ? (
-                <>
-                  <p>
-                    <strong>Total Stakers Ever</strong>:{' '}
-                    {data.context.total_stakers_ever?.toLocaleString() || 'N/A'} unique wallets have staked
-                    since the July 25, 2025 public sale.
-                  </p>
+              <p>
+                <strong>Current Active Stakers</strong>:{' '}
+                {currentActiveStakers ? (
+                  <>
+                    {currentActiveStakers.toLocaleString()} wallets currently hold non-zero staking balances
+                    {activeStakersCounts.length > 0 && ` (as of ${activeStakersCounts[activeStakersCounts.length - 1].date})`}.
+                  </>
+                ) : (
+                  'N/A'
+                )}
+              </p>
 
-                  <p>
-                    <strong>Current Active Stakers</strong>:{' '}
-                    {data.context.current_active_stakers?.toLocaleString() || 'N/A'} wallets currently hold
-                    non-zero staking balances
-                    {data.context.snapshot_date && ` (as of ${data.context.snapshot_date})`}.
-                    {data.context.total_stakers_ever && data.context.current_active_stakers && (
-                      <>
-                        {' '}This represents{' '}
-                        {((data.context.current_active_stakers / data.context.total_stakers_ever) * 100).toFixed(1)}%
-                        retention from the initial cohort.
-                      </>
-                    )}
-                  </p>
-
-                  <p>
-                    <strong>Reward Active Stakers</strong>: {summary.total_users.toLocaleString()} wallets
-                    {data.context.total_stakers_ever && (
-                      <>
-                        {' '}(
-                        {((summary.total_users / data.context.total_stakers_ever) * 100).toFixed(1)}% of total
-                      </>
-                    )}
-                    {data.context.current_active_stakers && (
-                      <>
-                        , {((summary.total_users / data.context.current_active_stakers) * 100).toFixed(1)}% of
-                        current active)
-                      </>
-                    )}
-                    {' '}have claimed or compounded rewards during the analysis period.
-                  </p>
-                </>
-              ) : (
-                <p>
-                  <strong>Reward Active Stakers</strong>: {summary.total_users.toLocaleString()} wallets have
-                  claimed or compounded rewards during the analysis period.
-                </p>
-              )}
+              <p>
+                <strong>Reward Active Stakers</strong>: {summary.total_users.toLocaleString()} wallets
+                {currentActiveStakers && (
+                  <>
+                    {' '}({((summary.total_users / currentActiveStakers) * 100).toFixed(1)}% of current active stakers)
+                  </>
+                )}
+                {' '}have claimed or compounded rewards during the analysis period.
+              </p>
             </div>
           </details>
         </>

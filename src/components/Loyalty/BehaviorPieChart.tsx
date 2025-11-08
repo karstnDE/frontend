@@ -8,11 +8,13 @@ import type { UserSegments } from '@site/src/hooks/useStakerLoyalty';
 interface BehaviorPieChartProps {
   userSegments: UserSegments;
   totalUsers: number;
+  currentActiveStakers?: number;
 }
 
 export default function BehaviorPieChart({
   userSegments,
   totalUsers,
+  currentActiveStakers,
 }: BehaviorPieChartProps): React.ReactElement {
   const { colorMode } = useColorMode();
   const template = getPlotlyTemplate(colorMode === 'dark');
@@ -26,20 +28,32 @@ export default function BehaviorPieChart({
 
   const { by_behavior } = userSegments;
 
-  const labels = ['Compound-only', 'Mixed Behavior', 'Claim-only'];
-  const values = [
-    by_behavior.compound_only.count,
-    by_behavior.mixed.count,
-    by_behavior.claim_only.count,
-  ];
-  const percentages = [
-    by_behavior.compound_only.percentage,
-    by_behavior.mixed.percentage,
-    by_behavior.claim_only.percentage,
-  ];
+  // Calculate non-active stakers if currentActiveStakers is provided
+  const nonActiveCount = currentActiveStakers ? currentActiveStakers - totalUsers : 0;
+  const baseTotal = currentActiveStakers || totalUsers;
+  const nonActivePercentage = currentActiveStakers ? (nonActiveCount / currentActiveStakers) * 100 : 0;
 
-  // Color scheme: green for compound, yellow for mixed, red for claim
-  const colors = ['#22C55E', '#F59E0B', '#EF4444'];
+  const labels = currentActiveStakers
+    ? ['No Reward Activity', 'Compound-only', 'Mixed Behavior', 'Claim-only']
+    : ['Compound-only', 'Mixed Behavior', 'Claim-only'];
+
+  const values = currentActiveStakers
+    ? [
+        nonActiveCount,
+        by_behavior.compound_only.count,
+        by_behavior.mixed.count,
+        by_behavior.claim_only.count,
+      ]
+    : [
+        by_behavior.compound_only.count,
+        by_behavior.mixed.count,
+        by_behavior.claim_only.count,
+      ];
+
+  // Color scheme: gray for no activity, green for compound, yellow for mixed, red for claim
+  const colors = currentActiveStakers
+    ? ['#9CA3AF', '#22C55E', '#F59E0B', '#EF4444']
+    : ['#22C55E', '#F59E0B', '#EF4444'];
 
   return (
     <div
@@ -88,7 +102,14 @@ export default function BehaviorPieChart({
       />
 
       <p style={{ color: 'var(--ifm-color-emphasis-700)', marginTop: '16px', marginBottom: 0 }}>
-        Based on <strong>{totalUsers.toLocaleString()}</strong> unique stakers
+        {currentActiveStakers ? (
+          <>
+            Based on <strong>{currentActiveStakers.toLocaleString()}</strong> current active stakers
+            {' '}({totalUsers.toLocaleString()} actively managed rewards)
+          </>
+        ) : (
+          <>Based on <strong>{totalUsers.toLocaleString()}</strong> unique stakers</>
+        )}
       </p>
     </div>
   );
