@@ -1,0 +1,24 @@
+{
+  "generated_at": "2025-11-07T23:59:59+00:00",
+  "files": [
+    "apy_data.json",
+    "daily_by_pool.json",
+    "daily_by_pool_type.json",
+    "daily_by_token.json",
+    "daily_by_type.json",
+    "daily_stacked.json",
+    "key_metrics.json",
+    "pool_ramp_up.json",
+    "pool_type_summary.json",
+    "position_metrics.json",
+    "staker_loyalty.json",
+    "staking_tuna.json",
+    "summary.json",
+    "top_transactions_pool.json",
+    "top_transactions_pool_type.json",
+    "top_transactions_token.json",
+    "top_transactions_type.json",
+    "usage_metrics.json",
+    "wallet_revenue_attribution.json"
+  ]
+}
