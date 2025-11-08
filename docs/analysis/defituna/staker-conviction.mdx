@@ -9,15 +9,9 @@ import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
 
 Understanding protocol loyalty through reward behavior analysis.
 
-Stakers can choose to **compound** their rewards (reinvesting back into TUNA) or **claim** them (taking profits). This analysis examines **1,749 stakers who actively managed their rewards** (claimed or compounded) between July 27 - October 25, 2025.
+Stakers can choose to **compound** their rewards (reinvesting back into TUNA) or **claim** them (taking profits). This analysis examines stakers who actively managed their rewards (claimed or compounded) during the analysis period.
 
-:::info Data Scope
-Out of **8,003 total unique stakers** (ever staked since July 25 launch), **4,055 currently hold active stakes** (as of October 27, 2025). This analysis focuses on the 1,749 who actively managed rewards, representing **21.8% of all stakers** or **43.1% of current active stakers**.
-:::
-
-:::warning Stake Size Visualization Scope
-The stake distribution and scatter plot visualizations are based on a subset of users with both position data and reward activity (approximately 599 wallets). This represents users who have both staking positions AND have claimed/compounded rewards. More comprehensive per-user position tracking is in development to include all 4,055 current active stakers.
-:::
+{/* Note: Statistics below are populated dynamically from the data pipeline */}
 
 **Key Insight**: The data reveals a surprising "Inverse Whale Effect" - medium-tier stakers demonstrate the highest conviction, not the largest holders.
 
@@ -53,6 +47,42 @@ The stake distribution and scatter plot visualizations are based on a subset of 
 
       return (
         <>
+          <div className="alert alert--info" role="alert" style={{ marginBottom: '24px' }}>
+            <h4 style={{ marginTop: 0 }}>Data Scope</h4>
+            <p style={{ marginBottom: 0 }}>
+              This analysis examines <strong>{summary.total_users.toLocaleString()} stakers who actively managed their rewards</strong> (claimed or compounded) between{' '}
+              <strong>{date_range.start}</strong> and <strong>{date_range.end}</strong>.
+              {data.context && (
+                <>
+                  {' '}Out of <strong>{data.context.total_stakers_ever?.toLocaleString() || 'N/A'} total unique stakers</strong> (ever staked since July 25 launch),{' '}
+                  <strong>{data.context.current_active_stakers?.toLocaleString() || 'N/A'} currently hold active stakes</strong>.
+                  This represents{' '}
+                  <strong>
+                    {data.context.total_stakers_ever
+                      ? ((summary.total_users / data.context.total_stakers_ever) * 100).toFixed(1)
+                      : 'N/A'}%
+                  </strong> of all stakers and{' '}
+                  <strong>
+                    {data.context.current_active_stakers
+                      ? ((summary.total_users / data.context.current_active_stakers) * 100).toFixed(1)
+                      : 'N/A'}%
+                  </strong> of current active stakers.
+                </>
+              )}
+            </p>
+          </div>
+
+          {visualizations?.compound_vs_stake && (
+            <div className="alert alert--warning" role="alert" style={{ marginBottom: '24px' }}>
+              <h4 style={{ marginTop: 0 }}>Stake Size Visualization Scope</h4>
+              <p style={{ marginBottom: 0 }}>
+                The stake distribution and scatter plot visualizations are based on a subset of users with both position data and reward activity{' '}
+                (<strong>{visualizations.compound_vs_stake.length} wallets</strong>). This represents users who have both staking positions AND have claimed/compounded rewards.
+                More comprehensive per-user position tracking is in development to include all current active stakers.
+              </p>
+            </div>
+          )}
+
           <LoyaltyStats summary={summary} />
 
           <BehaviorPieChart userSegments={user_segments} totalUsers={summary.total_users} />
@@ -74,11 +104,25 @@ The stake distribution and scatter plot visualizations are based on a subset of 
           <div style={{ marginBottom: '32px' }}>
             <h3>What This Tells Us</h3>
             <p>
-              Nearly <strong>60% of active reward managers never compound their rewards</strong>, treating
-              staking primarily as yield farming rather than long-term investment. However, a dedicated core
-              of <strong>23.6% (412 users)</strong> exclusively compound, demonstrating strong protocol
-              conviction. Note: The remaining ~2,300 current stakers either haven't claimed rewards yet or
-              are passively holding their positions.
+              Nearly{' '}
+              <strong>
+                {user_segments.by_behavior.claim_only.percentage.toFixed(1)}% of active reward managers never
+                compound their rewards
+              </strong>
+              , treating staking primarily as yield farming rather than long-term investment. However, a
+              dedicated core of{' '}
+              <strong>
+                {user_segments.by_behavior.compound_only.percentage.toFixed(1)}% (
+                {user_segments.by_behavior.compound_only.count.toLocaleString()} users)
+              </strong>{' '}
+              exclusively compound, demonstrating strong protocol conviction.
+              {data.context?.current_active_stakers && (
+                <>
+                  {' '}Note: The remaining ~
+                  {(data.context.current_active_stakers - summary.total_users).toLocaleString()} current
+                  stakers either haven't claimed rewards yet or are passively holding their positions.
+                </>
+              )}
             </p>
           </div>
 
@@ -117,9 +161,19 @@ The stake distribution and scatter plot visualizations are based on a subset of 
             </ul>
             <p>
               This pattern suggests your <strong>most loyal community is in the middle tier</strong> -
-              these are the users most aligned with protocol success. Among the 4,055 current active
-              stakers, the 1,749 who actively manage rewards represent the most engaged segment of the
-              protocol.
+              these are the users most aligned with protocol success.
+              {data.context?.current_active_stakers ? (
+                <>
+                  {' '}Among the {data.context.current_active_stakers.toLocaleString()} current active stakers,
+                  the {summary.total_users.toLocaleString()} who actively manage rewards represent the most
+                  engaged segment of the protocol.
+                </>
+              ) : (
+                <>
+                  {' '}The {summary.total_users.toLocaleString()} users who actively manage rewards represent
+                  the most engaged segment of the protocol.
+                </>
+              )}
             </p>
           </div>
 
@@ -128,10 +182,21 @@ The stake distribution and scatter plot visualizations are based on a subset of 
           <div style={{ marginBottom: '32px' }}>
             <h3>Trend Analysis</h3>
             <p>
-              The weekly compound rate shows <strong>no clear upward trend</strong>, ranging from 0% to
-              20.8% with an overall average of 5.3%. This suggests current behavior is stable rather than
-              improving, indicating that compound rates reflect established user preferences rather than
-              market conditions.
+              {(() => {
+                const rates = weekly_trends.map((w) => w.compound_rate);
+                const minRate = Math.min(...rates);
+                const maxRate = Math.max(...rates);
+                const avgRate = rates.reduce((sum, r) => sum + r, 0) / rates.length;
+                return (
+                  <>
+                    The weekly compound rate shows <strong>no clear upward trend</strong>, ranging from{' '}
+                    {minRate.toFixed(1)}% to {maxRate.toFixed(1)}% with an overall average of{' '}
+                    {avgRate.toFixed(1)}%. This suggests current behavior is stable rather than improving,
+                    indicating that compound rates reflect established user preferences rather than market
+                    conditions.
+                  </>
+                );
+              })()}
             </p>
           </div>
 
@@ -200,22 +265,53 @@ The stake distribution and scatter plot visualizations are based on a subset of 
 
               <h4>Staker Population Context</h4>
 
-              <p>
-                <strong>Total Stakers Ever</strong>: 8,003 unique wallets have staked since the July 25,
-                2025 public sale (includes 6,776 auto-staked participants + 2,008 manual stakers, with 781
-                overlap).
-              </p>
+              {data.context ? (
+                <>
+                  <p>
+                    <strong>Total Stakers Ever</strong>:{' '}
+                    {data.context.total_stakers_ever?.toLocaleString() || 'N/A'} unique wallets have staked
+                    since the July 25, 2025 public sale.
+                  </p>
 
-              <p>
-                <strong>Current Active Stakers</strong>: 4,055 wallets currently hold non-zero staking
-                balances (as of October 27, 2025). This represents 50.6% retention from the initial cohort.
-              </p>
+                  <p>
+                    <strong>Current Active Stakers</strong>:{' '}
+                    {data.context.current_active_stakers?.toLocaleString() || 'N/A'} wallets currently hold
+                    non-zero staking balances
+                    {data.context.snapshot_date && ` (as of ${data.context.snapshot_date})`}.
+                    {data.context.total_stakers_ever && data.context.current_active_stakers && (
+                      <>
+                        {' '}This represents{' '}
+                        {((data.context.current_active_stakers / data.context.total_stakers_ever) * 100).toFixed(1)}%
+                        retention from the initial cohort.
+                      </>
+                    )}
+                  </p>
 
-              <p>
-                <strong>Reward Active Stakers</strong>: 1,749 wallets (21.8% of total, 43.1% of current
-                active) have claimed or compounded rewards during the analysis period. These represent the
-                most engaged users who actively manage their positions.
-              </p>
+                  <p>
+                    <strong>Reward Active Stakers</strong>: {summary.total_users.toLocaleString()} wallets
+                    {data.context.total_stakers_ever && (
+                      <>
+                        {' '}(
+                        {((summary.total_users / data.context.total_stakers_ever) * 100).toFixed(1)}% of total
+                      </>
+                    )}
+                    {data.context.current_active_stakers && (
+                      <>
+                        , {((summary.total_users / data.context.current_active_stakers) * 100).toFixed(1)}% of
+                        current active)
+                      </>
+                    )}
+                    {' '}have claimed or compounded rewards during the analysis period. These represent the
+                    most engaged users who actively manage their positions.
+                  </p>
+                </>
+              ) : (
+                <p>
+                  <strong>Reward Active Stakers</strong>: {summary.total_users.toLocaleString()} wallets have
+                  claimed or compounded rewards during the analysis period. These represent the most engaged
+                  users who actively manage their positions.
+                </p>
+              )}
             </div>
           </details>
         </>

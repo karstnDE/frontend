@@ -83,6 +83,20 @@ export interface Visualizations {
   compound_vs_stake: CompoundVsStakePoint[];
 }
 
+/**
+ * Additional context about the staker population.
+ * These fields should be provided by the data pipeline to enable dynamic statistics.
+ *
+ * @property total_stakers_ever - Total unique wallets that have ever staked since launch
+ * @property current_active_stakers - Wallets currently holding non-zero staking balances
+ * @property snapshot_date - Date when current_active_stakers count was taken (e.g., "October 27, 2025")
+ */
+export interface DataContext {
+  total_stakers_ever?: number;
+  current_active_stakers?: number;
+  snapshot_date?: string;
+}
+
 export interface StakerLoyaltyData {
   generated_at: string;
   date_range: {
@@ -93,6 +107,7 @@ export interface StakerLoyaltyData {
   user_segments: UserSegments;
   weekly_trends: WeeklyTrend[];
   visualizations?: Visualizations;
+  context?: DataContext;
 }
 
 export interface UseStakerLoyaltyResult {
