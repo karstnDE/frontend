@@ -10,6 +10,7 @@ interface UsageTimeSeriesChartProps {
   title: string;
   yAxisLabel?: string;
   description?: React.ReactNode;
+  cumulative?: boolean;
 }
 
 export default function UsageTimeSeriesChart({
@@ -17,6 +18,7 @@ export default function UsageTimeSeriesChart({
   title,
   yAxisLabel = 'Users',
   description,
+  cumulative = false,
 }: UsageTimeSeriesChartProps): React.ReactElement {
   const { colorMode } = useColorMode();
   const template = getPlotlyTemplate(colorMode === 'dark');
@@ -30,7 +32,18 @@ export default function UsageTimeSeriesChart({
 
   const sorted = [...(data || [])].sort((a, b) => a.date.localeCompare(b.date));
   const x = sorted.map((entry) => entry.date);
-  const y = sorted.map((entry) => entry.count);
+
+  let y: number[];
+  if (cumulative) {
+    // Calculate cumulative sum
+    let runningTotal = 0;
+    y = sorted.map((entry) => {
+      runningTotal += entry.count;
+      return runningTotal;
+    });
+  } else {
+    y = sorted.map((entry) => entry.count);
+  }
 
   return (
     <div

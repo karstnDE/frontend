@@ -34,14 +34,15 @@ import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
       return (
         <>
           <p>
-            Stakers are wallets interacting with the staking program (stake, unstake, withdraw or manage rewards). Tracking
-            these addresses highlights how capital allocates into and out of DefiTuna staking.
+            This page tracks the total number of unique wallets that have staked TUNA by each day, regardless of their
+            current staking status or activity level. It shows the cumulative growth of unique stakers over time.
           </p>
           <UsageTimeSeriesChart
-            title="Daily Stakers"
+            title="Cumulative Unique Stakers"
             data={stakers.daily_counts}
-            yAxisLabel="Wallets"
-            description="Unique wallets performing staking operations per UTC day."
+            yAxisLabel="Total Unique Wallets"
+            description="Total number of unique wallets that have staked TUNA by each day."
+            cumulative={true}
           />
           <UsageTopAddresses
             title="Top Staker Wallets"
