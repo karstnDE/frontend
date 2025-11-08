@@ -127,7 +127,9 @@ export default function Dashboard(): React.ReactElement {
         <h3 style={{ marginTop: 0, marginBottom: '20px' }}>Top Tokens by Value</h3>
         <div style={{ overflowX: 'auto' }}>
           <table style={{
+            display: 'table',
             width: '100%',
+            minWidth: '100%',
             borderCollapse: 'collapse',
             fontSize: '14px',
           }}>
@@ -140,9 +142,19 @@ export default function Dashboard(): React.ReactElement {
             </thead>
             <tbody>
               {summary.top_tokens_by_value.map((token, idx) => (
-                <tr key={token.mint} style={{
-                  borderBottom: '1px solid var(--ifm-toc-border-color)',
-                }}>
+                <tr
+                  key={token.mint}
+                  style={{
+                    borderBottom: '1px solid var(--ifm-toc-border-color)',
+                    transition: 'background 120ms ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = 'var(--ifm-toc-border-color)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'transparent';
+                  }}
+                >
                   <td style={{ padding: '12px 8px', color: 'var(--ifm-color-secondary)' }}>
                     #{idx + 1}
                   </td>

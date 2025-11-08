@@ -50,40 +50,58 @@ export default function UsageTopAddresses({
         </div>
       ) : (
         <div style={{ overflowX: 'auto' }}>
-          <table className="usage-top-table">
+          <table style={{
+            display: 'table',
+            width: '100%',
+            minWidth: '100%',
+            borderCollapse: 'collapse',
+            fontSize: '14px',
+          }}>
             <thead>
-              <tr>
-                <th style={{ textAlign: 'left' }}>Rank</th>
-                <th style={{ textAlign: 'left' }}>Address</th>
-                <th style={{ textAlign: 'right' }}>Days Active</th>
-                {showWeeks && <th style={{ textAlign: 'right' }}>Active Weeks</th>}
-                {showMonths && <th style={{ textAlign: 'right' }}>Active Months</th>}
-                <th style={{ textAlign: 'right' }}>Transactions</th>
-                <th style={{ textAlign: 'right' }}>First Seen</th>
-                <th style={{ textAlign: 'right' }}>Last Seen</th>
+              <tr style={{ borderBottom: '2px solid var(--ifm-toc-border-color)' }}>
+                <th style={{ textAlign: 'left', padding: '12px 8px', fontWeight: 600 }}>Rank</th>
+                <th style={{ textAlign: 'left', padding: '12px 8px', fontWeight: 600 }}>Address</th>
+                <th style={{ textAlign: 'right', padding: '12px 8px', fontWeight: 600 }}>Days Active</th>
+                {showWeeks && <th style={{ textAlign: 'right', padding: '12px 8px', fontWeight: 600 }}>Active Weeks</th>}
+                {showMonths && <th style={{ textAlign: 'right', padding: '12px 8px', fontWeight: 600 }}>Active Months</th>}
+                <th style={{ textAlign: 'right', padding: '12px 8px', fontWeight: 600 }}>Transactions</th>
+                <th style={{ textAlign: 'right', padding: '12px 8px', fontWeight: 600 }}>First Seen</th>
+                <th style={{ textAlign: 'right', padding: '12px 8px', fontWeight: 600 }}>Last Seen</th>
               </tr>
             </thead>
             <tbody>
               {data.map((row, index) => (
-                <tr key={row.address}>
-                  <td style={{ textAlign: 'left', fontWeight: 600 }}>{index + 1}</td>
-                  <td style={{ textAlign: 'left', fontFamily: 'var(--ifm-font-family-monospace)' }}>
+                <tr
+                  key={row.address}
+                  style={{
+                    borderBottom: '1px solid var(--ifm-toc-border-color)',
+                    transition: 'background 120ms ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = 'var(--ifm-toc-border-color)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'transparent';
+                  }}
+                >
+                  <td style={{ padding: '12px 8px', textAlign: 'left', fontWeight: 600 }}>{index + 1}</td>
+                  <td style={{ padding: '12px 8px', textAlign: 'left', fontFamily: 'var(--ifm-font-family-monospace)' }}>
                     <a href={`https://solscan.io/account/${row.address}`} target="_blank" rel="noopener noreferrer">
                       {shorten(row.address)}
                     </a>
                   </td>
-                  <td style={{ textAlign: 'right' }}>{row.days_active}</td>
+                  <td style={{ padding: '12px 8px', textAlign: 'right' }}>{row.days_active}</td>
                   {showWeeks && (
-                    <td style={{ textAlign: 'right' }}>{row.active_weeks ?? 0}</td>
+                    <td style={{ padding: '12px 8px', textAlign: 'right' }}>{row.active_weeks ?? 0}</td>
                   )}
                   {showMonths && (
-                    <td style={{ textAlign: 'right' }}>{row.active_months ?? 0}</td>
+                    <td style={{ padding: '12px 8px', textAlign: 'right' }}>{row.active_months ?? 0}</td>
                   )}
-                  <td style={{ textAlign: 'right' }}>{row.tx_count}</td>
-                  <td style={{ textAlign: 'right', fontVariantNumeric: 'tabular-nums' }}>
+                  <td style={{ padding: '12px 8px', textAlign: 'right' }}>{row.tx_count}</td>
+                  <td style={{ padding: '12px 8px', textAlign: 'right', fontVariantNumeric: 'tabular-nums' }}>
                     {row.first_seen ?? '—'}
                   </td>
-                  <td style={{ textAlign: 'right', fontVariantNumeric: 'tabular-nums' }}>
+                  <td style={{ padding: '12px 8px', textAlign: 'right', fontVariantNumeric: 'tabular-nums' }}>
                     {row.last_seen ?? '—'}
                   </td>
                 </tr>

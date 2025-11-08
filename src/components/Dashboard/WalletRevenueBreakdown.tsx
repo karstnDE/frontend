@@ -318,14 +318,20 @@ export default function WalletRevenueBreakdown({ dataUrl }: WalletRevenueBreakdo
           {excludeLiquidations && <span style={{ fontSize: '0.875rem', color: 'var(--ifm-color-secondary)', fontWeight: 'normal' }}> (excl. liquidations)</span>}
         </h3>
         <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.9rem' }}>
+          <table style={{
+            display: 'table',
+            width: '100%',
+            minWidth: '100%',
+            borderCollapse: 'collapse',
+            fontSize: '14px',
+          }}>
             <thead>
               <tr style={{ borderBottom: '2px solid var(--ifm-toc-border-color)' }}>
-                <th style={{ textAlign: 'left', padding: '8px' }}>Rank</th>
-                <th style={{ textAlign: 'left', padding: '8px' }}>Wallet Address</th>
-                <th style={{ textAlign: 'right', padding: '8px' }}>Revenue (SOL)</th>
-                <th style={{ textAlign: 'right', padding: '8px' }}>Transactions</th>
-                <th style={{ textAlign: 'center', padding: '8px' }}>Actions</th>
+                <th style={{ textAlign: 'left', padding: '12px 8px', fontWeight: 600 }}>Rank</th>
+                <th style={{ textAlign: 'left', padding: '12px 8px', fontWeight: 600 }}>Wallet Address</th>
+                <th style={{ textAlign: 'right', padding: '12px 8px', fontWeight: 600 }}>Revenue (SOL)</th>
+                <th style={{ textAlign: 'right', padding: '12px 8px', fontWeight: 600 }}>Transactions</th>
+                <th style={{ textAlign: 'center', padding: '12px 8px', fontWeight: 600 }}>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -335,26 +341,39 @@ export default function WalletRevenueBreakdown({ dataUrl }: WalletRevenueBreakdo
                   style={{
                     borderBottom: '1px solid var(--ifm-toc-border-color)',
                     background: searchedWallet === wallet.address ? 'rgba(0, 163, 180, 0.1)' : 'transparent',
+                    transition: 'background 120ms ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    if (searchedWallet !== wallet.address) {
+                      e.currentTarget.style.background = 'var(--ifm-toc-border-color)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (searchedWallet !== wallet.address) {
+                      e.currentTarget.style.background = 'transparent';
+                    } else {
+                      e.currentTarget.style.background = 'rgba(0, 163, 180, 0.1)';
+                    }
                   }}
                 >
-                  <td style={{ padding: '8px' }}>{index + 1}</td>
-                  <td style={{ padding: '8px', fontFamily: 'monospace', fontSize: '0.85rem' }}>
+                  <td style={{ padding: '12px 8px', color: 'var(--ifm-color-secondary)' }}>{index + 1}</td>
+                  <td style={{ padding: '12px 8px', fontFamily: 'var(--ifm-font-family-monospace)', fontSize: '12px' }}>
                     <a
                       href={`https://solscan.io/account/${wallet.address}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      style={{ color: '#00A3B4', textDecoration: 'none' }}
+                      style={{ color: 'var(--accent)', textDecoration: 'none' }}
                     >
                       {wallet.address.slice(0, 8)}...{wallet.address.slice(-6)}
                     </a>
                   </td>
-                  <td style={{ textAlign: 'right', padding: '8px', fontWeight: 600 }}>
+                  <td style={{ textAlign: 'right', padding: '12px 8px', fontWeight: 600 }}>
                     {wallet.revenue.toFixed(4)}
                   </td>
-                  <td style={{ textAlign: 'right', padding: '8px' }}>
+                  <td style={{ textAlign: 'right', padding: '12px 8px' }}>
                     {wallet.txCount.toLocaleString()}
                   </td>
-                  <td style={{ textAlign: 'center', padding: '8px' }}>
+                  <td style={{ textAlign: 'center', padding: '12px 8px' }}>
                     <button
                       onClick={() => {
                         setWalletAddress(wallet.address);
@@ -362,12 +381,12 @@ export default function WalletRevenueBreakdown({ dataUrl }: WalletRevenueBreakdo
                       }}
                       style={{
                         padding: '4px 12px',
-                        fontSize: '0.75rem',
+                        fontSize: '12px',
                         fontWeight: 600,
-                        border: '1px solid #00A3B4',
+                        border: '1px solid var(--accent)',
                         borderRadius: '4px',
                         background: 'transparent',
-                        color: '#00A3B4',
+                        color: 'var(--accent)',
                         cursor: 'pointer',
                       }}
                     >
