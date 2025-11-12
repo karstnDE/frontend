@@ -68,7 +68,7 @@ export default function LoyaltyStats({ summary }: LoyaltyStatsProps): React.Reac
       <StatCard
         label="Compound-Only Rate"
         value={`${summary.loyalty_score.toFixed(1)}%`}
-        subtitle="% of active users"
+        subtitle="% of users managing their rewards"
         isPrimary={true}
       />
       <StatCard

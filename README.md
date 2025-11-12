@@ -142,7 +142,7 @@ The production build is output to `build/` directory.
 
 ### 1. Responsive Flex Layout
 
-The site uses a responsive flex layout inspired by Onum.com:
+The site uses a responsive flex layout with:
 - Centered content containers (max-width: 1440px)
 - Dynamic left/right whitespace that scales with viewport
 - Consistent alignment across header, tabs, sidebar, and content
@@ -164,7 +164,7 @@ Local search powered by @easyops-cn/docusaurus-search-local:
 - Last updated timestamp (right side, date only)
 
 **Theme Switcher:**
-The header features a three-icon theme switcher (inspired by docs.onum.com):
+The header features a three-icon theme switcher:
 - **Sun icon**: Light theme
 - **Monitor icon**: System theme (follows OS preference)
 - **Moon icon**: Dark theme

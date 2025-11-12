@@ -131,6 +131,7 @@ export default function ApyChart(): React.ReactElement {
   const dates = data.daily_apr.map(d => d.date);
   const referenceAprValues = data.daily_apr.map(d => d.reference_apr_percent);
   const yourAprValues = data.daily_apr.map(d => d.your_apr_percent);
+  const tunaPrices = data.daily_apr.map(d => d.tuna_price_usd);
 
   const parsedEntryPrice = (() => {
     const trimmed = entryPriceInput.trim();
@@ -154,20 +155,17 @@ export default function ApyChart(): React.ReactElement {
     let template = `<b>Date:</b> ${d.date}<br>` +
       `<b>Reference APR:</b> ${d.reference_apr_percent.toFixed(2)}%<br>`;
 
-    // Add custom APR if user changed entry price, otherwise show "Your APR"
+    // Add Entry Price APR
     if (customAprValues && customAprValues[i] !== null && parsedEntryPrice !== 0.05) {
-      template += `<b>Custom APR:</b> ${customAprValues[i].toFixed(2)}%<br>`;
+      template += `<b>Entry Price APR:</b> ${customAprValues[i].toFixed(2)}%<br>`;
     } else {
-      template += `<b>Your APR:</b> ${d.your_apr_percent.toFixed(2)}%<br>`;
+      template += `<b>Entry Price APR:</b> ${d.your_apr_percent.toFixed(2)}%<br>`;
     }
 
     template += `<b>Rolling Days:</b> ${d.rolling_days}<br>`;
 
     // Show rolling revenue in both SOL and USD
     template += `<b>Rolling Revenue:</b> ${d.rolling_revenue_sol.toFixed(2)} SOL ($${d.rolling_revenue_usd.toFixed(0)})<br>`;
-
-    // Show TUNA price in USD with source
-    template += `<b>TUNA Price:</b> $${d.tuna_price_usd.toFixed(4)} (${d.tuna_price_source})<br>`;
     template += `<extra></extra>`;
 
     return template;
@@ -180,7 +178,7 @@ export default function ApyChart(): React.ReactElement {
       y: referenceAprValues,
       type: 'scatter',
       mode: 'lines+markers',
-      name: 'Reference APR',
+      name: 'Reference APR (based on TUNA market price)',
       line: {
         color: 'rgba(0, 163, 180, 1)',  // Teal accent
         width: 2,
@@ -193,9 +191,10 @@ export default function ApyChart(): React.ReactElement {
     }
   ];
 
-  // Add Your/Custom APR trace (always show, either default $0.05 or custom price)
+  // Add Entry Price APR trace (always show, either default $0.05 or custom price)
   const yourAprTraceValues = customAprValues && parsedEntryPrice !== 0.05 ? customAprValues : yourAprValues;
-  const yourAprTraceName = customAprValues && parsedEntryPrice !== 0.05 ? 'Custom APR' : 'Your APR';
+  const entryPrice = parsedEntryPrice || 0.05;
+  const yourAprTraceName = `Entry Price APR ($${parseFloat(entryPrice.toFixed(4)).toString()} entry)`;
 
   traces.push({
     x: dates,
@@ -213,6 +212,22 @@ export default function ApyChart(): React.ReactElement {
       size: 4,
     },
     hovertemplate: hoverTemplate,
+  });
+
+  // Add TUNA Reference Price trace on secondary y-axis (hidden by default)
+  traces.push({
+    x: dates,
+    y: tunaPrices,
+    type: 'scatter',
+    mode: 'lines',
+    name: 'TUNA Reference Price',
+    yaxis: 'y2',
+    visible: 'legendonly',  // Hidden by default
+    line: {
+      color: 'rgba(239, 68, 68, 0.6)',  // Red/orange, semi-transparent
+      width: 1.5,
+    },
+    hovertemplate: '<b>TUNA Reference Price:</b> $%{y:.4f}<br><i>Derived from on-chain swap data</i><extra></extra>',
   });
 
   const handleEntryPriceChange = (value: string) => {
@@ -264,12 +279,24 @@ export default function ApyChart(): React.ReactElement {
             },
             xaxis: {
               ...template.layout.xaxis,
-              title: 'Date',
+              title: '',
               type: 'date',
             },
             yaxis: {
               ...template.layout.yaxis,
               title: 'APR (%)',
+              rangemode: 'tozero',
+            },
+            yaxis2: {
+              title: {
+                text: 'TUNA Reference Price (USD)',
+                font: { size: 12 },
+              },
+              overlaying: 'y',
+              side: 'right',
+              showgrid: false,
+              rangemode: 'tozero',
+              automargin: true,
             },
             showlegend: true,
             legend: {
@@ -310,9 +337,6 @@ export default function ApyChart(): React.ReactElement {
           flexWrap: 'wrap',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '14px', color: 'var(--ifm-color-secondary)' }}>
-              Your Entry Price:
-            </span>
             <span style={{ fontSize: '20px', fontWeight: 600, color: 'var(--ifm-font-color-base)' }}>$</span>
             <input
               type="text"
@@ -355,7 +379,6 @@ export default function ApyChart(): React.ReactElement {
           lineHeight: '1.5',
         }}>
           Enter the USD price you paid per TUNA to see your custom APR based on actual protocol revenue. Defaults to $0.05 (public pre-sale price).
-          {parsedEntryPrice !== null && ` Your entry price: $${parsedEntryPrice.toFixed(4)}`}
         </div>
       </div>
     </>

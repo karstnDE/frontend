@@ -24,14 +24,20 @@ interface PlotlyColors {
 function getColors(isDark: boolean): PlotlyColors {
   return {
     text: isDark ? '#E6E9EE' : '#111111',
-    grid: isDark ? '#3A4A5F' : '#E1E7EE',
+    grid: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
     bg: 'transparent',
     paper: 'transparent',
   };
 }
 
+function getSpikeColor(isDark: boolean): string {
+  // Very subtle crosshair - barely visible, just enough to help guide the eye
+  return isDark ? '#1a2832' : '#cbd5e0';
+}
+
 export function getPlotlyTemplate(isDark: boolean) {
   const colors = getColors(isDark);
+  const spikeColor = getSpikeColor(isDark);
   const accent = getThemeColor('--accent', ACCENT);
   const accentAlt = getThemeColor('--accent-hover', ACCENT_HOVER);
 
@@ -60,8 +66,10 @@ export function getPlotlyTemplate(isDark: boolean) {
         ticks: '',
         showspikes: true,
         spikemode: 'across',
-        spikecolor: ACCENT,
+        spikecolor: spikeColor,
         spikethickness: 1,
+        spikedash: 'dot',
+        spikesnap: 'cursor',
       },
       yaxis: {
         gridcolor: colors.grid,
@@ -70,8 +78,10 @@ export function getPlotlyTemplate(isDark: boolean) {
         ticks: '',
         showspikes: true,
         spikemode: 'across',
-        spikecolor: ACCENT,
+        spikecolor: spikeColor,
         spikethickness: 1,
+        spikedash: 'dot',
+        spikesnap: 'cursor',
       },
       legend: {
         orientation: 'h',
@@ -81,6 +91,14 @@ export function getPlotlyTemplate(isDark: boolean) {
         title: { text: '' },
       },
       hovermode: 'x unified',
+      hoverlabel: {
+        bgcolor: isDark ? '#1a1a1a' : '#ffffff',
+        bordercolor: spikeColor,
+        font: {
+          size: 13,
+          color: colors.text,
+        },
+      },
     },
     data: {
       scatter: [{ mode: 'lines', line: { width: 2 } }],

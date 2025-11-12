@@ -1,12 +1,12 @@
 ---
 id: usage-statistics-overview
-title: Usage Statistics
+title: Wallet Usage
 ---
 
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
 
-# Usage Statistics
+# Wallet Usage
 
 <BrowserOnly fallback={<LoadingSpinner />}>
   {() => {
@@ -34,37 +34,23 @@ import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
       return (
         <>
           <p>
-            Usage metrics capture how the DefiTuna community interacts with the protocol. We track stakers who manage
-            their positions, daily active users who trigger fee-generating actions, and the rolling seven day active set
-            to highlight sustained participation.
+            Wallet usage metrics track how the DefiTuna community interacts with the protocol. Daily active wallets capture
+            distinct addresses executing fee-generating actions each day, while weekly active wallets measure the rolling
+            seven-day union to highlight sustained participation.
           </p>
-          <div className="usage-summary-grid">
-            <div className="usage-summary-card">
-              <h3>Transactions scanned</h3>
-              <p>{summary.transactions_scanned.toLocaleString()}</p>
-            </div>
-            <div className="usage-summary-card">
-              <h3>Unique stakers</h3>
-              <p>{summary.staker_unique_addresses.toLocaleString()}</p>
-            </div>
-            <div className="usage-summary-card">
-              <h3>Daily active users</h3>
-              <p>{summary.daily_active_unique_addresses.toLocaleString()}</p>
-            </div>
-          </div>
 
           <UsageTimeSeriesChart
-            title="Daily Active Users (rolling view preview)"
+            title="Daily Active Wallets"
             data={daily_users.daily_counts}
-            yAxisLabel="Daily users"
-            description="This curve tracks the number of distinct wallets that executed fee-generating actions each day. Head to the dedicated pages for stakers and daily/weekly actives for deeper dives."
+            yAxisLabel="Daily active wallets"
+            description="Number of distinct wallets that executed fee-generating actions each day."
           />
 
           <UsageTimeSeriesChart
-            title="Weekly Active Users (7-day union)"
+            title="Weekly Active Wallets"
             data={weekly_users.rolling_counts}
             yAxisLabel="Active wallets (7-day)"
-            description="Weekly actives measure the union of addresses active within the trailing seven days. The chart helps identify sustained protocol use beyond single-day spikes."
+            description="Rolling 7-day union of active addresses. This metric identifies sustained protocol use beyond single-day spikes."
           />
 
           <UsageTopAddresses

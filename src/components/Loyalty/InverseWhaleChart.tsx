@@ -29,22 +29,38 @@ export default function InverseWhaleChart({
     return null;
   }
 
-  // Order: Small, Medium, Large, Mega (bottom to top)
-  const segments = [
-    { key: 'small', data: by_stake_size.small },
-    { key: 'medium', data: by_stake_size.medium },
-    { key: 'large', data: by_stake_size.large },
-    { key: 'mega', data: by_stake_size.mega },
-  ];
+  // Sort tiers from tier8 (top) to tier1 (bottom)
+  const sortedEntries = Object.entries(by_stake_size).sort((a, b) => {
+    // Extract tier numbers (tier8 -> 8, tier1 -> 1)
+    const tierA = parseInt(a[0].replace('tier', '')) || 0;
+    const tierB = parseInt(b[0].replace('tier', '')) || 0;
+    return tierB - tierA; // Descending order
+  });
 
-  const labels = segments.map((s) => s.data.label);
-  const rates = segments.map((s) => s.data.avg_compound_rate); // Already in percentage form
-  const userCounts = segments.map((s) => s.data.user_count);
+  const labels = sortedEntries.map(([_, data]) => data.label);
+  const totalRewards = sortedEntries.map(([_, data]) => data.total_rewards || 0);
 
-  // Highlight medium tier with accent color, others with secondary colors
-  const colors = segments.map((s) =>
-    s.key === 'medium' ? '#00A3B4' : '#6B7280'
+  // Calculate percentages for each behavior type
+  const compoundOnlyPct = sortedEntries.map(([_, data]) =>
+    data.user_count > 0 ? (data.compound_only_users / data.user_count) * 100 : 0
   );
+  const mixedPct = sortedEntries.map(([_, data]) =>
+    data.user_count > 0 ? (data.mixed_users / data.user_count) * 100 : 0
+  );
+  const claimOnlyPct = sortedEntries.map(([_, data]) =>
+    data.user_count > 0 ? (data.claim_only_users / data.user_count) * 100 : 0
+  );
+
+  // Behavior counts for hover info
+  const compoundOnlyCounts = sortedEntries.map(([_, data]) => data.compound_only_users);
+  const mixedCounts = sortedEntries.map(([_, data]) => data.mixed_users);
+  const claimOnlyCounts = sortedEntries.map(([_, data]) => data.claim_only_users);
+  const totalUsers = sortedEntries.map(([_, data]) => data.user_count);
+
+  // Colors: green for compound, yellow for mixed, red for claim
+  const compoundColor = '#22C55E';
+  const mixedColor = '#F59E0B';
+  const claimColor = '#EF4444';
 
   return (
     <div
@@ -60,43 +76,105 @@ export default function InverseWhaleChart({
       <h3 style={{ marginTop: 0 }}>Compound Rate by Stake Size (TUNA)</h3>
 
       <p style={{ color: 'var(--ifm-color-emphasis-700)', marginBottom: '24px' }}>
-        <strong>Compound Rate</strong>: Percentage of total rewards that were reinvested (compounded) rather than claimed.
+        Distribution of user behavior (compound-only, mixed, claim-only) across stake size tiers.
+        Each bar shows the percentage breakdown totaling 100%.
       </p>
 
       <Plot
         data={[
           {
             type: 'bar',
-            x: rates,
+            name: 'Compound-only',
+            x: compoundOnlyPct,
             y: labels,
             orientation: 'h',
             marker: {
-              color: colors,
+              color: compoundColor,
             },
-            text: rates.map(
-              (rate, idx) =>
-                `${rate.toFixed(1)}% (${userCounts[idx].toLocaleString()} users)`
-            ),
-            textposition: 'outside',
-            hovertemplate: '<b>%{y}</b><br>' +
-              'Compound Rate: %{x:.1f}%<br>' +
-              'Users: %{customdata}<br>' +
+            text: compoundOnlyPct.map(pct => pct > 5 ? `${pct.toFixed(0)}%` : ''),
+            textposition: 'inside',
+            insidetextanchor: 'middle',
+            hovertemplate: '<b>Compound-only</b><br>' +
+              '%{customdata.count} users (%{x:.1f}%)<br>' +
               '<extra></extra>',
-            customdata: userCounts,
+            customdata: compoundOnlyPct.map((_, idx) => ({
+              count: compoundOnlyCounts[idx],
+            })),
+          },
+          {
+            type: 'bar',
+            name: 'Mixed Behavior',
+            x: mixedPct,
+            y: labels,
+            orientation: 'h',
+            marker: {
+              color: mixedColor,
+            },
+            text: mixedPct.map(pct => pct > 5 ? `${pct.toFixed(0)}%` : ''),
+            textposition: 'inside',
+            insidetextanchor: 'middle',
+            hovertemplate: '<b>Mixed</b><br>' +
+              '%{customdata.count} users (%{x:.1f}%)<br>' +
+              '<extra></extra>',
+            customdata: mixedPct.map((_, idx) => ({
+              count: mixedCounts[idx],
+            })),
+          },
+          {
+            type: 'bar',
+            name: 'Claim-only',
+            x: claimOnlyPct,
+            y: labels,
+            orientation: 'h',
+            marker: {
+              color: claimColor,
+            },
+            text: claimOnlyPct.map(pct => pct > 5 ? `${pct.toFixed(0)}%` : ''),
+            textposition: 'inside',
+            insidetextanchor: 'middle',
+            hovertemplate: '<b>Claim-only</b><br>' +
+              '%{customdata.count} users (%{x:.1f}%)<br>' +
+              '<extra></extra>',
+            customdata: claimOnlyPct.map((_, idx) => ({
+              count: claimOnlyCounts[idx],
+            })),
           },
         ]}
         layout={{
           ...template.layout,
+          barmode: 'stack',
           xaxis: {
-            title: 'Average Compound Rate (%)',
-            range: [0, Math.max(...rates) * 1.2],
+            title: 'User Distribution (%)',
+            range: [0, 100],
+            ticksuffix: '%',
           },
           yaxis: {
             title: '',
             automargin: true,
           },
-          margin: { l: 150, r: 80, t: 20, b: 60 },
-          height: 350,
+          showlegend: true,
+          legend: {
+            orientation: 'h',
+            yanchor: 'bottom',
+            y: -0.3,
+            xanchor: 'center',
+            x: 0.5,
+          },
+          margin: { l: 150, r: 150, t: 20, b: 100 },
+          height: Math.max(400, labels.length * 60),
+          annotations: totalRewards.map((reward, idx) => ({
+            x: 101,
+            y: labels[idx],
+            xref: 'x',
+            yref: 'y',
+            text: `${reward.toFixed(1)} SOL<br>(${totalUsers[idx]} users)`,
+            showarrow: false,
+            xanchor: 'left',
+            font: {
+              size: 11,
+              color: 'var(--ifm-color-emphasis-700)',
+            },
+          })),
         }}
         config={defaultPlotlyConfig}
         style={{ width: '100%' }}

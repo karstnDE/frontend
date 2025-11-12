@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import type { TopTransactionsData, GroupMode, SummaryData } from './types';
 
 interface TopTransactionsTableProps {
@@ -11,6 +11,8 @@ interface TopTransactionsTableProps {
   selectedFilterLabel?: string | null;
   typeFilter?: string | string[] | null;
   summary?: SummaryData;
+  protocolFilter?: 'orca' | 'fusion' | null;
+  showProtocolToggle?: boolean;
 }
 
 export default function TopTransactionsTable({
@@ -23,7 +25,14 @@ export default function TopTransactionsTable({
   selectedFilterLabel,
   typeFilter,
   summary,
+  protocolFilter: externalProtocolFilter,
+  showProtocolToggle = false,
 }: TopTransactionsTableProps): React.ReactElement {
+  // Internal state for protocol filter when toggle is shown
+  const [internalProtocolFilter, setInternalProtocolFilter] = useState<'orca' | 'fusion'>('orca');
+
+  // Use external filter if provided, otherwise use internal state
+  const protocolFilter = showProtocolToggle ? internalProtocolFilter : externalProtocolFilter;
   // Create mint-to-name mapping from summary
   const mintToName = useMemo(() => {
     if (!summary) return {};
@@ -103,6 +112,22 @@ export default function TopTransactionsTable({
     if (typeFilterArray.length > 0) {
       allTransactions = allTransactions.filter(tx => typeFilterArray.includes(tx.type));
     }
+  }
+
+  // Apply protocol filter (Orca vs Fusion)
+  if (protocolFilter) {
+    allTransactions = allTransactions.filter(tx => {
+      const typeLower = (tx.type || '').toLowerCase();
+      const poolLabelLower = (tx.pool_label || '').toLowerCase();
+      const labelLower = (tx.label || '').toLowerCase();
+
+      if (protocolFilter === 'orca') {
+        return typeLower.includes('orca') || poolLabelLower.includes('orca') || labelLower.includes('orca');
+      } else if (protocolFilter === 'fusion') {
+        return typeLower.includes('fusion') || poolLabelLower.includes('fusion') || labelLower.includes('fusion');
+      }
+      return true;
+    });
   }
 
   // Deduplicate by signature (same transaction might appear in multiple groups)
@@ -197,9 +222,17 @@ export default function TopTransactionsTable({
     return abbreviateMint(tx.mint);
   };
 
-  const tableTitle = selectedFilter
+  let tableTitle = selectedFilter
     ? `Top 10 Transactions for ${selectedFilterLabel || selectedFilter}`
     : 'Top 10 Transactions';
+
+  // Add protocol filter to title
+  if (protocolFilter) {
+    const protocolName = protocolFilter.charAt(0).toUpperCase() + protocolFilter.slice(1);
+    tableTitle = selectedFilter
+      ? `Top 10 ${protocolName} Transactions for ${selectedFilterLabel || selectedFilter}`
+      : `Top 10 ${protocolName} Transactions`;
+  }
 
   const subtitle = totalMatching > 10
     ? `Showing top 10 of ${totalMatching.toLocaleString()} matching transactions`
@@ -216,12 +249,56 @@ export default function TopTransactionsTable({
       marginBottom: '24px',
     }}>
       <div style={{
-        marginTop: 0,
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         marginBottom: '4px',
-        fontSize: '1.25rem',
-        fontWeight: 600,
-        lineHeight: 1.25
-      }}>{tableTitle}</div>
+        flexWrap: 'wrap',
+        gap: '12px',
+      }}>
+        <div style={{
+          fontSize: '1.25rem',
+          fontWeight: 600,
+          lineHeight: 1.25
+        }}>{tableTitle}</div>
+
+        {showProtocolToggle && (
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button
+              onClick={() => setInternalProtocolFilter('orca')}
+              style={{
+                padding: '6px 12px',
+                fontSize: '13px',
+                fontWeight: '500',
+                border: '1px solid var(--ifm-toc-border-color)',
+                borderRadius: '4px',
+                background: internalProtocolFilter === 'orca' ? 'var(--ifm-color-primary)' : 'var(--ifm-background-color)',
+                color: internalProtocolFilter === 'orca' ? '#fff' : 'var(--ifm-font-color-base)',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+              }}
+            >
+              Orca
+            </button>
+            <button
+              onClick={() => setInternalProtocolFilter('fusion')}
+              style={{
+                padding: '6px 12px',
+                fontSize: '13px',
+                fontWeight: '500',
+                border: '1px solid var(--ifm-toc-border-color)',
+                borderRadius: '4px',
+                background: internalProtocolFilter === 'fusion' ? 'var(--ifm-color-primary)' : 'var(--ifm-background-color)',
+                color: internalProtocolFilter === 'fusion' ? '#fff' : 'var(--ifm-font-color-base)',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+              }}
+            >
+              Fusion
+            </button>
+          </div>
+        )}
+      </div>
       {(selectedFilter || typeFilter) && (
         <div style={{
           fontSize: '13px',

@@ -2,6 +2,8 @@
 title: Data Pipeline & Methodology
 ---
 
+YOU SCAN SKIP THIS IF YOU ARE NOT INTERESTED IN THE DETAILS AND JUST WANT TO SEE THE DATA
+
 # Data Pipeline & Methodology
 
 This page documents the general approach to analyzing Solana DeFi protocols through on-chain data. For technology stack details, see [Technical Foundation](../../intro/tech-setup). For more details around individual DeFi protocols, check the respective section/ page.
@@ -38,9 +40,11 @@ The specific accounts monitored depend on the analysis objective. Revenue analys
 
 **Supplemental:** Protocol websites and documentation provide context like token names and pool information.
 
+On-chain transactions contain a lot of information. I try to get as much information as I can out of as little transactions as possible.
+
 ### Update Cadence
 
-Data updates usually run daily via the automated GitHub Actions workflow (.github/workflows/daily-data.yml), When analytical methods improve, the entire dataset is reprocessed to maintain uniform standards.
+Data updates usually run daily via automated GitHub Actions workflow (.github/workflows/daily-data.yml), When analytical methods improve, the entire dataset is reprocessed to maintain uniform standards.
 
 ---
 
@@ -64,17 +68,17 @@ These logs contain instruction names describing operations. The classification s
 - Accurate instruction identification enables precise revenue attribution and analytics
 
 For example:
-- A log containing "Instruction: CollectFees" represents fee collection
+- A log containing "Instruction: CollectFees" represents collection of fees that have piled up in a certain market accouunt
 - A log containing "Instruction: Stake" represents a staking operation
 - IDL decoding reveals which accounts received fees or which pools were involved
 
 ### Classification Configuration
 
 A configuration file maintains the mapping between instruction names and their meanings. This includes:
-- Display names for user-facing labels
-- Categorization for grouping related transactions
-- Revenue flags indicating which transactions represent value generation
-- Color schemes for consistent visualization
+- Display names for user-facing labels (instead of technical strings)
+- Categorization for grouping related transactions (there might be different instruction types we want to sum up and display as one type)
+- Revenue flags indicating which transactions represent value generation. E.g. there are SwapReward transactions that convert tokens into SOL to distribute it to stakers. They are important but do not actually create the revenue
+- Color schemes for consistent visualization (e.g. liquidations should always have a red-ish color)
 
 When protocols introduce new transaction types, the configuration is updated and historical data is reprocessed for consistency.
 
@@ -95,7 +99,7 @@ Common attribution dimensions include:
 
 Each transaction receives labels for all applicable dimensions, allowing the same data to power different analytical views.
 
-### Pool Identification
+### Pool Identification -- AI TO CHECK THIS SECTION (REMOVE COMMENT AFTERWARDS). I think we do not use pattern matching? If we do, explain better
 
 **Pool identification works automatically** through account-based pattern matching. The system:
 
@@ -113,9 +117,9 @@ To compare and aggregate transactions involving different tokens, values are nor
 
 ### Conversion Approach
 
-**On-chain rates:** When tokens are swapped, the actual exchange rate provides precise valuation for that moment.
+**On-chain rates:** When tokens are swapped, the actual exchange rate provides precise valuation for that moment. If we have multiple swaps per day, I use the multiple conversion rates to build an average daily price.
 
-**Same-day pricing:** Conversion rates are applied only to transactions occurring on the same day, ensuring that historical values are never retroactively adjusted based on future price changes.
+**Same-day pricing:** Conversion rates are applied only to transactions occurring on the same day, ensuring that historical values are never retroactively adjusted based on future price changes. See "Pending Conversions" below.
 
 *Example:* If the treasury receives 100 USDC on Day 1 and swaps it for 0.5 SOL on Day 5, the Day 1 revenue is recorded as 100 USDC (unconverted). On Day 5, the swap reveals the rate (100 USDC = 0.5 SOL), and Day 5's attribution includes both the swap and the converted value. Day 1's historical record remains unchanged as 100 USDC, preserving the actual state of the treasury on that day. This prevents distortions where today's prices misrepresent historical revenue.
 
@@ -123,12 +127,12 @@ To compare and aggregate transactions involving different tokens, values are nor
 
 ### Pending Conversions
 
-**Context:** This is particularly relevant for **treasury accounts** in DeFi protocols. Treasuries often accumulate diverse tokens (fee revenue in USDC, BONK, various LP tokens, etc.), but **only a specific token is made available for distribution to stakers** (typically the protocol's native token or SOL).
+**Context:** This is particularly relevant for **treasury accounts** in DeFi protocols. Treasuries often accumulate diverse tokens (fee revenue in USDC, BONK, various LP tokens, etc.), but **only a specific token is made available for distribution to stakers** (typically the protocol's native token, USDC or SOL).
 
 For example, a treasury might receive:
 - 100 USDC from swap fees
-- 500 BONK from referral rewards
-- 10 LP tokens from liquidity provision
+- 500,000 BONK from a liquidation
+- 0,01 cbBTC from opening an LP position
 
 But the protocol only distributes SOL to stakers. Until the treasury swaps these tokens for SOL, they remain "pending conversions."
 
@@ -138,7 +142,7 @@ But the protocol only distributes SOL to stakers. Until the treasury swaps these
 
 ## Data Quality Standards
 
-Data Quality is paramount for a project like this. I spend a lot of time on ensuring that the numbers are exact and make sense. There are different ways to make sure the numbers are correct.
+Data Quality is paramount for a project like this. I spend a lot of time on ensuring that the numbers are exact and make sense. There are different ways to do that.
 
 ### Verification Methods
 

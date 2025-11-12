@@ -93,7 +93,7 @@ Before we talk about DefiTuna let's start with a summary of the key metrics that
             <h3>Staking Wallets</h3>
             <p>{metrics?.staking_wallets?.toLocaleString() || '—'}</p>
             <div style={{ fontSize: '0.9rem', color: 'var(--ifm-color-emphasis-600)', marginTop: '4px' }}>
-              unique addresses
+              active wallets with stake
             </div>
           </div>
 
@@ -135,7 +135,13 @@ Before we talk about DefiTuna let's start with a summary of the key metrics that
 > - Lenders enjoy attractive yields while enabling deeper liquidity.
 > - All of this serves one ambition: to deliver the most efficient and reliable AMM on Solana
 
+## Why DefiTuna?
 
+[Placeholder: This section will explain the rationale for selecting DefiTuna as the subject of this on-chain analysis. Topics to cover include: the protocol's innovative approach to DeFi infrastructure, its growing adoption within the Solana ecosystem, the transparency of its treasury operations, and the analytical opportunities presented by its comprehensive on-chain data.]
+
+## What Makes the Treasury Address Interesting?
+
+[Placeholder: This section will highlight what makes DefiTuna's treasury address particularly valuable for analysis. Discussion points will include: the treasury as a complete record of protocol economics, how fee collection mechanisms create detailed revenue attribution possibilities, the insights available from staking program interactions, and how treasury flows reveal protocol health and user behavior patterns. The treasury serves as a single source of truth for understanding protocol fundamentals.]
 
 ## What can I learn from the data?
 

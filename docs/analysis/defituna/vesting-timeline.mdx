@@ -1,0 +1,218 @@
+---
+title: Vesting Timeline
+---
+
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
+
+# Vesting Timeline
+
+Track TUNA tokens locked in vesting schedules and their unlock timeline.
+
+Vesting schedules lock tokens for a specified period with a cliff and gradual unlocking over time. This page shows all active vesting schedules, when tokens will become available, and the next upcoming unlock events.
+
+<BrowserOnly fallback={<LoadingSpinner />}>
+  {() => {
+    const { useVestingTimeline } = require('@site/src/hooks/useVestingTimeline');
+    const UnlockTimelineChart = require('@site/src/components/Vesting/UnlockTimelineChart').default;
+    const NextUnlocksTable = require('@site/src/components/Vesting/NextUnlocksTable').default;
+
+    function VestingTimelinePage() {
+      const { data, loading, error } = useVestingTimeline();
+
+      if (loading) {
+        return (
+          <div style={{ padding: '48px', textAlign: 'center' }}>
+            <LoadingSpinner />
+            <p style={{ marginTop: '16px', color: 'var(--ifm-color-emphasis-600)' }}>
+              Loading vesting data...
+            </p>
+          </div>
+        );
+      }
+
+      if (error || !data) {
+        return (
+          <div className="alert alert--danger" role="alert">
+            <h4>Error Loading Vesting Data</h4>
+            <p>{error || 'Failed to load vesting timeline data.'}</p>
+          </div>
+        );
+      }
+
+      const { schedules, daily_timeline } = data;
+
+      // Calculate statistics
+      const totalLocked = schedules.reduce((sum, s) => sum + s.locked_tuna, 0);
+
+      // Get current locked amount for today's date
+      const today = new Date().toISOString().split('T')[0];
+      const currentLocked = daily_timeline[today] ?? 0;
+
+      const peakLocked = Object.values(daily_timeline).length > 0
+        ? Math.max(...Object.values(daily_timeline))
+        : 0;
+
+      return (
+        <>
+          {/* Summary stats */}
+          <div className="alert alert--info" role="alert" style={{ marginBottom: '24px' }}>
+            <h4 style={{ marginTop: 0 }}>Vesting Overview</h4>
+            <p style={{ marginBottom: 0 }}>
+              <strong>{schedules.length}</strong> vesting schedule(s) with{' '}
+              <strong>{totalLocked.toLocaleString(undefined, { maximumFractionDigits: 0 })}</strong> TUNA total locked.{' '}
+              Currently{' '}
+              <strong>{currentLocked.toLocaleString(undefined, { maximumFractionDigits: 0 })}</strong> TUNA remain locked
+              ({((currentLocked / totalLocked) * 100).toFixed(1)}% of total).
+            </p>
+          </div>
+
+          {/* Unlock timeline chart */}
+          <UnlockTimelineChart
+            timeline={daily_timeline}
+            totalSchedules={schedules.length}
+          />
+
+          {/* Next unlocks table */}
+          <NextUnlocksTable schedules={schedules} />
+
+          {/* Schedule details */}
+          <details style={{ marginBottom: '24px' }}>
+            <summary style={{ cursor: 'pointer', padding: '12px', background: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-toc-border-color)', borderRadius: 'var(--ifm-global-radius)' }}>
+              <strong>All Vesting Schedules ({schedules.length})</strong>
+            </summary>
+            <div style={{
+              marginTop: '16px',
+              background: 'var(--ifm-background-surface-color)',
+              border: '1px solid var(--ifm-toc-border-color)',
+              borderRadius: 'var(--ifm-global-radius)',
+              padding: '24px',
+            }}>
+              <div style={{ overflowX: 'auto' }}>
+                <table style={{
+                  display: 'table',
+                  width: '100%',
+                  minWidth: '900px',
+                  borderCollapse: 'collapse',
+                  fontSize: '14px',
+                }}>
+                  <thead>
+                    <tr style={{ borderBottom: '2px solid var(--ifm-toc-border-color)' }}>
+                      <th style={{ padding: '12px 8px', textAlign: 'left', fontWeight: 600 }}>Start Date</th>
+                      <th style={{ padding: '12px 8px', textAlign: 'right', fontWeight: 600 }}>Locked (TUNA)</th>
+                      <th style={{ padding: '12px 8px', textAlign: 'right', fontWeight: 600 }}>Cliff (days)</th>
+                      <th style={{ padding: '12px 8px', textAlign: 'right', fontWeight: 600 }}>Unlock Period (days)</th>
+                      <th style={{ padding: '12px 8px', textAlign: 'right', fontWeight: 600 }}>Unlocks</th>
+                      <th style={{ padding: '12px 8px', textAlign: 'left', fontWeight: 600 }}>First Unlock</th>
+                      <th style={{ padding: '12px 8px', textAlign: 'left', fontWeight: 600 }}>Last Unlock</th>
+                      <th style={{ padding: '12px 8px', textAlign: 'left', fontWeight: 600 }}>Tx</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {schedules
+                      .sort((a, b) => b.start_time.localeCompare(a.start_time))
+                      .map((schedule, idx) => (
+                      <tr
+                        key={idx}
+                        style={{
+                          borderBottom: '1px solid var(--ifm-toc-border-color)',
+                          transition: 'background 120ms ease',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = 'var(--ifm-toc-border-color)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = 'transparent';
+                        }}
+                      >
+                        <td style={{ padding: '12px 8px', color: 'var(--ifm-color-secondary)' }}>
+                          {schedule.start_time.split('T')[0]}
+                        </td>
+                        <td style={{ padding: '12px 8px', textAlign: 'right', fontWeight: 600, color: 'var(--accent)' }}>
+                          {schedule.locked_tuna.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                        </td>
+                        <td style={{ padding: '12px 8px', textAlign: 'right', color: 'var(--ifm-color-secondary)' }}>
+                          {(schedule.cliff_hours / 24).toFixed(1)}
+                        </td>
+                        <td style={{ padding: '12px 8px', textAlign: 'right', color: 'var(--ifm-color-secondary)' }}>
+                          {(schedule.unlock_period_hours / 24).toFixed(1)}
+                        </td>
+                        <td style={{ padding: '12px 8px', textAlign: 'right', color: 'var(--ifm-color-secondary)' }}>
+                          {schedule.num_unlocks}
+                        </td>
+                        <td style={{ padding: '12px 8px', color: 'var(--ifm-color-secondary)' }}>
+                          {schedule.first_unlock ? schedule.first_unlock.split('T')[0] : 'N/A'}
+                        </td>
+                        <td style={{ padding: '12px 8px', color: 'var(--ifm-color-secondary)' }}>
+                          {schedule.last_unlock ? schedule.last_unlock.split('T')[0] : 'N/A'}
+                        </td>
+                        <td style={{ padding: '12px 8px' }}>
+                          <a
+                            href={`https://solscan.io/tx/${schedule.signature}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                              fontSize: '12px',
+                              fontFamily: 'var(--ifm-font-family-monospace)',
+                              color: 'var(--accent)',
+                              textDecoration: 'none',
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.textDecoration = 'underline';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.textDecoration = 'none';
+                            }}
+                          >
+                            {schedule.signature.substring(0, 5)}...{schedule.signature.slice(-5)}
+                          </a>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </details>
+
+          {/* Methodology */}
+          <details style={{ marginBottom: '24px' }}>
+            <summary style={{ cursor: 'pointer', padding: '12px', background: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-toc-border-color)', borderRadius: 'var(--ifm-global-radius)' }}>
+              <strong>Methodology</strong>
+            </summary>
+            <div style={{ marginTop: '16px', padding: '24px', background: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-toc-border-color)', borderRadius: 'var(--ifm-global-radius)' }}>
+              <h4>Data Source</h4>
+              <p>
+                Vesting data is extracted from on-chain <code>SetVestingStrategy</code> instructions
+                in the TUNA unstake program (<code>tUnst2Y2sbmgSgARBpSBZhqPzpoy2iUsdCwb5ToYVJa</code>).
+              </p>
+
+              <h4>Unlock Calculation</h4>
+              <p>
+                For each vesting schedule, the unlock timeline is calculated based on:
+              </p>
+              <ul>
+                <li><strong>Cliff Period</strong>: Initial waiting period before first unlock (in hours)</li>
+                <li><strong>Unlock Period</strong>: Time between unlock events (in hours)</li>
+                <li><strong>Unlock Rate</strong>: Amount of TUNA released per unlock period</li>
+              </ul>
+              <p>
+                The first unlock occurs at <code>start_time + cliff + unlock_period</code>.
+                Subsequent unlocks occur every <code>unlock_period</code> hours until all locked
+                tokens are released.
+              </p>
+
+              <h4>Timeline Aggregation</h4>
+              <p>
+                The daily timeline shows the total amount of TUNA locked across all vesting schedules
+                on each day. As unlock events occur, the total locked amount decreases accordingly.
+              </p>
+            </div>
+          </details>
+        </>
+      );
+    }
+
+    return <VestingTimelinePage />;
+  }}
+</BrowserOnly>

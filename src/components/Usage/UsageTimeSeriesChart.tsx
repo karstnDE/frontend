@@ -22,6 +22,12 @@ export default function UsageTimeSeriesChart({
 }: UsageTimeSeriesChartProps): React.ReactElement {
   const { colorMode } = useColorMode();
   const template = getPlotlyTemplate(colorMode === 'dark');
+  const isDark = colorMode === 'dark';
+
+  // Get accent color - Plotly doesn't support CSS variables, so we need actual hex values
+  const accentColor = isDark ? '#14BCCD' : '#00A3B4';
+  // Very subtle spike (crosshair) color
+  const spikeColor = isDark ? '#1a2832' : '#cbd5e0';
 
   const plotRef = useRef<HTMLDivElement>(null);
   useChartTracking(plotRef, {
@@ -50,10 +56,10 @@ export default function UsageTimeSeriesChart({
       ref={plotRef}
       style={{
         background: 'var(--ifm-background-surface-color)',
-        border: '1px solid var(--ifm-color-emphasis-200)',
+        border: '1px solid var(--ifm-toc-border-color)',
         borderRadius: 'var(--ifm-global-radius)',
         padding: '24px',
-        marginBottom: '32px',
+        marginBottom: '24px',
       }}
     >
       <h3 style={{ marginTop: 0 }}>{title}</h3>
@@ -70,25 +76,33 @@ export default function UsageTimeSeriesChart({
               y,
               type: 'scatter',
               mode: 'lines+markers',
-              marker: { color: 'var(--onum-accent)' },
-              line: { color: 'var(--onum-accent)' },
+              marker: { color: accentColor },
+              line: { color: accentColor },
               hovertemplate: '%{x}<br><b>%{y}</b> users<extra></extra>',
             },
           ]}
           layout={{
-            template,
+            ...template.layout,
             autosize: true,
             height: 420,
             margin: { l: 56, r: 24, t: 16, b: 48 },
             xaxis: {
+              ...template.layout.xaxis,
               title: 'Date (UTC)',
               type: 'date',
+              spikecolor: spikeColor,
+              spikedash: 'dot',
+              spikethickness: 1,
             },
             yaxis: {
+              ...template.layout.yaxis,
               title: yAxisLabel,
               rangemode: 'tozero',
+              spikecolor: spikeColor,
+              spikedash: 'dot',
+              spikethickness: 1,
             },
-            hovermode: 'x unified',
+            hovermode: 'x',
           }}
           config={defaultPlotlyConfig}
           style={{ width: '100%', height: '100%' }}

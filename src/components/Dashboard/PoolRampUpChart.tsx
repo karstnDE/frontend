@@ -146,6 +146,24 @@ export default function PoolRampUpChart(): React.ReactElement {
     setPlotRevision(prev => prev + 1);
   };
 
+  const handleSelect10Newest = () => {
+    // Sort pools by establishment_date (descending - most recent first)
+    const sortedPools = [...data.pools].sort((a, b) =>
+      new Date(b.establishment_date).getTime() - new Date(a.establishment_date).getTime()
+    );
+
+    // Get the 10 newest pool IDs
+    const newest10 = sortedPools.slice(0, 10).map(p => p.pool_id);
+
+    // Set visibility
+    const newVisibility: Record<string, boolean> = {};
+    data.pools.forEach(pool => {
+      newVisibility[pool.pool_id] = newest10.includes(pool.pool_id);
+    });
+    setPoolVisibility(newVisibility);
+    setPlotRevision(prev => prev + 1);
+  };
+
   // Create traces for each pool
   const traces: any[] = data.pools.map((pool, index) => {
     // Filter days based on maxDays slider
@@ -362,6 +380,32 @@ export default function PoolRampUpChart(): React.ReactElement {
                 }}
               >
                 Deselect All Pools
+              </button>
+              <button
+                onClick={handleSelect10Newest}
+                style={{
+                  padding: '8px 16px',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  border: '1px solid var(--ifm-toc-border-color)',
+                  borderRadius: '4px',
+                  background: 'var(--ifm-background-color)',
+                  color: 'var(--ifm-font-color-base)',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'var(--ifm-color-primary)';
+                  e.currentTarget.style.color = '#fff';
+                  e.currentTarget.style.borderColor = 'var(--ifm-color-primary)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'var(--ifm-background-color)';
+                  e.currentTarget.style.color = 'var(--ifm-font-color-base)';
+                  e.currentTarget.style.borderColor = 'var(--ifm-toc-border-color)';
+                }}
+              >
+                10 Newest Pools
               </button>
             </div>
           </div>

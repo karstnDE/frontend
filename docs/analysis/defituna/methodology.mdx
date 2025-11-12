@@ -4,17 +4,17 @@ title: DefiTuna Methodology
 
 # DefiTuna Methodology
 
-This page documents the analytical approaches specific to DefiTuna, a Solana DeFi protocol. For general methodology, see [Data Pipeline & Methodology](../methodology).
+This page documents the analytical approaches specific to DefiTuna. For general methodology, see [Data Pipeline & Methodology](../methodology).
 
 ## Overview
 
-DefiTuna analytics cover three main areas:
+DefiTuna analytics currently cover three main areas:
 
 1. **Treasury Revenue Attribution** - Understanding where protocol revenue comes from
 2. **Staking Analytics** - Tracking TUNA staking behavior and yields
 3. **Usage Statistics** - Measuring user activity and engagement
 
-Each area requires specialized approaches tailored to DefiTuna's unique characteristics.
+Each area requires specialized approaches tailored to DefiTuna's unique characteristics. Each of those areas have in commong that they can be analysed from looking at transactions that touch the Treasury account.
 
 ---
 
@@ -32,7 +32,7 @@ The analytical challenge: when tokens are eventually swapped to SOL, that SOL mu
 
 I track accumulated tokens across three dimensions:
 - **Which token** - USDC, JUP, TUNA, etc.
-- **Which pool** - Orca SOL-USDC, Fusion pools, etc.
+- **Which pool and DEX** - Orca SOL-USDC, Fusion pools, etc.
 - **Which activity** - Protocol fees, liquidity positions, etc.
 
 When tokens get swapped to SOL, I calculate the conversion rate and proportionally attribute the resulting SOL back to each source. This ensures every SOL is traced to its origin.
@@ -54,17 +54,15 @@ Here's how attribution works in practice:
   - Liquidity operations: 50 × 0.005 = 0.25 SOL
 - Total: 0.75 SOL (matches swap output)
 
-### Cross-Day Tracking
-
-Token balances persist across days. Tokens earned in Week 1 but swapped in Week 2 are still attributed to Week 1's revenue activities. This prevents gaps and ensures complete accounting.
+USDC is actually a bad example because it gets swapped to SOL multiple times per day. But as the last swap might not exactly take place at 00:00 AM UTC, there will be always some token "hangover".
 
 ### Dual Verification
 
 Two independent methods calculate total revenue:
-1. **Simple count** - Sum all SOL inflows
+1. **Simple count** - Sum all SOL inflows (i.e. revenue earned in SOL, and the SOL coming from SwapReward)
 2. **Attributed sum** - Sum all attributed SOL from the ledger
 
-These must match within 0.01 SOL. Any discrepancy indicates an attribution error requiring investigation.
+These must match 100%. Any discrepancy indicates an attribution logic error requiring investigation.
 
 ### 100% Accuracy Standard
 
@@ -86,11 +84,11 @@ I monitor the staking program to track:
 
 These metrics reveal staking participation trends over time.
 
-### APY Calculations
+### APR Calculations
 
-Two APY metrics are calculated:
+Two APR metrics are calculated:
 
-**Reference APR** - The protocol-wide staking return available to all stakers. Calculated from total rewards distributed divided by total staked amount.
+**Reference APR** - The protocol-wide staking return available to all stakers. Calculated from total rewards distributed divided by total staked amount. 
 
 **Your APR** - A user-specific return accounting for when someone stakes relative to reward distributions. Shows the actual return for different entry timings.
 
@@ -102,7 +100,7 @@ Stakers have two choices when rewards accrue:
 - **Compound** - Restake rewards to increase position
 - **Claim** - Withdraw rewards
 
-I track this behavior across different staker sizes:
+I track this behavior across different staker sizes: (AI TO CHECK AGAINST CURRENT COHORTS IN CODE)
 - **Mega stakers** - Over 10M TUNA staked
 - **Large stakers** - 1-10M TUNA
 - **Medium stakers** - 100K-1M TUNA
@@ -128,13 +126,13 @@ Usage analytics measure how actively the protocol is being used and by how many 
 
 ### User Definition
 
-A "user" is a unique wallet address that signs transactions interacting with DefiTuna. I track signers rather than just recipients to focus on active participants.
+A "user" is a unique wallet address that signs transactions interacting with DefiTuna's Treasury Account. I track signers rather than just recipients to focus on active participants.
 
 ### Activity Categories
 
-**Stakers** - Wallets that stake, unstake, claim rewards, or compound. These represent committed users directly participating in the protocol's staking mechanism.
+**Stakers** - Wallets that stake, unstake, claim rewards, or compound. These represent committed users directly participating in the protocol's staking mechanism. AI TO CHECK - SHOULD BE WALLETS WITH ACTIVE STAKE
 
-**Daily Active Users** - Wallets involved in revenue-generating activities like fee collection, position adjustments, liquidity operations, etc. Excludes pure token transfers.
+**Daily Active Users** - Wallets involved in revenue-generating activities like fee collection, position adjustments, liquidity operations, etc. Excludes pure token transfers. AI TO CHECK - SHOULD BE DAILY WALLETS
 
 ### Tracking Approach
 
@@ -143,10 +141,6 @@ Daily: Count unique wallet addresses per activity type each day.
 Weekly: Apply 7-day rolling windows to show sustained engagement over time rather than daily volatility.
 
 **Top Wallets** - Rank wallets by total days active, weeks active, or transaction count to identify core users.
-
-### No Bot Filtering
-
-Currently no automated bot detection. The transparent data makes manual review straightforward if suspicious patterns appear.
 
 ---
 
@@ -196,21 +190,7 @@ This is DefiTuna's primary treasury address where protocol revenue accumulates. 
 **Key Tokens:**
 - **SOL/WSOL** - Native Solana token
 - **TUNA** - DefiTuna's protocol token
-- **USDC, JUP** - Common revenue tokens
-
----
-
-## What's Excluded
-
-Not all treasury transactions represent revenue:
-
-**Staking operations** - User deposits that remain withdrawable aren't counted as revenue. Only staking-related fees or rewards that accrue to the treasury qualify.
-
-**Internal transfers** - Movements between treasury-controlled accounts don't represent new value.
-
-**System transactions** - Protocol maintenance operations that don't generate value.
-
-The classification system explicitly flags these transaction types to exclude them from revenue metrics while maintaining complete transaction history.
+- **USDC, JUP** - Common revenue tokens (examples)
 
 ---
 

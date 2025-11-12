@@ -1,7 +1,7 @@
 /**
  * karstenalytics Custom Theme
  * Teal accent color: #00A3B4
- * Based on Onum.com design with 56px header and 290px sidebar
+ * Design features: 56px header and 290px sidebar
  */
 
 /* Import Inter and JetBrains Mono fonts */
@@ -12,6 +12,7 @@
   /* Teal accent colors */
   --accent: #00A3B4;
   --accent-hover: #14BCCD;
+  --accent-transparent: rgba(0, 163, 180, 0.2);
 
   /* Light mode colors */
   --ifm-color-primary: #00A3B4;
@@ -95,6 +96,9 @@
   --ifm-hr-background-color: #1F2A35;
 
   /* Keep teal accent same in dark mode */
+  --accent: #00A3B4;
+  --accent-hover: #14BCCD;
+  --accent-transparent: rgba(0, 163, 180, 0.2);
   --ifm-color-primary: #00A3B4;
   --ifm-color-primary-dark: #009099;
   --ifm-color-primary-darker: #00858c;
@@ -282,6 +286,11 @@ body {
 .menu__link--active:not(.menu__link--sublist) {
   color: var(--accent);
   font-weight: 500;
+}
+
+/* Active sidebar item icon color */
+.menu__link--active:not(.menu__link--sublist) svg {
+  color: var(--accent);
 }
 
 .menu__link--active:not(.menu__link--sublist)::before {
@@ -547,6 +556,19 @@ figure,
   padding: 16px;
   margin: 20px 0;
 }
+
+/* Plotly spike/crosshair lines - override default white color */
+.spikeline {
+  stroke: #94a3b8 !important;
+  stroke-opacity: 0.6 !important;
+  stroke-dasharray: 2, 2 !important;
+}
+
+[data-theme='dark'] .spikeline {
+  stroke: #475569 !important;
+  stroke-opacity: 0.8 !important;
+}
+
 /* ========================
    Code blocks
    ======================== */
@@ -877,6 +899,11 @@ textarea:focus {
 .blog-layout .menu__link--active {
   color: var(--accent);
   font-weight: 500;
+}
+
+/* Active sidebar item icon color */
+.blog-layout .menu__link--active svg {
+  color: var(--accent);
 }
 
 .blog-layout .menu__link--active::before {

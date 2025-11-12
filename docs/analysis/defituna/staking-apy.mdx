@@ -79,65 +79,118 @@ This dashboard shows the historical development of the Annual Percentage Rate (A
           .map(d => (d.revenue_per_tuna_usd / userEntryPrice) * 100);
 
         if (customAprValues.length > 0) {
+          // Calculate 30-day average (last 30 values)
+          const last30Values = customAprValues.slice(-30);
+
           customStats = {
-            current: customAprValues[customAprValues.length - 1],
-            average: customAprValues.reduce((a, b) => a + b, 0) / customAprValues.length,
-            max: Math.max(...customAprValues),
-            min: Math.min(...customAprValues),
+            thirty_day_average: last30Values.reduce((a, b) => a + b, 0) / last30Values.length,
+            historical_average: customAprValues.reduce((a, b) => a + b, 0) / customAprValues.length,
           };
         }
       }
 
-      const StatCard = ({ label, referenceValue, yourValue, customValue }) => (
-        <div style={{
-          padding: '24px',
-          background: 'var(--ifm-background-surface-color)',
-          border: '1px solid var(--ifm-toc-border-color)',
-          borderRadius: 'var(--ifm-global-radius)',
-        }}>
-          <div style={{ fontSize: '14px', color: 'var(--ifm-color-secondary)', marginBottom: '8px' }}>{label}</div>
-          <div style={{ fontSize: '14px', color: 'var(--ifm-color-secondary)', marginTop: '4px' }}>
-            Reference: {referenceValue?.toFixed(2)}%
+      const StatCard = ({ label, referenceValue, yourValue, customValue, showIndicators }) => {
+        const entryPrice = userEntryPrice || 0.05;
+        const aprValue = customValue !== null && customValue !== undefined ? customValue : yourValue;
+
+        // Format entry price without trailing zeroes
+        const formatPrice = (price) => {
+          return parseFloat(price.toFixed(4)).toString();
+        };
+
+        return (
+          <div style={{
+            padding: '16px 20px',
+            background: 'var(--ifm-background-surface-color)',
+            border: '1px solid var(--ifm-toc-border-color)',
+            borderRadius: 'var(--ifm-global-radius)',
+            boxShadow: '0 4px 16px rgba(15, 20, 27, 0.05)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+          }}>
+            {/* Row 1: Label with optional teal line indicator */}
+            <div style={{ fontSize: '16px', color: 'var(--ifm-color-secondary)', fontWeight: '600' }}>
+              {label}{showIndicators && (
+                <span style={{ marginLeft: '8px' }}>
+                  (<span style={{
+                    display: 'inline-block',
+                    position: 'relative',
+                    width: '35px',
+                    height: '2px',
+                    backgroundColor: 'rgba(0, 163, 180, 1)',
+                    verticalAlign: 'middle'
+                  }}>
+                    <span style={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)',
+                      width: '6px',
+                      height: '6px',
+                      backgroundColor: 'rgba(0, 163, 180, 0.8)',
+                      borderRadius: '50%'
+                    }}></span>
+                  </span>)
+                </span>
+              )}
+            </div>
+
+            {/* Row 2: Reference APR */}
+            <div style={{ fontSize: '32px', fontWeight: '600', color: 'var(--accent)' }}>
+              {referenceValue?.toFixed(2)}%
+            </div>
+
+            {/* Row 3: Entry Price APR with optional green line indicator */}
+            <div style={{ fontSize: '14px', color: 'var(--ifm-color-emphasis-600)' }}>
+              APR with ${formatPrice(entryPrice)} TUNA entry price: <strong style={{ color: 'var(--ifm-color-emphasis-600)' }}>{aprValue?.toFixed(2)}%</strong>{showIndicators && (
+                <span style={{ marginLeft: '6px' }}>
+                  (<span style={{
+                    display: 'inline-block',
+                    position: 'relative',
+                    width: '30px',
+                    height: '2px',
+                    backgroundColor: 'rgba(34, 197, 94, 1)',
+                    verticalAlign: 'middle'
+                  }}>
+                    <span style={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)',
+                      width: '5px',
+                      height: '5px',
+                      backgroundColor: 'rgba(34, 197, 94, 0.8)',
+                      borderRadius: '50%'
+                    }}></span>
+                  </span>)
+                </span>
+              )}
+            </div>
           </div>
-          <div style={{ fontSize: '28px', fontWeight: '600', color: label.includes('Current') ? 'var(--accent)' : 'rgba(34, 197, 94, 1)', marginTop: '4px' }}>
-            {customValue !== null && customValue !== undefined ? `${customValue.toFixed(2)}%` : `${yourValue?.toFixed(2)}%`}
-          </div>
-          <div style={{ fontSize: '12px', color: 'var(--ifm-color-secondary)', marginTop: '2px' }}>
-            {customValue !== null && customValue !== undefined ? 'Custom APR' : 'Your APR'}
-          </div>
-        </div>
-      );
+        );
+      };
 
       return (
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
           gap: '16px',
           marginBottom: '32px',
         }}>
           <StatCard
-            label="Current APR"
-            referenceValue={summary.current_reference_apr}
-            yourValue={summary.current_your_apr}
-            customValue={customStats?.current}
+            label="30-day Average APR"
+            referenceValue={summary.thirty_day_average_reference_apr}
+            yourValue={summary.thirty_day_average_your_apr}
+            customValue={customStats?.thirty_day_average}
+            showIndicators={true}
           />
           <StatCard
-            label="Average APR"
-            referenceValue={summary.average_reference_apr}
-            yourValue={summary.average_your_apr}
-            customValue={customStats?.average}
-          />
-          <StatCard
-            label="Maximum APR"
-            referenceValue={summary.max_reference_apr}
-            yourValue={summary.max_your_apr}
-            customValue={customStats?.max}
-          />
-          <StatCard
-            label="Minimum APR"
-            referenceValue={summary.min_reference_apr}
-            yourValue={summary.min_your_apr}
-            customValue={customStats?.min}
+            label="All-time Average APR"
+            referenceValue={summary.historical_average_reference_apr}
+            yourValue={summary.historical_average_your_apr}
+            customValue={customStats?.historical_average}
+            showIndicators={false}
           />
         </div>
       );
@@ -156,6 +209,10 @@ This dashboard shows the historical development of the Annual Percentage Rate (A
   }}
 </BrowserOnly>
 
+:::info TUNA Reference Price
+The chart includes an optional **TUNA Reference Price** trace (hidden by default - click the legend to show it). This price is derived from on-chain swap transaction data in the treasury's daily assets analysis. For each day, we analyze all TUNA/WSOL swap transactions, calculate weighted average prices based on trade volumes, and convert to USD. This gives us a reliable, data-driven price reference that reflects actual on-chain trading activity.
+:::
+
 ## Methodology
 
 The TUNA staking APR is calculated using the following approach:
@@ -165,9 +222,9 @@ The TUNA staking APR is calculated using the following approach:
 - **TUNA Supply**: Fixed at 1,000,000,000 tokens
 - **Rolling Window**: Up to 30 days of historical revenue data
 - **Revenue Source**: Treasury WSOL inflows (validated against DefiTuna API)
-- **TUNA Price Source**:
-  - **Historical** (before 2025-11-01): `manual_tuna_prices.csv` - manually captured prices
-  - **Current/Future** (2025-11-01 onwards): Oracle API snapshots from nightly updates
+- **TUNA Reference Price**:
+  - **Source**: Daily `assets.json` files - derived from on-chain TUNA/WSOL swap transaction data
+  - **Calculation**: Weighted average price based on swap volumes, converted to USD
 - **Default Entry Price**: $0.05 (public pre-sale price)
 - **USD/SOL Rates**: Daily spot rates derived from DefiTuna staking revenue API
 
@@ -187,21 +244,21 @@ The APR calculation follows these steps:
    Revenue per TUNA USD = Annualized Revenue USD / 1,000,000,000
    ```
 
-4. **Reference APR** (based on current market price):
+4. **Reference APR** (based on TUNA Reference Price):
    ```
-   Reference APR (%) = (Revenue per TUNA USD / Current TUNA Price USD) × 100
+   Reference APR (%) = (Revenue per TUNA USD / TUNA Reference Price USD) × 100
    ```
 
-5. **Your APR** (based on your entry price):
+5. **Entry Price APR** (based on your entry price):
    ```
-   Your APR (%) = (Revenue per TUNA USD / Your Entry Price USD) × 100
+   Entry Price APR (%) = (Revenue per TUNA USD / Your Entry Price USD) × 100
    ```
 
 ### Example Calculation
 
 For a given day with the following data:
 - 30-day rolling revenue: $1,850,787 USD
-- Current TUNA price: $0.0624 USD (from oracle)
+- TUNA Reference Price: $0.0624 USD (from on-chain swap data)
 - Your entry price: $0.05 USD (default)
 
 The APR would be calculated as:
@@ -210,7 +267,7 @@ Annualized Revenue = ($1,850,787 / 30) × 365 = $22,509,605 USD
 Revenue per TUNA = $22,509,605 / 1,000,000,000 = $0.02251 USD
 
 Reference APR = ($0.02251 / $0.0624) × 100 = 36.07%
-Your APR = ($0.02251 / $0.05) × 100 = 45.02%
+Entry Price APR = ($0.02251 / $0.05) × 100 = 45.02%
 ```
 
 This shows how early investors with a lower entry price achieve higher APR on the same protocol revenue.
@@ -232,9 +289,7 @@ As of January 2025, USD values are calculated using **daily spot market rates** 
 ### Data Notes
 
 - **Early History**: For dates with less than 30 days of historical data, the APR is calculated using all available days and annualized accordingly.
-- **Price Data Sources**:
-  - **Historical** (before 2025-11-01): `manual_tuna_prices.csv` with manually captured TUNA prices in USD
-  - **Current/Future** (2025-11-01 onwards): Oracle API snapshots from nightly updates
+- **Price Data Source**: Daily `assets.json` files containing TUNA prices derived from on-chain swap transaction data
 - **Revenue Validation**: All revenue figures are validated against the DefiTuna public API to ensure 100% accuracy.
 - **USD Values**: Calculated using daily spot market rates from the DefiTuna API, ensuring exact match with protocol's official USD values.
 
@@ -250,7 +305,7 @@ The chart displays:
   - Reference APR and Your/Custom APR percentages
   - Number of days in rolling window
   - Rolling revenue (SOL and USD)
-  - TUNA price in USD with source (csv or oracle)
+  - TUNA Reference Price in USD (from on-chain swap data)
 
 The APR naturally fluctuates based on:
 1. **Treasury Revenue**: Higher protocol activity increases treasury inflows
@@ -303,15 +358,13 @@ For developers and technical users interested in how the APR calculation works:
 - **Backend Documentation**: See `docs/APY_CALCULATION_SYSTEM.md` in the `solana_analytics` repository for complete technical details
 - **Component Source**: `frontend/src/components/Dashboard/ApyChart.tsx`
 - **Data Source**: `frontend/static/data/apr_data.json` (generated by `tools/compute_apy_data.py`)
-- **Price Sources**:
-  - Historical: `analysis/manual_tuna_prices.csv`
-  - Current/Future: `cache/api_snapshots/{date}.json` (oracle data)
+- **Price Source**: `cache/{address}/{year}/{month}/{date}.assets.json` (on-chain derived prices)
 
 ### Data Update Frequency
 
 The APR data is manually updated when:
 - New treasury transaction data is loaded
-- TUNA price data is updated (CSV or oracle snapshots)
+- Assets analysis generates new daily price data
 - USD/SOL exchange rates change significantly
 
 For the most current data, check the "Last updated" timestamp in the site header.

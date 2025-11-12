@@ -29,6 +29,7 @@ export interface StakeSizeSegment {
   user_count: number;
   avg_compound_rate: number;
   total_staked_tuna: number;
+  total_rewards: number;
   compound_only_users: number;
   claim_only_users: number;
   mixed_users: number;
@@ -47,10 +48,7 @@ export interface UserSegments {
     small: RewardSizeSegment;
   };
   by_stake_size?: {
-    mega: StakeSizeSegment;
-    large: StakeSizeSegment;
-    medium: StakeSizeSegment;
-    small: StakeSizeSegment;
+    [key: string]: StakeSizeSegment;
   };
 }
 

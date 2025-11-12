@@ -1,7 +1,7 @@
 {
   "date_range": {
     "start": "2025-07-24",
-    "end": "2025-11-07"
+    "end": "2025-11-11"
   },
   "daily_apy": [
     {
@@ -579,16 +579,80 @@
       "daily_revenue_sol": 10.06,
       "daily_revenue_usdc": 1584.85,
       "usd_sol_rate": 157.61
+    },
+    {
+      "date": "2025-11-08",
+      "reference_apr_percent": 5.26,
+      "your_apr_percent": 6.8,
+      "rolling_days": 30,
+      "rolling_revenue_sol": 1759.38,
+      "rolling_revenue_usdc": 279290.03,
+      "annualized_revenue_sol": 21405.79,
+      "annualized_revenue_usdc": 3398028.76,
+      "tuna_price_usd": 0.06454309,
+      "tuna_price_source": "oracle",
+      "revenue_per_tuna_usdc": 0.0033980287557520317,
+      "daily_revenue_sol": 18.25,
+      "daily_revenue_usdc": 2897.75,
+      "usd_sol_rate": 158.74
+    },
+    {
+      "date": "2025-11-09",
+      "reference_apr_percent": 2.57,
+      "your_apr_percent": 3.32,
+      "rolling_days": 30,
+      "rolling_revenue_sol": 847.89,
+      "rolling_revenue_usdc": 136583.68,
+      "annualized_revenue_sol": 10315.98,
+      "annualized_revenue_usdc": 1661768.05,
+      "tuna_price_usd": 0.06454309,
+      "tuna_price_source": "oracle",
+      "revenue_per_tuna_usdc": 0.0016617680485116054,
+      "daily_revenue_sol": 14.87,
+      "daily_revenue_usdc": 2395.85,
+      "usd_sol_rate": 161.09
+    },
+    {
+      "date": "2025-11-10",
+      "reference_apr_percent": 2.48,
+      "your_apr_percent": 3.2,
+      "rolling_days": 30,
+      "rolling_revenue_sol": 788.06,
+      "rolling_revenue_usdc": 131388.47,
+      "annualized_revenue_sol": 9588.05,
+      "annualized_revenue_usdc": 1598559.77,
+      "tuna_price_usd": 0.06454309,
+      "tuna_price_source": "oracle",
+      "revenue_per_tuna_usdc": 0.0015985597690166434,
+      "daily_revenue_sol": 52.74,
+      "daily_revenue_usdc": 8792.44,
+      "usd_sol_rate": 166.72
+    },
+    {
+      "date": "2025-11-11",
+      "reference_apr_percent": 2.46,
+      "your_apr_percent": 3.18,
+      "rolling_days": 30,
+      "rolling_revenue_sol": 808.77,
+      "rolling_revenue_usdc": 130523.34,
+      "annualized_revenue_sol": 9839.97,
+      "annualized_revenue_usdc": 1588033.95,
+      "tuna_price_usd": 0.06454309,
+      "tuna_price_source": "oracle",
+      "revenue_per_tuna_usdc": 0.0015880339501667077,
+      "daily_revenue_sol": 47.91,
+      "daily_revenue_usdc": 7731.26,
+      "usd_sol_rate": 161.39
     }
   ],
   "summary": {
-    "current_reference_apr": 4.83,
-    "current_your_apr": 6.89,
-    "average_reference_apr": 5.59,
-    "average_your_apr": 9.01,
+    "current_reference_apr": 2.46,
+    "current_your_apr": 3.18,
+    "average_reference_apr": 5.35,
+    "average_your_apr": 8.52,
     "max_reference_apr": 7.47,
     "max_your_apr": 11.96,
-    "min_reference_apr": 2.99,
-    "min_your_apr": 6.89
+    "min_reference_apr": 2.46,
+    "min_your_apr": 3.18
   }
 }

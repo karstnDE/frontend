@@ -58,20 +58,6 @@ Stakers can choose to **compound** their rewards (reinvesting back into TUNA) or
 
       return (
         <>
-          <div className="alert alert--info" role="alert" style={{ marginBottom: '24px' }}>
-            <h4 style={{ marginTop: 0 }}>Data Scope</h4>
-            <p style={{ marginBottom: 0 }}>
-              This analysis examines <strong>{summary.total_users.toLocaleString()} stakers who actively managed their rewards</strong> (claimed or compounded) between{' '}
-              <strong>{date_range.start}</strong> and <strong>{date_range.end}</strong>.
-              {currentActiveStakers && (
-                <>
-                  {' '}Out of <strong>{currentActiveStakers.toLocaleString()} wallets currently holding active stakes</strong>,{' '}
-                  this represents <strong>{((summary.total_users / currentActiveStakers) * 100).toFixed(1)}%</strong> who actively manage their rewards.
-                </>
-              )}
-            </p>
-          </div>
-
           <LoyaltyStats summary={summary} />
 
           <BehaviorPieChart

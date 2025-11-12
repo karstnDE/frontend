@@ -173,7 +173,7 @@ export default function DailyStackedBarChart({
       name: group.displayName,
       type: 'bar',
       marker: { color },
-      hovertemplate: `<b>${group.displayName}</b><br>%{y:.2f} SOL<extra></extra>`,
+      hovertemplate: `<b>${group.displayName}</b><br>%{x}<br>%{y:.2f} SOL<extra></extra>`,
     });
   });
 
@@ -194,7 +194,7 @@ export default function DailyStackedBarChart({
       name: 'Other',
       type: 'bar',
       marker: { color: 'rgba(156, 163, 175, 0.8)' }, // gray
-      hovertemplate: '<b>Other</b><br>%{y:.2f} SOL<extra></extra>',
+      hovertemplate: '<b>Other</b><br>%{x}<br>%{y:.2f} SOL<extra></extra>',
     });
   }
 

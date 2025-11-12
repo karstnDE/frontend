@@ -21,7 +21,7 @@ So far Helius seems like a pretty good choice for me. They are also constantly i
 
 ### Data Processing: Python
 
-The backend data pipeline is written entirely in **Python** and used for data manipulation and custom classification engines for transaction analysis. Python was chosen for its ecosystem of data science tools, readability, and rapid iteration capabilities. Also, I already used it.
+The backend data pipeline is written entirely in **Python** and used for data manipulation and custom classification engines for transaction analysis. Python was chosen for its ecosystem of data science tools, readability, and rapid iteration capabilities. Another plus is that I already used it before.
 
 The processing pipeline runs daily to fetch new transactions, classify them using configurable rule sets, attribute activity across multiple dimensions (e.g. token, type, pool), and aggregate everything into structured JSON files. This happens entirely offline—no live database queries, no runtime dependencies. The pipeline simply generates static data files that the frontend can serve.
 
@@ -67,7 +67,7 @@ The decision to build this as a static site rather than a traditional web applic
 
 3. **Simplicity**: Fewer moving parts means less complexity, easier debugging, and lower maintenance burden. There's no server to secure, no database to back up, no API rate limits to manage.
 
-4. **Cost-effectiveness**: Running a static site costs nothing beyond the time to generate data files. As the project scales to cover more protocols, hosting costs remain zero.
+4. **Cost-effectiveness**: Running a static site costs nothing beyond the time to generate data files. As the project scales to cover more protocols, hosting costs remain zero (unless this is getting bigger than I expect currently).
 
 5. **Auditability**: Because everything is static files in a git repository, every change is version-controlled. Users can see exactly when data was updated, what changed, and review historical versions if needed.
 
@@ -91,13 +91,13 @@ As mentioned - this entire pipeline runs offline—there's no real-time querying
 
 ## Data Quality & Verification
 
-I try to maintain high standards for data accuracy by implementing different verification systems. Every data update is tested against publicly available benchmarks if available (such as information from the Websites of the DeFi Protocols, explorers like Solscan, or manually verified totals). If computed results deviate from known values by even 0.1 SOL, it indicates the classification logic is incomplete—not just a rounding error, but a conceptual gap in e.g. how transactions are categorized.
+I try to maintain high standards for data accuracy by implementing different verification systems. Every data update is tested against publicly available benchmarks if available (such as information from the Websites of the DeFi Protocols, explorers like Solscan, or manually verified totals). If computed results deviate from known values by even 0.1 SOL, it indicates the classification logic is incomplete—not just a rounding error, but a conceptual gap in e.g. how transactions are categorized. In case I do not get 100% match but am still confident the data is good enough, I will indicate this accordingly.
 
 The verification principle is MECE (Mutually Exclusive, Collectively Exhaustive): every transaction, every revenue contribution must be classified exactly once, and no transactions can be left unclassified. This ensures that aggregated metrics are complete and accurate.
 
 ## Current Coverage
 
-The project currently focuses exclusively on **DefiTuna**, a Solana-based DeFi protocol. This depth-first approach ensures complete historical data from $TUNA token and treasury launch, daily updates, and high-quality verified analytics. Future expansion will add other emerging Solana protocols while maintaining the same standards for accuracy and depth.
+The project currently focuses exclusively on **DefiTuna**, a Solana-based DeFi protocol. This depth-first approach ensures complete historical data (starting with $TUNA token and treasury launch by end of July 2025), daily updates, and high-quality verified analytics. Future expansion will add other emerging Solana protocols while maintaining the same standards for accuracy and depth.
 
 ## Open Source & Data Access
 
@@ -110,4 +110,4 @@ The backend data processing pipeline (Python scripts, classification logic, etc.
 
 This approach balances transparency (all results are public and verifiable) with practical considerations (maintaining a one-person project).
 
-Feedback, suggestions, and questions are always welcome. This is built on the principle that DeFi analytics should be transparent, verifiable, and accessible to everyone.
+Feedback, suggestions, and questions are always welcome. This is built on the principle that DeFi analytics should be transparent, verifiable, and accessible to everyone - as is DeFi itself.

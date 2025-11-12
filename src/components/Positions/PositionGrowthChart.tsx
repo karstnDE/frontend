@@ -95,14 +95,12 @@ export default function PositionGrowthChart({ data }: PositionGrowthChartProps):
             font: { size: 16, color: 'var(--ifm-font-color-base)' },
           },
           xaxis: {
+            ...template.layout.xaxis,
             title: 'Date',
-            showgrid: true,
-            gridcolor: isDark ? '#2D3748' : '#E2E8F0',
           },
           yaxis: {
+            ...template.layout.yaxis,
             title: 'Number of Positions',
-            showgrid: true,
-            gridcolor: isDark ? '#2D3748' : '#E2E8F0',
           },
           hovermode: 'x unified',
           showlegend: true,
