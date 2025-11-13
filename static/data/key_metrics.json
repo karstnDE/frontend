@@ -1,28 +1,28 @@
 {
   "revenue_30d": {
-    "sol": 808.76,
-    "usdc": 140841.03,
-    "annualized_sol": 9705.12,
-    "annualized_usdc": 1690092.36,
-    "period": "2025-10-13 to 2025-11-11"
+    "sol": 790.12,
+    "usdc": 136425.03,
+    "annualized_sol": 9481.44,
+    "annualized_usdc": 1637100.36,
+    "period": "2025-10-14 to 2025-11-12"
   },
   "market_data": {
-    "fdv_usd": 58391070.0,
-    "tuna_price_sol": 0.0002771088682846763,
-    "tuna_price_usd": 0.0584,
+    "fdv_usd": 65717730.0,
+    "tuna_price_sol": 0.0003118792956960357,
+    "tuna_price_usd": 0.0657,
     "sol_price_usd": 210.72
   },
   "metrics": {
-    "mcap_to_revenue_ratio": 34.55,
+    "mcap_to_revenue_ratio": 40.14,
     "staking_apy_percent": 0,
-    "weekly_active_wallets": 2027,
-    "staking_wallets": 3702,
+    "weekly_active_wallets": 2118,
     "percent_staked": 86.2,
-    "total_staked_tuna": 862018731.98
+    "total_staked_tuna": 862012740.02,
+    "staking_wallets": 3969
   },
-  "generated_at": "2025-11-12T02:13:15.086666Z",
+  "generated_at": "2025-11-13T09:46:53.259236Z",
   "date_range": {
     "start": "2025-07-24",
-    "end": "2025-11-11"
+    "end": "2025-11-12"
   }
 }
