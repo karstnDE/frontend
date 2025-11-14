@@ -82,8 +82,8 @@ Before we talk about DefiTuna let's start with a summary of the key metrics that
           </div>
 
           <div className="usage-summary-card">
-            <h3>Staking APY</h3>
-            <p>{metrics?.staking_apy_percent?.toFixed(2) || '—'}%</p>
+            <h3>Staking APR</h3>
+            <p>{metrics?.staking_apr_percent?.toFixed(2) || '—'}%</p>
             <div style={{ fontSize: '0.9rem', color: 'var(--ifm-color-emphasis-600)', marginTop: '4px' }}>
               30-day rolling
             </div>
@@ -135,24 +135,53 @@ Before we talk about DefiTuna let's start with a summary of the key metrics that
 > - Lenders enjoy attractive yields while enabling deeper liquidity.
 > - All of this serves one ambition: to deliver the most efficient and reliable AMM on Solana
 
-## Why DefiTuna?
-
-[Placeholder: This section will explain the rationale for selecting DefiTuna as the subject of this on-chain analysis. Topics to cover include: the protocol's innovative approach to DeFi infrastructure, its growing adoption within the Solana ecosystem, the transparency of its treasury operations, and the analytical opportunities presented by its comprehensive on-chain data.]
-
-## What Makes the Treasury Address Interesting?
-
-[Placeholder: This section will highlight what makes DefiTuna's treasury address particularly valuable for analysis. Discussion points will include: the treasury as a complete record of protocol economics, how fee collection mechanisms create detailed revenue attribution possibilities, the insights available from staking program interactions, and how treasury flows reveal protocol health and user behavior patterns. The treasury serves as a single source of truth for understanding protocol fundamentals.]
-
 ## What can I learn from the data?
 
 If you have one of the following questions, you are at the right place. Just click the link and it will bring you to the one chart I would recommend you the most for answering this question.
-- Where does DefiTuna's revenue come from? --> Revenue Breakdown per Token, Transaction Types, Pools
-- What are the biggest drivers of DefiTuna's protocol revenue? --> Pools vs. Types
-- Why is the protocol revenue on certain days higher than on other days? --> Types per Day
-- How big is the impact of Fusion on DefiTuna's revenue? --> Orca vs. Fusion
-- Is the supply tightening because more TUNA is getting staked? --> TUNA Treasury Allocation
-- Which wallets are currently increasing/ decreasing their stake the most? --> TUNA Treasury Allocation
-- Does a certain wallet (e.g. Whales) further accumulate and stake or withdraw their staked TUNA? --> Wallet Timeline
+- Where does DefiTuna's revenue come from? → [By Token](./revenue-breakdown/by-token), [By Type](./revenue-breakdown/by-type), [By Pool](./revenue-breakdown/by-pool)
+- What are the biggest drivers of DefiTuna's protocol revenue? → [Pools vs. Types](./revenue-breakdown/pools-vs-types)
+- Why is the protocol revenue on certain days higher than on other days? → [Types per Day](./revenue-breakdown/tx-type-per-day)
+- How big is the impact of Fusion on DefiTuna's revenue? → [Orca vs. Fusion](./revenue-breakdown/orca-vs-fusion)
+- Is the supply tightening because more TUNA is getting staked? Which wallets are staking or withdrawing the most? → [Staking Overview](./staked-tuna)
+- What's the reward behaviour of stakers - do they compound or "just" claim? → [Staker Conviction](./staker-conviction)
+- Does a certain wallet (e.g. Whales) further accumulate and stake or withdraw their staked TUNA? → [Wallet Timeline](./staking/wallet-timeline)
+- When will vested TUNA tokens unlock and how much is currently locked? → [Vesting Timeline](./vesting-timeline)
+
+## Why DefiTuna?
+
+DefiTuna represents an ideal candidate for my first comprehensive on-chain analysis for several reasons:
+
+**Protocol Knowledge**: Very simple: I like the DefiTuna product/ protocol and used it myself since quite a while. Without knowing how the Protocol roughly works, it would have taken a lot more time to ramp this site up. Obviously I still learned A LOT while building this.
+
+**Treasury Transparency**: DefiTuna's treasury operations are fully on-chain and structured in a way that makes comprehensive analysis possible. Every fee collection, token swap, and distribution event is recorded as a transaction, creating an auditable trail of protocol economics.
+
+**Analytical Opportunities**: The protocol's treasury address serves as a central hub for protocol activity, capturing:
+- Fee revenue from trading, liquidity provision, and lending operations
+- Token accumulation and conversion patterns
+- Staking program distributions and reward mechanics
+- Protocol-level economic decisions reflected in treasury management
+
+## What Makes the Treasury Address Interesting?
+
+The DefiTuna treasury address ([G9XfJoY81n8A9bZKaJFhJYomRrcvFkuJ22em2g8rZuCh](https://solscan.io/account/G9XfJoY81n8A9bZKaJFhJYomRrcvFkuJ22em2g8rZuCh)) functions as a comprehensive record of protocol economics, offering several analytical advantages:
+
+**Complete Revenue Attribution**: The treasury captures all fee generation through distinct transaction types. Each fee collection event includes program logs identifying the specific instruction (swap fees, liquidation rewards, position fees), enabling precise attribution across tokens, pools, and transaction types without relying on external data sources.
+
+**Multi-Token Revenue Tracking**: Treasury inflows occur in diverse tokens (SOL, USDC, BONK, LP tokens), providing visibility into which assets drive protocol revenue. Subsequent conversion transactions reveal the protocol's token management strategy and provide on-chain pricing data for accurate valuation.
+
+**Staking Program Insights**: Treasury interactions with the staking program ([tUnst2Y2sbmgSgARBpSBZhqPzpoy2iUsdCwb5ToYVJa](https://solscan.io/account/tUnst2Y2sbmgSgARBpSBZhqPzpoy2iUsdCwb5ToYVJa)) create a transparent view of reward distributions. This enables calculation of realized staking yields based on actual treasury outflows rather than theoretical projections.
+
+**Protocol Health Indicators**: Treasury flows reveal protocol fundamentals:
+- Daily revenue trends indicating usage patterns and market conditions
+- Token accumulation rates showing which protocol features generate value
+- Distribution patterns reflecting the balance between revenue generation and staker rewards
+- Treasury composition changes signaling shifts in protocol economics
+
+**User Behavior Patterns**: Transaction patterns in the treasury data expose broader ecosystem dynamics. Spikes in liquidation fees indicate market volatility. Shifts in pool-specific revenue reveal changing user preferences. Sustained growth in specific transaction types signals successful product-market fit.
+
+The treasury serves as a single source of truth because every economic event that matters to protocol stakeholders flows through this address. Rather than piecing together partial data from multiple sources, the treasury provides a complete, verifiable record of protocol performance.
+
+
 
 ## About the data presented in this section
 

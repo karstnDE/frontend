@@ -17,6 +17,7 @@ interface NavTab {
   to: string;
   activePattern: RegExp;
   Icon: React.ComponentType<IconProps>;
+  disabled?: boolean;
 }
 
 const tabs: NavTab[] = [
@@ -27,10 +28,11 @@ const tabs: NavTab[] = [
     Icon: LighthouseIcon,
   },
   {
-    label: 'Blog',
+    label: 'Articles',
     to: '/blog',
     activePattern: /^\/blog/,
     Icon: NotepadIcon,
+    disabled: true,
   },
   {
     label: 'Analysis',
@@ -51,11 +53,30 @@ export default function NavbarTabs(): JSX.Element {
         {tabs.map((tab) => {
           const active = isTabActive(tab);
           const { Icon } = tab;
+          const className = `navbar-tabs__link ${active ? 'navbar-tabs__link--active' : ''} ${tab.disabled ? 'navbar-tabs__link--disabled' : ''}`;
+
+          if (tab.disabled) {
+            return (
+              <span
+                key={tab.label}
+                className={className}
+              >
+                <Icon
+                  size={18}
+                  weight="regular"
+                  className="navbar-tabs__icon"
+                  aria-hidden="true"
+                />
+                <span>{tab.label}</span>
+              </span>
+            );
+          }
+
           return (
             <Link
               key={tab.label}
               to={tab.to}
-              className={`navbar-tabs__link ${active ? 'navbar-tabs__link--active' : ''}`}
+              className={className}
             >
               <Icon
                 size={18}

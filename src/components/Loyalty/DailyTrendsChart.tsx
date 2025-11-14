@@ -34,10 +34,11 @@ export default function DailyTrendsChart({
       ref={plotRef}
       style={{
         background: 'var(--ifm-background-surface-color)',
-        border: '1px solid var(--ifm-color-emphasis-200)',
+        border: '1px solid var(--ifm-toc-border-color)',
         borderRadius: 'var(--ifm-global-radius)',
         padding: '24px',
-        marginBottom: '32px',
+        marginBottom: '24px',
+        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
       }}
     >
       <h3 style={{ marginTop: 0 }}>Reward Allocation Over Time (Daily)</h3>

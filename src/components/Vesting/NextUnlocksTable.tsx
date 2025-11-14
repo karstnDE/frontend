@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import type { VestingSchedule } from '@site/src/hooks/useVestingTimeline';
+import { tableStyles, tableRowHoverHandlers } from '@site/src/styles/tableStyles';
 
 interface DailyUnlock {
   date: string;
@@ -11,10 +12,12 @@ interface DailyUnlock {
 
 interface NextUnlocksTableProps {
   schedules: VestingSchedule[];
+  onDateClick?: (date: string) => void;
 }
 
 export default function NextUnlocksTable({
   schedules,
+  onDateClick,
 }: NextUnlocksTableProps): React.ReactElement {
   const nextUnlocks = useMemo(() => {
     const now = new Date();
@@ -115,57 +118,57 @@ export default function NextUnlocksTable({
       </div>
 
       <div style={{ overflowX: 'auto' }}>
-        <table style={{
-          display: 'table',
-          width: '100%',
-          minWidth: '600px',
-          borderCollapse: 'collapse',
-          fontSize: '14px',
-        }}>
+        <table style={{ ...tableStyles.table, minWidth: '600px' }}>
           <thead>
-            <tr style={{ borderBottom: '2px solid var(--ifm-toc-border-color)' }}>
-              <th style={{ padding: '12px 8px', textAlign: 'left', fontWeight: 600 }}>Unlock Date</th>
-              <th style={{ padding: '12px 8px', textAlign: 'right', fontWeight: 600 }}>Total Amount (TUNA)</th>
-              <th style={{ padding: '12px 8px', textAlign: 'right', fontWeight: 600 }}>Days Until</th>
-              <th style={{ padding: '12px 8px', textAlign: 'center', fontWeight: 600 }}>Schedules</th>
+            <tr style={tableStyles.headerRow}>
+              <th style={tableStyles.headerCell}>Unlock Date</th>
+              <th style={tableStyles.headerCell}>Total Amount (TUNA)</th>
+              <th style={tableStyles.headerCell}>Days Until</th>
+              <th style={tableStyles.headerCell}>Schedules</th>
             </tr>
           </thead>
           <tbody>
             {nextUnlocks.map((daily) => (
               <tr
                 key={daily.date}
-                style={{
-                  borderBottom: '1px solid var(--ifm-toc-border-color)',
-                  transition: 'background 120ms ease',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'var(--ifm-toc-border-color)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'transparent';
-                }}
+                style={tableStyles.bodyRow}
+                {...tableRowHoverHandlers}
               >
-                <td style={{ padding: '12px 8px', color: 'var(--ifm-color-secondary)' }}>{daily.date}</td>
-                <td style={{ padding: '12px 8px', textAlign: 'right', fontWeight: 600, color: 'var(--accent)' }}>
+                <td style={tableStyles.dateCell}>{daily.date}</td>
+                <td style={tableStyles.amountCell}>
                   {daily.totalAmount.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                 </td>
-                <td
-                  style={{
-                    padding: '12px 8px',
-                    textAlign: 'right',
-                    color: daily.daysUntil < 7 ? 'var(--ifm-color-warning)' : 'var(--ifm-color-secondary)',
-                  }}
-                >
+                <td style={{ ...tableStyles.cell, color: daily.daysUntil < 7 ? 'var(--ifm-color-warning)' : 'var(--ifm-color-secondary)' }}>
                   {daily.daysUntil}
                 </td>
-                <td style={{ padding: '12px 8px', textAlign: 'center' }}>
-                  <span
-                    className="badge badge--secondary"
-                    style={{ fontSize: '12px' }}
-                    title={`${daily.scheduleCount} schedule${daily.scheduleCount > 1 ? 's' : ''} unlocking`}
+                <td style={tableStyles.cell}>
+                  <button
+                    onClick={() => onDateClick && onDateClick(daily.date)}
+                    style={{
+                      color: 'var(--accent)',
+                      textDecoration: 'none',
+                      fontSize: '13px',
+                      fontWeight: 600,
+                      padding: '6px 12px',
+                      border: '1px solid var(--accent)',
+                      borderRadius: '4px',
+                      display: 'inline-block',
+                      transition: 'all 120ms ease',
+                      background: 'transparent',
+                      cursor: 'pointer',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'var(--accent)';
+                      e.currentTarget.style.color = 'white';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'transparent';
+                      e.currentTarget.style.color = 'var(--accent)';
+                    }}
+                    title={`View ${daily.scheduleCount} schedule${daily.scheduleCount > 1 ? 's' : ''} unlocking on ${daily.date}`}
                   >
-                    {daily.scheduleCount}
-                  </span>
+                    {daily.scheduleCount} schedule{daily.scheduleCount > 1 ? 's' : ''}
+                  </button>
                 </td>
               </tr>
             ))}

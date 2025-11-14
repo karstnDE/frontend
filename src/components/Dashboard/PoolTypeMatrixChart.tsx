@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Plot from 'react-plotly.js';
+import type { Data } from 'plotly.js';
 import { useColorMode } from '@docusaurus/theme-common';
 import { getPlotlyTemplate, defaultPlotlyConfig } from '@site/src/utils/plotlyTheme';
 import { useChartTracking } from '@site/src/hooks/useChartTracking';
@@ -118,7 +119,7 @@ export default function PoolTypeMatrixChart({ onSegmentClick }: PoolTypeMatrixCh
   // Each pool gets a position on x-axis with width proportional to its share
   // Each type within a pool is a stacked segment
 
-  const traces: any[] = [];
+  const traces: Data[] = [];
   
   // Color palette - same as DailyStackedBarChart
   const nonRedPalette = [
@@ -321,7 +322,7 @@ export default function PoolTypeMatrixChart({ onSegmentClick }: PoolTypeMatrixCh
         config={defaultPlotlyConfig}
         style={{ width: '100%', height: '600px' }}
         useResizeHandler={true}
-        onClick={(event: any) => {
+        onClick={(event: React.MouseEvent) => {
           if (event.points && event.points.length > 0 && onSegmentClick) {
             const point = event.points[0];
             const [poolId, poolLabel, displayName, technicalTypes] = point.customdata;

@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import Plot from 'react-plotly.js';
+import type { Data } from 'plotly.js';
 import { useColorMode } from '@docusaurus/theme-common';
 import { getPlotlyTemplate, defaultPlotlyConfig } from '@site/src/utils/plotlyTheme';
 import { useChartTracking } from '@site/src/hooks/useChartTracking';
@@ -132,7 +133,7 @@ export default function BreakdownChart({ summary, groupMode, onBarClick }: Break
     return `<b>${cleanLabel}</b><br>${values[idx].toFixed(2)} SOL`;
   });
 
-  const trace: any = {
+  const trace: Data = {
     x: labels,
     y: values,
     type: 'bar',
@@ -167,11 +168,13 @@ export default function BreakdownChart({ summary, groupMode, onBarClick }: Break
             ...template.layout.xaxis,
             title: '',
             tickangle: 0,
-            tickfont: { size: 11 },
           },
           yaxis: {
             ...template.layout.yaxis,
-            title: 'Total SOL',
+            title: {
+              text: 'Total SOL',
+              standoff: 20
+            },
           },
           showlegend: false,
           hovermode: 'closest',
@@ -179,7 +182,7 @@ export default function BreakdownChart({ summary, groupMode, onBarClick }: Break
         config={defaultPlotlyConfig}
         style={{ width: '100%', height: '450px' }}
         useResizeHandler={true}
-        onClick={(event: any) => {
+        onClick={(event: React.MouseEvent) => {
           if (event.points && event.points.length > 0 && onBarClick) {
             const point = event.points[0];
             const clickedId = point.customdata; // mint/type/pool_id

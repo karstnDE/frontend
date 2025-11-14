@@ -148,7 +148,7 @@ export default function StakingBalanceChart({
             ...template.layout,
             autosize: true,
             height: 420,
-            margin: { l: 64, r: 24, t: 16, b: 48 },
+            margin: { l: 70, r: 24, t: 16, b: 32 },
             hovermode: 'x unified',
             xaxis: {
               ...template.layout.xaxis,
@@ -167,7 +167,7 @@ export default function StakingBalanceChart({
             },
             legend: {
               orientation: 'h',
-              y: -0.2,
+              y: -0.15,
               x: 0.5,
               xanchor: 'center',
             },

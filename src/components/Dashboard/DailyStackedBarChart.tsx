@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import Plot from 'react-plotly.js';
+import type { Data } from 'plotly.js';
 import { useColorMode } from '@docusaurus/theme-common';
 import { getPlotlyTemplate, defaultPlotlyConfig } from '@site/src/utils/plotlyTheme';
 import { useChartTracking } from '@site/src/hooks/useChartTracking';
@@ -153,7 +154,7 @@ export default function DailyStackedBarChart({
   };
 
   // Create traces for top 10 groups + "Other"
-  const traces: any[] = [];
+  const traces: Data[] = [];
 
   // Add traces for top 10 display name groups (combining technical types with same display name)
   top10Groups.forEach((group, index) => {
@@ -222,8 +223,7 @@ export default function DailyStackedBarChart({
           yaxis: {
             ...template.layout.yaxis,
             title: {
-              text: 'Daily Revenue (SOL)',
-              font: { size: 12 },
+              text: 'Daily Revenue<br>(SOL)',
             },
           },
           barmode: 'stack',
@@ -234,7 +234,6 @@ export default function DailyStackedBarChart({
             y: -0.2,
             xanchor: 'center',
             x: 0.5,
-            font: { size: 11 },
           },
           hovermode: 'closest',
         }}

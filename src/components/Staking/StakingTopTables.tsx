@@ -65,7 +65,7 @@ function renderTable(title: string, rows: StakingTopEntry[], emptyMessage: strin
                 </td>
                 <td style={{ padding: '12px 8px', textAlign: 'center' }}>
                   <a
-                    href={`/analysis/staking/wallet-timeline?wallet=${row.address}`}
+                    href={`/analysis/defituna/staking/wallet-timeline?wallet=${row.address}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{

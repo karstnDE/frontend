@@ -25,6 +25,8 @@
 
   --ifm-background-color: #FFFFFF;
   --ifm-background-surface-color: #FFFFFF;
+  --ifm-navbar-solid-color: #FFFFFF; /* Navbar base color for light mode */
+  --navbar-rgb: 255, 255, 255; /* RGB values for navbar color (light mode) */
   --ifm-font-color-base: #111111;
   --ifm-color-secondary: #4F5964;
   --sidebar-link-color: #5f6b77;
@@ -69,11 +71,17 @@
   --page-gutter: 16px; /* Fixed minimal padding for maximum chart space */
   --ifm-spacing-horizontal: var(--page-gutter);
   --ifm-spacing-vertical: 16px;
+
+  /* Transparent navbar backgrounds - derived from --navbar-rgb */
+  --navbar-bg-transparent: rgba(var(--navbar-rgb), 0.85);
+  --navbar-tabs-bg-transparent: rgba(var(--navbar-rgb), 0.85);
 }
 
 [data-theme='dark'] {
-  --ifm-background-color: #05080D;
-  --ifm-background-surface-color: #05080D;
+  --ifm-background-color: #242526;
+  --ifm-background-surface-color: #242526;
+  --ifm-navbar-solid-color: #242526; /* Navbar base color for dark mode */
+  --navbar-rgb: 36, 37, 38; /* RGB values for navbar color (dark mode) */
   --ifm-card-background-color: var(--ifm-background-surface-color);
   --ifm-navbar-background-color: var(--ifm-background-surface-color);
   --ifm-footer-background-color: var(--ifm-background-surface-color);
@@ -98,6 +106,10 @@
   /* Keep teal accent same in dark mode */
   --accent: #00A3B4;
   --accent-hover: #14BCCD;
+
+  /* Transparent navbar backgrounds - derived from --navbar-rgb */
+  --navbar-bg-transparent: rgba(var(--navbar-rgb), 0.85);
+  --navbar-tabs-bg-transparent: rgba(var(--navbar-rgb), 0.85);
   --accent-transparent: rgba(0, 163, 180, 0.2);
   --ifm-color-primary: #00A3B4;
   --ifm-color-primary-dark: #009099;
@@ -118,10 +130,6 @@ html[data-theme='dark'] .theme-doc-sidebar-container,
 html[data-theme='dark'] .theme-doc-sidebar-container .menu,
 html[data-theme='dark'] .theme-doc-toc-desktop,
 html[data-theme='dark'] .table-of-contents,
-html[data-theme='dark'] .navbar,
-html[data-theme='dark'] .navbar__inner,
-html[data-theme='dark'] .navbar__items,
-html[data-theme='dark'] .navbar__items--right,
 html[data-theme='dark'] .theme-doc-breadcrumbs,
 html[data-theme='dark'] .theme-doc-footer {
   background-color: var(--ifm-background-surface-color);
@@ -141,11 +149,15 @@ html[data-theme='dark'] .menu__link--sublist::before {
 html {
   scroll-padding-top: calc(var(--ifm-navbar-height) + 20px);
   scroll-behavior: smooth;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 body {
   font-family: var(--ifm-font-family-base);
   padding-bottom: 72px;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 /* ========================
@@ -154,7 +166,9 @@ body {
 
 .navbar {
   height: var(--ifm-navbar-height);
-  background: var(--ifm-background-surface-color);
+  background: var(--navbar-bg-transparent); /* Semi-transparent background */
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
   border-bottom: none; /* No separator between header and tabs */
   box-shadow: none;
   padding: 0; /* Remove direct padding */
@@ -164,7 +178,106 @@ body {
   display: flex;
   justify-content: center;
   overflow-x: hidden;
-  overflow-y: hidden;
+  overflow-y: visible; /* Changed from hidden to visible to allow search dropdown to show */
+}
+
+/* ========================
+   Search Bar
+   ======================== */
+
+/* Fix search dropdown z-index to appear above navbar and tabs */
+.navbar__search {
+  position: relative !important;
+  z-index: 101 !important;
+}
+
+/* Match search bar font size to "Last full day available" (13px) */
+.navbar__search-input {
+  font-size: 13px !important;
+  height: 32px !important;
+  padding: 6px 12px 6px 2.25rem !important; /* Left padding to clear magnifier icon */
+  padding-left: 2.25rem !important; /* Ensure text doesn't hide behind search icon */
+}
+
+/* Search bar container positioning */
+[class*="searchBarContainer"] {
+  position: relative !important;
+  z-index: 101 !important;
+}
+
+/* Search bar wrapper - must allow overflow */
+[class*="searchBar"] {
+  position: relative !important;
+  overflow: visible !important;
+}
+
+/* Autocomplete dropdown wrapper - position and z-index only */
+.aa-dropdown-menu,
+[class*="searchBar"] .aa-dropdown-menu,
+.navbar__search .aa-dropdown-menu {
+  position: absolute !important;
+  z-index: 9999 !important;
+  pointer-events: auto !important;
+  top: 100% !important;
+  left: auto !important;
+  right: 0 !important;
+  margin-top: 8px !important;
+}
+
+/* Ensure search results dropdown appears above all navigation elements */
+/* Target all possible dropdown menu variations */
+[class*="searchBar"] [class*="dropdownMenu"],
+[class*="searchBar"] > div[class*="dropdownMenu"],
+div[class*="dropdownMenu"][class*="dropdownMenu"] {
+  position: absolute !important;
+  z-index: 9999 !important;
+  pointer-events: auto !important;
+  transform: none !important;
+  top: 100% !important;
+  margin-top: 8px !important;
+  left: auto !important;
+  right: 0 !important;
+}
+
+/* Match search results font size to navbar timestamp */
+[class*="searchBar"] [class*="dropdownMenu"] [class*="suggestion"],
+.aa-suggestion {
+  font-size: 13px !important;
+  height: 48px !important;
+  min-height: 48px !important;
+}
+
+[class*="hitTitle"] {
+  font-size: 13px !important;
+}
+
+[class*="hitPath"] {
+  font-size: 11px !important;
+}
+
+[class*="hitWrapper"] {
+  font-size: 13px !important;
+}
+
+/* Clear button adjustment for smaller search bar */
+[class*="searchBarContainer"] [class*="searchClearButton"] {
+  right: 8px !important;
+  font-size: 13px !important;
+}
+
+/* Search hint adjustment */
+[class*="searchHintContainer"] {
+  font-size: 11px !important;
+}
+
+/* Icon sizing for smaller search results */
+[class*="hitIcon"] {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+[class*="hitTree"] > svg {
+  height: 48px !important;
 }
 
 .navbar__inner {
@@ -172,7 +285,16 @@ body {
   max-width: var(--max-content-width);
   margin: 0 auto;
   padding: 0 var(--page-gutter);
-  overflow: visible;
+  overflow: visible !important;
+}
+
+/* Ensure navbar items container allows overflow for search dropdown */
+.navbar__items {
+  overflow: visible !important;
+}
+
+.navbar__items--right {
+  overflow: visible !important;
 }
 
 .navbar__logo {
@@ -662,7 +784,9 @@ textarea:focus {
   left: 0;
   bottom: 0;
   width: 100%;
-  background: var(--ifm-background-surface-color);
+  background: var(--navbar-bg-transparent); /* Semi-transparent background for glassmorphism effect */
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
   border-top: 1px solid var(--ifm-toc-border-color);
   z-index: 120;
 }

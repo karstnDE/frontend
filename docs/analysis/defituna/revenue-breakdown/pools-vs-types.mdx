@@ -7,9 +7,9 @@ import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
 
 # Revenue Breakdown: Pools vs. Types
 
-This page shows the **two-dimensional revenue distribution** using a Marimekko chart that combines both pool and transaction type perspectives in a single visualization.
+Two-dimensional revenue distribution showing how transaction types and liquidity pools interact. The Marimekko chart reveals which pool-type combinations drive revenue, where transaction types concentrate, and how revenue composition varies across pools. Click on any segment to display the top 10 contributing transactions for that pool-type combination.
 
-## Overview
+## Data
 
 <BrowserOnly fallback={<LoadingSpinner />}>
   {() => {
@@ -51,58 +51,70 @@ This page shows the **two-dimensional revenue distribution** using a Marimekko c
       };
 
       return (
-        <div style={{ padding: '24px 0' }}>
+        <div>
+          {/* Chart Section */}
           <PoolTypeMatrixChart onSegmentClick={handleSegmentClick} />
 
-          {selectedSegment && (
-            <div style={{
-              padding: '16px',
-              background: 'var(--ifm-background-surface-color)',
-              border: '1px solid var(--accent)',
-              borderRadius: 'var(--ifm-global-radius)',
-              marginBottom: '24px',
-            }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span>
-                  <strong>Filtered by:</strong> {selectedSegment.poolLabel}
+          {/* Table Section - appears under "Top Transactions Table" heading below */}
+          <div id="transactions-table-section" style={{ marginTop: '32px' }}>
+            <h2 id="top-transactions">Top Transactions Table</h2>
+
+            <p style={{ marginBottom: '16px' }}>
+              The table displays individual transactions contributing to treasury revenue.
+              By default, it shows all transactions across all pool-type combinations, sorted by SOL amount.
+            </p>
+
+            <p style={{ marginBottom: '16px' }}>
+              <strong>Filtering</strong>: Click any segment in the Marimekko chart above to filter the table to that specific pool-type combination's transactions.
+            </p>
+
+            {selectedSegment && (
+              <div style={{
+                marginBottom: '16px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px'
+              }}>
+                <span style={{ fontSize: '14px', color: 'var(--ifm-color-secondary)' }}>
+                  Filtered by: <strong>{selectedSegment.poolLabel}</strong>
                   {selectedSegment.displayName && (
                     <>
-                      <span style={{ margin: '0 8px', color: 'var(--ifm-color-secondary)' }}>→</span>
-                      <span style={{ color: 'var(--accent)' }}>{selectedSegment.displayName}</span>
+                      <span style={{ margin: '0 8px' }}>→</span>
+                      <strong>{selectedSegment.displayName}</strong>
                     </>
                   )}
                 </span>
                 <button
                   onClick={handleClearFilter}
                   style={{
-                    padding: '6px 16px',
-                    background: 'var(--accent)',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px',
+                    padding: '6px 12px',
+                    fontSize: '13px',
+                    background: 'var(--ifm-color-emphasis-200)',
+                    border: '1px solid var(--ifm-toc-border-color)',
+                    borderRadius: 'var(--ifm-global-radius)',
                     cursor: 'pointer',
-                    fontSize: '14px',
+                    color: 'var(--ifm-font-color-base)',
                   }}
                 >
                   Clear Filter
                 </button>
               </div>
-            </div>
-          )}
+            )}
 
-          {!loading && (
-            <TopTransactionsTable
-              topTransactionsToken={{}}
-              topTransactionsType={{}}
-              topTransactionsPool={topTransactionsPool}
-              topTransactionsPoolType={topTransactionsPoolType}
-              groupMode="pool"
-              selectedFilter={selectedSegment?.poolId}
-              selectedFilterLabel={selectedSegment?.poolLabel}
-              typeFilter={selectedSegment?.technicalTypes}
-              summary={summary}
-            />
-          )}
+            {!loading && (
+              <TopTransactionsTable
+                topTransactionsToken={{}}
+                topTransactionsType={{}}
+                topTransactionsPool={topTransactionsPool}
+                topTransactionsPoolType={topTransactionsPoolType}
+                groupMode="pool"
+                selectedFilter={selectedSegment?.poolId}
+                selectedFilterLabel={selectedSegment?.poolLabel}
+                typeFilter={selectedSegment?.technicalTypes}
+                summary={summary}
+              />
+            )}
+          </div>
         </div>
       );
     }
@@ -111,123 +123,89 @@ This page shows the **two-dimensional revenue distribution** using a Marimekko c
   }}
 </BrowserOnly>
 
+## Use Cases
 
-This page shows the **two-dimensional revenue distribution** using a Marimekko chart that combines both pool and transaction type perspectives in a single visualization.
+This page helps you:
 
-## Understanding the Marimekko Chart
+- **Identify high-value combinations**: Find pool-type pairs generating the most revenue by looking for large rectangular areas
+- **Assess pool specialization**: Determine if pools focus on specific transaction types or maintain diverse compositions
+- **Evaluate revenue concentration risk**: Check if revenue relies too heavily on specific pool-type combinations
+- **Compare pool efficiency**: Analyze which pools generate better returns per transaction type
+- **Spot unusual patterns**: Identify gaps in expected pool-type pairs or unexpected concentrations
+- **Find diversification opportunities**: See which pools could expand their transaction type mix
+- **Cross-reference with single-dimension views**: Combine insights from [By Token](/analysis/defituna/revenue-breakdown/by-token), [By Type](/analysis/defituna/revenue-breakdown/by-type), and [By Pool](/analysis/defituna/revenue-breakdown/by-pool) to understand pool-type interactions
 
-The Marimekko (also called mosaic or market map) chart provides a powerful two-dimensional view of revenue:
+## How to Read This Chart
 
-### Chart Dimensions
+**Understanding the Marimekko Format**
 
-- **X-axis (Width)**: Each vertical strip represents a **liquidity pool**
-  - Width is proportional to the pool's share of total revenue
-  - Wider pools = larger revenue contribution
+The Marimekko (also called mosaic or market map) chart provides a two-dimensional view of revenue where both dimensions matter:
 
-- **Y-axis (Height)**: Within each pool, segments show **transaction types**
-  - Height represents the SOL amount for that type within the pool
-  - Segments are stacked to show composition
+**Chart Dimensions:**
+- **X-axis (Width)**: Each vertical strip represents a **liquidity pool**. Width is proportional to the pool's share of total revenue. Wider pools = larger revenue contribution.
+- **Y-axis (Height)**: Within each pool, segments show **transaction types**. Height represents the SOL amount for that type within the pool. Segments are stacked to show composition.
+- **Area**: The area of each colored segment equals revenue from that specific pool-type combination. Larger areas = more significant revenue sources.
 
-- **Area**: The area of each colored segment = revenue from that specific pool-type combination
-  - Larger areas = more significant revenue sources
+**Visual Interpretation:**
 
-### Visual Interpretation
-
-This chart answers questions like:
+This chart answers:
 - Which pool generates the most revenue? (widest strip)
 - What transaction types dominate each pool? (tallest segments)
 - Which pool-type combinations are most valuable? (largest areas)
 - How does transaction composition vary across pools? (segment patterns)
 
-### Color Coding
+**Color Coding:**
+- Each color represents a specific transaction type
+- Same color across pools = same transaction type in different pools
+- Legend shows all transaction types present in the data
 
-- **Each color** represents a specific transaction type
-- **Same color across pools** = same transaction type in different pools
-- **Legend** shows all transaction types present in the data
-
-### Interactive Features
-
+**Interactive Features:**
 - **Hover**: See exact SOL amounts and percentages for each pool-type segment
-- **Click segments**: Select specific pool-type combinations (feature in development)
+- **Click segments**: Filter the transaction table by specific pool-type combinations
 - **Legend**: Click legend items to show/hide specific transaction types
 
-## Key Insights
-
-This combined view reveals:
-
-### Pool-Level Patterns
-
-- **Pool Specialization**: Some pools may focus on specific transaction types
-- **Pool Diversity**: How varied is the transaction mix within each pool?
-- **Pool Dominance**: Which pools drive the most revenue across all types?
-
-### Type-Level Patterns
-
-- **Type Distribution**: Which transaction types appear across multiple pools?
-- **Type Concentration**: Are certain types concentrated in specific pools?
-- **Type Magnitude**: Which types generate the most revenue overall?
-
-### Strategic Implications
-
-- **Risk Concentration**: Are you over-reliant on specific pool-type combinations?
-- **Diversification Opportunities**: Which pools could expand their transaction types?
-- **Pool Efficiency**: Which pools generate the best returns per transaction type?
-
-## Comparing with Other Views
-
-This cross-dimensional view complements the other breakdowns:
-
-- **[By Token](./by-token)**: Shows which tokens flow through which pool-type combinations
-- **[By Type](./by-type)**: Aggregates all pools to show overall type dominance
-- **[By Pool](./by-pool)**: Aggregates all types to show overall pool performance
-
-The Marimekko shows how pools and types **interact**, revealing patterns hidden in single-dimension views.
-
-## Analysis Tips
-
-### Identifying High-Value Combinations
-
-Look for large rectangular areas:
-- These represent pool-type combinations with substantial revenue
-- Focus optimization efforts on these high-value segments
-
-### Spotting Unusual Patterns
+**Pattern Recognition:**
 
 Watch for:
+- **Large rectangular areas**: Pool-type combinations with substantial revenue (high-value segments to optimize)
 - **Narrow but tall segments**: High concentration in one type within a small pool
 - **Wide but short segments**: Revenue spread thinly across many types in a major pool
 - **Missing combinations**: Pool-type pairs with no revenue (gaps in expected patterns)
-
-### Comparative Analysis
-
-Compare pool strips:
-- **Similar patterns**: Pools with similar transaction type distributions
-- **Unique patterns**: Pools with distinctive type compositions
-- **Size vs. complexity**: Do larger pools have more diverse types, or stay focused?
-
-### Temporal Context
-
-For changes over time:
-- Visit **[Tx Type per Day](../tx-type-per-day)** to see how these patterns evolve
-- Check **[Orca vs. Fusion](../orca-vs-fusion)** for ecosystem-level trends
-
-## Technical Details
-
-The Marimekko chart is built from the `pool_type_summary.json` data file which contains:
-
-- **Pool dimension**: All liquidity pools with their total contributions
-- **Type dimension**: Transaction types within each pool with SOL amounts
-- **Proportional sizing**: Both width (pool) and height (type) scaled by actual values
-
-This ensures the visual representation accurately reflects the underlying revenue distribution.
+- **Similar pool patterns**: Pools with comparable transaction type distributions
+- **Unique pool patterns**: Pools with distinctive type compositions
 
 ## Methodology
 
-Data for this visualization comes from the revenue attribution system:
+<details>
+<summary>Click to expand technical details</summary>
 
-1. Each transaction is classified by type and attributed to a pool
-2. Revenue is aggregated by pool-type combination
-3. Proportions are calculated relative to total revenue
-4. The Marimekko layout is computed to preserve both dimensions
+**Cross-Dimensional Revenue Attribution**
 
-All values maintain 100% attribution accuracy, ensuring the chart represents true on-chain revenue distribution.
+This visualization combines two classification systems to create a matrix view:
+
+1. **Pool attribution**: Each transaction is linked to the liquidity pool where it occurred (Orca Whirlpools, Fusion pools, or "Other")
+2. **Type classification**: Each transaction is categorized by its operation type using log-based pattern matching
+3. **Cross-tabulation**: Revenue is aggregated by each unique pool-type combination
+4. **Proportional sizing**: Both dimensions (width for pools, height for types) are scaled by actual SOL values
+
+**Relationship to Other Views**
+
+- **[By Pool](/analysis/defituna/revenue-breakdown/by-pool)**: Aggregates all types to show total pool performance (horizontal sum of Marimekko)
+- **[By Type](/analysis/defituna/revenue-breakdown/by-type)**: Aggregates all pools to show total type performance (vertical sum of Marimekko)
+- **[By Token](/analysis/defituna/revenue-breakdown/by-token)**: Shows which tokens flow through these pool-type combinations
+
+The Marimekko reveals interactions between pools and types that remain hidden in single-dimension views. For example, a transaction type may generate significant revenue overall but only within specific pools, or a major pool may derive most of its revenue from just one or two transaction types.
+
+**Temporal Analysis**
+
+For changes over time:
+- **[Tx Type per Day](/analysis/defituna/revenue-breakdown/tx-type-per-day)**: Shows how these pool-type patterns evolve daily
+- **[Orca vs. Fusion](/analysis/defituna/revenue-breakdown/orca-vs-fusion)**: Compares the two major protocol ecosystems
+
+**Data Accuracy**
+
+All values maintain 100% attribution accuracy. Each transaction is counted exactly once, assigned to one pool and one type. The chart layout preserves both dimensions, ensuring the visual representation accurately reflects the underlying revenue distribution.
+
+For complete pipeline details, see [Data Pipeline](/analysis/methodology).
+
+</details>

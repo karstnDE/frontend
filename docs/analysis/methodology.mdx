@@ -1,29 +1,65 @@
 ---
-title: Data Pipeline & Methodology
+title: Data Pipeline
 ---
 
-YOU SCAN SKIP THIS IF YOU ARE NOT INTERESTED IN THE DETAILS AND JUST WANT TO SEE THE DATA
+# End-to-end data pipeline
 
-# Data Pipeline & Methodology
+This page documents the general approach to analyzing Solana DeFi protocols through on-chain data. 
+For technology stack details, see [Technical Foundation](../../intro/tech-setup). 
 
-This page documents the general approach to analyzing Solana DeFi protocols through on-chain data. For technology stack details, see [Technical Foundation](../../intro/tech-setup). For more details around individual DeFi protocols, check the respective section/ page.
+If you just want to see the numbers, feel free to skip this page.
 
 ## Overview
 
-The end-to-end process transforms raw blockchain transactions into structured data and charts:
+The data pipeline transforms raw blockchain transactions into interactive analytics through five major stages:
 
-1. **Data Collection** - Monitor relevant on-chain accounts and fetch transaction history
-2. **Classification** - Identify what each transaction represents
-3. **Attribution** - Organize transactions by relevant dimensions (token, type, pool, wallet)
-4. **Aggregation** - Calculate totals, trends, and patterns
-5. **Visualization** - Present findings through interactive charts
+```mermaid
+graph LR
+    A[Solana Blockchain] -->|RPC Queries| B[Data Collection]
+    B -->|Raw Transactions| C[Transaction Classification]
+    C -->|Classified Data| D[Multi-Dimensional Attribution]
+    D -->|Attributed Data| E[Token Normalization]
+    E -->|Aggregated JSON| F[Frontend Presentation]
 
-All processing happens offline in another (private) backend repository. The site displays pre-computed results, ensuring fast performance.
-Below you find more details for each of the five points mentioned above.
+    style A fill:#00A3B4,color:#fff
+    style B fill:#00A3B4,color:#fff
+    style C fill:#00A3B4,color:#fff
+    style D fill:#00A3B4,color:#fff
+    style E fill:#00A3B4,color:#fff
+    style F fill:#00A3B4,color:#fff
+```
+
+**Pipeline Overview:**
+
+1. **Data Collection** - Enumerate transaction signatures for monitored accounts, fetch full transaction data with logs via Helius RPC, and store in compressed daily cache files
+2. **Transaction Classification** - Parse program execution logs to identify what each transaction represents (fees, swaps, liquidations, etc.) and map to human-readable names using configuration files
+3. **Multi-Dimensional Attribution** - Attribute each classified transaction across multiple dimensions simultaneously (token, transaction type, liquidity pool, wallet, time) enabling flexible analysis
+4. **Token Normalization** - Track token accumulation in treasury accounts, apply same-day conversion rates from actual on-chain swaps, and attribute converted SOL back to originating transaction types
+5. **Frontend Presentation** - Aggregate attributed data into dimension-specific JSON files, host as static assets, and render through interactive Plotly charts with filtering
+
+**Processing Model:**
+
+All processing happens offline in a separate backend repository. The frontend displays pre-computed results as static JSON files, ensuring fast load times regardless of data volume. This architecture enables complex multi-dimensional analysis while maintaining simple, reliable hosting.
+
+Each section below includes a detailed diagram showing the internal flow for that pipeline stage.
 
 ---
 
 ## Data Collection
+
+```mermaid
+graph LR
+    A[Monitored Accounts] -->|Treasury PDA| B[Signature Enumeration]
+    A -->|Token Accounts ATAs| B
+    A -->|Program IDs| B
+    B -->|Signature List| C[Batch RPC Fetching]
+    C -->|Full Transaction Data| D[Cache Storage]
+    D -->|.jsonl.gz Files| E[Daily Cache Files]
+
+    style A fill:#00A3B4,color:#fff
+    style C fill:#00A3B4,color:#fff
+    style E fill:#00A3B4,color:#fff
+```
 
 ### What Gets Monitored
 
@@ -36,7 +72,7 @@ The specific accounts monitored depend on the analysis objective. Revenue analys
 
 ### Data Sources
 
-**Primary:** Helius API provides enhanced transaction data with parsed logs and token transfers, eliminating complex instruction parsing. Fallback APIs with free plans but heavy rate limiting are in place.
+**Primary:** Helius API provides enhanced transaction data with parsed logs and token transfers, guaranteeing logMessages and consistent classification.
 
 **Supplemental:** Protocol websites and documentation provide context like token names and pool information.
 
@@ -50,7 +86,20 @@ Data updates usually run daily via automated GitHub Actions workflow (.github/wo
 
 ## Transaction Classification
 
-Understanding what each transaction represents is fundamental to analysis. Classification examines transaction logs to identify transaction purposes. **The core objective is identifying which Instruction is being executed** from the Program/Account we are observing.
+```mermaid
+graph LR
+    A[Raw Transaction] -->|Extract| B[Program Logs]
+    B -->|Parse| C[Instruction Names]
+    C -->|Match| D[Config Mapping]
+    D -->|Apply| E[Transaction Type]
+    E -->|Enriched| F[Classified Transaction]
+
+    style A fill:#00A3B4,color:#fff
+    style D fill:#00A3B4,color:#fff
+    style F fill:#00A3B4,color:#fff
+```
+
+Understanding what each transaction represents is fundamental to my analysis. Classification examines transaction logs to identify transaction purposes. **The core objective is identifying which Instruction is being executed** from the Program/Account we are observing.
 
 ### Log-Based Classification
 
@@ -86,6 +135,24 @@ When protocols introduce new transaction types, the configuration is updated and
 
 ## Multi-Dimensional Attribution
 
+```mermaid
+graph TB
+    A[Classified Transaction] --> B[Token Dimension]
+    A --> C[Type Dimension]
+    A --> D[Pool Dimension]
+    A --> E[Wallet Dimension]
+    A --> F[Time Dimension]
+
+    B --> G[Multi-Dimensional Record]
+    C --> G
+    D --> G
+    E --> G
+    F --> G
+
+    style A fill:#00A3B4,color:#fff
+    style G fill:#00A3B4,color:#fff
+```
+
 Transactions are attributed across multiple dimensions simultaneously, enabling flexible analysis from different perspectives.
 
 ### Attribution Dimensions
@@ -99,19 +166,33 @@ Common attribution dimensions include:
 
 Each transaction receives labels for all applicable dimensions, allowing the same data to power different analytical views.
 
-### Pool Identification -- AI TO CHECK THIS SECTION (REMOVE COMMENT AFTERWARDS). I think we do not use pattern matching? If we do, explain better
+### Pool Identification
 
-**Pool identification works automatically** through account-based pattern matching. The system:
+**Pool identification works automatically** through a multi-source matching system. The system:
 
-1. **Matches transaction accounts** against a registry of known pool addresses
-2. **Auto-discovers new pools** by analyzing account structures and token pair patterns in transactions
-3. **Infers pools from token pairs** when explicit address matches aren't found (e.g., a SOL-USDC swap likely involves the SOL-USDC pool)
+1. **Direct address matching** - Compares transaction account addresses against a registry of known pool addresses maintained in configuration files
+2. **Alias resolution** - Maps alternative addresses (like position accounts or vault accounts) to their canonical pool IDs
+3. **Token pair hints** - Uses mint addresses involved in transfers to identify pools when direct matches aren't found (e.g., a transaction involving SOL and USDC mints likely uses a SOL-USDC pool)
+4. **Protocol detection** - Identifies the protocol (Orca, Fusion, etc.) from program IDs to generate fallback labels when pools aren't in the registry
 
-The pool registry continuously expands as new pools are encountered, combining auto-discovered entries with manually verified addresses. No manual intervention is required for common pool operations—new pools are identified and tracked automatically during transaction processing.
+The pool registry combines manually verified entries with auto-discovered pools. When a new pool is encountered, it's assigned a generated label (like "Orca pool abc1...def2") and can be promoted to the manual registry with a human-readable name. This hybrid approach ensures comprehensive coverage while maintaining accurate, user-friendly pool names.
 
 ---
 
-## Token Value Normalization
+## Token Normalization
+
+```mermaid
+graph LR
+    A[Day N: +100 USDC] -->|Track in Ledger| B[Pending Ledger]
+    B -->|Day N+X| C[SwapReward: 100 USDC → 0.5 SOL]
+    C -->|Calculate Rate| D[Rate: 0.005 SOL/USDC]
+    D -->|Attribute Back| E[Fees: 0.5 SOL]
+    E -->|Aggregate| F[Daily SOL Totals]
+
+    style A fill:#00A3B4,color:#fff
+    style C fill:#00A3B4,color:#fff
+    style F fill:#00A3B4,color:#fff
+```
 
 To compare and aggregate transactions involving different tokens, values are normalized to a common denomination (typically SOL for Solana protocols).
 
@@ -140,44 +221,69 @@ But the protocol only distributes SOL to stakers. Until the treasury swaps these
 
 ---
 
-## Data Quality Standards
-
-Data Quality is paramount for a project like this. I spend a lot of time on ensuring that the numbers are exact and make sense. There are different ways to do that.
-
-### Verification Methods
-
-Quality is maintained through:
-- **Cross-validation** - Multiple calculation methods must agree
-- **Completeness checks** - All transactions must be classified and attributed
-- **Consistency validation** - Reprocessing historical data produces identical results
-- **Benchmark comparison** - Where possible, totals verified against known values
-
-### Accuracy Standard
-
-Even small discrepancies (0.1 SOL) indicate analytical gaps requiring investigation. This might seem like minor, but if the root cause is not addressed, a small gap can grow to a big gap and indiates the situation is not fully understood.
-
----
-
-## Protocol-Specific Analysis
-
-Each protocol requires tailored analytical approaches based on its unique characteristics and available data. Protocol-specific methodology pages document these customizations.
-
-### Current Coverage
-
-- **[DefiTuna Methodology](./defituna/methodology)** - Treasury revenue attribution, staking analytics, usage tracking
-
-Additional protocols will be added with similar depth and rigor.
-
----
-
 ## Frontend Presentation
+
+```mermaid
+graph LR
+    A[Aggregated Data] -->|Export| B[JSON Files]
+    B -->|e.g. daily_by_token.json| C[Static Hosting]
+    B -->|daily_by_type.json| C
+    B -->|summary.json| C
+    B -->|+15 more files| C
+    C -->|HTTP Fetch| D[React Data Hook]
+    D -->|Parse & Cache| E[Plotly Charts]
+    E -->|User Interaction| F[Interactive Dashboard]
+
+    style A fill:#00A3B4,color:#fff
+    style C fill:#00A3B4,color:#fff
+    style F fill:#00A3B4,color:#fff
+```
 
 Processed data exports as JSON files served as static assets. The frontend loads these files and renders interactive visualizations using Plotly charts.
 
-A manifest timestamp indicates data freshness, displayed in the site header.
+### Data Export
 
-Static architecture ensures consistent performance regardless of data volume and makes the complete dataset accessible for download.
+The backend aggregates attributed and normalized data into dimension-specific JSON files. Examples include:
+- `daily_by_token.json` - Revenue by token mint per day
+- `daily_by_type.json` - Revenue by transaction type per day
+- `daily_by_pool.json` - Revenue by liquidity pool per day
+
+In total, the system exports ~20 JSON files covering daily time series (by token, type, pool, pool-type combinations), summary statistics, top transaction rankings, staking metrics (`staking_tuna.json`, `staker_loyalty.json`), usage statistics, APY data, and more.
+
+### Static Architecture
+
+All JSON files are hosted in the `/static/data/` directory and served as immutable assets. This approach:
+- **Ensures fast load times** - No server-side processing or database queries
+- **Enables simple hosting** - Works with any static file server or CDN
+- **Supports offline analysis** - Complete dataset is downloadable
+- **Maintains consistency** - All users see the same pre-computed data
+
+### Frontend Loading
+
+The React frontend uses a custom hook (`useDashboardData`) to:
+1. Fetch all JSON files in parallel on page load
+2. Parse and validate the data structure
+3. Cache results in React state
+4. Provide loading states and error handling
+
+### Interactive Visualization
+
+Plotly charts consume the loaded data and enable:
+- **Multi-dimensional filtering** - Click any bar/segment to filter other views
+- **Cross-chart interaction** - Selection in one chart updates all related charts
+- **Responsive design** - Charts adapt to screen size and theme (light/dark mode)
+- **Export capabilities** - Download charts as PNG or view underlying data
+
+A manifest timestamp (displayed in the site header) indicates when data was last updated, helping users understand data freshness.
 
 ---
 
-*This represents the general analytical framework. Protocol-specific pages detail particular implementations and unique challenges.*
+## Data Quality
+
+Data quality is paramount for accurate on-chain analytics. The pipeline maintains rigorous standards including 100% attribution accuracy, automated validation during processing, and manual verification tools for deep auditing.
+
+**For detailed information on quality standards, automated checks, and verification tools, see: [Data Quality](./data-quality)**
+
+---
+
+*This represents the general analytical framework. Protocol-specific methodology pages document particular implementations and unique challenges.*

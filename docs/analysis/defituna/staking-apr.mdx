@@ -7,32 +7,20 @@ import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
 
 # TUNA Staking APR
 
-This dashboard shows the historical development of the Annual Percentage Rate (APR) for staking TUNA tokens, calculated based on the DefiTuna protocol's treasury revenue.
+Historical Annual Percentage Rate (APR) for TUNA staking, calculated from DefiTuna treasury revenue. Shows both Reference APR (based on current market price from on-chain swap data) and personalized APR based on your entry price. 30-day rolling window reveals how protocol revenue translates to staker yields.
 
-## Current Statistics
+## Data
 
 <BrowserOnly fallback={<LoadingSpinner />}>
   {() => {
     const { useEffect, useState } = require('react');
+    const { useApyData } = require('@site/src/hooks/useApyData');
 
     function ApySummaryStats() {
-      const [data, setData] = useState(null);
-      const [loading, setLoading] = useState(true);
+      const { data, loading } = useApyData();
       const [userEntryPrice, setUserEntryPrice] = useState(null);
 
       useEffect(() => {
-        // Load APR data
-        fetch('/data/apr_data.json')
-          .then(response => response.json())
-          .then(jsonData => {
-            setData(jsonData);
-            setLoading(false);
-          })
-          .catch(err => {
-            console.error('Error loading APR summary:', err);
-            setLoading(false);
-          });
-
         // Load user entry price from localStorage, default to 0.05 (public pre-sale price)
         const saved = localStorage.getItem('tunaEntryPrice');
         if (saved && !isNaN(parseFloat(saved))) {
@@ -200,8 +188,6 @@ This dashboard shows the historical development of the Annual Percentage Rate (A
   }}
 </BrowserOnly>
 
-## APR Development Over Time
-
 <BrowserOnly fallback={<LoadingSpinner />}>
   {() => {
     const ApyChart = require('@site/src/components/Dashboard/ApyChart').default;
@@ -209,26 +195,67 @@ This dashboard shows the historical development of the Annual Percentage Rate (A
   }}
 </BrowserOnly>
 
-:::info TUNA Reference Price
-The chart includes an optional **TUNA Reference Price** trace (hidden by default - click the legend to show it). This price is derived from on-chain swap transaction data in the treasury's daily assets analysis. For each day, we analyze all TUNA/WSOL swap transactions, calculate weighted average prices based on trade volumes, and convert to USD. This gives us a reliable, data-driven price reference that reflects actual on-chain trading activity.
-:::
+## Use Cases
+
+This page helps you:
+
+- **Track staking yields**: Monitor how protocol revenue translates to APR for TUNA stakers
+- **Calculate personalized returns**: Compare your actual APR based on entry price vs. market reference APR
+- **Evaluate investment timing**: See how early entry prices result in higher effective yields
+- **Analyze APR trends**: Identify whether staking yields are increasing, stable, or declining over time
+- **Benchmark revenue performance**: Understand protocol revenue trends through the lens of staker returns
+- **Plan entry strategies**: Compare potential APR at different TUNA price points
+
+## How to Read This Chart
+
+**Summary Statistics Cards:**
+- **30-day Average APR**: Rolling 30-day average yield (includes line indicators matching chart traces)
+- **All-time Average APR**: Historical average since staking launch
+- **Reference APR** (large teal number): APR based on current market TUNA price from on-chain swap data
+- **Entry Price APR** (smaller text below): Your personalized APR based on entry price (default $0.05)
+
+**APR Chart:**
+- **X-axis**: Date
+- **Y-axis**: Annual Percentage Rate (%)
+- **Teal line with dots**: Reference APR (based on on-chain TUNA market price)
+- **Green dashed line with dots**: Your/Custom APR (based on entry price you set)
+- **Hidden trace**: TUNA Reference Price (click legend to show) - derived from on-chain swap volume-weighted prices
+
+**Entry Price Input (below chart):**
+Enter your actual TUNA purchase price to calculate your personalized APR. The chart and summary cards update in real-time. Your entry price is saved across sessions.
+
+**Interactive Features:**
+- **Hover on chart**: See detailed breakdown including both APR values, rolling revenue (SOL/USD), days in window, and TUNA price
+- **Click legend**: Show/hide traces (e.g., reveal TUNA Reference Price)
+- **Entry price input**: Immediately updates all statistics and chart traces
+- **Line indicators in cards**: Show which line corresponds to which APR value (teal = Reference, green = Entry Price)
+
+**Why Two APR Values?**
+
+If you bought TUNA below the current market price, your effective APR is higher:
+- **Reference APR**: What the market sees based on current TUNA price
+- **Your APR**: What you actually earn based on your lower cost basis
+- **Example**: $0.012 revenue per TUNA ÷ $0.05 entry = 24% APR vs. ÷ $0.20 market = 6% APR
 
 ## Methodology
 
+<details>
+<summary>Click to expand technical details</summary>
+
 The TUNA staking APR is calculated using the following approach:
 
-### Key Parameters
+**Key Parameters**
 
 - **TUNA Supply**: Fixed at 1,000,000,000 tokens
 - **Rolling Window**: Up to 30 days of historical revenue data
-- **Revenue Source**: Treasury WSOL inflows (validated against DefiTuna API)
+- **Revenue Source**: Treasury WSOL inflows (validated against DefiTuna data)
 - **TUNA Reference Price**:
   - **Source**: Daily `assets.json` files - derived from on-chain TUNA/WSOL swap transaction data
   - **Calculation**: Weighted average price based on swap volumes, converted to USD
 - **Default Entry Price**: $0.05 (public pre-sale price)
-- **USD/SOL Rates**: Daily spot rates derived from DefiTuna staking revenue API
+- **USD/SOL Rates**: Daily spot rates from DefiTuna staking revenue data
 
-### Calculation Formula
+**Calculation Formula**
 
 The APR calculation follows these steps:
 
@@ -254,117 +281,88 @@ The APR calculation follows these steps:
    Entry Price APR (%) = (Revenue per TUNA USD / Your Entry Price USD) × 100
    ```
 
-### Example Calculation
+**Example Calculation**
 
-For a given day with the following data:
-- 30-day rolling revenue: $1,850,787 USD
-- TUNA Reference Price: $0.0624 USD (from on-chain swap data)
-- Your entry price: $0.05 USD (default)
+<BrowserOnly fallback={<div>Loading example...</div>}>
+  {() => {
+    const { useEffect, useState } = require('react');
+    const { useApyData } = require('@site/src/hooks/useApyData');
 
-The APR would be calculated as:
-```
-Annualized Revenue = ($1,850,787 / 30) × 365 = $22,509,605 USD
-Revenue per TUNA = $22,509,605 / 1,000,000,000 = $0.02251 USD
+    function ExampleCalculation() {
+      const { data: apyData, loading } = useApyData();
+      const [data, setData] = useState(null);
 
-Reference APR = ($0.02251 / $0.0624) × 100 = 36.07%
-Entry Price APR = ($0.02251 / $0.05) × 100 = 45.02%
-```
+      useEffect(() => {
+        if (apyData?.daily_apr) {
+          // Get the last entry (most recent date with full 30-day window)
+          const fullWindowData = apyData.daily_apr.filter(d => d.rolling_days === 30);
+          if (fullWindowData.length > 0) {
+            setData(fullWindowData[fullWindowData.length - 1]);
+          }
+        }
+      }, [apyData]);
 
-This shows how early investors with a lower entry price achieve higher APR on the same protocol revenue.
+      if (!data) {
+        return <div style={{ padding: '16px', color: 'var(--ifm-color-secondary)' }}>Loading calculation example...</div>;
+      }
 
-### USD Conversion Methodology
+      const formatCurrency = (val) => val.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const formatPrice = (val) => val.toFixed(4);
 
-**Daily Spot Rates (Current)**:
+      return (
+        <div>
+          <p>Using actual data from {data.date}:</p>
+          <ul>
+            <li>30-day rolling revenue: ${formatCurrency(data.rolling_revenue_usd)} USD ({formatCurrency(data.rolling_revenue_sol)} SOL)</li>
+            <li>TUNA Reference Price: ${formatPrice(data.tuna_price_usd)} USD (from on-chain swap data)</li>
+            <li>Your entry price: $0.05 USD (default)</li>
+          </ul>
 
-As of January 2025, USD values are calculated using **daily spot market rates** fetched from the DefiTuna API. This ensures our USD calculations match the protocol's official values with 100% accuracy.
+          <p>The APR would be calculated as:</p>
+          <pre style={{ background: 'var(--ifm-code-background)', padding: '16px', borderRadius: 'var(--ifm-global-radius)', overflow: 'auto' }}>
+{`Annualized Revenue = ($${formatCurrency(data.rolling_revenue_usd)} / ${data.rolling_days}) × 365 = $${formatCurrency(data.annualized_revenue_usd)} USD
+Revenue per TUNA = $${formatCurrency(data.annualized_revenue_usd)} / 1,000,000,000 = $${formatPrice(data.revenue_per_tuna_usd)} USD
 
-- **API Endpoint**: `https://api.defituna.com/api/v1/stats/staking/revenue`
+Reference APR = ($${formatPrice(data.revenue_per_tuna_usd)} / $${formatPrice(data.tuna_price_usd)}) × 100 = ${data.reference_apr_percent.toFixed(2)}%
+Entry Price APR = ($${formatPrice(data.revenue_per_tuna_usd)} / $0.05) × 100 = ${data.your_apr_percent.toFixed(2)}%`}
+          </pre>
+
+          <p>This shows how early investors with a lower entry price achieve higher APR on the same protocol revenue.</p>
+        </div>
+      );
+    }
+
+    return <ExampleCalculation />;
+  }}
+</BrowserOnly>
+
+**USD Conversion Methodology**
+
+USD values are calculated using **daily spot market rates** from DefiTuna's staking revenue data. This ensures our USD calculations match the protocol's official values with 100% accuracy.
+
+- **Rate Source**: Daily USD/SOL conversion rates from DefiTuna
 - **Rate Calculation**: For each day, USD/SOL rate = (daily USD deposits) / (daily SOL deposits)
-- **Accuracy**: 100% match with DefiTuna API (verified daily)
+- **Accuracy**: 100% match with DefiTuna data (verified daily)
 
-**Example**: On October 10, 2025, the spot rate was $181.11/SOL, so 926.36 SOL revenue = $167,771.22 USD.
+**Example**: On a given day with a spot rate of $181.11/SOL, 926.36 SOL revenue = $167,771.22 USD.
 
-**Previous Approach** (deprecated): Used a single historical average rate ($198.98/SOL) for all dates, which caused USD values to differ from the API.
-
-### Data Notes
+**Data Notes**
 
 - **Early History**: For dates with less than 30 days of historical data, the APR is calculated using all available days and annualized accordingly.
 - **Price Data Source**: Daily `assets.json` files containing TUNA prices derived from on-chain swap transaction data
-- **Revenue Validation**: All revenue figures are validated against the DefiTuna public API to ensure 100% accuracy.
-- **USD Values**: Calculated using daily spot market rates from the DefiTuna API, ensuring exact match with protocol's official USD values.
+- **Revenue Validation**: All revenue figures are validated against data made available by DefiTuna to ensure 100% accuracy.
+- **USD Values**: Calculated using daily spot market rates from DefiTuna, ensuring exact match with protocol's official USD values.
 
-## Understanding the Chart
-
-The chart displays:
-- **X-axis**: Date
-- **Y-axis**: APR in percentage
-- **Traces**:
-  - **Reference APR** (teal line): APR based on current market price
-  - **Your APR / Custom APR** (green dashed line): APR based on your entry price (default $0.05)
-- **Hover**: Shows detailed breakdown including:
-  - Reference APR and Your/Custom APR percentages
-  - Number of days in rolling window
-  - Rolling revenue (SOL and USD)
-  - TUNA Reference Price in USD (from on-chain swap data)
+**APR Fluctuation Factors**
 
 The APR naturally fluctuates based on:
-1. **Treasury Revenue**: Higher protocol activity increases treasury inflows
-2. **TUNA Price**: Price movements affect the Reference APR calculation
-3. **Your Entry Price**: Lower entry prices result in higher Your APR for the same revenue
-4. **Historical Window**: Early days with less historical data may show higher volatility
+- **Treasury Revenue**: Higher protocol activity increases treasury inflows
+- **TUNA Price**: Price movements affect the Reference APR calculation
+- **Your Entry Price**: Lower entry prices result in higher Your APR for the same revenue
+- **Historical Window**: Early days with less historical data may show higher volatility
 
-## Personalized APR Feature
+**Data Update Frequency**
 
-The dashboard allows you to calculate your personalized APR based on your actual TUNA entry price.
+APR data is automatically updated once per day. Check the "Last updated" timestamp in the site header for data freshness.
 
-### How It Works
-
-**Formula**:
-```
-Custom APR (%) = (Revenue per TUNA in USD / Your Entry Price in USD) × 100
-```
-
-**Default**: If no price is entered, defaults to $0.05 (public pre-sale price).
-
-**Example**:
-- Market TUNA price: $0.20
-- Your entry price: $0.05
-- Revenue per TUNA: $0.012
-
-Reference APR: ($0.012 / $0.20) × 100 = **6.0%**
-Custom APR: ($0.012 / $0.05) × 100 = **24.0%**
-
-### Features
-
-- **Interactive Input**: Enter your entry price below the chart
-- **Dual Chart Traces**: Green dashed line shows your personalized APR
-- **Summary Stats**: Each stat card displays both Reference and Custom APR
-- **localStorage Persistence**: Your entry price is saved across sessions
-- **Real-time Updates**: Chart updates immediately when you change the price
-
-### Why This Matters
-
-If you purchased TUNA at a lower price than the current market price, your effective APR is higher because:
-- The protocol revenue is the same
-- But your cost basis was lower
-- Therefore, your return on investment is higher
-
-This feature helps you understand your actual yield based on your investment, not just the market yield.
-
-## Technical Details
-
-For developers and technical users interested in how the APR calculation works:
-
-- **Backend Documentation**: See `docs/APY_CALCULATION_SYSTEM.md` in the `solana_analytics` repository for complete technical details
-- **Component Source**: `frontend/src/components/Dashboard/ApyChart.tsx`
-- **Data Source**: `frontend/static/data/apr_data.json` (generated by `tools/compute_apy_data.py`)
-- **Price Source**: `cache/{address}/{year}/{month}/{date}.assets.json` (on-chain derived prices)
-
-### Data Update Frequency
-
-The APR data is manually updated when:
-- New treasury transaction data is loaded
-- Assets analysis generates new daily price data
-- USD/SOL exchange rates change significantly
-
-For the most current data, check the "Last updated" timestamp in the site header.
+</details>

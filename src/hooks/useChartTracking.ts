@@ -9,6 +9,16 @@
 
 import { useEffect, useRef } from 'react';
 import { trackChartEvent } from '@site/src/utils/analytics';
+import type { PlotMouseEvent, PlotRelayoutEvent, PlotSelectionEvent } from 'plotly.js';
+
+/**
+ * Extended HTMLDivElement with Plotly event methods
+ * Plotly.js adds these methods to the div element at runtime
+ */
+interface PlotlyHTMLElement extends HTMLDivElement {
+  on?: (event: string, handler: (data: any) => void) => void;
+  removeAllListeners?: (event: string) => void;
+}
 
 interface UseChartTrackingOptions {
   /** Display name of the chart (used in event paths) */
@@ -86,7 +96,7 @@ export function useChartTracking(
       }
     };
 
-    const handleClick = (data: any) => {
+    const handleClick = (data: Readonly<PlotMouseEvent>) => {
       if (trackClick) {
         // Extract useful metadata from click event
         const metadata: Record<string, string | number> = {};
@@ -99,7 +109,7 @@ export function useChartTracking(
       }
     };
 
-    const handleRelayout = (eventData: any) => {
+    const handleRelayout = (eventData: Readonly<PlotRelayoutEvent>) => {
       if (trackZoom) {
         // Detect if this was a zoom/pan event
         if (eventData['xaxis.range[0]'] || eventData['yaxis.range[0]']) {
@@ -108,7 +118,7 @@ export function useChartTracking(
       }
     };
 
-    const handleSelected = (eventData: any) => {
+    const handleSelected = (eventData: Readonly<PlotSelectionEvent>) => {
       if (trackSelect && eventData && eventData.points) {
         trackChartEvent(chartName, 'select', {
           points: eventData.points.length,
@@ -118,7 +128,7 @@ export function useChartTracking(
 
     // Attach Plotly event listeners
     // Note: Plotly adds these as properties on the div element
-    const plotlyDiv = plotDiv as any;
+    const plotlyDiv = plotDiv as PlotlyHTMLElement;
     if (plotlyDiv.on) {
       plotlyDiv.on('plotly_hover', handleHover);
       plotlyDiv.on('plotly_click', handleClick);

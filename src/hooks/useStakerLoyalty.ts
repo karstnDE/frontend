@@ -123,28 +123,62 @@ export interface UseStakerLoyaltyResult {
   error: string | null;
 }
 
+// Module-level cache to prevent re-fetching on component remounts
+let cachedData: StakerLoyaltyData | null = null;
+let cachedError: string | null = null;
+let isLoading = false;
+let loadPromise: Promise<void> | null = null;
+
 export function useStakerLoyalty(): UseStakerLoyaltyResult {
-  const [data, setData] = useState<StakerLoyaltyData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [data, setData] = useState<StakerLoyaltyData | null>(cachedData);
+  const [loading, setLoading] = useState(!cachedData && !cachedError);
+  const [error, setError] = useState<string | null>(cachedError);
 
   useEffect(() => {
-    fetch('/data/staker_loyalty.json')
-      .then((response) => {
+    // If we already have cached data or error, use it immediately
+    if (cachedData || cachedError) {
+      setData(cachedData);
+      setError(cachedError);
+      setLoading(false);
+      return;
+    }
+
+    // If data is currently being loaded by another component instance, wait for it
+    if (isLoading && loadPromise) {
+      loadPromise.then(() => {
+        setData(cachedData);
+        setError(cachedError);
+        setLoading(false);
+      });
+      return;
+    }
+
+    // Start loading data
+    const load = async () => {
+      try {
+        isLoading = true;
+        setLoading(true);
+        const response = await fetch('/data/staker_loyalty.json');
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
-        return response.json();
-      })
-      .then((jsonData) => {
+        const jsonData = await response.json();
+        cachedData = jsonData;
+        cachedError = null;
         setData(jsonData);
-        setLoading(false);
-      })
-      .catch((err) => {
+        setError(null);
+      } catch (err) {
         console.error('Error loading staker loyalty data:', err);
-        setError(err.message || 'Failed to load staker loyalty data');
+        const errorMessage = err instanceof Error ? err.message : 'Failed to load staker loyalty data';
+        cachedError = errorMessage;
+        setError(errorMessage);
+      } finally {
+        isLoading = false;
         setLoading(false);
-      });
+      }
+    };
+
+    loadPromise = load();
   }, []);
 
   return { data, loading, error };

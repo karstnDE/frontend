@@ -16,8 +16,6 @@ That's why I started this: to zoom in on a handful of intriguing, rising stars o
 It's about building a solid foundation for thoughtful discussions on what makes these gems tick, evolve, and stand out in Solana's wild landscape. If you're a fellow DeFi enthusiast, dev, investor, or curious observer tired of the surface-level noise ("How to farm this Airdrop/ How this protocol works in 3 tweets"), join me in exploring these deep dives. Check out the dashboards and reports, **and let's discuss the details together. Always feel free to drop me a comment.**
 </p>
 
-[To do: Show cards (like in the dashboards) for number of projects covered, number of transactions, number of charts]: #
-
 
 <div class="card-section" data-animate>
   <h2>Objectives</h2>
@@ -37,7 +35,119 @@ It's about building a solid foundation for thoughtful discussions on what makes 
 <div class="card-section" data-animate>
   <h2>Scope</h2>
   <div class="section-grid">
-    <p>
+
+import BrowserOnly from '@docusaurus/BrowserOnly';
+
+<BrowserOnly fallback={<div>Loading statistics...</div>}>
+  {() => {
+    const { useEffect, useState } = require('react');
+
+    function StatsCards() {
+      const [txCount, setTxCount] = useState(null);
+      const [loading, setLoading] = useState(true);
+
+      useEffect(() => {
+        fetch('/data/usage_metrics.json')
+          .then(response => response.json())
+          .then(data => {
+            setTxCount(data.summary.transactions_scanned);
+            setLoading(false);
+          })
+          .catch(err => {
+            console.error('Error loading transaction count:', err);
+            setLoading(false);
+          });
+      }, []);
+
+      if (loading) {
+        return (
+          <div style={{
+            padding: '24px',
+            textAlign: 'center',
+            color: 'var(--ifm-color-secondary)',
+          }}>
+            Loading statistics...
+          </div>
+        );
+      }
+
+      const cardStyle = {
+        background: 'var(--ifm-background-surface-color)',
+        border: '1px solid var(--ifm-toc-border-color)',
+        borderRadius: 'var(--ifm-global-radius)',
+        padding: '24px',
+        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        textAlign: 'center',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '8px',
+      };
+
+      const labelStyle = {
+        fontSize: '14px',
+        fontWeight: '600',
+        color: 'var(--ifm-color-secondary)',
+        textTransform: 'uppercase',
+        letterSpacing: '0.5px',
+      };
+
+      const valueStyle = {
+        fontSize: '32px',
+        fontWeight: '700',
+        color: 'var(--ifm-color-primary)',
+        lineHeight: '1.2',
+      };
+
+      const supplementaryStyle = {
+        fontSize: '13px',
+        color: 'var(--ifm-color-emphasis-600)',
+      };
+
+      return (
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+          gap: '24px',
+          marginTop: '32px',
+          marginBottom: '48px',
+        }}>
+          {/* Transactions Loaded Card */}
+          <div style={cardStyle}>
+            <div style={labelStyle}>Transactions Loaded</div>
+            <div style={valueStyle}>
+              {txCount ? txCount.toLocaleString() : 'N/A'}
+            </div>
+            <div style={supplementaryStyle}>
+              On-chain transactions analyzed
+            </div>
+          </div>
+
+          {/* Projects Covered Card */}
+          <div style={cardStyle}>
+            <div style={labelStyle}>Projects Covered</div>
+            <div style={valueStyle}>1</div>
+            <div style={supplementaryStyle}>
+              Deep-dive protocol analysis
+            </div>
+          </div>
+
+          {/* Analyses Presented Card */}
+          <div style={cardStyle}>
+            <div style={labelStyle}>Analyses Presented</div>
+            <div style={valueStyle}>14</div>
+            <div style={supplementaryStyle}>
+              Interactive data visualizations
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    return <StatsCards />;
+  }}
+</BrowserOnly>
+
+    <p> 
     This project provides on-chain data analytics for Solana DeFi protocols. Analytics are useful for me if they are considering the overall objective a DeFi protocol has. Which ultimately always is the same: Generating value for users and investors.
     Let's say a protocol shares revenue with its investors via staking. What I want to understand is:
     <ul>

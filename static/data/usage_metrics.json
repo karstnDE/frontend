@@ -1,13 +1,13 @@
 {
-  "generated_at": "2025-11-11T00:00:00+00:00",
+  "generated_at": "2025-11-12T00:00:00+00:00",
   "date_range": {
     "start": "2025-07-24",
-    "end": "2025-11-11"
+    "end": "2025-11-12"
   },
   "summary": {
-    "transactions_scanned": 159700,
-    "staker_unique_addresses": 4843,
-    "daily_active_unique_addresses": 31873
+    "transactions_scanned": 161037,
+    "staker_unique_addresses": 4844,
+    "daily_active_unique_addresses": 32174
   },
   "stakers": {
     "daily_counts": [
@@ -450,9 +450,20 @@
       {
         "date": "2025-11-11",
         "count": 47
+      },
+      {
+        "date": "2025-11-12",
+        "count": 37
       }
     ],
     "top_wallets": [
+      {
+        "address": "CiVSK81H4kuC4LRiRb93fPLoxFmW5YfCKxnKJsvzzPza",
+        "tx_count": 338,
+        "days_active": 84,
+        "first_seen": "2025-07-28",
+        "last_seen": "2025-11-12"
+      },
       {
         "address": "ExFcWT2snFVAHa7hFhFbhE8sHyEcMcvAcy6nr4jQRbeF",
         "tx_count": 304,
@@ -461,32 +472,25 @@
         "last_seen": "2025-11-06"
       },
       {
-        "address": "CiVSK81H4kuC4LRiRb93fPLoxFmW5YfCKxnKJsvzzPza",
-        "tx_count": 337,
-        "days_active": 83,
-        "first_seen": "2025-07-28",
-        "last_seen": "2025-11-08"
-      },
-      {
         "address": "ECyvtxvY4KNBt5vfLtdsMrp77mKjL3JD6aha9m3aXBvd",
-        "tx_count": 198,
-        "days_active": 72,
+        "tx_count": 199,
+        "days_active": 73,
         "first_seen": "2025-08-11",
-        "last_seen": "2025-11-11"
+        "last_seen": "2025-11-12"
       },
       {
         "address": "Eef4P5aFkZAoudhV7qvmxYJaLuxpBLLQek6oCh4jSbrp",
-        "tx_count": 95,
-        "days_active": 68,
+        "tx_count": 96,
+        "days_active": 69,
         "first_seen": "2025-08-01",
-        "last_seen": "2025-11-11"
+        "last_seen": "2025-11-12"
       },
       {
         "address": "4t6cFgFThjH2HrgAxnVtvTVkDmDoPAHGy9RfSoprsJRa",
-        "tx_count": 116,
-        "days_active": 63,
+        "tx_count": 117,
+        "days_active": 64,
         "first_seen": "2025-07-28",
-        "last_seen": "2025-11-10"
+        "last_seen": "2025-11-12"
       },
       {
         "address": "6yA7bhwaZQUv2VFPeHFBsPUwr2pv4hLVCfBg4iYK3wLa",
@@ -497,17 +501,17 @@
       },
       {
         "address": "8Ji51bchqqwZYCXAXVQAK3FwPsWnupZQa4jDeCVFqdmM",
-        "tx_count": 116,
-        "days_active": 55,
+        "tx_count": 117,
+        "days_active": 56,
         "first_seen": "2025-08-02",
-        "last_seen": "2025-11-11"
+        "last_seen": "2025-11-12"
       },
       {
         "address": "3ovDaHpvxoVQ9EycH2HGo8bsbAy49CnU5VAHR1wmVypN",
-        "tx_count": 69,
-        "days_active": 54,
+        "tx_count": 71,
+        "days_active": 55,
         "first_seen": "2025-07-30",
-        "last_seen": "2025-11-11"
+        "last_seen": "2025-11-12"
       },
       {
         "address": "6szPPBa2qrM3RK952aYChXEZ6CjJScQ4HtrSYBqwv4yn",
@@ -517,11 +521,11 @@
         "last_seen": "2025-11-11"
       },
       {
-        "address": "PsZoZgAzF5qM4gL5ZczPkdSTSDFEvcvKMUGgHsuYP77",
-        "tx_count": 86,
-        "days_active": 47,
-        "first_seen": "2025-07-31",
-        "last_seen": "2025-11-04"
+        "address": "6VTAjq7RvPxwo2P7hJ1odaz2tu8QRZRSjg34HCezWnH7",
+        "tx_count": 57,
+        "days_active": 48,
+        "first_seen": "2025-07-27",
+        "last_seen": "2025-11-12"
       }
     ]
   },
@@ -942,36 +946,40 @@
       {
         "date": "2025-11-11",
         "count": 400
+      },
+      {
+        "date": "2025-11-12",
+        "count": 425
       }
     ],
     "top_wallets": [
       {
         "address": "9j6dHYVg6jkWX2Ejp1i6M4HkzRqKtVdWfLNE9ZUhsUxM",
-        "tx_count": 70469,
-        "days_active": 104,
+        "tx_count": 71069,
+        "days_active": 105,
         "first_seen": "2025-07-31",
-        "last_seen": "2025-11-11"
+        "last_seen": "2025-11-12"
       },
       {
         "address": "4mfejFGRr7YnN18Pyk6cnEE1DcngMQpuVmLLNE2gQVzw",
-        "tx_count": 5258,
-        "days_active": 104,
+        "tx_count": 5495,
+        "days_active": 105,
         "first_seen": "2025-07-31",
-        "last_seen": "2025-11-11"
+        "last_seen": "2025-11-12"
       },
       {
         "address": "HzfgzoEdCudib7pE99ABJch8ontDnF2h3yqRnK5J9TTF",
-        "tx_count": 343,
-        "days_active": 98,
+        "tx_count": 346,
+        "days_active": 99,
         "first_seen": "2025-08-01",
-        "last_seen": "2025-11-11"
+        "last_seen": "2025-11-12"
       },
       {
         "address": "7XLX6KXXBB8HhLLXifSUYNW7F8B4oaDDoXzzw4mSJRQ8",
-        "tx_count": 500,
-        "days_active": 92,
+        "tx_count": 504,
+        "days_active": 93,
         "first_seen": "2025-07-31",
-        "last_seen": "2025-11-11"
+        "last_seen": "2025-11-12"
       },
       {
         "address": "4ZbyCVeco39vbKmT6kL2xCa2ZzG8DUSH4XiBRE6g6FyS",
@@ -1002,17 +1010,17 @@
         "last_seen": "2025-11-05"
       },
       {
+        "address": "CgMr1dy5wGR4AEwstXuoWK2VCvW4M6LgY7kpnBCip4jE",
+        "tx_count": 510,
+        "days_active": 82,
+        "first_seen": "2025-08-16",
+        "last_seen": "2025-11-12"
+      },
+      {
         "address": "6NcbT9g7xDTaBpAVJGjfQK4jW81KxBA5zH3nPdQVu9od",
         "tx_count": 202,
         "days_active": 82,
         "first_seen": "2025-08-01",
-        "last_seen": "2025-11-11"
-      },
-      {
-        "address": "CgMr1dy5wGR4AEwstXuoWK2VCvW4M6LgY7kpnBCip4jE",
-        "tx_count": 503,
-        "days_active": 81,
-        "first_seen": "2025-08-16",
         "last_seen": "2025-11-11"
       }
     ]
@@ -1434,39 +1442,43 @@
       {
         "date": "2025-11-11",
         "count": 2027
+      },
+      {
+        "date": "2025-11-12",
+        "count": 2118
       }
     ],
     "top_wallets": [
       {
         "address": "9j6dHYVg6jkWX2Ejp1i6M4HkzRqKtVdWfLNE9ZUhsUxM",
-        "tx_count": 70469,
-        "days_active": 104,
+        "tx_count": 71069,
+        "days_active": 105,
         "first_seen": "2025-07-31",
-        "last_seen": "2025-11-11",
+        "last_seen": "2025-11-12",
         "active_weeks": 16
       },
       {
         "address": "4mfejFGRr7YnN18Pyk6cnEE1DcngMQpuVmLLNE2gQVzw",
-        "tx_count": 5258,
-        "days_active": 104,
+        "tx_count": 5495,
+        "days_active": 105,
         "first_seen": "2025-07-31",
-        "last_seen": "2025-11-11",
+        "last_seen": "2025-11-12",
         "active_weeks": 16
       },
       {
         "address": "HzfgzoEdCudib7pE99ABJch8ontDnF2h3yqRnK5J9TTF",
-        "tx_count": 343,
-        "days_active": 98,
+        "tx_count": 346,
+        "days_active": 99,
         "first_seen": "2025-08-01",
-        "last_seen": "2025-11-11",
+        "last_seen": "2025-11-12",
         "active_weeks": 16
       },
       {
         "address": "7XLX6KXXBB8HhLLXifSUYNW7F8B4oaDDoXzzw4mSJRQ8",
-        "tx_count": 500,
-        "days_active": 92,
+        "tx_count": 504,
+        "days_active": 93,
         "first_seen": "2025-07-31",
-        "last_seen": "2025-11-11",
+        "last_seen": "2025-11-12",
         "active_weeks": 16
       },
       {
@@ -1478,43 +1490,43 @@
         "active_weeks": 16
       },
       {
+        "address": "3GSWLuXHBQ1E8Y3bQuB9qCVr8dJy5pCZATCTyKgU75PP",
+        "tx_count": 212,
+        "days_active": 80,
+        "first_seen": "2025-08-03",
+        "last_seen": "2025-11-12",
+        "active_weeks": 16
+      },
+      {
         "address": "Dpe3RA3m63ayLyArs4vcPkEiWjgnqkTV2gjPJzdeg44t",
-        "tx_count": 277,
-        "days_active": 76,
+        "tx_count": 279,
+        "days_active": 77,
         "first_seen": "2025-07-31",
-        "last_seen": "2025-11-11",
+        "last_seen": "2025-11-12",
         "active_weeks": 16
       },
       {
         "address": "7BTi7AteGqbbDDBBthXhLPLZ8tPv3K3NCiKGXQMLBon7",
-        "tx_count": 212,
-        "days_active": 70,
+        "tx_count": 213,
+        "days_active": 71,
         "first_seen": "2025-07-31",
-        "last_seen": "2025-11-11",
+        "last_seen": "2025-11-12",
         "active_weeks": 16
       },
       {
         "address": "G4ikGcerYDnHqPjRNFQRQBRssLztGXnevvr6MnDQtbKS",
-        "tx_count": 192,
-        "days_active": 64,
+        "tx_count": 194,
+        "days_active": 65,
         "first_seen": "2025-08-01",
-        "last_seen": "2025-11-11",
+        "last_seen": "2025-11-12",
         "active_weeks": 16
       },
       {
         "address": "6VTAjq7RvPxwo2P7hJ1odaz2tu8QRZRSjg34HCezWnH7",
-        "tx_count": 109,
-        "days_active": 58,
+        "tx_count": 110,
+        "days_active": 59,
         "first_seen": "2025-07-31",
-        "last_seen": "2025-11-11",
-        "active_weeks": 16
-      },
-      {
-        "address": "51vrHHUkX6E6CWyBp6JjCNnaHaSqaNiz62quDtXgGYSV",
-        "tx_count": 86,
-        "days_active": 55,
-        "first_seen": "2025-07-31",
-        "last_seen": "2025-11-10",
+        "last_seen": "2025-11-12",
         "active_weeks": 16
       }
     ]

@@ -5,15 +5,19 @@ title: Revenue by Pool
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
 
-# Revenue Breakdown: By Pool
+# Revenue Breakdown by Pool
+
+Displays protocol revenue categorized by liquidity pool, showing which LP positions generate treasury inflows. Revenue primarily comes from Orca Whirlpools and Fusion pools, with additional revenue not tied to specific pools shown as "Other." Click on a pool bar to display the top 10 contributing transactions for that pool.
+
+## Data
 
 <BrowserOnly fallback={<LoadingSpinner />}>
   {() => {
-    const { useState } = require('react');
+    const { useState, useEffect } = require('react');
     const { useDashboardData } = require('@site/src/components/Dashboard/useDashboardData');
     const BreakdownChart = require('@site/src/components/Dashboard/BreakdownChart').default;
     const TopTransactionsTable = require('@site/src/components/Dashboard/TopTransactionsTable').default;
-    
+
     function RevenueDashboard() {
       const data = useDashboardData();
       const [selectedId, setSelectedId] = useState(null);
@@ -29,6 +33,19 @@ import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
         setSelectedLabel(null);
       };
 
+      // Fix scroll position after component loads
+      useEffect(() => {
+        if (!data.loading && window.location.hash) {
+          setTimeout(() => {
+            const id = window.location.hash.slice(1);
+            const element = document.getElementById(id);
+            if (element) {
+              element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }, 100);
+        }
+      }, [data.loading]);
+
       if (data.loading) {
         return <LoadingSpinner />;
       }
@@ -42,7 +59,7 @@ import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
             borderRadius: 'var(--ifm-global-radius)',
             color: 'var(--ifm-color-danger)',
           }}>
-            <h3>Error Loading Dashboard</h3>
+            <div style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '8px' }}>Error Loading Dashboard</div>
             <p>{data.error}</p>
           </div>
         );
@@ -54,174 +71,147 @@ import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
       }
 
       return (
-        <div style={{ padding: '24px 0' }}>
+        <div>
+          {/* Chart Section */}
           <BreakdownChart
             summary={summary}
             groupMode="pool"
             onBarClick={handleBarClick}
           />
 
-          {selectedLabel && (
-            <div style={{
-              marginBottom: '16px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px'
-            }}>
-              <span style={{ fontSize: '14px', color: 'var(--ifm-color-secondary)' }}>
-                Filtered by: <strong>{selectedLabel}</strong>
-              </span>
-              <button
-                onClick={clearFilter}
-                style={{
-                  padding: '6px 12px',
-                  fontSize: '13px',
-                  background: 'var(--ifm-color-emphasis-200)',
-                  border: '1px solid var(--ifm-toc-border-color)',
-                  borderRadius: 'var(--ifm-global-radius)',
-                  cursor: 'pointer',
-                  color: 'var(--ifm-font-color-base)',
-                }}
-              >
-                Clear Filter
-              </button>
-            </div>
-          )}
+          {/* Table Section - appears under "Top Transactions Table" heading below */}
+          <div id="transactions-table-section" style={{ marginTop: '32px' }}>
+            <h2 id="top-transactions">Top Transactions Table</h2>
 
-          <TopTransactionsTable
-            topTransactionsToken={data.topTransactionsToken}
-            topTransactionsType={data.topTransactionsType}
-            topTransactionsPool={data.topTransactionsPool}
-            groupMode="pool"
-            selectedFilter={selectedId}
-            selectedFilterLabel={selectedLabel}
-            summary={summary}
-          />
+            <p style={{ marginBottom: '16px' }}>
+              The table displays individual transactions contributing to treasury revenue.
+              By default, it shows all transactions across all pools, sorted by SOL amount.
+            </p>
+
+            <p style={{ marginBottom: '16px' }}>
+              <strong>Filtering</strong>: Click any bar in the chart above to filter the table to that specific pool's transactions.
+            </p>
+
+            {selectedLabel && (
+              <div style={{
+                marginBottom: '16px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px'
+              }}>
+                <span style={{ fontSize: '14px', color: 'var(--ifm-color-secondary)' }}>
+                  Filtered by: <strong>{selectedLabel}</strong>
+                </span>
+                <button
+                  onClick={clearFilter}
+                  style={{
+                    padding: '6px 12px',
+                    fontSize: '13px',
+                    background: 'var(--ifm-color-emphasis-200)',
+                    border: '1px solid var(--ifm-toc-border-color)',
+                    borderRadius: 'var(--ifm-global-radius)',
+                    cursor: 'pointer',
+                    color: 'var(--ifm-font-color-base)',
+                  }}
+                >
+                  Clear Filter
+                </button>
+              </div>
+            )}
+
+            <TopTransactionsTable
+              topTransactionsToken={data.topTransactionsToken}
+              topTransactionsType={data.topTransactionsType}
+              topTransactionsPool={data.topTransactionsPool}
+              groupMode="pool"
+              selectedFilter={selectedId}
+              selectedFilterLabel={selectedLabel}
+              summary={summary}
+            />
+          </div>
         </div>
       );
     }
-    
+
     return <RevenueDashboard />;
   }}
 </BrowserOnly>
 
-# Revenue Breakdown: By Pool
+## Use Cases
 
-This page shows how treasury revenue is distributed across different **liquidity pools**, revealing which vaults and LP strategies drive protocol earnings.
+This chart helps you:
 
-## Overview
+- **Assess pool concentration**: Determine if revenue is too dependent on specific pools or venues
+- **Cross-reference pool activity**: Link pool data with [token](./by-token) and [transaction type](./by-type) breakdowns
+- **Investigate specific pools**: Click bars to examine individual transactions for any pool
 
-<BrowserOnly fallback={<LoadingSpinner />}>
-  {() => {
-  }}
-</BrowserOnly>
+## How to Read This Chart
 
-## Understanding Pool Revenue
+- **Bar height**: Each pool's total revenue contribution in SOL
+- **X-axis**: Pool identifiers (labels may be truncated for display)
+- **Y-axis**: Revenue amount in SOL
+- **Pool types**: Primarily Orca Whirlpools and Fusion pools, with "Other" representing unattributed revenue
+- **Interactions**:
+  - Click on bars to filter the transaction table below
+  - Hover over bars to see exact SOL amounts and pool names
+  - Transaction signatures in the table link to Solscan for detailed exploration
 
-The Marimekko chart above visualizes revenue distribution across pools with:
+## Methodology
 
-- **Width**: Represents each pool's relative contribution to total revenue
-- **Height**: Shows the breakdown within each pool (by token or transaction type)
-- **Area**: Total segment area = pool's share of overall treasury revenue
+<details>
+<summary>Click to expand technical details</summary>
 
-### Key Pool Types
+**Data Sources**
 
-Common liquidity pool sources include:
+- **Treasury transactions**: On-chain data from DefiTuna treasury PDA (`G9XfJoY81n8A9bZKaJFhJYomRrcvFkuJ22em2g8rZuCh`)
+- **Pool attribution**: Multi-source matching system (registry lookups + auto labels) reconciled against the revenue totals described in [Data Quality](/analysis/data-quality); flows that cannot be confidently matched remain in “Other” until labeled
+- **Pool labels**: Manually curated pool names maintained in the backend
 
-- **Orca Whirlpools**: Concentrated liquidity pools on the Orca DEX
-- **Fusion Pools**: DefiTuna's native liquidity pools
-- **Partner Pools**: Liquidity positions in integrated protocols
-- **Direct Treasury**: Revenue not attributed to specific pools
+For complete pipeline details, see [Data Pipeline](/analysis/methodology).
 
-### Pool Attribution
+**Pool Attribution System**
 
-Pool attribution is determined through:
+Pools are identified through a multi-source matching system:
 
-1. **Program ID Analysis**: Identifying which protocol's program executed the transaction
-2. **Account Parsing**: Extracting pool addresses from transaction accounts
-3. **Label Mapping**: Matching pool addresses to human-readable names via `pool_labels.json`
-4. **Fallback Rules**: Categorizing unlabeled pools by protocol or program
+1. **Direct address matching**: Compares transaction account addresses against a registry of known pool addresses
+2. **Alias resolution**: Maps alternative addresses (position accounts, vault accounts) to canonical pool IDs
+3. **Token pair hints**: Uses mint addresses involved in transfers to identify pools when direct matches aren't found
+4. **Protocol detection**: Identifies the protocol (Orca, Fusion, etc.) from program IDs to generate fallback labels
 
-### Interactive Features
+This hybrid approach ensures comprehensive coverage while maintaining accurate, user-friendly pool names.
 
-- **Click on segments**: View the top transactions for that specific pool in the table below
-- **Hover**: See exact SOL amounts and percentages for each pool
-- **Cross-reference**: Compare with [By Token](./by-token) and [By Type](./by-type) views
+**Pool Labeling**
 
-## Key Insights
+Pool addresses are mapped to human-readable names:
 
-This pool-based view helps you understand:
+- **Manual labels**: Hand-curated names for major pools (e.g., "Orca SOL-USDC Whirlpool")
+- **Auto-generated**: Programmatic labels for unlabeled pools (e.g., "Orca pool abc1...def2")
+- **Unknown pools**: Placeholder labels for newly discovered pools
 
-- **Strategy Performance**: Which LP positions generate the most revenue
-- **Pool Concentration**: Dependence on specific liquidity venues
-- **Diversification**: Spread of revenue across different pools
-- **Integration Success**: Performance of partner protocol integrations
+When new pools are encountered, they receive generated labels and can be promoted to the manual registry with proper names.
 
-## Pool Labeling System
+**Common Pool Types**
 
-Pool addresses are mapped to friendly names in the backend's `pool_labels.json` configuration file:
+- **Orca Whirlpools**: Concentrated liquidity pools on the Orca DEX (e.g., SOL-USDC, SOL-CBBTC)
+- **Fusion Pools**: DefiTuna's native liquidity pools (e.g., WSOL-USDC, USDC-TUNA)
+- **Other / Not Applicable**: Revenue not attributed to specific pools
 
-- **Manual Labels**: Hand-curated names for major pools (e.g., "SOL-USDC Orca Whirlpool")
-- **Auto-generated**: Programmatic labels for unlabeled pools (e.g., "Orca Pool abc123...")
-- **Unknown Pools**: Placeholder labels for newly discovered pools pending manual review
+**Integration with Revenue Attribution**
 
-To add or update pool labels, refer to the backend repository's configuration guide.
+Pool attribution occurs during revenue processing:
+- Each transaction attributed to exactly one pool
+- Pool + transaction type combinations tracked for detailed analysis
+- Enables pool-specific revenue breakdowns
 
-## Top Transactions Table
+**Update Frequency**
 
-The table below shows:
-- **Default**: Top transactions across all pools
-- **Filtered**: When you click a pool segment, see that pool's largest revenue events
+Data is automatically updated once a day. Check the "Last updated" timestamp in the site header for data freshness.
 
-This drill-down capability lets you investigate:
-- Which specific transactions drove pool revenue
-- Timing and context of large pool-specific events
-- Unusual activity within specific liquidity venues
+**Known Limitations**
 
-## Analysis Tips
+- Pool labels may show addresses for newly discovered pools until manual names are added
+- Pools with minimal revenue contribution may be grouped into "Other" category
+- Chart shows cumulative data; individual transaction dates available in the table
+- Unlabeled pools receive generated labels until the pool registry is updated
 
-### Identifying High-Performers
-
-Look for:
-- **Consistent Contributors**: Pools that regularly generate revenue
-- **High-Value Positions**: Large individual positions in specific pools
-- **Emerging Pools**: New pools appearing as integrations launch
-
-### Concentration Risk Assessment
-
-Use this view to evaluate:
-- **Pool Concentration**: Is too much revenue from a single pool?
-- **Protocol Diversification**: Balance between Orca, Fusion, and other venues
-- **Strategy Mix**: Spread across different liquidity provision strategies
-
-### Comparing Pool Performance
-
-Compare pools by:
-- **Total Revenue**: Overall contribution size
-- **Transaction Frequency**: Number of revenue events per pool
-- **Token Mix**: Which tokens flow through each pool (cross-reference with [By Token](./by-token))
-
-### Week-over-Week Changes
-
-For temporal analysis:
-- Visit **[Tx Type per Day](../tx-type-per-day)** to see daily evolution
-- Filter by specific pools to track performance trends
-- Identify shifts in pool importance over time
-
-### Cross-referencing
-
-Compare this pool view with:
-- **[By Token](./by-token)**: See which tokens are traded in each pool
-- **[By Type](./by-type)**: Understand which transaction types occur in each pool
-- **[Orca vs. Fusion](../orca-vs-fusion)**: Direct comparison of the two main pool ecosystems
-
-## Technical Details
-
-For more information on pool attribution:
-
-- **Pool Labels Config**: `solana_analytics/config/pool_labels.json`
-- **Attribution Logic**: See `tools/generate_realized_types.py` in the backend
-- **Adding Pools**: Use `tools/refresh_pool_labels.py` to update pool mappings
-
-The pool attribution system ensures accurate tracking of which liquidity strategies drive treasury growth.
-
+</details>

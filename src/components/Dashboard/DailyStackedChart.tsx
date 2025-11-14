@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import Plot from 'react-plotly.js';
+import type { Data } from 'plotly.js';
 import { useColorMode } from '@docusaurus/theme-common';
 import { getPlotlyTemplate, defaultPlotlyConfig } from '@site/src/utils/plotlyTheme';
 import { useChartTracking } from '@site/src/hooks/useChartTracking';
@@ -59,7 +60,7 @@ export default function DailyStackedChart({ data }: DailyStackedChartProps): Rea
     return total > 0 ? (fusion / total) * 100 : 0;
   });
 
-  const traces: any[] = [
+  const traces: Data[] = [
     {
       x: dates,
       y: orcaCumulative,
@@ -120,15 +121,13 @@ export default function DailyStackedChart({ data }: DailyStackedChartProps): Rea
             ...template.layout.yaxis,
             title: {
               text: 'Cumulative Revenue (SOL)',
-              font: { size: 12 },
-              standoff: 10,
+              standoff: 20,
             },
             side: 'left',
           },
           yaxis2: {
             title: {
               text: 'Fusion Dominance (%)',
-              font: { size: 12 },
             },
             overlaying: 'y',
             side: 'right',

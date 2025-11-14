@@ -21,6 +21,7 @@ const config: Config = {
 
   markdown: {
     format: 'mdx',
+    mermaid: true,
   },
 
   i18n: {
@@ -34,7 +35,43 @@ const config: Config = {
       src: 'https://karstenalytics.goatcounter.com/count.js',
       async: true,
       'data-goatcounter': 'https://karstenalytics.goatcounter.com/count',
+      integrity: 'sha384-fA1l3VUg6TBQkkfysf1/eafAO8aaY2KuL0EUkjbHTA2n/pgE3mfohKwjfIJ42xCB',
+      crossorigin: 'anonymous',
     },
+  ],
+
+  plugins: [
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        redirects: [
+          {
+            from: '/analysis/staking/wallet-timeline',
+            to: '/analysis/defituna/staking/wallet-timeline',
+          },
+          {
+            from: '/analysis/usage-statistics/usage-statistics-overview',
+            to: '/analysis/defituna/usage-statistics/usage-statistics-overview',
+          },
+          {
+            from: '/analysis/usage-statistics/usage-statistics-stakers',
+            to: '/analysis/defituna/usage-statistics/usage-statistics-stakers',
+          },
+          {
+            from: '/analysis/defituna/orca-vs-fusion',
+            to: '/analysis/defituna/revenue-breakdown/orca-vs-fusion',
+          },
+          {
+            from: '/analysis/defituna/tx-type-per-day',
+            to: '/analysis/defituna/revenue-breakdown/tx-type-per-day',
+          },
+          {
+            from: '/analysis/defituna/staking-apy',
+            to: '/analysis/defituna/staking-apr',
+          },
+        ],
+      },
+    ],
   ],
 
   presets: [
@@ -52,9 +89,9 @@ const config: Config = {
           feedOptions: {
             type: ['rss', 'atom'],
           },
-          blogTitle: 'karstenalytics Blog',
+          blogTitle: 'karstenalytics Articles',
           blogDescription: 'Insights and updates on Solana treasury analytics',
-          blogSidebarTitle: 'RECENT POSTS',
+          blogSidebarTitle: 'RECENT ARTICLES',
           blogSidebarCount: 5,
           postsPerPage: 10,
           // Remove edit links for blog posts
@@ -68,6 +105,7 @@ const config: Config = {
   ],
 
   themes: [
+    '@docusaurus/theme-mermaid',
     [
       require.resolve('@easyops-cn/docusaurus-search-local'),
       {
@@ -75,6 +113,11 @@ const config: Config = {
         language: ['en'],
         highlightSearchTermsOnTargetPage: true,
         explicitSearchResultPath: true,
+        indexDocs: true,
+        indexBlog: true,
+        indexPages: true,
+        docsRouteBasePath: '/',
+        blogRouteBasePath: '/blog',
       },
     ],
   ],

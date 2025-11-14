@@ -58,7 +58,7 @@ export function getPlotlyTemplate(isDark: boolean) {
       ],
       paper_bgcolor: colors.paper,
       plot_bgcolor: colors.bg,
-      margin: { l: 60, r: 24, t: 32, b: 48 },
+      margin: { l: 70, r: 24, t: 32, b: 50 },
       xaxis: {
         gridcolor: colors.grid,
         zeroline: false,
@@ -70,6 +70,9 @@ export function getPlotlyTemplate(isDark: boolean) {
         spikethickness: 1,
         spikedash: 'dot',
         spikesnap: 'cursor',
+        tickfont: { size: 12 },
+        titlefont: { size: 18 },
+        titlestandoff: 16,
       },
       yaxis: {
         gridcolor: colors.grid,
@@ -82,6 +85,9 @@ export function getPlotlyTemplate(isDark: boolean) {
         spikethickness: 1,
         spikedash: 'dot',
         spikesnap: 'cursor',
+        tickfont: { size: 12 },
+        titlefont: { size: 18 },
+        titlestandoff: 20,
       },
       legend: {
         orientation: 'h',
@@ -89,6 +95,7 @@ export function getPlotlyTemplate(isDark: boolean) {
         yanchor: 'bottom',
         x: 0,
         title: { text: '' },
+        font: { size: 12 },
       },
       hovermode: 'x unified',
       hoverlabel: {

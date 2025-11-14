@@ -3,29 +3,58 @@ import type { DashboardData, SummaryData, DailyDataPoint, TopTransactionsData } 
 
 const BASE_PATH = '/data';
 
+// Module-level cache to prevent re-fetching on component remounts
+let cachedData: DashboardData | null = null;
+let isLoading = false;
+let loadPromise: Promise<void> | null = null;
+
 /**
  * Custom hook to load all dashboard data from JSON files
  */
 export function useDashboardData(): DashboardData {
-  const [data, setData] = useState<DashboardData>({
-    summary: null,
-    dailyStacked: [],
-    dailyByToken: [],
-    dailyByType: [],
-    dailyByPool: [],
-    topTransactionsToken: {},
-    topTransactionsType: {},
-    topTransactionsPool: {},
-    topTransactionsPoolType: {},
-    poolTypeSummary: null,
-    dailyByPoolType: [],
-    loading: true,
-    error: null,
+  const [data, setData] = useState<DashboardData>(() => {
+    // Initialize with cached data if available
+    if (cachedData) {
+      return cachedData;
+    }
+    return {
+      summary: null,
+      dailyStacked: [],
+      dailyByToken: [],
+      dailyByType: [],
+      dailyByPool: [],
+      topTransactionsToken: {},
+      topTransactionsType: {},
+      topTransactionsPool: {},
+      topTransactionsPoolType: {},
+      poolTypeSummary: null,
+      dailyByPoolType: [],
+      loading: true,
+      error: null,
+    };
   });
 
   useEffect(() => {
+    // If we already have cached data, use it immediately
+    if (cachedData) {
+      setData(cachedData);
+      return;
+    }
+
+    // If data is currently being loaded by another component instance, wait for it
+    if (isLoading && loadPromise) {
+      loadPromise.then(() => {
+        if (cachedData) {
+          setData(cachedData);
+        }
+      });
+      return;
+    }
+
+    // Start loading data
     async function loadData() {
       try {
+        isLoading = true;
         setData(prev => ({ ...prev, loading: true, error: null }));
 
         console.log('[useDashboardData] Starting data fetch...');
@@ -62,7 +91,7 @@ export function useDashboardData(): DashboardData {
 
         console.log('[useDashboardData] topTransactionsPoolType loaded:', Object.keys(topTransactionsPoolType).length, 'combinations');
 
-        setData({
+        const loadedData: DashboardData = {
           summary: summary as SummaryData,
           dailyStacked: dailyStacked as DailyDataPoint[],
           dailyByToken: dailyByToken as DailyDataPoint[],
@@ -76,18 +105,35 @@ export function useDashboardData(): DashboardData {
           dailyByPoolType: dailyByPoolType as DailyDataPoint[],
           loading: false,
           error: null,
-        });
+        };
+
+        // Cache the loaded data
+        cachedData = loadedData;
+        setData(loadedData);
       } catch (err) {
         console.error('Error loading dashboard data:', err);
-        setData(prev => ({
-          ...prev,
+        const errorData = {
+          summary: null,
+          dailyStacked: [],
+          dailyByToken: [],
+          dailyByType: [],
+          dailyByPool: [],
+          topTransactionsToken: {},
+          topTransactionsType: {},
+          topTransactionsPool: {},
+          topTransactionsPoolType: {},
+          poolTypeSummary: null,
+          dailyByPoolType: [],
           loading: false,
           error: err instanceof Error ? err.message : 'Failed to load data',
-        }));
+        };
+        setData(errorData);
+      } finally {
+        isLoading = false;
       }
     }
 
-    loadData();
+    loadPromise = loadData();
   }, []);
 
   return data;

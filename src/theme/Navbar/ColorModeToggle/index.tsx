@@ -3,6 +3,7 @@ import {useColorMode, useThemeConfig} from '@docusaurus/theme-common';
 import {Sun, Moon, Monitor} from '@phosphor-icons/react';
 import type {Props} from '@theme/Navbar/ColorModeToggle';
 import styles from './styles.module.css';
+import { safeGetItem, safeSetItem } from '@site/src/utils/localStorage';
 
 type ColorModeType = 'light' | 'dark' | 'system';
 
@@ -18,8 +19,8 @@ export default function NavbarColorModeToggle({className}: Props): ReactNode {
   // Docusaurus doesn't have a built-in 'system' mode, so we'll use localStorage to track user preference
   const [selectedMode, setSelectedMode] = React.useState<ColorModeType>(() => {
     if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('theme-preference');
-      return (stored as ColorModeType) || 'system';
+      const stored = safeGetItem('theme-preference', 'system');
+      return stored as ColorModeType;
     }
     return 'system';
   });
@@ -27,7 +28,7 @@ export default function NavbarColorModeToggle({className}: Props): ReactNode {
   const handleModeChange = (mode: ColorModeType) => {
     setSelectedMode(mode);
     if (typeof window !== 'undefined') {
-      localStorage.setItem('theme-preference', mode);
+      safeSetItem('theme-preference', mode);
     }
 
     if (mode === 'system') {

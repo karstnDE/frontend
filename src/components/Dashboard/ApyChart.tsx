@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Plot from 'react-plotly.js';
+import type { Data } from 'plotly.js';
 import { useColorMode } from '@docusaurus/theme-common';
 import { getPlotlyTemplate, defaultPlotlyConfig } from '@site/src/utils/plotlyTheme';
 import LoadingSpinner from '../common/LoadingSpinner';
 import { useChartTracking } from '@site/src/hooks/useChartTracking';
 import { trackCustomEvent } from '@site/src/utils/analytics';
+import { safeGetItem, safeSetItem, safeRemoveItem } from '@site/src/utils/localStorage';
 
 interface AprDataPoint {
   date: string;
@@ -43,6 +45,42 @@ interface AprData {
   summary: AprSummary;
 }
 
+/**
+ * Validates and sanitizes user entry price input.
+ * @param value - The raw input value to validate
+ * @returns Valid price number or null if invalid
+ */
+function validateEntryPrice(value: string | null | undefined): number | null {
+  // Handle null/undefined/empty
+  if (!value || value.trim() === '') {
+    return null;
+  }
+
+  // Normalize comma to period for decimal separator
+  const normalized = value.trim().replace(',', '.');
+
+  // Parse as float
+  const parsed = Number.parseFloat(normalized);
+
+  // Validate: must be finite, positive, and within reasonable bounds
+  if (!Number.isFinite(parsed)) {
+    console.warn(`Invalid entry price: "${value}" parsed to ${parsed}`);
+    return null;
+  }
+
+  if (parsed <= 0) {
+    console.warn(`Entry price must be positive: ${parsed}`);
+    return null;
+  }
+
+  if (parsed >= 1000) {
+    console.warn(`Entry price too high (max $1000): ${parsed}`);
+    return null;
+  }
+
+  return parsed;
+}
+
 export default function ApyChart(): React.ReactElement {
   const { colorMode } = useColorMode();
   const isDark = colorMode === 'dark';
@@ -63,14 +101,23 @@ export default function ApyChart(): React.ReactElement {
 
   // Load user entry price from localStorage on mount, default to 0.05 (public pre-sale price)
   useEffect(() => {
-    const saved = localStorage.getItem('tunaEntryPrice');
-    if (saved && saved.trim() !== '') {
-      const normalised = saved.replace(',', '.');
-      setEntryPriceInput(normalised);
-      localStorage.setItem('tunaEntryPrice', normalised);
-    } else {
+    const saved = safeGetItem('tunaEntryPrice');
+    const validatedPrice = validateEntryPrice(saved);
+
+    if (validatedPrice !== null) {
+      // Valid saved price exists - use it
+      const normalized = String(validatedPrice);
+      setEntryPriceInput(normalized);
+      safeSetItem('tunaEntryPrice', normalized);
+    } else if (saved && saved.trim() !== '') {
+      // Invalid saved price - clear it and use default
+      console.warn(`Clearing invalid entry price from localStorage: "${saved}"`);
       setEntryPriceInput('0.05');
-      localStorage.setItem('tunaEntryPrice', '0.05');
+      safeSetItem('tunaEntryPrice', '0.05');
+    } else {
+      // No saved price - use default
+      setEntryPriceInput('0.05');
+      safeSetItem('tunaEntryPrice', '0.05');
     }
   }, []);
 
@@ -104,10 +151,19 @@ export default function ApyChart(): React.ReactElement {
         textAlign: 'center',
         color: 'var(--ifm-color-danger)',
         background: 'var(--ifm-background-surface-color)',
-        border: '1px solid var(--ifm-toc-border-color)',
+        border: '2px solid var(--ifm-color-danger)',
         borderRadius: 'var(--ifm-global-radius)',
       }}>
-        Error loading APR data: {error}
+        <div style={{ fontSize: '2rem', marginBottom: '12px' }}>⚠️</div>
+        <div style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '8px' }}>
+          Failed to Load APR Data
+        </div>
+        <p style={{ fontSize: '0.875rem', color: 'var(--ifm-font-color-secondary)', marginBottom: '16px' }}>
+          {error}
+        </p>
+        <p style={{ fontSize: '0.875rem', color: 'var(--ifm-font-color-secondary)' }}>
+          Try refreshing the page. If the problem persists, the data file may be temporarily unavailable.
+        </p>
       </div>
     );
   }
@@ -172,7 +228,7 @@ export default function ApyChart(): React.ReactElement {
   });
 
   // Build traces array
-  const traces: any[] = [
+  const traces: Data[] = [
     {
       x: dates,
       y: referenceAprValues,
@@ -231,32 +287,43 @@ export default function ApyChart(): React.ReactElement {
   });
 
   const handleEntryPriceChange = (value: string) => {
+    // Allow clearing the input
     if (value === '') {
       setEntryPriceInput('');
-      localStorage.removeItem('tunaEntryPrice');
+      safeRemoveItem('tunaEntryPrice');
       window.dispatchEvent(new Event('tunaEntryPriceChanged'));
       return;
     }
 
+    // Only allow numeric input with decimal point
     if (!/^[0-9]*[.,]?[0-9]*$/.test(value)) {
       return;
     }
 
     const normalised = value.replace(',', '.');
-    setEntryPriceInput(normalised);
-    localStorage.setItem('tunaEntryPrice', normalised);
-    window.dispatchEvent(new Event('tunaEntryPriceChanged'));
 
-    // Track custom price usage
-    const parsed = Number.parseFloat(normalised);
-    if (Number.isFinite(parsed) && parsed > 0) {
-      trackCustomEvent('APY', 'custom-price-set', String(parsed));
+    // Validate the input (will show warning if out of bounds)
+    const validatedPrice = validateEntryPrice(normalised);
+
+    // Still allow user to type (for UX), but validate before saving
+    setEntryPriceInput(normalised);
+
+    // Only save to localStorage if valid
+    if (validatedPrice !== null) {
+      safeSetItem('tunaEntryPrice', normalised);
+      window.dispatchEvent(new Event('tunaEntryPriceChanged'));
+
+      // Track custom price usage
+      trackCustomEvent('APY', 'custom-price-set', String(validatedPrice));
+    } else {
+      // Clear localStorage if invalid to prevent persistence
+      safeRemoveItem('tunaEntryPrice');
     }
   };
 
   const handleClearEntryPrice = () => {
     setEntryPriceInput('');
-    localStorage.removeItem('tunaEntryPrice');
+    safeRemoveItem('tunaEntryPrice');
     window.dispatchEvent(new Event('tunaEntryPriceChanged'));
   };
 

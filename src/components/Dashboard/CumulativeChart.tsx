@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import Plot from 'react-plotly.js';
+import type { Data } from 'plotly.js';
 import { useColorMode } from '@docusaurus/theme-common';
 import { getPlotlyTemplate, defaultPlotlyConfig } from '@site/src/utils/plotlyTheme';
 import { useChartTracking } from '@site/src/hooks/useChartTracking';
@@ -45,7 +46,7 @@ export default function CumulativeChart({ data }: CumulativeChartProps): React.R
     return cumulativeTotal;
   });
 
-  const trace: any = {
+  const trace: Data = {
     x: dates,
     y: cumulativeTotals,
     name: 'Cumulative Revenue',

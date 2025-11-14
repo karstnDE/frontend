@@ -62,7 +62,7 @@ export default function UsageTimeSeriesChart({
         marginBottom: '24px',
       }}
     >
-      <h3 style={{ marginTop: 0 }}>{title}</h3>
+      <h3 style={{ marginTop: 0, textAlign: 'center' }}>{title}</h3>
       {description && <p style={{ color: 'var(--ifm-color-emphasis-700)' }}>{description}</p>}
       {sorted.length === 0 ? (
         <div style={{ padding: '24px', color: 'var(--ifm-color-emphasis-600)' }}>
@@ -85,10 +85,10 @@ export default function UsageTimeSeriesChart({
             ...template.layout,
             autosize: true,
             height: 420,
-            margin: { l: 56, r: 24, t: 16, b: 48 },
+            margin: { l: 70, r: 24, t: 16, b: 48 },
             xaxis: {
               ...template.layout.xaxis,
-              title: 'Date (UTC)',
+              title: '',
               type: 'date',
               spikecolor: spikeColor,
               spikedash: 'dot',
@@ -96,7 +96,10 @@ export default function UsageTimeSeriesChart({
             },
             yaxis: {
               ...template.layout.yaxis,
-              title: yAxisLabel,
+              title: {
+                text: yAxisLabel,
+                standoff: 20,
+              },
               rangemode: 'tozero',
               spikecolor: spikeColor,
               spikedash: 'dot',

@@ -23,6 +23,7 @@ export default function LoyaltyStats({ summary }: LoyaltyStatsProps): React.Reac
         background: 'var(--ifm-background-surface-color)',
         border: '1px solid var(--ifm-toc-border-color)',
         borderRadius: 'var(--ifm-global-radius)',
+        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
       }}
     >
       <div
@@ -68,7 +69,7 @@ export default function LoyaltyStats({ summary }: LoyaltyStatsProps): React.Reac
       <StatCard
         label="Compound-Only Rate"
         value={`${summary.loyalty_score.toFixed(1)}%`}
-        subtitle="% of users managing their rewards"
+        subtitle="% of stakers managing their rewards"
         isPrimary={true}
       />
       <StatCard
@@ -77,7 +78,7 @@ export default function LoyaltyStats({ summary }: LoyaltyStatsProps): React.Reac
         subtitle="% of total rewards"
       />
       <StatCard
-        label="Compound-Only Users"
+        label="Compound-Only Stakers"
         value={summary.compound_only_users.toLocaleString()}
         subtitle="Total count"
       />

@@ -1,5 +1,47 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import pako from 'pako';
+
+/**
+ * Raw event data structure from staker cache
+ * Event structure: [signature, timestamp, slot, type_id, address, d_stake, d_pending, d_withdrawn, d_compounded, fee_payer, reward_sol, ...]
+ */
+type StakerEvent = [
+  signature: string,
+  timestamp: string,
+  slot: number,
+  type_id: number,
+  address: string,
+  d_stake: number,
+  d_pending: number,
+  d_withdrawn: number,
+  d_compounded: number,
+  fee_payer: string | null,
+  reward_sol: number,
+  ...rest: unknown[]
+];
+
+/**
+ * Address data structure from staker cache
+ */
+interface AddressData {
+  first_event: number;
+  last_event: number;
+  current: [staked: number, unstaked: number, withdrawn: number, compounded: number, total_rewards: number];
+}
+
+/**
+ * Staker cache structure
+ */
+interface StakerCache {
+  addresses: Record<string, AddressData>;
+  events: StakerEvent[];
+  meta: {
+    start: string;
+    end: string;
+    total_wallets: number;
+    total_events: number;
+  };
+}
 
 export interface TimelinePoint {
   date: string;
@@ -50,7 +92,7 @@ const EVENT_TYPES: Record<number, [string, string]> = {
 /**
  * Build timeline from wallet events
  */
-function buildBalanceTimeline(events: any[]): [TimelinePoint[], Operation[]] {
+function buildBalanceTimeline(events: StakerEvent[]): [TimelinePoint[], Operation[]] {
   const timeline: TimelinePoint[] = [];
   const operations: Operation[] = [];
 
@@ -121,7 +163,7 @@ function buildBalanceTimeline(events: any[]): [TimelinePoint[], Operation[]] {
 /**
  * Parse wallet timeline from staker cache
  */
-function parseWalletTimeline(walletAddress: string, cache: any): WalletTimelineData {
+function parseWalletTimeline(walletAddress: string, cache: StakerCache): WalletTimelineData {
   const addresses = cache.addresses || {};
   const events = cache.events || [];
   const meta = cache.meta || {};
@@ -150,7 +192,7 @@ function parseWalletTimeline(walletAddress: string, cache: any): WalletTimelineD
   // Extract events for this wallet by filtering the entire events array
   // Note: first_event/last_event are indices of first/last occurrence,
   // but events are NOT contiguous - they're interleaved chronologically
-  const walletEvents = events.filter((e: any) => e.length > 4 && e[4] === walletAddress);
+  const walletEvents = events.filter((e: StakerEvent) => e.length > 4 && e[4] === walletAddress);
 
   if (walletEvents.length === 0) {
     return {
@@ -230,13 +272,81 @@ function parseWalletTimeline(walletAddress: string, cache: any): WalletTimelineD
 
 /**
  * Hook to load and parse wallet timeline from staker cache
+ * Includes debouncing to prevent excessive requests during rapid input changes
  */
 export function useWalletTimeline(walletAddress: string | null) {
   const [data, setData] = useState<WalletTimelineData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Track debounce timeout
+  const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Track if component is mounted (to avoid state updates after unmount)
+  const isMountedRef = useRef(true);
+
+  // Memoized load function
+  const loadTimeline = useCallback(async (address: string) => {
+    if (!isMountedRef.current) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      // Load compressed staker cache
+      const response = await fetch('/data/staker_cache.json.gz');
+      if (!response.ok) {
+        throw new Error(`Failed to load staker cache: ${response.statusText}`);
+      }
+
+      const compressed = await response.arrayBuffer();
+
+      // Check compressed size (10MB limit to prevent DoS)
+      const MAX_COMPRESSED_SIZE = 10 * 1024 * 1024; // 10MB
+      if (compressed.byteLength > MAX_COMPRESSED_SIZE) {
+        throw new Error(`Compressed file too large: ${(compressed.byteLength / 1024 / 1024).toFixed(2)}MB (max 10MB)`);
+      }
+
+      const decompressed = pako.ungzip(new Uint8Array(compressed), { to: 'string' });
+
+      // Check decompressed size (50MB limit to prevent memory exhaustion)
+      const MAX_DECOMPRESSED_SIZE = 50 * 1024 * 1024; // 50MB
+      if (decompressed.length > MAX_DECOMPRESSED_SIZE) {
+        throw new Error(`Decompressed data too large: ${(decompressed.length / 1024 / 1024).toFixed(2)}MB (max 50MB)`);
+      }
+
+      const cache = JSON.parse(decompressed);
+
+      // Parse timeline for this wallet
+      const result = parseWalletTimeline(address.trim(), cache);
+
+      if (isMountedRef.current) {
+        setData(result);
+        if (!result.found) {
+          setError(result.error || 'Wallet not found');
+        }
+      }
+    } catch (err) {
+      console.error('Error loading wallet timeline:', err);
+      if (isMountedRef.current) {
+        setError(err instanceof Error ? err.message : 'Failed to load timeline');
+        setData(null);
+      }
+    } finally {
+      if (isMountedRef.current) {
+        setLoading(false);
+      }
+    }
+  }, []);
+
   useEffect(() => {
+    // Clear any pending debounced calls
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+      debounceTimeoutRef.current = null;
+    }
+
+    // Handle empty/invalid wallet address
     if (!walletAddress || walletAddress.trim().length === 0) {
       setData(null);
       setError(null);
@@ -244,39 +354,28 @@ export function useWalletTimeline(walletAddress: string | null) {
       return;
     }
 
-    const loadTimeline = async () => {
-      setLoading(true);
-      setError(null);
+    // Debounce the wallet lookup by 500ms to prevent excessive requests
+    // while user is typing the wallet address
+    debounceTimeoutRef.current = setTimeout(() => {
+      loadTimeline(walletAddress.trim());
+    }, 500);
 
-      try {
-        // Load compressed staker cache
-        const response = await fetch('/data/staker_cache.json.gz');
-        if (!response.ok) {
-          throw new Error(`Failed to load staker cache: ${response.statusText}`);
-        }
-
-        const compressed = await response.arrayBuffer();
-        const decompressed = pako.ungzip(new Uint8Array(compressed), { to: 'string' });
-        const cache = JSON.parse(decompressed);
-
-        // Parse timeline for this wallet
-        const result = parseWalletTimeline(walletAddress.trim(), cache);
-        setData(result);
-
-        if (!result.found) {
-          setError(result.error || 'Wallet not found');
-        }
-      } catch (err) {
-        console.error('Error loading wallet timeline:', err);
-        setError(err instanceof Error ? err.message : 'Failed to load timeline');
-        setData(null);
-      } finally {
-        setLoading(false);
+    // Cleanup function
+    return () => {
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+        debounceTimeoutRef.current = null;
       }
     };
+  }, [walletAddress, loadTimeline]);
 
-    loadTimeline();
-  }, [walletAddress]);
+  // Cleanup on unmount
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   return { data, loading, error };
 }

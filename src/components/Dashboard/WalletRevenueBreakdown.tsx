@@ -428,7 +428,7 @@ export default function WalletRevenueBreakdown({ dataUrl }: WalletRevenueBreakdo
                 ...template.layout.yaxis,
                 title: 'Number of Wallets',
               },
-              margin: { l: 60, r: 40, t: 20, b: 60 },
+              margin: { l: 70, r: 40, t: 20, b: 60 },
               hovermode: 'closest',
             }}
             config={defaultPlotlyConfig}
@@ -598,7 +598,7 @@ export default function WalletRevenueBreakdown({ dataUrl }: WalletRevenueBreakdo
                       x: 1.02,
                       xanchor: 'left',
                     },
-                    margin: { l: 60, r: 200, t: 20, b: 60 },
+                    margin: { l: 70, r: 200, t: 20, b: 60 },
                   }}
                   config={defaultPlotlyConfig}
                   style={{ width: '100%', height: '500px' }}

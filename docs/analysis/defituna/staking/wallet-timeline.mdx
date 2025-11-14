@@ -7,9 +7,9 @@ import LoadingSpinner from '@site/src/components/common/LoadingSpinner';
 
 # Staking Wallet Timeline
 
-Analyze individual wallet staking behavior over time. Track staked and unstaked TUNA balances, realized rewards in SOL, and all staking operations for any wallet address.
+Detailed staking history for individual wallet addresses showing balance evolution, realized rewards, and all staking operations over time. Enter any wallet address to view their staked/unstaked TUNA balances, cumulative SOL rewards (claimed + compounded), and complete transaction history with interactive charts and sortable tables.
 
----
+## Data
 
 <BrowserOnly fallback={<LoadingSpinner />}>
   {() => {
@@ -125,7 +125,7 @@ Analyze individual wallet staking behavior over time. Track staked and unstaked 
               fontSize: '13px',
               color: 'var(--ifm-color-secondary)',
             }}>
-              Enter any wallet address from the staking cache ({loading ? '...' : '7,861 wallets available'})
+              Enter any wallet address from the staking cache ({loading ? '...' : '7,861 wallets available'}). No idea which address to enter? Check <a href="/analysis/defituna/staked-tuna" style={{ color: 'var(--accent)', textDecoration: 'none' }}>recent stakers/withdrawers</a> or <a href="https://defituna.com/stake" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none' }}>DefiTuna Leaderboard</a>.
             </p>
           </div>
 
@@ -248,7 +248,7 @@ Analyze individual wallet staking behavior over time. Track staked and unstaked 
                   fontSize: '13px',
                   color: 'var(--ifm-color-secondary)',
                 }}>
-                  ℹ️ <strong>Note:</strong> Realized rewards are shown in SOL (claimed and compounded amounts). Unclaimed rewards are not shown (planned for Phase 2).
+                  ℹ️ <strong>Note:</strong> Realized rewards are shown in SOL (claimed and compounded amounts). Unclaimed rewards are not shown.
                 </div>
               </div>
 
@@ -256,6 +256,8 @@ Analyze individual wallet staking behavior over time. Track staked and unstaked 
 
               {/* Transactions Table */}
               {(() => {
+                const { tableStyles, tableRowHoverHandlers, linkHoverHandlers } = require('@site/src/styles/tableStyles');
+
                 // Reverse operations to show newest first
                 const reversedOperations = [...data.operations].reverse();
                 const pageSize = 10;
@@ -275,24 +277,18 @@ Analyze individual wallet staking behavior over time. Track staked and unstaked 
                 };
 
                 return (
-                  <div className="wallet-transactions-table" style={{
-                    background: 'var(--ifm-background-surface-color)',
-                    border: '1px solid var(--ifm-toc-border-color)',
-                    borderRadius: 'var(--ifm-global-radius)',
-                    padding: '24px',
-                    marginBottom: '24px',
-                  }}>
-                    <h3 style={{ marginTop: 0, marginBottom: '16px' }}>Wallet Transactions ({reversedOperations.length}) — Newest First</h3>
+                  <div style={tableStyles.container}>
+                    <h3 style={{ marginTop: 0, marginBottom: '16px' }}>Wallet Transactions ({reversedOperations.length}) — Newest First ▼</h3>
 
                     <div style={{ overflowX: 'auto' }}>
-                      <table>
+                      <table style={tableStyles.table}>
                         <thead>
-                          <tr>
-                            <th>#</th>
-                            <th>Date</th>
-                            <th>Type</th>
-                            <th style={{ textAlign: 'right' }}>Amount</th>
-                            <th>Transaction</th>
+                          <tr style={tableStyles.headerRow}>
+                            <th style={tableStyles.headerCell}>#</th>
+                            <th style={tableStyles.headerCell}>Date</th>
+                            <th style={tableStyles.headerCell}>Type</th>
+                            <th style={tableStyles.headerCell}>Amount</th>
+                            <th style={tableStyles.headerCell}>Transaction</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -300,24 +296,20 @@ Analyze individual wallet staking behavior over time. Track staked and unstaked 
                             const globalIdx = startIdx + idx;
                             const unit = (op.type === 'compound' || op.type === 'claim') ? 'SOL' : 'TUNA';
                             const decimals = (op.type === 'compound' || op.type === 'claim') ? 4 : 2;
-                            const isHovered = hoveredRow === globalIdx;
 
                             return (
                               <tr
                                 key={globalIdx}
-                                style={{
-                                  background: isHovered ? 'var(--ifm-menu-color-background-hover)' : 'transparent',
-                                }}
-                                onMouseEnter={() => setHoveredRow(globalIdx)}
-                                onMouseLeave={() => setHoveredRow(null)}
+                                style={tableStyles.bodyRow}
+                                {...tableRowHoverHandlers}
                               >
-                                <td style={{ color: 'var(--ifm-color-secondary)' }}>
+                                <td style={tableStyles.rankCell}>
                                   #{globalIdx + 1}
                                 </td>
-                                <td style={{ fontSize: '12px', fontFamily: 'var(--ifm-font-family-monospace)' }}>
+                                <td style={{ ...tableStyles.dateCell, fontSize: '12px', fontFamily: 'var(--ifm-font-family-monospace)' }}>
                                   {new Date(op.date).toLocaleString()}
                                 </td>
-                                <td>
+                                <td style={tableStyles.cell}>
                                   <span style={{
                                     display: 'inline-block',
                                     padding: '4px 8px',
@@ -330,20 +322,16 @@ Analyze individual wallet staking behavior over time. Track staked and unstaked 
                                     {op.type_label}
                                   </span>
                                 </td>
-                                <td style={{ textAlign: 'right', fontWeight: 600 }}>
+                                <td style={{ ...tableStyles.cell, fontWeight: 600 }}>
                                   {op.amount.toLocaleString(undefined, { minimumFractionDigits: decimals, maximumFractionDigits: decimals })} {unit}
                                 </td>
-                                <td>
+                                <td style={tableStyles.addressCell}>
                                   <a
                                     href={op.solscan_url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    style={{
-                                      color: 'var(--accent)',
-                                      textDecoration: 'none',
-                                      fontSize: '12px',
-                                      fontFamily: 'var(--ifm-font-family-monospace)',
-                                    }}
+                                    style={tableStyles.link}
+                                    {...linkHoverHandlers}
                                   >
                                     {op.signature.slice(0, 8)}...{op.signature.slice(-8)}
                                   </a>
@@ -443,27 +431,40 @@ Analyze individual wallet staking behavior over time. Track staked and unstaked 
   }}
 </BrowserOnly>
 
-## How to Use
+## Use Cases
 
-1. Enter a Solana wallet address in the search box above
+This page helps you:
+
+- **Track individual wallet behavior**: Monitor any wallet's staking activity, commitment level, and reward strategies over time
+- **Analyze whale patterns**: Study large stakers to understand their behavior, when they stake/unstake, and how they manage rewards
+- **Review your own portfolio**: Analyze your wallet's performance, engagement patterns, and reward accumulation
+- **Identify staker archetypes**: Distinguish between compounders (reinvest rewards), claimers (extract rewards), HODLers (long-term holds), and active traders (frequent operations)
+- **Benchmark performance**: Compare wallet strategies against successful patterns or your own approach
+- **Share wallet analysis**: Use URL parameters (?wallet=ADDRESS) to share pre-filled analysis links with others
+- **Investigate transactions**: Click any operation in the table to view the full transaction on Solscan
+
+## How to Read This Chart
+
+**How to Use:**
+
+1. Enter a Solana wallet address in the search box
 2. Click "Analyze Wallet" or press Enter
-3. View the wallet's complete staking history with:
-   - **Wallet Summary**: Key metrics including current staked/unstaked balances, realized rewards, and activity timeline
-   - **Staked Timeline Chart**: Visual representation of balance changes over time
-   - **Wallet Transactions**: Complete list of all staking operations (sorted newest first)
+3. View complete staking history with wallet summary, timeline chart, and transaction table
 
-**Pro Tip**: You can share a direct link with a pre-filled wallet address by adding a URL parameter:
-- `?wallet=YOUR_WALLET_ADDRESS` or `?address=YOUR_WALLET_ADDRESS`
-- Example: `/analysis/staking/wallet-timeline?wallet=5MJ6Jx2SJKyTce...`
-- The wallet will be automatically analyzed when the page loads
+**URL Parameters**: Share direct links with pre-filled addresses using `?wallet=ADDRESS` or `?address=ADDRESS`
 
-## How to Read the Chart
+**Wallet Summary Metrics:**
+- **Current Staked**: TUNA currently locked in staking positions
+- **Current Unstaked**: TUNA held liquid by the wallet
+- **Realized Rewards**: Cumulative SOL from claimed + compounded rewards (unclaimed rewards not shown)
+- **Total Operations**: Count of all staking transactions
+- **Active Since**: First staking transaction date and total days active
+- **Last Activity**: Most recent staking transaction date
 
-### Chart Elements
-
-- **Stacked Area (Teal + Gray)**: Shows your TUNA balance split between staked (bottom, teal) and unstaked (top, gray) portions
+**Timeline Chart Elements:**
+- **Stacked Area (Teal + Gray)**: TUNA balance split between staked (bottom, teal) and unstaked (top, gray)
 - **Dashed Gold Line (Right Y-axis)**: Cumulative realized rewards in SOL (claimed + compounded)
-- **Colored Dots**: Individual staking operations
+- **Colored Dots**: Individual staking operations with distinct shapes and colors:
   - 🟣 Purple diamond = Initialize Position
   - 🟢 Green circle = Stake
   - 🔴 Red circle = Unstake
@@ -471,36 +472,95 @@ Analyze individual wallet staking behavior over time. Track staked and unstaked 
   - 🟡 Gold star = Claim Rewards
   - 🟠 Orange square = Withdraw
 
-### Interactive Features
+**Wallet Transactions Table:**
+- Shows all staking operations sorted newest first (indicated by ▼)
+- **#**: Transaction number in chronological order
+- **Date**: Timestamp of operation
+- **Type**: Color-coded badge showing operation type
+- **Amount**: TUNA amount (for stake/unstake) or SOL amount (for claim/compound)
+- **Transaction**: Clickable signature linking to Solscan
+- **Pagination**: 10 transactions per page with Previous/Next navigation
 
-- **Hover over areas**: See exact balance amounts at any point in time
-- **Hover over dots**: View operation details (type, amount, transaction signature)
-- **Click "View on Solscan"**: Opens the transaction in Solscan block explorer
-- **Zoom & Pan**: Use mouse to zoom into specific time periods
+**Interactive Features:**
+- **Hover on chart areas**: See exact staked/unstaked balance amounts at any point in time
+- **Hover on dots**: View operation details (type, amount, transaction signature)
+- **Click transaction links**: Opens full transaction details in Solscan block explorer
+- **Zoom & Pan**: Use mouse to zoom into specific time periods on the chart
 - **Toggle legend**: Click legend items to show/hide specific data series
 
-### Data Limitations
+## Methodology
 
-- **Date Range**: Data available from 2025-07-25 onwards (when staker cache tracking began)
-- **Pre-existing Balances**: Wallets with positions before 2025-07-25 may show incomplete balance history
-- **Realized Rewards Only**: Currently shows only claimed + compounded rewards in SOL (MVP)
-- **Unclaimed Rewards**: Not included in this version (planned for Phase 2)
-- **Cache Updates**: Data is updated when the staker cache is rebuilt (not real-time)
+<details>
+<summary>Click to expand technical details</summary>
 
-## Use Cases
+**Data Sources**
 
-### Whale Tracking
-Monitor large stakers to understand their behavior patterns, commitment levels, and reward strategies.
+- **Staker cache**: Compressed snapshot of all staking positions and operations (`staker_cache.json.gz`)
+- **On-chain transactions**: Staking instructions from DefiTuna staking program
+- **Balance tracking**: Daily snapshots of staked and unstaked TUNA balances
+- **Reward calculations**: Realized rewards from claim and compound operations
 
-### Portfolio Analysis
-Analyze your own wallet or institutional holdings to track performance and engagement over time.
+For complete pipeline details, see [Data Pipeline](/analysis/methodology).
 
-### Behavior Patterns
-Identify different staker archetypes:
-- **Compounders**: Frequently compound rewards back into staked position
-- **Claimers**: Regularly claim rewards without compounding
-- **HODLers**: Stake once and hold without frequent operations
-- **Active Traders**: Frequent stake/unstake operations
+**Wallet Lookup Process**
 
-### Performance Benchmarking
-Compare wallet performance against your own strategy or identify successful patterns to emulate.
+1. **Address validation**: Input validated as 32-44 character Solana address
+2. **Cache search**: Wallet looked up in staker cache (7,861 wallets active from 2025-07-25 onwards)
+3. **Timeline reconstruction**: All operations sorted chronologically to rebuild balance history
+4. **Metrics calculation**: Summary statistics computed from operation history
+
+**Balance Calculation**
+
+Daily staked and unstaked balances are calculated by:
+
+1. **Starting balances**: Begin with earliest known state (or zero if cache started after first stake)
+2. **Operation application**: Each stake/unstake/withdraw operation adjusts balances
+3. **Daily snapshots**: End-of-day balances recorded in UTC timezone
+4. **Compound handling**: Compounded rewards increase staked balance
+5. **Claim handling**: Claimed rewards tracked separately as realized SOL
+
+**Realized Rewards Tracking**
+
+Realized rewards represent SOL that has been extracted or compounded:
+
+- **Claim operations**: SOL sent to wallet (adds to realized rewards)
+- **Compound operations**: SOL reinvested as TUNA stake (adds to realized rewards and staked balance)
+- **Cumulative total**: Running sum of all claim + compound amounts
+- **Unclaimed rewards**: Not included in current version
+
+**Operation Types**
+
+Each transaction is classified as one of these types:
+
+- **Initialize**: Create new staking position (first transaction)
+- **Stake**: Add TUNA to staking position
+- **Unstake**: Begin unstaking process (tokens become available after cooldown)
+- **Compound**: Reinvest rewards as additional stake
+- **Claim**: Extract rewards as SOL
+- **Withdraw**: Complete unstake and receive TUNA
+
+**Relationship to Other Views**
+
+This wallet-level detail complements:
+- **[Stakers](/analysis/defituna/usage-statistics/usage-statistics-stakers)**: Shows all active stakers ranked by activity
+- **[Staking Overview](/analysis/defituna/staked-tuna)**: Shows treasury's total staked/unstaked allocation
+- **[Staker Conviction](/analysis/defituna/staker-conviction)**: Analyzes long-term staker behavior patterns
+
+**Date Range and Limitations**
+
+- **Data start**: 2025-07-25 (when staker cache tracking began)
+- **Pre-existing positions**: Wallets with stakes before 2025-07-25 may show incomplete balance history
+- **Cache size**: 7,861 wallets tracked (wallets with at least one operation since 2025-07-25)
+- **Update frequency**: Data refreshes when staker cache is rebuilt (not real-time)
+- **Realized rewards only**: Shows claimed + compounded SOL; unclaimed rewards not included
+- **Operation granularity**: Each transaction counted as one operation regardless of size
+
+**Known Limitations**
+
+- Balance history for wallets staking before 2025-07-25 may not show full position size at cache start
+- Unclaimed rewards not tracked (requires additional on-chain queries)
+- Multi-wallet users (same person, multiple addresses) counted separately
+- No cross-wallet aggregation for institutional holders
+- Pagination limited to 10 transactions per page for performance
+
+</details>

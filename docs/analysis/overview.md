@@ -4,9 +4,35 @@ sidebar_custom_props:
   icon: ChartBar
 ---
 
-# Analysis Overview
+# About this section
 
-Welcome to the on-chain treasury analytics platform. This section provides comprehensive data analysis for Solana-based DeFi protocols, with a focus on **100% accurate revenue attribution** through transaction-level classification.
+This section is the heart of this project and provides analytics for Solana-based DeFi protocols, with a focus on **high data quality and easy to understand on-chain data**. I try to keep this as fact-based as possible, and use the Blog section if I want to share opinions about the data or longer explanations.
+
+Visualization of the data is done via plotly charts. You can zoom in and out as you want, if required. Some of the charts are enriched with tables that allow a deep dive into transactions or wallets. This should help to understand which type of transactions are behind the data and also do some sanity checks.
+
+If you want to understand the details about how the information you are seeing on this page is created, please check out the next page. My ambition is to make it as clear as possible what the numbers mean, in case you want to get into the details. 
+
+## Protocol Coverage
+
+### DefiTuna Treasury Analytics
+
+The DefiTuna protocol treasury is our primary focus, with comprehensive coverage including:
+
+- **Revenue Attribution**: Multi-dimensional breakdowns by token, transaction type, and liquidity pool
+- **Staking APR**: Historical yield calculations based on treasury inflows and token metrics
+- **Daily Trends**: Time-series analysis of revenue patterns and growth
+- **Usage Statistics**: Cohort views of stakers plus daily and weekly active wallets developments
+- **TUNA Treasury Allocation**: Daily split of treasury-held TUNA between staked and liquid balances
+- **Top Transactions**: Detailed views of largest revenue events
+
+Navigate to the **DefiTuna** section in the sidebar to explore interactive dashboards and detailed analytics.
+
+For DefiTuna, other aspects might be interesting like analysing Positions. They are not completely covered via Treasury because e.g. manual closing if Positions is not an event that touches the treasury.
+
+### Which protocol comes next?
+
+After going live I want to clean up first and react on user feedback (if there is any). Then I intend to cover additional DeFi protocols that fit into my scope - stay tuned!
+
 
 ## Our Approach
 
@@ -41,19 +67,6 @@ Our system maintains a **100% attribution accuracy standard** verified through d
 
 These two methods must reconcile to within rounding errors (≤0.01 SOL per day). Any discrepancy triggers investigation and system refinement.
 
-## Protocol Coverage
-
-### DefiTuna Treasury Analytics
-
-The DefiTuna protocol treasury is our primary focus, with comprehensive coverage including:
-
-- **Revenue Attribution**: Multi-dimensional breakdowns by token, transaction type, and liquidity pool
-- **Staking APY**: Historical yield calculations based on treasury inflows and token metrics
-- **Daily Trends**: Time-series analysis of revenue patterns and growth
-- **Usage Statistics**: Cohort views of stakers plus daily and weekly active wallets`n- **TUNA Treasury Allocation**: Daily split of treasury-held TUNA between staked and liquid balances
-- **Top Transactions**: Detailed views of largest revenue events
-
-Navigate to the **DefiTuna** section in the sidebar to explore interactive dashboards and detailed analytics.
 
 ## Data Freshness
 
@@ -61,11 +74,7 @@ All analytics are generated from the latest available on-chain data. Check the *
 
 ## Technical Documentation
 
-For developers and technical users interested in the backend implementation:
-
-- [Revenue Attribution System](https://github.com/yourusername/solana_analytics/blob/main/docs/REVENUE_ATTRIBUTION_SYSTEM.md)
-- [Classification System](https://github.com/yourusername/solana_analytics/blob/main/docs/CLASSIFICATION_SYSTEM.md)
-- [Daily Workflow](https://github.com/yourusername/solana_analytics/blob/main/docs/DAILY_WORKFLOW.md)
+For developers and technical users interested in the backend implementation, please reach out via the contact links in the footer. Detailed documentation covering the revenue attribution design, classification logic, and daily workflow runbooks is available on request because the operational repository is private.
 
 ---
 

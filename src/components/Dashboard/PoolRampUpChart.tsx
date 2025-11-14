@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Plot from 'react-plotly.js';
+import type { Data } from 'plotly.js';
 import { useColorMode } from '@docusaurus/theme-common';
 import { getPlotlyTemplate, defaultPlotlyConfig } from '@site/src/utils/plotlyTheme';
 import { useChartTracking } from '@site/src/hooks/useChartTracking';
@@ -75,7 +76,9 @@ export default function PoolRampUpChart(): React.ReactElement {
 
         const initialVisibility: Record<string, boolean> = {};
         jsonData.pools.forEach(pool => {
-          initialVisibility[pool.pool_id] = !hiddenByDefault.includes(pool.pool_id);
+          // Hide if explicitly in hiddenByDefault list OR if cumulative revenue < 5 SOL
+          const shouldHide = hiddenByDefault.includes(pool.pool_id) || pool.total_revenue < 5;
+          initialVisibility[pool.pool_id] = !shouldHide;
         });
         setPoolVisibility(initialVisibility);
 
@@ -165,7 +168,7 @@ export default function PoolRampUpChart(): React.ReactElement {
   };
 
   // Create traces for each pool
-  const traces: any[] = data.pools.map((pool, index) => {
+  const traces: Data[] = data.pools.map((pool, index) => {
     // Filter days based on maxDays slider
     const filteredDays = pool.days.filter(d => d.day <= maxDays);
 
@@ -412,48 +415,6 @@ export default function PoolRampUpChart(): React.ReactElement {
         </div>
       </div>
 
-      {/* Chart Instructions */}
-      <div style={{
-        background: 'var(--ifm-background-surface-color)',
-        border: '1px solid var(--ifm-toc-border-color)',
-        borderRadius: 'var(--ifm-global-radius)',
-        padding: '12px',
-        marginBottom: '16px',
-        fontSize: '13px',
-        color: 'var(--ifm-color-secondary)',
-        lineHeight: '1.6',
-      }}>
-        <strong style={{ color: 'var(--ifm-font-color-base)' }}>Chart Interactions:</strong>
-        <ul style={{ margin: '8px 0 0 0', paddingLeft: '20px' }}>
-          <li><strong>Slider</strong> below chart to adjust the time window (7-{data.metadata.max_days} days)</li>
-          <li><strong>Pool Visibility buttons</strong> to quickly show/hide all pools</li>
-          <li><strong>Hover</strong> over lines to see detailed revenue information</li>
-          <li><strong>Click</strong> legend items to show/hide individual pools</li>
-          <li><strong>Double-click</strong> legend items to isolate a single pool</li>
-          <li><strong>Drag</strong> to zoom into a specific area</li>
-          <li><strong>Double-click chart</strong> to reset zoom</li>
-        </ul>
-      </div>
-
-      {/* Pool Summary Stats */}
-      <div style={{
-        background: 'var(--ifm-background-surface-color)',
-        border: '1px solid var(--ifm-toc-border-color)',
-        borderRadius: 'var(--ifm-global-radius)',
-        padding: '12px',
-        marginBottom: '24px',
-        fontSize: '13px',
-      }}>
-        <strong style={{ color: 'var(--ifm-font-color-base)' }}>Summary:</strong>
-        <div style={{ marginTop: '8px', color: 'var(--ifm-color-secondary)' }}>
-          Showing <strong>{data.pools.length} pools</strong> from{' '}
-          <strong>{data.metadata.date_range.start}</strong> to{' '}
-          <strong>{data.metadata.date_range.end}</strong>
-        </div>
-        <div style={{ marginTop: '4px', color: 'var(--ifm-color-secondary)', fontSize: '12px' }}>
-          Pool establishment = first revenue-generating transaction
-        </div>
-      </div>
     </>
   );
 }

@@ -12,12 +12,12 @@ const sidebars: SidebarsConfig = {
   analysisSidebar: [
     'analysis/overview',
     'analysis/methodology',
+    'analysis/data-quality',
     {
       type: 'html',
       value: '<span class="sidebar-heading">DEFITUNA</span>',
     },
     'analysis/defituna/overview',
-    'analysis/defituna/methodology',
     {
       type: 'category',
       label: 'Treasury Analysis',
@@ -39,10 +39,10 @@ const sidebars: SidebarsConfig = {
             'analysis/defituna/revenue-breakdown/pools-vs-types',
             {
               type: 'doc',
-              id: 'analysis/defituna/tx-type-per-day',
+              id: 'analysis/defituna/revenue-breakdown/tx-type-per-day',
               label: 'Types per Day',
             },
-            'analysis/defituna/orca-vs-fusion',
+            'analysis/defituna/revenue-breakdown/orca-vs-fusion',
           ],
         },
         {
@@ -52,8 +52,8 @@ const sidebars: SidebarsConfig = {
             icon: 'ChartLineUp',
           },
           items: [
-            'analysis/usage-statistics/usage-statistics-overview',
-            'analysis/usage-statistics/usage-statistics-stakers',
+            'analysis/defituna/usage-statistics/usage-statistics-overview',
+            'analysis/defituna/usage-statistics/usage-statistics-stakers',
           ],
         },
         {
@@ -65,7 +65,7 @@ const sidebars: SidebarsConfig = {
           items: [
             'analysis/defituna/staked-tuna',
             'analysis/defituna/vesting-timeline',
-            'analysis/staking/wallet-timeline',
+            'analysis/defituna/staking/wallet-timeline',
             'analysis/defituna/staker-conviction',
           ],
         },
@@ -83,7 +83,7 @@ const sidebars: SidebarsConfig = {
         //     'analysis/defituna/position-openings',
         //   ],
         // },
-        'analysis/defituna/staking-apy',
+        'analysis/defituna/staking-apr',
         'analysis/defituna/pool-ramp-up',
       ],
     },

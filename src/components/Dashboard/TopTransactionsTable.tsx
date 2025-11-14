@@ -209,7 +209,7 @@ export default function TopTransactionsTable({
   };
 
   // Helper to display token name or abbreviated mint
-  const getTokenDisplay = (tx: any): string => {
+  const getTokenDisplay = (tx: { token_name?: string; mint: string }): string => {
     // Check if token_name exists and is NOT a mint address
     if (tx.token_name && !isMintAddress(tx.token_name)) {
       return tx.token_name;
@@ -233,12 +233,6 @@ export default function TopTransactionsTable({
       ? `Top 10 ${protocolName} Transactions for ${selectedFilterLabel || selectedFilter}`
       : `Top 10 ${protocolName} Transactions`;
   }
-
-  const subtitle = totalMatching > 10
-    ? `Showing top 10 of ${totalMatching.toLocaleString()} matching transactions`
-    : totalMatching < 10
-    ? `Showing all ${totalMatching} matching transactions`
-    : `Showing all ${totalMatching} matching transactions`;
 
   return (
     <div style={{
@@ -299,16 +293,7 @@ export default function TopTransactionsTable({
           </div>
         )}
       </div>
-      {(selectedFilter || typeFilter) && (
-        <div style={{
-          fontSize: '13px',
-          color: 'var(--ifm-color-secondary)',
-          marginBottom: '16px'
-        }}>
-          {subtitle}
-        </div>
-      )}
-      <div style={{ overflowX: 'auto' }}>
+      <div style={{ overflowX: 'auto', marginTop: '16px' }}>
         <table style={{
           display: 'table',
           width: '100%',
@@ -348,7 +333,7 @@ export default function TopTransactionsTable({
               <td style={{ padding: '12px 8px', fontWeight: 600, color: 'var(--accent)' }}>
                 {tx.amount.toLocaleString(undefined, { maximumFractionDigits: 2 })} SOL
               </td>
-              <td style={{ padding: '12px 8px', color: 'var(--ifm-color-secondary)' }}>
+              <td style={{ padding: '12px 8px', color: 'var(--ifm-color-secondary)', fontFamily: 'var(--ifm-font-family-base)' }}>
                 {formatDate(tx.timestamp)}
               </td>
 
