@@ -11,3 +11,6 @@ node_modules/
 
 # Generated data files (avoid conflicts with automated pipeline)
 static/data/
+
+# Internal documentation (keep local only)
+docs-internal/

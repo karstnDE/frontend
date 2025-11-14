@@ -266,4 +266,6 @@ This project was migrated from MkDocs Material to Docusaurus v3 in January 2025.
 
 ## License
 
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
 Copyright © 2025 karstenalytics
