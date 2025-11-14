@@ -10,7 +10,7 @@ const config: Config = {
   // Set the production url of your site here
   url: 'https://karstenalytics.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
-  baseUrl: '/frontend/',
+  baseUrl: '/frontend',
 
   // GitHub pages deployment config.
   organizationName: 'karstenalytics',
