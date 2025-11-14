@@ -35,7 +35,6 @@ const sidebars: SidebarsConfig = {
             'analysis/defituna/revenue-breakdown/by-token',
             'analysis/defituna/revenue-breakdown/by-type',
             'analysis/defituna/revenue-breakdown/by-pool',
-            // 'analysis/defituna/revenue-breakdown/by-wallet', // TODO: Not yet functional
             'analysis/defituna/revenue-breakdown/pools-vs-types',
             {
               type: 'doc',
@@ -69,20 +68,6 @@ const sidebars: SidebarsConfig = {
             'analysis/defituna/staker-conviction',
           ],
         },
-        // Position Analysis - DISABLED (data quality issues)
-        // Issue: Fusion position openings tracked from July 31, but Fusion revenue attribution
-        // is fragmented due to tuna4u IDL rename (see TODO.md: "Unify post-2025-09-09 Fusion transaction aliases")
-        // Re-enable after fixing transaction type aliases and regenerating cache
-        // {
-        //   type: 'category',
-        //   label: 'Position Analysis',
-        //   customProps: {
-        //     icon: 'ChartLineUp',
-        //   },
-        //   items: [
-        //     'analysis/defituna/position-openings',
-        //   ],
-        // },
         'analysis/defituna/staking-apr',
         'analysis/defituna/pool-ramp-up',
       ],

@@ -6,7 +6,7 @@ import {
   NewspaperClipping,
   ChartLineUp,
   type IconProps,
-  LighthouseIcon,
+  Compass,
   ChartBarIcon,
   NotepadIcon,
 } from '@phosphor-icons/react';
@@ -25,7 +25,7 @@ const tabs: NavTab[] = [
     label: 'Intro',
     to: '/',
     activePattern: /^\/(intro\/)?$/,
-    Icon: LighthouseIcon,
+    Icon: Compass,
   },
   {
     label: 'Articles',

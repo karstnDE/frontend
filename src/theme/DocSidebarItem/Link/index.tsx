@@ -7,7 +7,7 @@ import Link from '@docusaurus/Link';
 import isInternalUrl from '@docusaurus/isInternalUrl';
 import IconExternalLink from '@theme/Icon/ExternalLink';
 import styles from './styles.module.css';
-import {FileText, House, Gear, User, ChartBar, Info, TrendUp, Percent, Article, Newspaper, type IconProps as PhosphorIconProps} from '@phosphor-icons/react';
+import {FileText, House, Gear, User, ChartBar, Info, TrendUp, Percent, Article, Newspaper, FlowArrow, SealCheck, type IconProps as PhosphorIconProps} from '@phosphor-icons/react';
 
 function LinkLabel({
   label,
@@ -62,6 +62,10 @@ function getLinkIcon(level: number, isActive: boolean, customProps?: {icon?: str
         return <Article {...common} />;
       case 'Newspaper':
         return <Newspaper {...common} />;
+      case 'FlowArrow':
+        return <FlowArrow {...common} />;
+      case 'SealCheck':
+        return <SealCheck {...common} />;
       default:
         break;
     }

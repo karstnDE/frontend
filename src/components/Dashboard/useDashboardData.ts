@@ -58,8 +58,6 @@ export function useDashboardData(): DashboardData {
         isLoading = true;
         setData(prev => ({ ...prev, loading: true, error: null }));
 
-        console.log('[useDashboardData] Starting data fetch...');
-
         // Load all data files in parallel
         const [
           summary,
@@ -82,15 +80,10 @@ export function useDashboardData(): DashboardData {
           fetch(`${BASE_PATH}/top_transactions_token.json`).then(r => r.json()),
           fetch(`${BASE_PATH}/top_transactions_type.json`).then(r => r.json()),
           fetch(`${BASE_PATH}/top_transactions_pool.json`).then(r => r.json()),
-          fetch(`${BASE_PATH}/top_transactions_pool_type.json`).then(r => {
-            console.log('[useDashboardData] Fetching top_transactions_pool_type.json...');
-            return r.json();
-          }),
+          fetch(`${BASE_PATH}/top_transactions_pool_type.json`).then(r => r.json()),
           fetch(`${BASE_PATH}/pool_type_summary.json`).then(r => r.json()),
           fetch(`${BASE_PATH}/daily_by_pool_type.json`).then(r => r.json()),
         ]);
-
-        console.log('[useDashboardData] topTransactionsPoolType loaded:', Object.keys(topTransactionsPoolType).length, 'combinations');
 
         const loadedData: DashboardData = {
           summary: summary as SummaryData,

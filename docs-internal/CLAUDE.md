@@ -1,1 +1,0 @@
-- Going forward I want to run npm build and npm start myself

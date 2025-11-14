@@ -1,5 +1,7 @@
 ---
 title: Data Quality
+sidebar_custom_props:
+  icon: SealCheck
 ---
 
 # Data Quality

@@ -41,7 +41,9 @@ frontend/
 │       └── plotlyTheme.ts          # Plotly theme system for light/dark mode
 ├── static/                         # Static assets
 │   ├── img/
-│   │   └── logo.svg
+│   │   ├── logo.png
+│   │   ├── logo_dark.png
+│   │   └── banner_start.jpg
 │   ├── analytics/                  # Analytics data bundle
 │   │   └── data/
 │   └── data/

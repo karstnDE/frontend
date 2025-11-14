@@ -30,15 +30,14 @@ const config: Config = {
   },
 
   // GoatCounter analytics - privacy-friendly, GDPR-compliant
-  scripts: [
+  // Only loads in production to avoid CORS/404 errors in development
+  scripts: process.env.NODE_ENV === 'production' ? [
     {
       src: 'https://karstenalytics.goatcounter.com/count.js',
       async: true,
       'data-goatcounter': 'https://karstenalytics.goatcounter.com/count',
-      integrity: 'sha384-fA1l3VUg6TBQkkfysf1/eafAO8aaY2KuL0EUkjbHTA2n/pgE3mfohKwjfIJ42xCB',
-      crossorigin: 'anonymous',
     },
-  ],
+  ] : [],
 
   plugins: [
     [
@@ -84,21 +83,7 @@ const config: Config = {
           // Remove this to remove the "edit this page" links.
           editUrl: undefined,
         },
-        blog: {
-          path: 'articles',
-          routeBasePath: 'articles',
-          showReadingTime: true,
-          feedOptions: {
-            type: ['rss', 'atom'],
-          },
-          blogTitle: 'karstenalytics Articles',
-          blogDescription: 'Insights and updates on Solana treasury analytics',
-          blogSidebarTitle: 'RECENT ARTICLES',
-          blogSidebarCount: 5,
-          postsPerPage: 10,
-          // Remove edit links for blog posts
-          editUrl: undefined,
-        },
+        blog: false,  // Disabled - reserved for future articles
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -116,10 +101,9 @@ const config: Config = {
         highlightSearchTermsOnTargetPage: true,
         explicitSearchResultPath: true,
         indexDocs: true,
-        indexBlog: true,
+        indexBlog: false,
         indexPages: true,
         docsRouteBasePath: '/',
-        blogRouteBasePath: '/articles',
       },
     ],
   ],
