@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Plot from 'react-plotly.js';
 import type { Data } from 'plotly.js';
 import { useColorMode } from '@docusaurus/theme-common';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 import { getPlotlyTemplate, defaultPlotlyConfig } from '@site/src/utils/plotlyTheme';
 import { useChartTracking } from '@site/src/hooks/useChartTracking';
 
@@ -61,6 +62,7 @@ export default function PoolTypeMatrixChart({ onSegmentClick }: PoolTypeMatrixCh
   const { colorMode } = useColorMode();
   const isDark = colorMode === 'dark';
   const template = getPlotlyTemplate(isDark);
+  const poolTypePath = useBaseUrl('/data/pool_type_summary.json');
 
   const [data, setData] = useState<PoolTypeData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -95,7 +97,7 @@ export default function PoolTypeMatrixChart({ onSegmentClick }: PoolTypeMatrixCh
   };
 
   useEffect(() => {
-    fetch('/data/pool_type_summary.json')
+    fetch(poolTypePath)
       .then(response => response.json())
       .then(jsonData => {
         setData(jsonData);
@@ -105,7 +107,7 @@ export default function PoolTypeMatrixChart({ onSegmentClick }: PoolTypeMatrixCh
         console.error('Error loading pool-type matrix data:', err);
         setLoading(false);
       });
-  }, []);
+  }, [poolTypePath]);
 
   if (loading) {
     return <div style={{ padding: '24px', textAlign: 'center' }}>Loading chart...</div>;

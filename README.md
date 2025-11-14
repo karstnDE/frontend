@@ -1,6 +1,6 @@
 # karstenalytics Frontend
 
-This repository hosts the public-facing documentation and interactive dashboards for the karstenalytics treasury analytics project. The site is built with [Docusaurus v3](https://docusaurus.io/) and features custom theming, responsive layouts, and integrated Plotly dashboards.
+This repository hosts the public-facing documentation and interactive dashboards for Solana DeFi analytics. The site is built with [Docusaurus v3](https://docusaurus.io/) and features custom theming, responsive layouts, and integrated Plotly dashboards.
 
 ## Technology Stack
 
@@ -16,14 +16,12 @@ This repository hosts the public-facing documentation and interactive dashboards
 
 ```
 frontend/
+├── articles/                       # Article posts (empty, reserved for future content)
 ├── docs/                           # Markdown content
 │   ├── index.md                    # Landing page
 │   ├── interactive.mdx             # Interactive dashboard with Plotly charts
 │   ├── intro/                      # Introduction section
 │   │   └── about.md
-│   ├── blog/                       # Blog posts
-│   │   ├── general.md
-│   │   └── defituna.md
 │   └── analysis/                   # Analysis section
 │       ├── general.md
 │       └── defituna/               # Treasury-specific analysis
@@ -38,7 +36,7 @@ frontend/
 │   ├── theme/                      # Swizzled Docusaurus components
 │   │   ├── Navbar/
 │   │   │   └── Content/            # Custom navbar with search, dark mode, timestamp
-│   │   └── NavbarTabs/             # Separate tabs row (Intro, Blog, Analysis)
+│   │   └── NavbarTabs/             # Separate tabs row (Intro, Articles, Analysis)
 │   └── utils/
 │       └── plotlyTheme.ts          # Plotly theme system for light/dark mode
 ├── static/                         # Static assets
@@ -79,7 +77,7 @@ frontend/
 ### Layout
 
 - **Header**: 56px height (48px on mobile), centered content with max-width 1440px
-- **Tabs Row**: Separate sticky row below header (Intro, Blog, Analysis)
+- **Tabs Row**: Separate sticky row below header (Intro, Articles, Analysis)
 - **Sidebar**: 290px width (240px on tablets), aligned with header content
 - **Responsive Padding**: Dynamic padding using `clamp(16px, 4.44vw, 64px)` - grows/shrinks with viewport
 
@@ -184,11 +182,11 @@ The timestamp is fetched from `static/data/_manifest.json`:
 
 **Two-row navigation:**
 1. **Header** (fixed): Logo, search, dark mode, timestamp
-2. **Tabs** (sticky): Intro, Blog, Analysis
+2. **Tabs** (sticky): Intro, Articles, Analysis
 
 **Sidebar** adapts to active tab:
 - **Intro**: Welcome, About me
-- **Blog**: General, Treasury
+- **Articles**: Reserved for future content
 - **Analysis**: Interactive Dashboard, Treasury Analysis (with nested items)
 
 ### 5. Plotly Integration

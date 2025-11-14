@@ -38,7 +38,9 @@ Enter any wallet address to see its complete revenue timeline, including:
 <BrowserOnly fallback={<LoadingSpinner />}>
   {() => {
     const WalletRevenueBreakdown = require('@site/src/components/Dashboard/WalletRevenueBreakdown').default;
-    return <WalletRevenueBreakdown dataUrl="/data/wallet_revenue_attribution.json" />;
+    const useBaseUrl = require('@docusaurus/useBaseUrl').default;
+    const dataUrl = useBaseUrl('/data/wallet_revenue_attribution.json');
+    return <WalletRevenueBreakdown dataUrl={dataUrl} />;
   }}
 </BrowserOnly>
 
