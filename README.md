@@ -260,10 +260,6 @@ Edit `sidebars.ts` to change sidebar navigation.
 
 See `package.json` for complete list.
 
-## Migration History
-
-This project was migrated from MkDocs Material to Docusaurus v3 in January 2025. See `DOCUSAURUS_MIGRATION.md` for migration details.
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

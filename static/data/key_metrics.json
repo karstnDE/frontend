@@ -1,9 +1,9 @@
 {
   "revenue_30d": {
     "sol": 793.93,
-    "usdc": 134658.74,
+    "usdc": 134655.89,
     "annualized_sol": 9527.16,
-    "annualized_usdc": 1615904.88,
+    "annualized_usdc": 1615870.68,
     "period": "2025-10-15 to 2025-11-13"
   },
   "market_data": {
@@ -14,13 +14,13 @@
   },
   "metrics": {
     "mcap_to_revenue_ratio": 37.88,
-    "staking_apy_percent": 0,
+    "staking_apr_percent": 2.18,
     "weekly_active_wallets": 2167,
     "percent_staked": 86.23,
     "total_staked_tuna": 862324091.7,
     "staking_wallets": 3969
   },
-  "generated_at": "2025-11-14T02:16:54.936532Z",
+  "generated_at": "2025-11-14T21:02:19.019146Z",
   "date_range": {
     "start": "2025-07-24",
     "end": "2025-11-13"

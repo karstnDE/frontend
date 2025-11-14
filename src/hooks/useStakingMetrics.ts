@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
 export interface StakingDailyRecord {
   date: string;
@@ -43,6 +44,8 @@ let isLoading = false;
 let loadPromise: Promise<void> | null = null;
 
 export function useStakingMetrics() {
+  const dataPath = useBaseUrl('/data/staking_tuna.json');
+
   const [data, setData] = useState<StakingMetrics | null>(cachedData);
   const [loading, setLoading] = useState(!cachedData && !cachedError);
   const [error, setError] = useState<string | null>(cachedError);
@@ -72,7 +75,7 @@ export function useStakingMetrics() {
       try {
         isLoading = true;
         setLoading(true);
-        const response = await fetch('/data/staking_tuna.json');
+        const response = await fetch(dataPath);
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}`);
         }

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
 // Module-level cache to prevent re-fetching on component remounts
 let cachedTimestamp: string | null = null;
@@ -6,6 +7,8 @@ let isLoading = false;
 let loadPromise: Promise<void> | null = null;
 
 export function useManifest(): string {
+  const manifestPath = useBaseUrl('/data/_manifest.json');
+
   const [timestamp, setTimestamp] = useState<string>(cachedTimestamp || '');
 
   useEffect(() => {
@@ -29,7 +32,7 @@ export function useManifest(): string {
     const loadData = async () => {
       try {
         isLoading = true;
-        const response = await fetch('/data/_manifest.json');
+        const response = await fetch(manifestPath);
         const data = await response.json();
 
         if (data && data.generated_at) {

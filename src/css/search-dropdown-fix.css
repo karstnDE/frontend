@@ -1,0 +1,36 @@
+/**
+ * Search Dropdown Positioning Fix
+ * Only fixes positioning and z-index - lets autocomplete.js control visibility
+ */
+
+/* Ensure navbar containers allow overflow */
+.navbar,
+.navbar__inner,
+.navbar__items,
+.navbar__items--right {
+  overflow: visible !important;
+}
+
+/* Navbar tabs must allow overflow */
+.navbar-tabs {
+  overflow: visible !important;
+}
+
+/* Search dropdown - only fix position and z-index, NOT visibility */
+.aa-dropdown-menu,
+div.aa-dropdown-menu,
+[class*="searchBar"] .aa-dropdown-menu,
+[class*="searchBar"] > .aa-dropdown-menu,
+.navbar__search .aa-dropdown-menu {
+  position: fixed !important;
+  z-index: 999999 !important;
+}
+
+/* Module-based class names - only fix position and z-index */
+[class*="dropdownMenu"],
+div[class*="dropdownMenu"],
+[class*="searchBar"] [class*="dropdownMenu"],
+[class*="searchBar"] > [class*="dropdownMenu"] {
+  position: fixed !important;
+  z-index: 999999 !important;
+}

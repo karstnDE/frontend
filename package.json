@@ -1,6 +1,26 @@
 {
   "name": "karstenalytics",
   "version": "1.0.0",
+  "description": "Documentation and interactive analytics dashboards for Solana DeFi analytics",
+  "author": "karstenalytics",
+  "license": "MIT",
+  "homepage": "https://karstenalytics.github.io/frontend",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/karstenalytics/frontend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/karstenalytics/frontend/issues"
+  },
+  "keywords": [
+    "docusaurus",
+    "documentation",
+    "analytics",
+    "dashboard",
+    "defi",
+    "solana",
+    "treasury-analytics"
+  ],
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",

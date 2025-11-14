@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 import pako from 'pako';
 
 /**
@@ -275,6 +276,8 @@ function parseWalletTimeline(walletAddress: string, cache: StakerCache): WalletT
  * Includes debouncing to prevent excessive requests during rapid input changes
  */
 export function useWalletTimeline(walletAddress: string | null) {
+  const dataPath = useBaseUrl('/data/staker_cache.json.gz');
+
   const [data, setData] = useState<WalletTimelineData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -294,7 +297,7 @@ export function useWalletTimeline(walletAddress: string | null) {
 
     try {
       // Load compressed staker cache
-      const response = await fetch('/data/staker_cache.json.gz');
+      const response = await fetch(dataPath);
       if (!response.ok) {
         throw new Error(`Failed to load staker cache: ${response.statusText}`);
       }

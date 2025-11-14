@@ -30,12 +30,12 @@ export function isAnalyticsAvailable(): boolean {
  * Tracks user interactions with Plotly charts (view, click, zoom, etc.)
  * Events are tracked as custom paths for easy filtering in GoatCounter.
  *
- * @param chartName - Display name of the chart (e.g., "APY Chart")
+ * @param chartName - Display name of the chart (e.g., "APR Chart")
  * @param action - Type of interaction (e.g., "view", "click", "zoom")
  * @param metadata - Optional metadata to include in the event path
  *
  * @example
- * trackChartEvent('APY Chart', 'view');
+ * trackChartEvent('APR Chart', 'view');
  * trackChartEvent('Revenue Breakdown', 'click', { date: '2025-10-15' });
  */
 export function trackChartEvent(
@@ -69,13 +69,13 @@ export function trackChartEvent(
  * Tracks custom user actions like filter changes, feature usage, etc.
  * Events appear as /event/{category}/{action}/{label} in GoatCounter.
  *
- * @param category - Event category (e.g., "Dashboard", "APY", "Loyalty")
+ * @param category - Event category (e.g., "Dashboard", "APR", "Loyalty")
  * @param action - Action performed (e.g., "filter-change", "custom-price-set")
  * @param label - Optional label for additional context
  *
  * @example
  * trackCustomEvent('Dashboard', 'filter-change', 'group-token');
- * trackCustomEvent('APY', 'custom-price-set', '0.05');
+ * trackCustomEvent('APR', 'custom-price-set', '0.05');
  */
 export function trackCustomEvent(
   category: string,

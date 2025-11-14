@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDoc } from '@docusaurus/plugin-content-docs/client';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './styles.module.css';
 
 interface SummaryData {
@@ -12,13 +13,14 @@ interface SummaryData {
 
 export default function DefitunaBanner(): JSX.Element | null {
   const { metadata } = useDoc();
+  const baseUrl = useBaseUrl('/');
   const [dateRange, setDateRange] = useState<{ start: string; end: string } | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadSummary() {
       try {
-        const response = await fetch('/data/summary.json');
+        const response = await fetch(`${baseUrl}data/summary.json`);
         const data: SummaryData = await response.json();
         setDateRange({
           start: data.date_range.start,
@@ -32,7 +34,7 @@ export default function DefitunaBanner(): JSX.Element | null {
     }
 
     loadSummary();
-  }, []);
+  }, [baseUrl]);
 
   // Only show banner on DefiTuna + usage analytics pages
   const id = metadata.id?.toLowerCase() ?? '';

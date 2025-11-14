@@ -17,37 +17,38 @@ It's about building a solid foundation for thoughtful discussions on what makes 
 </p>
 
 
-<div class="card-section" data-animate>
+<div className="card-section" data-animate>
   <h2>Objectives</h2>
-  <div class="section-grid">
-    <p>
-    For me personally this project has three main objectives:
-    <ul>
-      <li>Provide deep-dive data and thoughts about DeFi projects for investment and education purposes</li>
-      <li>Build something useful while supporting the DeFi philosophy and getting more involved in the Crypto community</li>
-      <li>Have fun</li>
-    </ul>
-  
-    </p>
+  <div className="section-grid">
+    <div>
+      <p>For me personally this project has three main objectives:</p>
+      <ul>
+        <li>Provide deep-dive data and thoughts about DeFi projects for investment and education purposes</li>
+        <li>Build something useful while supporting the DeFi philosophy and getting more involved in the Crypto community</li>
+        <li>Have fun</li>
+      </ul>
+    </div>
   </div>
 </div>
 
-<div class="card-section" data-animate>
+<div className="card-section" data-animate>
   <h2>Scope</h2>
-  <div class="section-grid">
+  <div className="section-grid">
 
 import BrowserOnly from '@docusaurus/BrowserOnly';
 
 <BrowserOnly fallback={<div>Loading statistics...</div>}>
   {() => {
     const { useEffect, useState } = require('react');
+    const useBaseUrl = require('@docusaurus/useBaseUrl').default;
 
     function StatsCards() {
+      const baseUrl = useBaseUrl('/');
       const [txCount, setTxCount] = useState(null);
       const [loading, setLoading] = useState(true);
 
       useEffect(() => {
-        fetch('/data/usage_metrics.json')
+        fetch(`${baseUrl}data/usage_metrics.json`)
           .then(response => response.json())
           .then(data => {
             setTxCount(data.summary.transactions_scanned);
@@ -57,7 +58,7 @@ import BrowserOnly from '@docusaurus/BrowserOnly';
             console.error('Error loading transaction count:', err);
             setLoading(false);
           });
-      }, []);
+      }, [baseUrl]);
 
       if (loading) {
         return (
@@ -147,21 +148,23 @@ import BrowserOnly from '@docusaurus/BrowserOnly';
   }}
 </BrowserOnly>
 
-    <p> 
-    This project provides on-chain data analytics for Solana DeFi protocols. Analytics are useful for me if they are considering the overall objective a DeFi protocol has. Which ultimately always is the same: Generating value for users and investors.
-    Let's say a protocol shares revenue with its investors via staking. What I want to understand is:
-    <ul>
-      <li>Where does the revenue come from?</li>
-      <li>What are the main revenue drivers?</li>
-      <li>How are the main revenue drivers developing so far and most probably going to develop in the future?</li>
-      <li>On-chain data only looks backwards and does not provide complete information. Is there other data we can look at to get a more complete picture (e.g. behaviour of Users or "Whales")? </li>
-      <li>How does demand and supply (e.g. Stake Size) develop?</li>
-    </ul>
+    <div>
+      <p>This project provides on-chain data analytics for Solana DeFi protocols. Analytics are useful for me if they are considering the overall objective a DeFi protocol has. Which ultimately always is the same: Generating value for users and investors.</p>
 
-    I'm not so much interested in the current price of a protocol's token or Technical Analysis. This project is more about understanding fundamentals, and for this I want to understand how key metrics I can see on-chain develop.
-    Disclaimer: Technical Analysis is something I also like to follow up on, as I believe it works in some cases and is sometimes useful, e.g. for setting up LP positions.
+      <p>Let's say a protocol shares revenue with its investors via staking. What I want to understand is:</p>
+      <ul>
+        <li>Where does the revenue come from?</li>
+        <li>What are the main revenue drivers?</li>
+        <li>How are the main revenue drivers developing so far and most probably going to develop in the future?</li>
+        <li>On-chain data only looks backwards and does not provide complete information. Is there other data we can look at to get a more complete picture (e.g. behaviour of Users or "Whales")? </li>
+        <li>How does demand and supply (e.g. Stake Size) develop?</li>
+      </ul>
 
-    I am doing this solo, and as a hobby. This might change going forward, but for now I'm paying this myself. Feel free to support me via the Donate address in the footer. My current infrastructure limits the projects I can cover for now. So do not aim to look at the Orcas, Raydiums, Pumpfuns of this world. But this anyhow matches my philosophy of shining light on the **killer protocols of tomorrow**, not today's.
-    </p>
+      <p>I'm not so much interested in the current price of a protocol's token or Technical Analysis. This project is more about understanding fundamentals, and for this I want to understand how key metrics I can see on-chain develop.</p>
+
+      <p>Disclaimer: Technical Analysis is something I also like to follow up on, as I believe it works in some cases and is sometimes useful, e.g. for setting up LP positions.</p>
+
+      <p>I am doing this solo, and as a hobby. This might change going forward, but for now I'm paying this myself. Feel free to support me via the Donate address in the footer. My current infrastructure limits the projects I can cover for now. So do not aim to look at the Orcas, Raydiums, Pumpfuns of this world. But this anyhow matches my philosophy of shining light on the **killer protocols of tomorrow**, not today's.</p>
+    </div>
   </div>
 </div>

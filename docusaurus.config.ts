@@ -85,6 +85,8 @@ const config: Config = {
           editUrl: undefined,
         },
         blog: {
+          path: 'articles',
+          routeBasePath: 'articles',
           showReadingTime: true,
           feedOptions: {
             type: ['rss', 'atom'],
@@ -117,7 +119,7 @@ const config: Config = {
         indexBlog: true,
         indexPages: true,
         docsRouteBasePath: '/',
-        blogRouteBasePath: '/blog',
+        blogRouteBasePath: '/articles',
       },
     ],
   ],

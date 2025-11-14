@@ -197,8 +197,8 @@ const handleGroupModeChange = (newMode: string) => {
 const handleCustomPriceSet = (price: number) => {
   setEntryPrice(price);
 
-  // Track custom APY entry price usage
-  trackCustomEvent('APY', 'custom-price-set', String(price));
+  // Track custom APR entry price usage
+  trackCustomEvent('APR', 'custom-price-set', String(price));
 };
 ```
 
@@ -217,7 +217,7 @@ useEffect(() => {
 
 ```typescript
 trackCustomEvent(
-  category: string,  // e.g., 'Dashboard', 'APY', 'Loyalty'
+  category: string,  // e.g., 'Dashboard', 'APR', 'Loyalty'
   action: string,    // e.g., 'filter-change', 'custom-price-set'
   label?: string     // Optional: additional context
 ): void
@@ -293,9 +293,9 @@ Chart events are automatically formatted as:
 ```
 
 **Examples**:
-- `/chart/apy-chart/view`
-- `/chart/apy-chart/click`
-- `/chart/apy-chart/zoom`
+- `/chart/apr-chart/view`
+- `/chart/apr-chart/click`
+- `/chart/apr-chart/zoom`
 - `/chart/revenue-breakdown/click/date-2025-01-15/series-0`
 
 **Rules**:
@@ -312,11 +312,11 @@ Custom events are formatted as:
 
 **Examples**:
 - `/event/Dashboard/filter-change/group-token`
-- `/event/APY/custom-price-set/0.05`
+- `/event/APR/custom-price-set/0.05`
 - `/event/Loyalty/explore-segment/whales`
 
 **Rules**:
-- Use PascalCase for categories (Dashboard, APY, Loyalty, Usage)
+- Use PascalCase for categories (Dashboard, APR, Loyalty, Usage)
 - Use kebab-case for actions (filter-change, custom-price-set)
 - Labels are freeform but should be descriptive
 
@@ -325,7 +325,7 @@ Custom events are formatted as:
 | Category | Purpose | Example Actions |
 |----------|---------|----------------|
 | `Dashboard` | Main dashboard interactions | `filter-change`, `date-range-change` |
-| `APY` | APY chart features | `custom-price-set`, `view-personalized` |
+| `APR` | APR chart features | `custom-price-set`, `view-personalized` |
 | `Loyalty` | Loyalty analytics features | `explore-segment`, `view-whale-data` |
 | `Usage` | Usage statistics features | `view-top-addresses`, `sort-table` |
 | `Staking` | Staking analytics features | `view-wallet-timeline`, `filter-wallets` |
@@ -426,9 +426,9 @@ Shows all tracked pages and events sorted by popularity:
 Path                                          | Views
 --------------------------------------------- | -----
 /                                             | 1,234
-/analysis/defituna/staking-apy                | 456
-/chart/apy-chart/view                         | 234
-/chart/apy-chart/click                        | 45
+/analysis/defituna/staking-apr                | 456
+/chart/apr-chart/view                         | 234
+/chart/apr-chart/click                        | 45
 /event/Dashboard/filter-change/group-token    | 12
 ```
 
@@ -493,9 +493,9 @@ Group by: First two path segments
 Sort by: Views descending
 ```
 
-**What's the engagement rate for APY chart?**
+**What's the engagement rate for APR chart?**
 ```
-Filter: /chart/apy-chart/
+Filter: /chart/apr-chart/
 Calculate: (clicks + zooms) / views * 100
 ```
 
@@ -689,13 +689,13 @@ trackChartEvent(
 ```
 
 **Parameters**:
-- `chartName`: Display name of the chart (e.g., "APY Chart")
+- `chartName`: Display name of the chart (e.g., "APR Chart")
 - `action`: Type of interaction (e.g., "view", "click", "zoom")
 - `metadata`: Optional metadata to include in the event path
 
 **Example**:
 ```typescript
-trackChartEvent('APY Chart', 'view');
+trackChartEvent('APR Chart', 'view');
 trackChartEvent('Revenue Breakdown', 'click', { date: '2025-10-15' });
 ```
 
@@ -716,14 +716,14 @@ trackCustomEvent(
 ```
 
 **Parameters**:
-- `category`: Event category (e.g., "Dashboard", "APY", "Loyalty")
+- `category`: Event category (e.g., "Dashboard", "APR", "Loyalty")
 - `action`: Action performed (e.g., "filter-change", "custom-price-set")
 - `label`: Optional label for additional context
 
 **Example**:
 ```typescript
 trackCustomEvent('Dashboard', 'filter-change', 'group-token');
-trackCustomEvent('APY', 'custom-price-set', '0.05');
+trackCustomEvent('APR', 'custom-price-set', '0.05');
 ```
 
 **Event Path Format**: `/event/{category}/{action}/{label}`

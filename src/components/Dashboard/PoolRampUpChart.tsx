@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import Plot from 'react-plotly.js';
 import type { Data } from 'plotly.js';
 import { useColorMode } from '@docusaurus/theme-common';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 import { getPlotlyTemplate, defaultPlotlyConfig } from '@site/src/utils/plotlyTheme';
 import { useChartTracking } from '@site/src/hooks/useChartTracking';
 import LoadingSpinner from '../common/LoadingSpinner';
@@ -42,6 +43,7 @@ export default function PoolRampUpChart(): React.ReactElement {
   const { colorMode } = useColorMode();
   const isDark = colorMode === 'dark';
   const template = getPlotlyTemplate(isDark);
+  const poolDataPath = useBaseUrl('/data/pool_ramp_up.json');
 
   const [data, setData] = useState<PoolRampUpData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -58,7 +60,7 @@ export default function PoolRampUpChart(): React.ReactElement {
   });
 
   useEffect(() => {
-    fetch('/data/pool_ramp_up.json')
+    fetch(poolDataPath)
       .then(response => {
         if (!response.ok) {
           throw new Error(`Failed to load pool ramp-up data: ${response.status}`);
@@ -89,7 +91,7 @@ export default function PoolRampUpChart(): React.ReactElement {
         setError(err.message);
         setLoading(false);
       });
-  }, []);
+  }, [poolDataPath]);
 
   if (loading) {
     return <LoadingSpinner />;

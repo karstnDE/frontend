@@ -213,7 +213,7 @@ export interface StakerLoyaltyMetrics {
 }
 
 // ============================================================================
-// APY/APR Data (apr_data.json / apy_data.json)
+// APR Data (apr_data.json)
 // ============================================================================
 
 export interface AprDataPoint {
@@ -222,14 +222,14 @@ export interface AprDataPoint {
   your_apr_percent: number;
   rolling_days: number;
   rolling_revenue_sol: number;
-  rolling_revenue_usd: number;
+  rolling_revenue_usdc: number;
   annualized_revenue_sol: number;
-  annualized_revenue_usd: number;
+  annualized_revenue_usdc: number;
   tuna_price_usd: number;
   tuna_price_source: string;
-  revenue_per_tuna_usd: number;
+  revenue_per_tuna_usdc: number;
   daily_revenue_sol: number;
-  daily_revenue_usd: number;
+  daily_revenue_usdc: number;
   usd_sol_rate: number;
 }
 

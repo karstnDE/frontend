@@ -8,6 +8,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
 
+/* Import search dropdown fix */
+@import './search-dropdown-fix.css';
+
 :root {
   /* Teal accent colors */
   --accent: #00A3B4;
@@ -211,32 +214,11 @@ body {
   overflow: visible !important;
 }
 
-/* Autocomplete dropdown wrapper - position and z-index only */
-.aa-dropdown-menu,
-[class*="searchBar"] .aa-dropdown-menu,
-.navbar__search .aa-dropdown-menu {
-  position: absolute !important;
+/* Search container positioning */
+.navbar__search,
+[class*="navbarSearchContainer"] {
+  position: relative !important;
   z-index: 9999 !important;
-  pointer-events: auto !important;
-  top: 100% !important;
-  left: auto !important;
-  right: 0 !important;
-  margin-top: 8px !important;
-}
-
-/* Ensure search results dropdown appears above all navigation elements */
-/* Target all possible dropdown menu variations */
-[class*="searchBar"] [class*="dropdownMenu"],
-[class*="searchBar"] > div[class*="dropdownMenu"],
-div[class*="dropdownMenu"][class*="dropdownMenu"] {
-  position: absolute !important;
-  z-index: 9999 !important;
-  pointer-events: auto !important;
-  transform: none !important;
-  top: 100% !important;
-  margin-top: 8px !important;
-  left: auto !important;
-  right: 0 !important;
 }
 
 /* Match search results font size to navbar timestamp */

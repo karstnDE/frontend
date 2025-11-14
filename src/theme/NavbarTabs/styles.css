@@ -6,7 +6,7 @@
 .navbar-tabs {
   position: sticky;
   top: 56px; /* Stick below the navbar */
-  z-index: 99;
+  z-index: 99; /* Search dropdown has z-index: 10000, so it will appear above */
   margin-top: -1px; /* Pull up to overlap navbar by 1px for seamless blur */
   background: var(--navbar-tabs-bg-transparent); /* More transparent for glassmorphism effect */
   backdrop-filter: blur(12px) saturate(180%);
@@ -14,8 +14,7 @@
   border-bottom: 1px solid var(--ifm-toc-border-color); /* Only bottom border under tabs */
   display: flex;
   justify-content: center;
-  overflow-x: hidden;
-  overflow-y: visible; /* Changed from hidden to visible to allow search dropdown to show */
+  overflow: visible !important; /* Must be visible to allow search dropdown to show */
   width: 100%;
 }
 

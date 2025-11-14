@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
 export interface VestingSchedule {
   signature: string;
@@ -24,6 +25,8 @@ let isLoading = false;
 let loadPromise: Promise<void> | null = null;
 
 export function useVestingTimeline() {
+  const dataPath = useBaseUrl('/data/vesting_timeline.json');
+
   const [data, setData] = useState<VestingTimeline | null>(cachedData);
   const [loading, setLoading] = useState(!cachedData && !cachedError);
   const [error, setError] = useState<string | null>(cachedError);
@@ -53,7 +56,7 @@ export function useVestingTimeline() {
       try {
         isLoading = true;
         setLoading(true);
-        const response = await fetch('/data/vesting_timeline.json');
+        const response = await fetch(dataPath);
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}`);
         }

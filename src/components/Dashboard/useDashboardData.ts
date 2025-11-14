@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 import type { DashboardData, SummaryData, DailyDataPoint, TopTransactionsData } from './types';
-
-const BASE_PATH = '/data';
 
 // Module-level cache to prevent re-fetching on component remounts
 let cachedData: DashboardData | null = null;
@@ -12,6 +11,8 @@ let loadPromise: Promise<void> | null = null;
  * Custom hook to load all dashboard data from JSON files
  */
 export function useDashboardData(): DashboardData {
+  const BASE_PATH = useBaseUrl('/data');
+
   const [data, setData] = useState<DashboardData>(() => {
     // Initialize with cached data if available
     if (cachedData) {

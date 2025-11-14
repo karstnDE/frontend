@@ -1,6 +1,3 @@
-# MkDocs archive
-archive-mkdocs/
-
 # Docusaurus
 .docusaurus/
 build/
@@ -8,6 +5,9 @@ node_modules/
 
 # macOS
 .DS_Store
+
+# Claude Code
+.claude/
 
 # Generated data files (avoid conflicts with automated pipeline)
 static/data/

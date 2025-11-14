@@ -14,10 +14,10 @@ Historical Annual Percentage Rate (APR) for TUNA staking, calculated from DefiTu
 <BrowserOnly fallback={<LoadingSpinner />}>
   {() => {
     const { useEffect, useState } = require('react');
-    const { useApyData } = require('@site/src/hooks/useApyData');
+    const { useAprData } = require('@site/src/hooks/useAprData');
 
-    function ApySummaryStats() {
-      const { data, loading } = useApyData();
+    function AprSummaryStats() {
+      const { data, loading } = useAprData();
       const [userEntryPrice, setUserEntryPrice] = useState(null);
 
       useEffect(() => {
@@ -63,8 +63,8 @@ Historical Annual Percentage Rate (APR) for TUNA staking, calculated from DefiTu
       let customStats = null;
       if (userEntryPrice !== null && userEntryPrice > 0 && userEntryPrice !== 0.05 && data.daily_apr) {
         const customAprValues = data.daily_apr
-          .filter(d => d.revenue_per_tuna_usd)
-          .map(d => (d.revenue_per_tuna_usd / userEntryPrice) * 100);
+          .filter(d => d.revenue_per_tuna_usdc)
+          .map(d => (d.revenue_per_tuna_usdc / userEntryPrice) * 100);
 
         if (customAprValues.length > 0) {
           // Calculate 30-day average (last 30 values)
@@ -184,14 +184,14 @@ Historical Annual Percentage Rate (APR) for TUNA staking, calculated from DefiTu
       );
     }
 
-    return <ApySummaryStats />;
+    return <AprSummaryStats />;
   }}
 </BrowserOnly>
 
 <BrowserOnly fallback={<LoadingSpinner />}>
   {() => {
-    const ApyChart = require('@site/src/components/Dashboard/ApyChart').default;
-    return <ApyChart />;
+    const AprChart = require('@site/src/components/Dashboard/AprChart').default;
+    return <AprChart />;
   }}
 </BrowserOnly>
 
@@ -286,21 +286,21 @@ The APR calculation follows these steps:
 <BrowserOnly fallback={<div>Loading example...</div>}>
   {() => {
     const { useEffect, useState } = require('react');
-    const { useApyData } = require('@site/src/hooks/useApyData');
+    const { useAprData } = require('@site/src/hooks/useAprData');
 
     function ExampleCalculation() {
-      const { data: apyData, loading } = useApyData();
+      const { data: aprData, loading } = useAprData();
       const [data, setData] = useState(null);
 
       useEffect(() => {
-        if (apyData?.daily_apr) {
+        if (aprData?.daily_apr) {
           // Get the last entry (most recent date with full 30-day window)
-          const fullWindowData = apyData.daily_apr.filter(d => d.rolling_days === 30);
+          const fullWindowData = aprData.daily_apr.filter(d => d.rolling_days === 30);
           if (fullWindowData.length > 0) {
             setData(fullWindowData[fullWindowData.length - 1]);
           }
         }
-      }, [apyData]);
+      }, [aprData]);
 
       if (!data) {
         return <div style={{ padding: '16px', color: 'var(--ifm-color-secondary)' }}>Loading calculation example...</div>;
@@ -313,18 +313,18 @@ The APR calculation follows these steps:
         <div>
           <p>Using actual data from {data.date}:</p>
           <ul>
-            <li>30-day rolling revenue: ${formatCurrency(data.rolling_revenue_usd)} USD ({formatCurrency(data.rolling_revenue_sol)} SOL)</li>
+            <li>30-day rolling revenue: ${formatCurrency(data.rolling_revenue_usdc)} USDC ({formatCurrency(data.rolling_revenue_sol)} SOL)</li>
             <li>TUNA Reference Price: ${formatPrice(data.tuna_price_usd)} USD (from on-chain swap data)</li>
             <li>Your entry price: $0.05 USD (default)</li>
           </ul>
 
           <p>The APR would be calculated as:</p>
           <pre style={{ background: 'var(--ifm-code-background)', padding: '16px', borderRadius: 'var(--ifm-global-radius)', overflow: 'auto' }}>
-{`Annualized Revenue = ($${formatCurrency(data.rolling_revenue_usd)} / ${data.rolling_days}) × 365 = $${formatCurrency(data.annualized_revenue_usd)} USD
-Revenue per TUNA = $${formatCurrency(data.annualized_revenue_usd)} / 1,000,000,000 = $${formatPrice(data.revenue_per_tuna_usd)} USD
+{`Annualized Revenue = ($${formatCurrency(data.rolling_revenue_usdc)} / ${data.rolling_days}) × 365 = $${formatCurrency(data.annualized_revenue_usdc)} USDC
+Revenue per TUNA = $${formatCurrency(data.annualized_revenue_usdc)} / 1,000,000,000 = $${formatPrice(data.revenue_per_tuna_usdc)} USDC
 
-Reference APR = ($${formatPrice(data.revenue_per_tuna_usd)} / $${formatPrice(data.tuna_price_usd)}) × 100 = ${data.reference_apr_percent.toFixed(2)}%
-Entry Price APR = ($${formatPrice(data.revenue_per_tuna_usd)} / $0.05) × 100 = ${data.your_apr_percent.toFixed(2)}%`}
+Reference APR = ($${formatPrice(data.revenue_per_tuna_usdc)} / $${formatPrice(data.tuna_price_usd)}) × 100 = ${data.reference_apr_percent.toFixed(2)}%
+Entry Price APR = ($${formatPrice(data.revenue_per_tuna_usdc)} / $0.05) × 100 = ${data.your_apr_percent.toFixed(2)}%`}
           </pre>
 
           <p>This shows how early investors with a lower entry price achieve higher APR on the same protocol revenue.</p>

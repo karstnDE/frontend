@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
 export interface UsageDailyRecord {
   date: string;
@@ -47,6 +48,8 @@ let isLoading = false;
 let loadPromise: Promise<void> | null = null;
 
 export function useUsageMetrics() {
+  const dataPath = useBaseUrl('/data/usage_metrics.json');
+
   const [data, setData] = useState<UsageMetrics | null>(cachedData);
   const [loading, setLoading] = useState(!cachedData && !cachedError);
   const [error, setError] = useState<string | null>(cachedError);
@@ -76,7 +79,7 @@ export function useUsageMetrics() {
       try {
         isLoading = true;
         setLoading(true);
-        const response = await fetch('/data/usage_metrics.json');
+        const response = await fetch(dataPath);
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}`);
         }
