@@ -24,20 +24,20 @@ const tabs: NavTab[] = [
   {
     label: 'Intro',
     to: '/',
-    activePattern: /^\/(intro\/)?$/,
+    activePattern: /^\/(frontend\/)?(intro\/.*)?$/,
     Icon: Compass,
   },
   {
     label: 'Articles',
     to: '/blog',
-    activePattern: /^\/blog/,
+    activePattern: /^\/(frontend\/)?blog/,
     Icon: NotepadIcon,
     disabled: true,
   },
   {
     label: 'Analysis',
     to: '/analysis/overview',
-    activePattern: /^\/analysis\//,
+    activePattern: /^\/(frontend\/)?analysis\//,
     Icon: ChartBarIcon,
   },
 ];
