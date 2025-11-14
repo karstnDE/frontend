@@ -1,0 +1,2438 @@
+{
+  "metadata": {
+    "generated_at": "2025-11-14T02:16:33.430797+00:00",
+    "date_range": {
+      "start": "2025-07-24",
+      "end": "2025-11-13"
+    },
+    "total_positions_opened": 11961,
+    "total_volume_sol": 768231.758571,
+    "avg_position_size_sol": 64.228054
+  },
+  "daily_metrics": [
+    {
+      "date": "2025-07-24",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-07-25",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-07-26",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-07-27",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-07-28",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-07-29",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-07-30",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-07-31",
+      "total_count": 298,
+      "total_volume_sol": 3918.387703,
+      "avg_position_size_sol": 13.148952,
+      "by_dex": {
+        "fusion": {
+          "count": 99,
+          "volume_sol": 28.226463
+        },
+        "orca": {
+          "count": 199,
+          "volume_sol": 3890.16124
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 102,
+          "volume_sol": 1401.287416
+        },
+        {
+          "pool": "C9U2Ksk6KKWvLEeo5yUQ7Xu46X7NzeBJtd9PBfuXaUSM",
+          "label": "Orca (SOL\u2013FARTCOIN )",
+          "count": 14,
+          "volume_sol": 1019.186565
+        },
+        {
+          "pool": "FwewVm8u6tFPGewAyHmWAqad9hmF7mvqxK4mJ7iNqqGC",
+          "label": "Orca (SOL\u2013USDT)",
+          "count": 11,
+          "volume_sol": 933.61182
+        },
+        {
+          "pool": "HsQGWEh3ib6w59rBh5n1jXmi8VXFBqKEjxozL6PGfcgb",
+          "label": "Orca (SOL\u2013USELESS)",
+          "count": 19,
+          "volume_sol": 308.945454
+        },
+        {
+          "pool": "CeaZcxBNLpJWtxzt58qQmfMBtJY8pQLvursXTJYGQpbN",
+          "label": "Orca (SOL\u2013CBBTC)",
+          "count": 3,
+          "volume_sol": 89.786564
+        }
+      ]
+    },
+    {
+      "date": "2025-08-01",
+      "total_count": 483,
+      "total_volume_sol": 13771.77582,
+      "avg_position_size_sol": 28.512993,
+      "by_dex": {
+        "fusion": {
+          "count": 82,
+          "volume_sol": 5.330634
+        },
+        "orca": {
+          "count": 401,
+          "volume_sol": 13766.445186
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 204,
+          "volume_sol": 5398.295736
+        },
+        {
+          "pool": "HsQGWEh3ib6w59rBh5n1jXmi8VXFBqKEjxozL6PGfcgb",
+          "label": "Orca (SOL\u2013USELESS)",
+          "count": 38,
+          "volume_sol": 3349.788918
+        },
+        {
+          "pool": "FwewVm8u6tFPGewAyHmWAqad9hmF7mvqxK4mJ7iNqqGC",
+          "label": "Orca (SOL\u2013USDT)",
+          "count": 33,
+          "volume_sol": 1901.84326
+        },
+        {
+          "pool": "C9U2Ksk6KKWvLEeo5yUQ7Xu46X7NzeBJtd9PBfuXaUSM",
+          "label": "Orca (SOL\u2013FARTCOIN )",
+          "count": 21,
+          "volume_sol": 1088.739105
+        },
+        {
+          "pool": "B5EwJVDuAauzUEEdwvbuXzbFFgEYnUqqS37TUM1c4PQA",
+          "label": "Orca (SOL\u2013WBTC)",
+          "count": 2,
+          "volume_sol": 728.099997
+        }
+      ]
+    },
+    {
+      "date": "2025-08-02",
+      "total_count": 288,
+      "total_volume_sol": 18107.291056,
+      "avg_position_size_sol": 62.872538,
+      "by_dex": {
+        "orca": {
+          "count": 249,
+          "volume_sol": 16994.253361
+        },
+        "fusion": {
+          "count": 39,
+          "volume_sol": 1113.037695
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 128,
+          "volume_sol": 10063.304251
+        },
+        {
+          "pool": "C9U2Ksk6KKWvLEeo5yUQ7Xu46X7NzeBJtd9PBfuXaUSM",
+          "label": "Orca (SOL\u2013FARTCOIN )",
+          "count": 16,
+          "volume_sol": 2699.894101
+        },
+        {
+          "pool": "9vNKzrrHAjqjuTGLjCBo9Ai4edMYgP9dsG4tFZ2hF251",
+          "label": "Orca (GP\u2013USDC)",
+          "count": 38,
+          "volume_sol": 1037.387858
+        },
+        {
+          "pool": "AXB9KoFBT4ZxJgc4bHMYDgSkxjox6JuL3bbLBeL8LdSJ",
+          "label": "Fusion USDC-TUNA",
+          "count": 34,
+          "volume_sol": 1010.613377
+        },
+        {
+          "pool": "FwewVm8u6tFPGewAyHmWAqad9hmF7mvqxK4mJ7iNqqGC",
+          "label": "Orca (SOL\u2013USDT)",
+          "count": 8,
+          "volume_sol": 762.706904
+        }
+      ]
+    },
+    {
+      "date": "2025-08-03",
+      "total_count": 212,
+      "total_volume_sol": 13509.408192,
+      "avg_position_size_sol": 63.723624,
+      "by_dex": {
+        "orca": {
+          "count": 180,
+          "volume_sol": 11633.271469
+        },
+        "fusion": {
+          "count": 32,
+          "volume_sol": 1876.136723
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 94,
+          "volume_sol": 8402.905137
+        },
+        {
+          "pool": "AXB9KoFBT4ZxJgc4bHMYDgSkxjox6JuL3bbLBeL8LdSJ",
+          "label": "Fusion USDC-TUNA",
+          "count": 26,
+          "volume_sol": 1849.559381
+        },
+        {
+          "pool": "C9U2Ksk6KKWvLEeo5yUQ7Xu46X7NzeBJtd9PBfuXaUSM",
+          "label": "Orca (SOL\u2013FARTCOIN )",
+          "count": 13,
+          "volume_sol": 779.822731
+        },
+        {
+          "pool": "FwewVm8u6tFPGewAyHmWAqad9hmF7mvqxK4mJ7iNqqGC",
+          "label": "Orca (SOL\u2013USDT)",
+          "count": 9,
+          "volume_sol": 759.410813
+        },
+        {
+          "pool": "9vNKzrrHAjqjuTGLjCBo9Ai4edMYgP9dsG4tFZ2hF251",
+          "label": "Orca (GP\u2013USDC)",
+          "count": 24,
+          "volume_sol": 539.941179
+        }
+      ]
+    },
+    {
+      "date": "2025-08-04",
+      "total_count": 380,
+      "total_volume_sol": 26568.887382,
+      "avg_position_size_sol": 69.918125,
+      "by_dex": {
+        "orca": {
+          "count": 348,
+          "volume_sol": 22252.934809
+        },
+        "fusion": {
+          "count": 32,
+          "volume_sol": 4315.952573
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 132,
+          "volume_sol": 13250.044635
+        },
+        {
+          "pool": "9vNKzrrHAjqjuTGLjCBo9Ai4edMYgP9dsG4tFZ2hF251",
+          "label": "Orca (GP\u2013USDC)",
+          "count": 101,
+          "volume_sol": 2565.827901
+        },
+        {
+          "pool": "7VuKeevbvbQQcxz6N4SNLmuq6PYy4AcGQRDssoqo4t65",
+          "label": "Fusion WSOL-USDC",
+          "count": 8,
+          "volume_sol": 2359.497571
+        },
+        {
+          "pool": "C9U2Ksk6KKWvLEeo5yUQ7Xu46X7NzeBJtd9PBfuXaUSM",
+          "label": "Orca (SOL\u2013FARTCOIN )",
+          "count": 18,
+          "volume_sol": 2067.653404
+        },
+        {
+          "pool": "FwewVm8u6tFPGewAyHmWAqad9hmF7mvqxK4mJ7iNqqGC",
+          "label": "Orca (SOL\u2013USDT)",
+          "count": 23,
+          "volume_sol": 1933.28009
+        }
+      ]
+    },
+    {
+      "date": "2025-08-05",
+      "total_count": 494,
+      "total_volume_sol": 31534.012141,
+      "avg_position_size_sol": 63.834033,
+      "by_dex": {
+        "orca": {
+          "count": 449,
+          "volume_sol": 17274.384879
+        },
+        "fusion": {
+          "count": 45,
+          "volume_sol": 14259.627262
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "7VuKeevbvbQQcxz6N4SNLmuq6PYy4AcGQRDssoqo4t65",
+          "label": "Fusion WSOL-USDC",
+          "count": 27,
+          "volume_sol": 12910.772705
+        },
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 98,
+          "volume_sol": 7652.469065
+        },
+        {
+          "pool": "9vNKzrrHAjqjuTGLjCBo9Ai4edMYgP9dsG4tFZ2hF251",
+          "label": "Orca (GP\u2013USDC)",
+          "count": 215,
+          "volume_sol": 4584.153793
+        },
+        {
+          "pool": "HsQGWEh3ib6w59rBh5n1jXmi8VXFBqKEjxozL6PGfcgb",
+          "label": "Orca (SOL\u2013USELESS)",
+          "count": 61,
+          "volume_sol": 1999.72618
+        },
+        {
+          "pool": "AXB9KoFBT4ZxJgc4bHMYDgSkxjox6JuL3bbLBeL8LdSJ",
+          "label": "Fusion USDC-TUNA",
+          "count": 16,
+          "volume_sol": 1318.06964
+        }
+      ]
+    },
+    {
+      "date": "2025-08-06",
+      "total_count": 432,
+      "total_volume_sol": 14885.927629,
+      "avg_position_size_sol": 34.458166,
+      "by_dex": {
+        "orca": {
+          "count": 416,
+          "volume_sol": 13613.647938
+        },
+        "fusion": {
+          "count": 16,
+          "volume_sol": 1272.279691
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 121,
+          "volume_sol": 9039.588054
+        },
+        {
+          "pool": "9vNKzrrHAjqjuTGLjCBo9Ai4edMYgP9dsG4tFZ2hF251",
+          "label": "Orca (GP\u2013USDC)",
+          "count": 158,
+          "volume_sol": 2314.353513
+        },
+        {
+          "pool": "AXB9KoFBT4ZxJgc4bHMYDgSkxjox6JuL3bbLBeL8LdSJ",
+          "label": "Fusion USDC-TUNA",
+          "count": 15,
+          "volume_sol": 1269.25938
+        },
+        {
+          "pool": "C9U2Ksk6KKWvLEeo5yUQ7Xu46X7NzeBJtd9PBfuXaUSM",
+          "label": "Orca (SOL\u2013FARTCOIN )",
+          "count": 31,
+          "volume_sol": 1005.931873
+        },
+        {
+          "pool": "HsQGWEh3ib6w59rBh5n1jXmi8VXFBqKEjxozL6PGfcgb",
+          "label": "Orca (SOL\u2013USELESS)",
+          "count": 57,
+          "volume_sol": 762.323819
+        }
+      ]
+    },
+    {
+      "date": "2025-08-07",
+      "total_count": 461,
+      "total_volume_sol": 25034.826635,
+      "avg_position_size_sol": 54.305481,
+      "by_dex": {
+        "orca": {
+          "count": 420,
+          "volume_sol": 22367.165896
+        },
+        "fusion": {
+          "count": 41,
+          "volume_sol": 2667.660738
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 118,
+          "volume_sol": 17296.11825
+        },
+        {
+          "pool": "AXB9KoFBT4ZxJgc4bHMYDgSkxjox6JuL3bbLBeL8LdSJ",
+          "label": "Fusion USDC-TUNA",
+          "count": 31,
+          "volume_sol": 2483.459733
+        },
+        {
+          "pool": "9vNKzrrHAjqjuTGLjCBo9Ai4edMYgP9dsG4tFZ2hF251",
+          "label": "Orca (GP\u2013USDC)",
+          "count": 167,
+          "volume_sol": 2319.276646
+        },
+        {
+          "pool": "HsQGWEh3ib6w59rBh5n1jXmi8VXFBqKEjxozL6PGfcgb",
+          "label": "Orca (SOL\u2013USELESS)",
+          "count": 45,
+          "volume_sol": 542.909675
+        },
+        {
+          "pool": "6NUiVmsNjsi4AfsMsEiaezsaV9N4N1ZrD4jEnuWNRvyb",
+          "label": "Orca (JLP\u2013USDC)",
+          "count": 4,
+          "volume_sol": 501.859498
+        }
+      ]
+    },
+    {
+      "date": "2025-08-08",
+      "total_count": 369,
+      "total_volume_sol": 19200.533816,
+      "avg_position_size_sol": 52.033967,
+      "by_dex": {
+        "orca": {
+          "count": 364,
+          "volume_sol": 19032.269446
+        },
+        "fusion": {
+          "count": 5,
+          "volume_sol": 168.26437
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 135,
+          "volume_sol": 13683.903335
+        },
+        {
+          "pool": "9vNKzrrHAjqjuTGLjCBo9Ai4edMYgP9dsG4tFZ2hF251",
+          "label": "Orca (GP\u2013USDC)",
+          "count": 77,
+          "volume_sol": 929.315998
+        },
+        {
+          "pool": "FwewVm8u6tFPGewAyHmWAqad9hmF7mvqxK4mJ7iNqqGC",
+          "label": "Orca (SOL\u2013USDT)",
+          "count": 22,
+          "volume_sol": 801.182091
+        },
+        {
+          "pool": "HsQGWEh3ib6w59rBh5n1jXmi8VXFBqKEjxozL6PGfcgb",
+          "label": "Orca (SOL\u2013USELESS)",
+          "count": 46,
+          "volume_sol": 792.328994
+        },
+        {
+          "pool": "C9U2Ksk6KKWvLEeo5yUQ7Xu46X7NzeBJtd9PBfuXaUSM",
+          "label": "Orca (SOL\u2013FARTCOIN )",
+          "count": 28,
+          "volume_sol": 764.399713
+        }
+      ]
+    },
+    {
+      "date": "2025-08-09",
+      "total_count": 394,
+      "total_volume_sol": 28841.310332,
+      "avg_position_size_sol": 73.201295,
+      "by_dex": {
+        "orca": {
+          "count": 384,
+          "volume_sol": 28551.275035
+        },
+        "fusion": {
+          "count": 10,
+          "volume_sol": 290.035296
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 136,
+          "volume_sol": 23250.580083
+        },
+        {
+          "pool": "9vNKzrrHAjqjuTGLjCBo9Ai4edMYgP9dsG4tFZ2hF251",
+          "label": "Orca (GP\u2013USDC)",
+          "count": 79,
+          "volume_sol": 1015.349795
+        },
+        {
+          "pool": "FwewVm8u6tFPGewAyHmWAqad9hmF7mvqxK4mJ7iNqqGC",
+          "label": "Orca (SOL\u2013USDT)",
+          "count": 29,
+          "volume_sol": 773.887533
+        },
+        {
+          "pool": "HsQGWEh3ib6w59rBh5n1jXmi8VXFBqKEjxozL6PGfcgb",
+          "label": "Orca (SOL\u2013USELESS)",
+          "count": 58,
+          "volume_sol": 572.779574
+        },
+        {
+          "pool": "C9U2Ksk6KKWvLEeo5yUQ7Xu46X7NzeBJtd9PBfuXaUSM",
+          "label": "Orca (SOL\u2013FARTCOIN )",
+          "count": 13,
+          "volume_sol": 565.00215
+        }
+      ]
+    },
+    {
+      "date": "2025-08-10",
+      "total_count": 340,
+      "total_volume_sol": 20663.250016,
+      "avg_position_size_sol": 60.774265,
+      "by_dex": {
+        "orca": {
+          "count": 313,
+          "volume_sol": 18188.978224
+        },
+        "fusion": {
+          "count": 27,
+          "volume_sol": 2474.271792
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 111,
+          "volume_sol": 13018.785488
+        },
+        {
+          "pool": "AXB9KoFBT4ZxJgc4bHMYDgSkxjox6JuL3bbLBeL8LdSJ",
+          "label": "Fusion USDC-TUNA",
+          "count": 26,
+          "volume_sol": 2305.223159
+        },
+        {
+          "pool": "FwewVm8u6tFPGewAyHmWAqad9hmF7mvqxK4mJ7iNqqGC",
+          "label": "Orca (SOL\u2013USDT)",
+          "count": 29,
+          "volume_sol": 1336.832817
+        },
+        {
+          "pool": "CeaZcxBNLpJWtxzt58qQmfMBtJY8pQLvursXTJYGQpbN",
+          "label": "Orca (SOL\u2013CBBTC)",
+          "count": 13,
+          "volume_sol": 1173.034356
+        },
+        {
+          "pool": "HsQGWEh3ib6w59rBh5n1jXmi8VXFBqKEjxozL6PGfcgb",
+          "label": "Orca (SOL\u2013USELESS)",
+          "count": 50,
+          "volume_sol": 597.931
+        }
+      ]
+    },
+    {
+      "date": "2025-08-11",
+      "total_count": 498,
+      "total_volume_sol": 44988.957643,
+      "avg_position_size_sol": 90.339272,
+      "by_dex": {
+        "orca": {
+          "count": 375,
+          "volume_sol": 33304.267496
+        },
+        "fusion": {
+          "count": 123,
+          "volume_sol": 11684.690148
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 136,
+          "volume_sol": 24035.459138
+        },
+        {
+          "pool": "AXB9KoFBT4ZxJgc4bHMYDgSkxjox6JuL3bbLBeL8LdSJ",
+          "label": "Fusion USDC-TUNA",
+          "count": 120,
+          "volume_sol": 11438.275552
+        },
+        {
+          "pool": "9vNKzrrHAjqjuTGLjCBo9Ai4edMYgP9dsG4tFZ2hF251",
+          "label": "Orca (GP\u2013USDC)",
+          "count": 70,
+          "volume_sol": 2394.037412
+        },
+        {
+          "pool": "FwewVm8u6tFPGewAyHmWAqad9hmF7mvqxK4mJ7iNqqGC",
+          "label": "Orca (SOL\u2013USDT)",
+          "count": 29,
+          "volume_sol": 1822.455388
+        },
+        {
+          "pool": "C1MgLojNLWBKADvu9BHdtgzz1oZX4dZ5zGdGcgvvW8Wz",
+          "label": "Orca (JUP\u2013SOL)",
+          "count": 6,
+          "volume_sol": 1300.705834
+        }
+      ]
+    },
+    {
+      "date": "2025-08-12",
+      "total_count": 445,
+      "total_volume_sol": 107075.245193,
+      "avg_position_size_sol": 240.618529,
+      "by_dex": {
+        "orca": {
+          "count": 387,
+          "volume_sol": 42933.678103
+        },
+        "fusion": {
+          "count": 58,
+          "volume_sol": 64141.567089
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "7VuKeevbvbQQcxz6N4SNLmuq6PYy4AcGQRDssoqo4t65",
+          "label": "Fusion WSOL-USDC",
+          "count": 9,
+          "volume_sol": 61748.561027
+        },
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 176,
+          "volume_sol": 28288.652508
+        },
+        {
+          "pool": "HktfL7iwGKT5QHjywQkcDnZXScoh811k7akrMZJkCcEF",
+          "label": "Orca (SOL\u2013ETH)",
+          "count": 10,
+          "volume_sol": 2834.803512
+        },
+        {
+          "pool": "C9U2Ksk6KKWvLEeo5yUQ7Xu46X7NzeBJtd9PBfuXaUSM",
+          "label": "Orca (SOL\u2013FARTCOIN )",
+          "count": 33,
+          "volume_sol": 2437.269942
+        },
+        {
+          "pool": "AXB9KoFBT4ZxJgc4bHMYDgSkxjox6JuL3bbLBeL8LdSJ",
+          "label": "Fusion USDC-TUNA",
+          "count": 45,
+          "volume_sol": 2340.693148
+        }
+      ]
+    },
+    {
+      "date": "2025-08-13",
+      "total_count": 662,
+      "total_volume_sol": 61665.779647,
+      "avg_position_size_sol": 93.150725,
+      "by_dex": {
+        "orca": {
+          "count": 601,
+          "volume_sol": 55754.304759
+        },
+        "fusion": {
+          "count": 61,
+          "volume_sol": 5911.474888
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 271,
+          "volume_sol": 31667.283585
+        },
+        {
+          "pool": "6a3m2EgFFKfsFuQtP4LJJXPcAe3TQYXNyHUjjZpUxYgd",
+          "label": "Orca (SOL\u2013JLP)",
+          "count": 12,
+          "volume_sol": 6412.11595
+        },
+        {
+          "pool": "FwewVm8u6tFPGewAyHmWAqad9hmF7mvqxK4mJ7iNqqGC",
+          "label": "Orca (SOL\u2013USDT)",
+          "count": 47,
+          "volume_sol": 4409.342733
+        },
+        {
+          "pool": "CeaZcxBNLpJWtxzt58qQmfMBtJY8pQLvursXTJYGQpbN",
+          "label": "Orca (SOL\u2013CBBTC)",
+          "count": 19,
+          "volume_sol": 4115.436844
+        },
+        {
+          "pool": "AXB9KoFBT4ZxJgc4bHMYDgSkxjox6JuL3bbLBeL8LdSJ",
+          "label": "Fusion USDC-TUNA",
+          "count": 44,
+          "volume_sol": 3222.376881
+        }
+      ]
+    },
+    {
+      "date": "2025-08-14",
+      "total_count": 620,
+      "total_volume_sol": 64804.966959,
+      "avg_position_size_sol": 104.52414,
+      "by_dex": {
+        "orca": {
+          "count": 518,
+          "volume_sol": 47559.755797
+        },
+        "fusion": {
+          "count": 102,
+          "volume_sol": 17245.211162
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 238,
+          "volume_sol": 23479.043111
+        },
+        {
+          "pool": "7VuKeevbvbQQcxz6N4SNLmuq6PYy4AcGQRDssoqo4t65",
+          "label": "Fusion WSOL-USDC",
+          "count": 34,
+          "volume_sol": 11031.113576
+        },
+        {
+          "pool": "AXB9KoFBT4ZxJgc4bHMYDgSkxjox6JuL3bbLBeL8LdSJ",
+          "label": "Fusion USDC-TUNA",
+          "count": 67,
+          "volume_sol": 6214.067022
+        },
+        {
+          "pool": "6a3m2EgFFKfsFuQtP4LJJXPcAe3TQYXNyHUjjZpUxYgd",
+          "label": "Orca (SOL\u2013JLP)",
+          "count": 9,
+          "volume_sol": 6038.816073
+        },
+        {
+          "pool": "CeaZcxBNLpJWtxzt58qQmfMBtJY8pQLvursXTJYGQpbN",
+          "label": "Orca (SOL\u2013CBBTC)",
+          "count": 23,
+          "volume_sol": 5013.274937
+        }
+      ]
+    },
+    {
+      "date": "2025-08-15",
+      "total_count": 377,
+      "total_volume_sol": 37295.735215,
+      "avg_position_size_sol": 98.92768,
+      "by_dex": {
+        "orca": {
+          "count": 335,
+          "volume_sol": 31092.323874
+        },
+        "fusion": {
+          "count": 42,
+          "volume_sol": 6203.41134
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 144,
+          "volume_sol": 20600.273355
+        },
+        {
+          "pool": "7VuKeevbvbQQcxz6N4SNLmuq6PYy4AcGQRDssoqo4t65",
+          "label": "Fusion WSOL-USDC",
+          "count": 18,
+          "volume_sol": 4023.237231
+        },
+        {
+          "pool": "6a3m2EgFFKfsFuQtP4LJJXPcAe3TQYXNyHUjjZpUxYgd",
+          "label": "Orca (SOL\u2013JLP)",
+          "count": 4,
+          "volume_sol": 3648.89958
+        },
+        {
+          "pool": "AXB9KoFBT4ZxJgc4bHMYDgSkxjox6JuL3bbLBeL8LdSJ",
+          "label": "Fusion USDC-TUNA",
+          "count": 24,
+          "volume_sol": 2180.174109
+        },
+        {
+          "pool": "HsQGWEh3ib6w59rBh5n1jXmi8VXFBqKEjxozL6PGfcgb",
+          "label": "Orca (SOL\u2013USELESS)",
+          "count": 97,
+          "volume_sol": 1757.60584
+        }
+      ]
+    },
+    {
+      "date": "2025-08-16",
+      "total_count": 481,
+      "total_volume_sol": 40801.608189,
+      "avg_position_size_sol": 84.826628,
+      "by_dex": {
+        "orca": {
+          "count": 281,
+          "volume_sol": 18827.249654
+        },
+        "fusion": {
+          "count": 200,
+          "volume_sol": 21974.358535
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "AXB9KoFBT4ZxJgc4bHMYDgSkxjox6JuL3bbLBeL8LdSJ",
+          "label": "Fusion USDC-TUNA",
+          "count": 178,
+          "volume_sol": 20738.577084
+        },
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 96,
+          "volume_sol": 10762.445485
+        },
+        {
+          "pool": "HsQGWEh3ib6w59rBh5n1jXmi8VXFBqKEjxozL6PGfcgb",
+          "label": "Orca (SOL\u2013USELESS)",
+          "count": 121,
+          "volume_sol": 5607.901976
+        },
+        {
+          "pool": "B79cNdgpBao2yFkaysgtTK9vU13iXFyYamr5ntwauFtz",
+          "label": "Fusion WSOL-TUNA",
+          "count": 4,
+          "volume_sol": 798.225287
+        },
+        {
+          "pool": "FwewVm8u6tFPGewAyHmWAqad9hmF7mvqxK4mJ7iNqqGC",
+          "label": "Orca (SOL\u2013USDT)",
+          "count": 4,
+          "volume_sol": 572.10864
+        }
+      ]
+    },
+    {
+      "date": "2025-08-17",
+      "total_count": 331,
+      "total_volume_sol": 28999.04773,
+      "avg_position_size_sol": 87.610416,
+      "by_dex": {
+        "fusion": {
+          "count": 54,
+          "volume_sol": 4446.560976
+        },
+        "orca": {
+          "count": 277,
+          "volume_sol": 24552.486754
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 125,
+          "volume_sol": 15951.803748
+        },
+        {
+          "pool": "6NUiVmsNjsi4AfsMsEiaezsaV9N4N1ZrD4jEnuWNRvyb",
+          "label": "Orca (JLP\u2013USDC)",
+          "count": 13,
+          "volume_sol": 5292.119667
+        },
+        {
+          "pool": "AXB9KoFBT4ZxJgc4bHMYDgSkxjox6JuL3bbLBeL8LdSJ",
+          "label": "Fusion USDC-TUNA",
+          "count": 42,
+          "volume_sol": 4380.545956
+        },
+        {
+          "pool": "FwewVm8u6tFPGewAyHmWAqad9hmF7mvqxK4mJ7iNqqGC",
+          "label": "Orca (SOL\u2013USDT)",
+          "count": 12,
+          "volume_sol": 816.862704
+        },
+        {
+          "pool": "HsQGWEh3ib6w59rBh5n1jXmi8VXFBqKEjxozL6PGfcgb",
+          "label": "Orca (SOL\u2013USELESS)",
+          "count": 69,
+          "volume_sol": 646.364688
+        }
+      ]
+    },
+    {
+      "date": "2025-08-18",
+      "total_count": 289,
+      "total_volume_sol": 38078.747286,
+      "avg_position_size_sol": 131.760371,
+      "by_dex": {
+        "orca": {
+          "count": 216,
+          "volume_sol": 28169.378671
+        },
+        "fusion": {
+          "count": 73,
+          "volume_sol": 9909.368615
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 118,
+          "volume_sol": 14683.07179
+        },
+        {
+          "pool": "AXB9KoFBT4ZxJgc4bHMYDgSkxjox6JuL3bbLBeL8LdSJ",
+          "label": "Fusion USDC-TUNA",
+          "count": 58,
+          "volume_sol": 7820.288812
+        },
+        {
+          "pool": "6a3m2EgFFKfsFuQtP4LJJXPcAe3TQYXNyHUjjZpUxYgd",
+          "label": "Orca (SOL\u2013JLP)",
+          "count": 9,
+          "volume_sol": 6158.953269
+        },
+        {
+          "pool": "6NUiVmsNjsi4AfsMsEiaezsaV9N4N1ZrD4jEnuWNRvyb",
+          "label": "Orca (JLP\u2013USDC)",
+          "count": 6,
+          "volume_sol": 3740.530626
+        },
+        {
+          "pool": "7VuKeevbvbQQcxz6N4SNLmuq6PYy4AcGQRDssoqo4t65",
+          "label": "Fusion WSOL-USDC",
+          "count": 15,
+          "volume_sol": 2089.079802
+        }
+      ]
+    },
+    {
+      "date": "2025-08-19",
+      "total_count": 299,
+      "total_volume_sol": 22596.695193,
+      "avg_position_size_sol": 75.574231,
+      "by_dex": {
+        "orca": {
+          "count": 195,
+          "volume_sol": 10443.505691
+        },
+        "fusion": {
+          "count": 104,
+          "volume_sol": 12153.189502
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "AXB9KoFBT4ZxJgc4bHMYDgSkxjox6JuL3bbLBeL8LdSJ",
+          "label": "Fusion USDC-TUNA",
+          "count": 92,
+          "volume_sol": 10796.967712
+        },
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 86,
+          "volume_sol": 7310.670722
+        },
+        {
+          "pool": "7VuKeevbvbQQcxz6N4SNLmuq6PYy4AcGQRDssoqo4t65",
+          "label": "Fusion WSOL-USDC",
+          "count": 9,
+          "volume_sol": 1343.306804
+        },
+        {
+          "pool": "FwewVm8u6tFPGewAyHmWAqad9hmF7mvqxK4mJ7iNqqGC",
+          "label": "Orca (SOL\u2013USDT)",
+          "count": 13,
+          "volume_sol": 1028.466391
+        },
+        {
+          "pool": "6a3m2EgFFKfsFuQtP4LJJXPcAe3TQYXNyHUjjZpUxYgd",
+          "label": "Orca (SOL\u2013JLP)",
+          "count": 6,
+          "volume_sol": 668.137336
+        }
+      ]
+    },
+    {
+      "date": "2025-08-20",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-08-21",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-08-22",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-08-23",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-08-24",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-08-25",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-08-26",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-08-27",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-08-28",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-08-29",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-08-30",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-08-31",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-09-01",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-09-02",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-09-03",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-09-04",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-09-05",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-09-06",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-09-07",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-09-08",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-09-09",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-09-10",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-09-11",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-09-12",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-09-13",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-09-14",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-09-15",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-09-16",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-09-17",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-09-18",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-09-19",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-09-20",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-09-21",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-09-22",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-09-23",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-09-24",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-09-25",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-09-26",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-09-27",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-09-28",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-09-29",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-09-30",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-10-01",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-10-02",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-10-03",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-10-04",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-10-05",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-10-06",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-10-07",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-10-08",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-10-09",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-10-10",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-10-11",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-10-12",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-10-13",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-10-14",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-10-15",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-10-16",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-10-17",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-10-18",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-10-19",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-10-20",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-10-21",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-10-22",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-10-23",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-10-24",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-10-25",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-10-26",
+      "total_count": 0,
+      "total_volume_sol": 0.0,
+      "avg_position_size_sol": 0.0,
+      "by_dex": {},
+      "top_pools": []
+    },
+    {
+      "date": "2025-10-27",
+      "total_count": 182,
+      "total_volume_sol": 3169.977826,
+      "avg_position_size_sol": 17.417461,
+      "by_dex": {
+        "orca": {
+          "count": 111,
+          "volume_sol": 2800.73742
+        },
+        "fusion": {
+          "count": 71,
+          "volume_sol": 369.240407
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "HsQGWEh3ib6w59rBh5n1jXmi8VXFBqKEjxozL6PGfcgb",
+          "label": "Orca (SOL\u2013USELESS)",
+          "count": 30,
+          "volume_sol": 1430.877993
+        },
+        {
+          "pool": "FwewVm8u6tFPGewAyHmWAqad9hmF7mvqxK4mJ7iNqqGC",
+          "label": "Orca (SOL\u2013USDT)",
+          "count": 19,
+          "volume_sol": 815.144002
+        },
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 43,
+          "volume_sol": 422.284392
+        },
+        {
+          "pool": "7VuKeevbvbQQcxz6N4SNLmuq6PYy4AcGQRDssoqo4t65",
+          "label": "Fusion WSOL-USDC",
+          "count": 60,
+          "volume_sol": 368.031774
+        },
+        {
+          "pool": "HktfL7iwGKT5QHjywQkcDnZXScoh811k7akrMZJkCcEF",
+          "label": "Orca (SOL\u2013ETH)",
+          "count": 2,
+          "volume_sol": 71.26469
+        }
+      ]
+    },
+    {
+      "date": "2025-10-28",
+      "total_count": 166,
+      "total_volume_sol": 1753.654801,
+      "avg_position_size_sol": 10.564186,
+      "by_dex": {
+        "orca": {
+          "count": 109,
+          "volume_sol": 1109.094827
+        },
+        "fusion": {
+          "count": 57,
+          "volume_sol": 644.559974
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "7VuKeevbvbQQcxz6N4SNLmuq6PYy4AcGQRDssoqo4t65",
+          "label": "Fusion WSOL-USDC",
+          "count": 40,
+          "volume_sol": 643.648219
+        },
+        {
+          "pool": "HsQGWEh3ib6w59rBh5n1jXmi8VXFBqKEjxozL6PGfcgb",
+          "label": "Orca (SOL\u2013USELESS)",
+          "count": 13,
+          "volume_sol": 560.788226
+        },
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 40,
+          "volume_sol": 203.233252
+        },
+        {
+          "pool": "FwewVm8u6tFPGewAyHmWAqad9hmF7mvqxK4mJ7iNqqGC",
+          "label": "Orca (SOL\u2013USDT)",
+          "count": 33,
+          "volume_sol": 154.432599
+        },
+        {
+          "pool": "C9U2Ksk6KKWvLEeo5yUQ7Xu46X7NzeBJtd9PBfuXaUSM",
+          "label": "Orca (SOL\u2013FARTCOIN )",
+          "count": 6,
+          "volume_sol": 115.939562
+        }
+      ]
+    },
+    {
+      "date": "2025-10-29",
+      "total_count": 150,
+      "total_volume_sol": 3301.028461,
+      "avg_position_size_sol": 22.006856,
+      "by_dex": {
+        "orca": {
+          "count": 103,
+          "volume_sol": 2796.262216
+        },
+        "fusion": {
+          "count": 47,
+          "volume_sol": 504.766245
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "HktfL7iwGKT5QHjywQkcDnZXScoh811k7akrMZJkCcEF",
+          "label": "Orca (SOL\u2013ETH)",
+          "count": 14,
+          "volume_sol": 1607.657354
+        },
+        {
+          "pool": "7VuKeevbvbQQcxz6N4SNLmuq6PYy4AcGQRDssoqo4t65",
+          "label": "Fusion WSOL-USDC",
+          "count": 37,
+          "volume_sol": 504.05765
+        },
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 36,
+          "volume_sol": 457.670441
+        },
+        {
+          "pool": "6a3m2EgFFKfsFuQtP4LJJXPcAe3TQYXNyHUjjZpUxYgd",
+          "label": "Orca (SOL\u2013JLP)",
+          "count": 7,
+          "volume_sol": 334.031232
+        },
+        {
+          "pool": "HsQGWEh3ib6w59rBh5n1jXmi8VXFBqKEjxozL6PGfcgb",
+          "label": "Orca (SOL\u2013USELESS)",
+          "count": 6,
+          "volume_sol": 189.13188
+        }
+      ]
+    },
+    {
+      "date": "2025-10-30",
+      "total_count": 235,
+      "total_volume_sol": 4845.97913,
+      "avg_position_size_sol": 20.621188,
+      "by_dex": {
+        "fusion": {
+          "count": 67,
+          "volume_sol": 2971.596217
+        },
+        "orca": {
+          "count": 168,
+          "volume_sol": 1874.382913
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "GTTGMvvPq51CTEND7zfME4LiNo6vxjP64hB85jCszjz6",
+          "label": "Fusion WSOL-fun",
+          "count": 8,
+          "volume_sol": 1728.2
+        },
+        {
+          "pool": "7VuKeevbvbQQcxz6N4SNLmuq6PYy4AcGQRDssoqo4t65",
+          "label": "Fusion WSOL-USDC",
+          "count": 45,
+          "volume_sol": 1242.730148
+        },
+        {
+          "pool": "HsQGWEh3ib6w59rBh5n1jXmi8VXFBqKEjxozL6PGfcgb",
+          "label": "Orca (SOL\u2013USELESS)",
+          "count": 27,
+          "volume_sol": 1103.237385
+        },
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 59,
+          "volume_sol": 435.775033
+        },
+        {
+          "pool": "FwewVm8u6tFPGewAyHmWAqad9hmF7mvqxK4mJ7iNqqGC",
+          "label": "Orca (SOL\u2013USDT)",
+          "count": 49,
+          "volume_sol": 208.709355
+        }
+      ]
+    },
+    {
+      "date": "2025-10-31",
+      "total_count": 165,
+      "total_volume_sol": 2464.651302,
+      "avg_position_size_sol": 14.937281,
+      "by_dex": {
+        "orca": {
+          "count": 109,
+          "volume_sol": 2129.130528
+        },
+        "fusion": {
+          "count": 56,
+          "volume_sol": 335.520775
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 43,
+          "volume_sol": 756.945434
+        },
+        {
+          "pool": "FwewVm8u6tFPGewAyHmWAqad9hmF7mvqxK4mJ7iNqqGC",
+          "label": "Orca (SOL\u2013USDT)",
+          "count": 24,
+          "volume_sol": 460.854093
+        },
+        {
+          "pool": "HsQGWEh3ib6w59rBh5n1jXmi8VXFBqKEjxozL6PGfcgb",
+          "label": "Orca (SOL\u2013USELESS)",
+          "count": 13,
+          "volume_sol": 438.422114
+        },
+        {
+          "pool": "HktfL7iwGKT5QHjywQkcDnZXScoh811k7akrMZJkCcEF",
+          "label": "Orca (SOL\u2013ETH)",
+          "count": 8,
+          "volume_sol": 394.91746
+        },
+        {
+          "pool": "7VuKeevbvbQQcxz6N4SNLmuq6PYy4AcGQRDssoqo4t65",
+          "label": "Fusion WSOL-USDC",
+          "count": 36,
+          "volume_sol": 334.091377
+        }
+      ]
+    },
+    {
+      "date": "2025-11-01",
+      "total_count": 108,
+      "total_volume_sol": 1533.570993,
+      "avg_position_size_sol": 14.199731,
+      "by_dex": {
+        "orca": {
+          "count": 71,
+          "volume_sol": 1339.779803
+        },
+        "fusion": {
+          "count": 37,
+          "volume_sol": 193.79119
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 17,
+          "volume_sol": 495.173684
+        },
+        {
+          "pool": "FwewVm8u6tFPGewAyHmWAqad9hmF7mvqxK4mJ7iNqqGC",
+          "label": "Orca (SOL\u2013USDT)",
+          "count": 13,
+          "volume_sol": 333.518172
+        },
+        {
+          "pool": "6a3m2EgFFKfsFuQtP4LJJXPcAe3TQYXNyHUjjZpUxYgd",
+          "label": "Orca (SOL\u2013JLP)",
+          "count": 8,
+          "volume_sol": 237.756866
+        },
+        {
+          "pool": "7VuKeevbvbQQcxz6N4SNLmuq6PYy4AcGQRDssoqo4t65",
+          "label": "Fusion WSOL-USDC",
+          "count": 24,
+          "volume_sol": 193.413614
+        },
+        {
+          "pool": "HsQGWEh3ib6w59rBh5n1jXmi8VXFBqKEjxozL6PGfcgb",
+          "label": "Orca (SOL\u2013USELESS)",
+          "count": 8,
+          "volume_sol": 187.932081
+        }
+      ]
+    },
+    {
+      "date": "2025-11-02",
+      "total_count": 102,
+      "total_volume_sol": 1540.511145,
+      "avg_position_size_sol": 15.10305,
+      "by_dex": {
+        "fusion": {
+          "count": 31,
+          "volume_sol": 33.874246
+        },
+        "orca": {
+          "count": 71,
+          "volume_sol": 1506.636899
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "6a3m2EgFFKfsFuQtP4LJJXPcAe3TQYXNyHUjjZpUxYgd",
+          "label": "Orca (SOL\u2013JLP)",
+          "count": 5,
+          "volume_sol": 435.019018
+        },
+        {
+          "pool": "HktfL7iwGKT5QHjywQkcDnZXScoh811k7akrMZJkCcEF",
+          "label": "Orca (SOL\u2013ETH)",
+          "count": 2,
+          "volume_sol": 377.02031
+        },
+        {
+          "pool": "HsQGWEh3ib6w59rBh5n1jXmi8VXFBqKEjxozL6PGfcgb",
+          "label": "Orca (SOL\u2013USELESS)",
+          "count": 9,
+          "volume_sol": 300.696886
+        },
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 20,
+          "volume_sol": 299.645861
+        },
+        {
+          "pool": "FwewVm8u6tFPGewAyHmWAqad9hmF7mvqxK4mJ7iNqqGC",
+          "label": "Orca (SOL\u2013USDT)",
+          "count": 10,
+          "volume_sol": 67.714462
+        }
+      ]
+    },
+    {
+      "date": "2025-11-03",
+      "total_count": 268,
+      "total_volume_sol": 5173.957445,
+      "avg_position_size_sol": 19.305811,
+      "by_dex": {
+        "fusion": {
+          "count": 107,
+          "volume_sol": 916.059379
+        },
+        "orca": {
+          "count": 161,
+          "volume_sol": 4257.898067
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "6a3m2EgFFKfsFuQtP4LJJXPcAe3TQYXNyHUjjZpUxYgd",
+          "label": "Orca (SOL\u2013JLP)",
+          "count": 13,
+          "volume_sol": 1613.966996
+        },
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 56,
+          "volume_sol": 1393.608531
+        },
+        {
+          "pool": "7VuKeevbvbQQcxz6N4SNLmuq6PYy4AcGQRDssoqo4t65",
+          "label": "Fusion WSOL-USDC",
+          "count": 92,
+          "volume_sol": 915.677354
+        },
+        {
+          "pool": "HktfL7iwGKT5QHjywQkcDnZXScoh811k7akrMZJkCcEF",
+          "label": "Orca (SOL\u2013ETH)",
+          "count": 7,
+          "volume_sol": 705.405883
+        },
+        {
+          "pool": "FwewVm8u6tFPGewAyHmWAqad9hmF7mvqxK4mJ7iNqqGC",
+          "label": "Orca (SOL\u2013USDT)",
+          "count": 32,
+          "volume_sol": 307.188517
+        }
+      ]
+    },
+    {
+      "date": "2025-11-04",
+      "total_count": 324,
+      "total_volume_sol": 8170.298966,
+      "avg_position_size_sol": 25.216972,
+      "by_dex": {
+        "orca": {
+          "count": 217,
+          "volume_sol": 3968.842944
+        },
+        "fusion": {
+          "count": 107,
+          "volume_sol": 4201.456021
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "7VuKeevbvbQQcxz6N4SNLmuq6PYy4AcGQRDssoqo4t65",
+          "label": "Fusion WSOL-USDC",
+          "count": 93,
+          "volume_sol": 4200.636214
+        },
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 109,
+          "volume_sol": 1359.195259
+        },
+        {
+          "pool": "6a3m2EgFFKfsFuQtP4LJJXPcAe3TQYXNyHUjjZpUxYgd",
+          "label": "Orca (SOL\u2013JLP)",
+          "count": 17,
+          "volume_sol": 1232.461277
+        },
+        {
+          "pool": "HktfL7iwGKT5QHjywQkcDnZXScoh811k7akrMZJkCcEF",
+          "label": "Orca (SOL\u2013ETH)",
+          "count": 7,
+          "volume_sol": 755.188428
+        },
+        {
+          "pool": "HsQGWEh3ib6w59rBh5n1jXmi8VXFBqKEjxozL6PGfcgb",
+          "label": "Orca (SOL\u2013USELESS)",
+          "count": 28,
+          "volume_sol": 490.843856
+        }
+      ]
+    },
+    {
+      "date": "2025-11-05",
+      "total_count": 206,
+      "total_volume_sol": 3625.494053,
+      "avg_position_size_sol": 17.599486,
+      "by_dex": {
+        "fusion": {
+          "count": 38,
+          "volume_sol": 122.331912
+        },
+        "orca": {
+          "count": 168,
+          "volume_sol": 3503.162141
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 72,
+          "volume_sol": 954.61867
+        },
+        {
+          "pool": "HsQGWEh3ib6w59rBh5n1jXmi8VXFBqKEjxozL6PGfcgb",
+          "label": "Orca (SOL\u2013USELESS)",
+          "count": 20,
+          "volume_sol": 736.087996
+        },
+        {
+          "pool": "HktfL7iwGKT5QHjywQkcDnZXScoh811k7akrMZJkCcEF",
+          "label": "Orca (SOL\u2013ETH)",
+          "count": 6,
+          "volume_sol": 640.397084
+        },
+        {
+          "pool": "FwewVm8u6tFPGewAyHmWAqad9hmF7mvqxK4mJ7iNqqGC",
+          "label": "Orca (SOL\u2013USDT)",
+          "count": 20,
+          "volume_sol": 524.037636
+        },
+        {
+          "pool": "6a3m2EgFFKfsFuQtP4LJJXPcAe3TQYXNyHUjjZpUxYgd",
+          "label": "Orca (SOL\u2013JLP)",
+          "count": 17,
+          "volume_sol": 514.862606
+        }
+      ]
+    },
+    {
+      "date": "2025-11-06",
+      "total_count": 152,
+      "total_volume_sol": 869.359554,
+      "avg_position_size_sol": 5.719471,
+      "by_dex": {
+        "orca": {
+          "count": 105,
+          "volume_sol": 636.16597
+        },
+        "fusion": {
+          "count": 47,
+          "volume_sol": 233.193585
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "7VuKeevbvbQQcxz6N4SNLmuq6PYy4AcGQRDssoqo4t65",
+          "label": "Fusion WSOL-USDC",
+          "count": 35,
+          "volume_sol": 232.404037
+        },
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 37,
+          "volume_sol": 223.210104
+        },
+        {
+          "pool": "HktfL7iwGKT5QHjywQkcDnZXScoh811k7akrMZJkCcEF",
+          "label": "Orca (SOL\u2013ETH)",
+          "count": 6,
+          "volume_sol": 185.963336
+        },
+        {
+          "pool": "HsQGWEh3ib6w59rBh5n1jXmi8VXFBqKEjxozL6PGfcgb",
+          "label": "Orca (SOL\u2013USELESS)",
+          "count": 4,
+          "volume_sol": 130.223967
+        },
+        {
+          "pool": "FwewVm8u6tFPGewAyHmWAqad9hmF7mvqxK4mJ7iNqqGC",
+          "label": "Orca (SOL\u2013USDT)",
+          "count": 17,
+          "volume_sol": 49.564107
+        }
+      ]
+    },
+    {
+      "date": "2025-11-07",
+      "total_count": 222,
+      "total_volume_sol": 2529.370411,
+      "avg_position_size_sol": 11.39356,
+      "by_dex": {
+        "fusion": {
+          "count": 52,
+          "volume_sol": 175.405896
+        },
+        "orca": {
+          "count": 170,
+          "volume_sol": 2353.964516
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "27ExzqiGapKFd6NhffapRfdSkuykTVUqY5qeuNnrzBNm",
+          "label": "Orca WSOL-ORE",
+          "count": 83,
+          "volume_sol": 1415.049264
+        },
+        {
+          "pool": "FwewVm8u6tFPGewAyHmWAqad9hmF7mvqxK4mJ7iNqqGC",
+          "label": "Orca (SOL\u2013USDT)",
+          "count": 7,
+          "volume_sol": 313.660334
+        },
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 41,
+          "volume_sol": 295.975915
+        },
+        {
+          "pool": "B5EwJVDuAauzUEEdwvbuXzbFFgEYnUqqS37TUM1c4PQA",
+          "label": "Orca (SOL\u2013WBTC)",
+          "count": 2,
+          "volume_sol": 204.99995
+        },
+        {
+          "pool": "7VuKeevbvbQQcxz6N4SNLmuq6PYy4AcGQRDssoqo4t65",
+          "label": "Fusion WSOL-USDC",
+          "count": 34,
+          "volume_sol": 174.024251
+        }
+      ]
+    },
+    {
+      "date": "2025-11-08",
+      "total_count": 241,
+      "total_volume_sol": 4209.488663,
+      "avg_position_size_sol": 17.466758,
+      "by_dex": {
+        "fusion": {
+          "count": 31,
+          "volume_sol": 54.929537
+        },
+        "orca": {
+          "count": 210,
+          "volume_sol": 4154.559126
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "27ExzqiGapKFd6NhffapRfdSkuykTVUqY5qeuNnrzBNm",
+          "label": "Orca WSOL-ORE",
+          "count": 144,
+          "volume_sol": 3405.265038
+        },
+        {
+          "pool": "HktfL7iwGKT5QHjywQkcDnZXScoh811k7akrMZJkCcEF",
+          "label": "Orca (SOL\u2013ETH)",
+          "count": 7,
+          "volume_sol": 568.485954
+        },
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 24,
+          "volume_sol": 62.323317
+        },
+        {
+          "pool": "7VuKeevbvbQQcxz6N4SNLmuq6PYy4AcGQRDssoqo4t65",
+          "label": "Fusion WSOL-USDC",
+          "count": 17,
+          "volume_sol": 54.116684
+        },
+        {
+          "pool": "HsQGWEh3ib6w59rBh5n1jXmi8VXFBqKEjxozL6PGfcgb",
+          "label": "Orca (SOL\u2013USELESS)",
+          "count": 7,
+          "volume_sol": 50.803045
+        }
+      ]
+    },
+    {
+      "date": "2025-11-09",
+      "total_count": 196,
+      "total_volume_sol": 5373.511086,
+      "avg_position_size_sol": 27.415873,
+      "by_dex": {
+        "orca": {
+          "count": 181,
+          "volume_sol": 5346.718792
+        },
+        "fusion": {
+          "count": 15,
+          "volume_sol": 26.792294
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "27ExzqiGapKFd6NhffapRfdSkuykTVUqY5qeuNnrzBNm",
+          "label": "Orca WSOL-ORE",
+          "count": 99,
+          "volume_sol": 2922.173258
+        },
+        {
+          "pool": "FwewVm8u6tFPGewAyHmWAqad9hmF7mvqxK4mJ7iNqqGC",
+          "label": "Orca (SOL\u2013USDT)",
+          "count": 29,
+          "volume_sol": 1367.087152
+        },
+        {
+          "pool": "HktfL7iwGKT5QHjywQkcDnZXScoh811k7akrMZJkCcEF",
+          "label": "Orca (SOL\u2013ETH)",
+          "count": 9,
+          "volume_sol": 850.021074
+        },
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 26,
+          "volume_sol": 143.516047
+        },
+        {
+          "pool": "CeaZcxBNLpJWtxzt58qQmfMBtJY8pQLvursXTJYGQpbN",
+          "label": "Orca (SOL\u2013CBBTC)",
+          "count": 1,
+          "volume_sol": 33.75
+        }
+      ]
+    },
+    {
+      "date": "2025-11-10",
+      "total_count": 353,
+      "total_volume_sol": 5478.668598,
+      "avg_position_size_sol": 15.520308,
+      "by_dex": {
+        "orca": {
+          "count": 312,
+          "volume_sol": 5109.911246
+        },
+        "fusion": {
+          "count": 41,
+          "volume_sol": 368.757352
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "27ExzqiGapKFd6NhffapRfdSkuykTVUqY5qeuNnrzBNm",
+          "label": "Orca WSOL-ORE",
+          "count": 202,
+          "volume_sol": 3610.670673
+        },
+        {
+          "pool": "HktfL7iwGKT5QHjywQkcDnZXScoh811k7akrMZJkCcEF",
+          "label": "Orca (SOL\u2013ETH)",
+          "count": 7,
+          "volume_sol": 732.159522
+        },
+        {
+          "pool": "HsQGWEh3ib6w59rBh5n1jXmi8VXFBqKEjxozL6PGfcgb",
+          "label": "Orca (SOL\u2013USELESS)",
+          "count": 20,
+          "volume_sol": 384.588573
+        },
+        {
+          "pool": "7VuKeevbvbQQcxz6N4SNLmuq6PYy4AcGQRDssoqo4t65",
+          "label": "Fusion WSOL-USDC",
+          "count": 19,
+          "volume_sol": 367.716836
+        },
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 50,
+          "volume_sol": 309.570821
+        }
+      ]
+    },
+    {
+      "date": "2025-11-11",
+      "total_count": 252,
+      "total_volume_sol": 3790.498804,
+      "avg_position_size_sol": 15.041662,
+      "by_dex": {
+        "orca": {
+          "count": 193,
+          "volume_sol": 3420.291966
+        },
+        "fusion": {
+          "count": 59,
+          "volume_sol": 370.206838
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "27ExzqiGapKFd6NhffapRfdSkuykTVUqY5qeuNnrzBNm",
+          "label": "Orca WSOL-ORE",
+          "count": 106,
+          "volume_sol": 1617.024212
+        },
+        {
+          "pool": "HktfL7iwGKT5QHjywQkcDnZXScoh811k7akrMZJkCcEF",
+          "label": "Orca (SOL\u2013ETH)",
+          "count": 14,
+          "volume_sol": 1027.878526
+        },
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 33,
+          "volume_sol": 432.945901
+        },
+        {
+          "pool": "7VuKeevbvbQQcxz6N4SNLmuq6PYy4AcGQRDssoqo4t65",
+          "label": "Fusion WSOL-USDC",
+          "count": 11,
+          "volume_sol": 368.495853
+        },
+        {
+          "pool": "HsQGWEh3ib6w59rBh5n1jXmi8VXFBqKEjxozL6PGfcgb",
+          "label": "Orca (SOL\u2013USELESS)",
+          "count": 14,
+          "volume_sol": 175.135406
+        }
+      ]
+    },
+    {
+      "date": "2025-11-12",
+      "total_count": 288,
+      "total_volume_sol": 10231.417965,
+      "avg_position_size_sol": 35.525757,
+      "by_dex": {
+        "orca": {
+          "count": 201,
+          "volume_sol": 6856.088311
+        },
+        "fusion": {
+          "count": 87,
+          "volume_sol": 3375.329654
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "AXB9KoFBT4ZxJgc4bHMYDgSkxjox6JuL3bbLBeL8LdSJ",
+          "label": "Fusion USDC-TUNA",
+          "count": 9,
+          "volume_sol": 2546.295057
+        },
+        {
+          "pool": "27ExzqiGapKFd6NhffapRfdSkuykTVUqY5qeuNnrzBNm",
+          "label": "Orca WSOL-ORE",
+          "count": 106,
+          "volume_sol": 2502.268575
+        },
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 38,
+          "volume_sol": 1719.838806
+        },
+        {
+          "pool": "HktfL7iwGKT5QHjywQkcDnZXScoh811k7akrMZJkCcEF",
+          "label": "Orca (SOL\u2013ETH)",
+          "count": 16,
+          "volume_sol": 724.326612
+        },
+        {
+          "pool": "6a3m2EgFFKfsFuQtP4LJJXPcAe3TQYXNyHUjjZpUxYgd",
+          "label": "Orca (SOL\u2013JLP)",
+          "count": 13,
+          "volume_sol": 608.255699
+        }
+      ]
+    },
+    {
+      "date": "2025-11-13",
+      "total_count": 198,
+      "total_volume_sol": 37827.925592,
+      "avg_position_size_sol": 191.050129,
+      "by_dex": {
+        "orca": {
+          "count": 160,
+          "volume_sol": 6542.68569
+        },
+        "fusion": {
+          "count": 38,
+          "volume_sol": 31285.239901
+        }
+      },
+      "top_pools": [
+        {
+          "pool": "7VuKeevbvbQQcxz6N4SNLmuq6PYy4AcGQRDssoqo4t65",
+          "label": "Fusion WSOL-USDC",
+          "count": 19,
+          "volume_sol": 28383.581429
+        },
+        {
+          "pool": "AXB9KoFBT4ZxJgc4bHMYDgSkxjox6JuL3bbLBeL8LdSJ",
+          "label": "Fusion USDC-TUNA",
+          "count": 9,
+          "volume_sol": 2778.926968
+        },
+        {
+          "pool": "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+          "label": "Orca (SOL\u2013USDC)",
+          "count": 49,
+          "volume_sol": 2225.431304
+        },
+        {
+          "pool": "HktfL7iwGKT5QHjywQkcDnZXScoh811k7akrMZJkCcEF",
+          "label": "Orca (SOL\u2013ETH)",
+          "count": 18,
+          "volume_sol": 1755.296195
+        },
+        {
+          "pool": "27ExzqiGapKFd6NhffapRfdSkuykTVUqY5qeuNnrzBNm",
+          "label": "Orca WSOL-ORE",
+          "count": 47,
+          "volume_sol": 935.49951
+        }
+      ]
+    }
+  ]
+}

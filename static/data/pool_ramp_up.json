@@ -1,20 +1,32 @@
 {
   "metadata": {
+<<<<<<< HEAD
     "generated_at": "2025-11-13T21:59:12.451294Z",
+=======
+    "generated_at": "2025-11-14T02:16:03.646571Z",
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
     "max_days": 90,
     "total_pools": 44,
     "date_range": {
       "start": "2025-07-24",
+<<<<<<< HEAD
       "end": "2025-11-12"
+=======
+      "end": "2025-11-13"
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
     }
   },
   "pools": [
     {
       "pool_id": "7VuKeevbvbQQcxz6N4SNLmuq6PYy4AcGQRDssoqo4t65",
-      "name": "Fusion SOL-USDC",
+      "name": "Fusion WSOL-USDC",
       "protocol": "Fusion",
       "establishment_date": "2025-07-31",
+<<<<<<< HEAD
       "total_revenue": 1860.335333,
+=======
+      "total_revenue": 1867.184651,
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "days_of_data": 90,
       "days": [
         {
@@ -564,7 +576,11 @@
       "name": "Orca (SOL\u2013USDC)",
       "protocol": "Orca",
       "establishment_date": "2025-07-31",
+<<<<<<< HEAD
       "total_revenue": 1565.433243,
+=======
+      "total_revenue": 1587.211916,
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "days_of_data": 90,
       "days": [
         {
@@ -1114,7 +1130,11 @@
       "name": "Orca (SOL\u2013CBBTC)",
       "protocol": "Orca",
       "establishment_date": "2025-07-31",
+<<<<<<< HEAD
       "total_revenue": 296.039607,
+=======
+      "total_revenue": 296.142698,
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "days_of_data": 90,
       "days": [
         {
@@ -1664,7 +1684,11 @@
       "name": "Orca (SOL\u2013FARTCOIN )",
       "protocol": "Orca",
       "establishment_date": "2025-07-31",
+<<<<<<< HEAD
       "total_revenue": 255.696043,
+=======
+      "total_revenue": 255.696361,
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "days_of_data": 90,
       "days": [
         {
@@ -2214,7 +2238,11 @@
       "name": "Orca (SOL\u2013USDT)",
       "protocol": "Orca",
       "establishment_date": "2025-07-31",
+<<<<<<< HEAD
       "total_revenue": 201.830143,
+=======
+      "total_revenue": 205.403218,
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "days_of_data": 90,
       "days": [
         {
@@ -2764,7 +2792,11 @@
       "name": "Orca (SOL\u2013USELESS)",
       "protocol": "Orca",
       "establishment_date": "2025-07-31",
+<<<<<<< HEAD
       "total_revenue": 199.387531,
+=======
+      "total_revenue": 199.430917,
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "days_of_data": 90,
       "days": [
         {
@@ -3314,7 +3346,11 @@
       "name": "Fusion USDC-TUNA",
       "protocol": "Fusion",
       "establishment_date": "2025-08-02",
+<<<<<<< HEAD
       "total_revenue": 140.000605,
+=======
+      "total_revenue": 140.060203,
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "days_of_data": 90,
       "days": [
         {
@@ -3860,11 +3896,67 @@
       ]
     },
     {
+      "pool_id": "27ExzqiGapKFd6NhffapRfdSkuykTVUqY5qeuNnrzBNm",
+      "name": "Orca WSOL-ORE",
+      "protocol": "Orca",
+      "establishment_date": "2025-11-07",
+      "total_revenue": 133.900997,
+      "days_of_data": 7,
+      "days": [
+        {
+          "day": 1,
+          "date": "2025-11-07",
+          "daily": 1.874167,
+          "cumulative": 1.874167
+        },
+        {
+          "day": 2,
+          "date": "2025-11-08",
+          "daily": 14.018086,
+          "cumulative": 15.892252
+        },
+        {
+          "day": 3,
+          "date": "2025-11-09",
+          "daily": 9.271829,
+          "cumulative": 25.164082
+        },
+        {
+          "day": 4,
+          "date": "2025-11-10",
+          "daily": 46.078215,
+          "cumulative": 71.242297
+        },
+        {
+          "day": 5,
+          "date": "2025-11-11",
+          "daily": 40.932973,
+          "cumulative": 112.17527
+        },
+        {
+          "day": 6,
+          "date": "2025-11-12",
+          "daily": 8.487873,
+          "cumulative": 120.663143
+        },
+        {
+          "day": 7,
+          "date": "2025-11-13",
+          "daily": 13.237853,
+          "cumulative": 133.900997
+        }
+      ]
+    },
+    {
       "pool_id": "6a3m2EgFFKfsFuQtP4LJJXPcAe3TQYXNyHUjjZpUxYgd",
       "name": "Orca (SOL\u2013JLP)",
       "protocol": "Orca",
       "establishment_date": "2025-07-31",
+<<<<<<< HEAD
       "total_revenue": 126.433632,
+=======
+      "total_revenue": 126.584197,
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "days_of_data": 90,
       "days": [
         {
@@ -4410,6 +4502,7 @@
       ]
     },
     {
+<<<<<<< HEAD
       "pool_id": "27ExzqiGapKFd6NhffapRfdSkuykTVUqY5qeuNnrzBNm",
       "name": "Orca SOL-ORE",
       "protocol": "Orca",
@@ -4456,11 +4549,17 @@
       ]
     },
     {
+=======
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "pool_id": "9vNKzrrHAjqjuTGLjCBo9Ai4edMYgP9dsG4tFZ2hF251",
       "name": "Orca (GP\u2013USDC)",
       "protocol": "Orca",
       "establishment_date": "2025-08-02",
+<<<<<<< HEAD
       "total_revenue": 71.697199,
+=======
+      "total_revenue": 71.702365,
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "days_of_data": 90,
       "days": [
         {
@@ -5010,7 +5109,11 @@
       "name": "Orca (SOL\u2013ETH)",
       "protocol": "Orca",
       "establishment_date": "2025-07-31",
+<<<<<<< HEAD
       "total_revenue": 57.36019,
+=======
+      "total_revenue": 58.252122,
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "days_of_data": 90,
       "days": [
         {
@@ -5560,7 +5663,11 @@
       "name": "Orca (JLP\u2013USDC)",
       "protocol": "Orca",
       "establishment_date": "2025-08-02",
+<<<<<<< HEAD
       "total_revenue": 25.885703,
+=======
+      "total_revenue": 25.888273,
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "days_of_data": 90,
       "days": [
         {
@@ -6110,7 +6217,11 @@
       "name": "Orca (JUP\u2013SOL)",
       "protocol": "Orca",
       "establishment_date": "2025-07-31",
+<<<<<<< HEAD
       "total_revenue": 22.056565,
+=======
+      "total_revenue": 22.114932,
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "days_of_data": 90,
       "days": [
         {
@@ -6660,7 +6771,11 @@
       "name": "Orca (CBBTC\u2013USDC)",
       "protocol": "Orca",
       "establishment_date": "2025-08-02",
+<<<<<<< HEAD
       "total_revenue": 21.705456,
+=======
+      "total_revenue": 21.785096,
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "days_of_data": 90,
       "days": [
         {
@@ -7760,8 +7875,13 @@
       "name": "Fusion (SOL\u2013cbBTC)",
       "protocol": "Fusion",
       "establishment_date": "2025-09-09",
+<<<<<<< HEAD
       "total_revenue": 9.478847,
       "days_of_data": 65,
+=======
+      "total_revenue": 9.5964,
+      "days_of_data": 66,
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "days": [
         {
           "day": 1,
@@ -8152,6 +8272,15 @@
           "date": "2025-11-12",
           "daily": 0.078179,
           "cumulative": 9.478847
+<<<<<<< HEAD
+=======
+        },
+        {
+          "day": 66,
+          "date": "2025-11-13",
+          "daily": 0.117553,
+          "cumulative": 9.5964
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
         }
       ]
     },
@@ -8160,7 +8289,11 @@
       "name": "Orca (SOL\u2013PENGU)",
       "protocol": "Orca",
       "establishment_date": "2025-07-31",
+<<<<<<< HEAD
       "total_revenue": 6.432885,
+=======
+      "total_revenue": 6.432983,
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "days_of_data": 90,
       "days": [
         {
@@ -8711,7 +8844,11 @@
       "protocol": "Fusion",
       "establishment_date": "2025-09-12",
       "total_revenue": 6.253184,
+<<<<<<< HEAD
       "days_of_data": 62,
+=======
+      "days_of_data": 63,
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "days": [
         {
           "day": 1,
@@ -9084,6 +9221,15 @@
           "date": "2025-11-12",
           "daily": 0.0,
           "cumulative": 6.253184
+<<<<<<< HEAD
+=======
+        },
+        {
+          "day": 63,
+          "date": "2025-11-13",
+          "daily": 0.0,
+          "cumulative": 6.253184
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
         }
       ]
     },
@@ -9092,7 +9238,7 @@
       "name": "Orca (SOL\u2013BONK)",
       "protocol": "Orca",
       "establishment_date": "2025-07-31",
-      "total_revenue": 6.042672,
+      "total_revenue": 6.042692,
       "days_of_data": 90,
       "days": [
         {
@@ -9638,11 +9784,433 @@
       ]
     },
     {
+      "pool_id": "wBCQf7mz5q64gwL4LghzEztzXkX3mQJW95fMjjugFzH",
+      "name": "Fusion USDC-TSLAr",
+      "protocol": "Fusion",
+      "establishment_date": "2025-09-07",
+      "total_revenue": 5.412212,
+      "days_of_data": 68,
+      "days": [
+        {
+          "day": 1,
+          "date": "2025-09-07",
+          "daily": 0.039733,
+          "cumulative": 0.039733
+        },
+        {
+          "day": 2,
+          "date": "2025-09-08",
+          "daily": 0.0,
+          "cumulative": 0.039733
+        },
+        {
+          "day": 3,
+          "date": "2025-09-09",
+          "daily": 0.0,
+          "cumulative": 0.039733
+        },
+        {
+          "day": 4,
+          "date": "2025-09-10",
+          "daily": 0.0,
+          "cumulative": 0.039733
+        },
+        {
+          "day": 5,
+          "date": "2025-09-11",
+          "daily": 0.0,
+          "cumulative": 0.039733
+        },
+        {
+          "day": 6,
+          "date": "2025-09-12",
+          "daily": 0.076812,
+          "cumulative": 0.116545
+        },
+        {
+          "day": 7,
+          "date": "2025-09-13",
+          "daily": 0.330603,
+          "cumulative": 0.447148
+        },
+        {
+          "day": 8,
+          "date": "2025-09-14",
+          "daily": 0.0,
+          "cumulative": 0.447148
+        },
+        {
+          "day": 9,
+          "date": "2025-09-15",
+          "daily": 0.406051,
+          "cumulative": 0.853199
+        },
+        {
+          "day": 10,
+          "date": "2025-09-16",
+          "daily": 0.166903,
+          "cumulative": 1.020102
+        },
+        {
+          "day": 11,
+          "date": "2025-09-17",
+          "daily": 0.016856,
+          "cumulative": 1.036958
+        },
+        {
+          "day": 12,
+          "date": "2025-09-18",
+          "daily": 0.047422,
+          "cumulative": 1.08438
+        },
+        {
+          "day": 13,
+          "date": "2025-09-19",
+          "daily": 0.0,
+          "cumulative": 1.08438
+        },
+        {
+          "day": 14,
+          "date": "2025-09-20",
+          "daily": 0.0,
+          "cumulative": 1.08438
+        },
+        {
+          "day": 15,
+          "date": "2025-09-21",
+          "daily": 0.015839,
+          "cumulative": 1.100219
+        },
+        {
+          "day": 16,
+          "date": "2025-09-22",
+          "daily": 0.17597,
+          "cumulative": 1.276189
+        },
+        {
+          "day": 17,
+          "date": "2025-09-23",
+          "daily": 0.077553,
+          "cumulative": 1.353743
+        },
+        {
+          "day": 18,
+          "date": "2025-09-24",
+          "daily": 0.114349,
+          "cumulative": 1.468092
+        },
+        {
+          "day": 19,
+          "date": "2025-09-25",
+          "daily": 0.0,
+          "cumulative": 1.468092
+        },
+        {
+          "day": 20,
+          "date": "2025-09-26",
+          "daily": 0.014037,
+          "cumulative": 1.482129
+        },
+        {
+          "day": 21,
+          "date": "2025-09-27",
+          "daily": 0.0,
+          "cumulative": 1.482129
+        },
+        {
+          "day": 22,
+          "date": "2025-09-28",
+          "daily": 0.0,
+          "cumulative": 1.482129
+        },
+        {
+          "day": 23,
+          "date": "2025-09-29",
+          "daily": 0.0,
+          "cumulative": 1.482129
+        },
+        {
+          "day": 24,
+          "date": "2025-09-30",
+          "daily": 0.0,
+          "cumulative": 1.482129
+        },
+        {
+          "day": 25,
+          "date": "2025-10-01",
+          "daily": 0.027587,
+          "cumulative": 1.509716
+        },
+        {
+          "day": 26,
+          "date": "2025-10-02",
+          "daily": 0.088306,
+          "cumulative": 1.598022
+        },
+        {
+          "day": 27,
+          "date": "2025-10-03",
+          "daily": 0.004281,
+          "cumulative": 1.602302
+        },
+        {
+          "day": 28,
+          "date": "2025-10-04",
+          "daily": 0.0,
+          "cumulative": 1.602302
+        },
+        {
+          "day": 29,
+          "date": "2025-10-05",
+          "daily": 0.0,
+          "cumulative": 1.602302
+        },
+        {
+          "day": 30,
+          "date": "2025-10-06",
+          "daily": 0.032281,
+          "cumulative": 1.634583
+        },
+        {
+          "day": 31,
+          "date": "2025-10-07",
+          "daily": 0.017862,
+          "cumulative": 1.652445
+        },
+        {
+          "day": 32,
+          "date": "2025-10-08",
+          "daily": 0.735496,
+          "cumulative": 2.387941
+        },
+        {
+          "day": 33,
+          "date": "2025-10-09",
+          "daily": 0.059524,
+          "cumulative": 2.447465
+        },
+        {
+          "day": 34,
+          "date": "2025-10-10",
+          "daily": 0.0,
+          "cumulative": 2.447465
+        },
+        {
+          "day": 35,
+          "date": "2025-10-11",
+          "daily": 0.041889,
+          "cumulative": 2.489353
+        },
+        {
+          "day": 36,
+          "date": "2025-10-12",
+          "daily": 0.0,
+          "cumulative": 2.489353
+        },
+        {
+          "day": 37,
+          "date": "2025-10-13",
+          "daily": 0.04765,
+          "cumulative": 2.537004
+        },
+        {
+          "day": 38,
+          "date": "2025-10-14",
+          "daily": 0.0,
+          "cumulative": 2.537004
+        },
+        {
+          "day": 39,
+          "date": "2025-10-15",
+          "daily": 0.049156,
+          "cumulative": 2.58616
+        },
+        {
+          "day": 40,
+          "date": "2025-10-16",
+          "daily": 0.058458,
+          "cumulative": 2.644618
+        },
+        {
+          "day": 41,
+          "date": "2025-10-17",
+          "daily": 0.188302,
+          "cumulative": 2.83292
+        },
+        {
+          "day": 42,
+          "date": "2025-10-18",
+          "daily": 0.067369,
+          "cumulative": 2.900289
+        },
+        {
+          "day": 43,
+          "date": "2025-10-19",
+          "daily": 0.0,
+          "cumulative": 2.900289
+        },
+        {
+          "day": 44,
+          "date": "2025-10-20",
+          "daily": 0.128979,
+          "cumulative": 3.029269
+        },
+        {
+          "day": 45,
+          "date": "2025-10-21",
+          "daily": 0.027633,
+          "cumulative": 3.056901
+        },
+        {
+          "day": 46,
+          "date": "2025-10-22",
+          "daily": 0.117969,
+          "cumulative": 3.17487
+        },
+        {
+          "day": 47,
+          "date": "2025-10-23",
+          "daily": 0.080581,
+          "cumulative": 3.255451
+        },
+        {
+          "day": 48,
+          "date": "2025-10-24",
+          "daily": 0.039502,
+          "cumulative": 3.294953
+        },
+        {
+          "day": 49,
+          "date": "2025-10-25",
+          "daily": 0.0,
+          "cumulative": 3.294953
+        },
+        {
+          "day": 50,
+          "date": "2025-10-26",
+          "daily": 0.0,
+          "cumulative": 3.294953
+        },
+        {
+          "day": 51,
+          "date": "2025-10-27",
+          "daily": 0.257437,
+          "cumulative": 3.55239
+        },
+        {
+          "day": 52,
+          "date": "2025-10-28",
+          "daily": 0.0,
+          "cumulative": 3.55239
+        },
+        {
+          "day": 53,
+          "date": "2025-10-29",
+          "daily": 0.06745,
+          "cumulative": 3.619841
+        },
+        {
+          "day": 54,
+          "date": "2025-10-30",
+          "daily": 0.155921,
+          "cumulative": 3.775762
+        },
+        {
+          "day": 55,
+          "date": "2025-10-31",
+          "daily": 0.091713,
+          "cumulative": 3.867475
+        },
+        {
+          "day": 56,
+          "date": "2025-11-01",
+          "daily": 0.0,
+          "cumulative": 3.867475
+        },
+        {
+          "day": 57,
+          "date": "2025-11-02",
+          "daily": 0.0,
+          "cumulative": 3.867475
+        },
+        {
+          "day": 58,
+          "date": "2025-11-03",
+          "daily": 0.304969,
+          "cumulative": 4.172444
+        },
+        {
+          "day": 59,
+          "date": "2025-11-04",
+          "daily": 0.089472,
+          "cumulative": 4.261916
+        },
+        {
+          "day": 60,
+          "date": "2025-11-05",
+          "daily": 0.0,
+          "cumulative": 4.261916
+        },
+        {
+          "day": 61,
+          "date": "2025-11-06",
+          "daily": 0.479176,
+          "cumulative": 4.741092
+        },
+        {
+          "day": 62,
+          "date": "2025-11-07",
+          "daily": 0.173385,
+          "cumulative": 4.914477
+        },
+        {
+          "day": 63,
+          "date": "2025-11-08",
+          "daily": 0.0,
+          "cumulative": 4.914477
+        },
+        {
+          "day": 64,
+          "date": "2025-11-09",
+          "daily": 0.0,
+          "cumulative": 4.914477
+        },
+        {
+          "day": 65,
+          "date": "2025-11-10",
+          "daily": 0.09421,
+          "cumulative": 5.008687
+        },
+        {
+          "day": 66,
+          "date": "2025-11-11",
+          "daily": 0.065215,
+          "cumulative": 5.073903
+        },
+        {
+          "day": 67,
+          "date": "2025-11-12",
+          "daily": 0.088863,
+          "cumulative": 5.162765
+        },
+        {
+          "day": 68,
+          "date": "2025-11-13",
+          "daily": 0.249447,
+          "cumulative": 5.412212
+        }
+      ]
+    },
+    {
       "pool_id": "B79cNdgpBao2yFkaysgtTK9vU13iXFyYamr5ntwauFtz",
-      "name": "Fusion SOL-TUNA",
+      "name": "Fusion WSOL-TUNA",
       "protocol": "Fusion",
       "establishment_date": "2025-07-31",
+<<<<<<< HEAD
       "total_revenue": 5.300738,
+=======
+      "total_revenue": 5.325934,
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "days_of_data": 90,
       "days": [
         {
@@ -10188,6 +10756,7 @@
       ]
     },
     {
+<<<<<<< HEAD
       "pool_id": "wBCQf7mz5q64gwL4LghzEztzXkX3mQJW95fMjjugFzH",
       "name": "Fusion USDC-TSLAr",
       "protocol": "Fusion",
@@ -10600,6 +11169,8 @@
       ]
     },
     {
+=======
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "pool_id": "4fuUiYxTQ6QCrdSq9ouBYcTM7bqSwYTSyLueGZLTy4T4",
       "name": "Orca (USDC\u2013USDT)",
       "protocol": "Orca",
@@ -11155,7 +11726,11 @@
       "protocol": "Fusion",
       "establishment_date": "2025-09-16",
       "total_revenue": 2.422189,
+<<<<<<< HEAD
       "days_of_data": 58,
+=======
+      "days_of_data": 59,
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "days": [
         {
           "day": 1,
@@ -11504,6 +12079,37 @@
           "date": "2025-11-12",
           "daily": 0.0,
           "cumulative": 2.422189
+<<<<<<< HEAD
+=======
+        },
+        {
+          "day": 59,
+          "date": "2025-11-13",
+          "daily": 0.0,
+          "cumulative": 2.422189
+        }
+      ]
+    },
+    {
+      "pool_id": "3pD4g1Urf9pAU5xw3uaJ4waGx3njja5X5gQ5MqJEKEAf",
+      "name": "Fusion USDC-ORE",
+      "protocol": "Fusion",
+      "establishment_date": "2025-11-12",
+      "total_revenue": 2.237783,
+      "days_of_data": 2,
+      "days": [
+        {
+          "day": 1,
+          "date": "2025-11-12",
+          "daily": 1.513339,
+          "cumulative": 1.513339
+        },
+        {
+          "day": 2,
+          "date": "2025-11-13",
+          "daily": 0.724444,
+          "cumulative": 2.237783
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
         }
       ]
     },
@@ -12062,8 +12668,13 @@
       "name": "Fusion USDC-SPYr",
       "protocol": "Fusion",
       "establishment_date": "2025-09-17",
+<<<<<<< HEAD
       "total_revenue": 1.983941,
       "days_of_data": 57,
+=======
+      "total_revenue": 2.112427,
+      "days_of_data": 58,
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "days": [
         {
           "day": 1,
@@ -12406,6 +13017,15 @@
           "date": "2025-11-12",
           "daily": 0.0,
           "cumulative": 1.983941
+<<<<<<< HEAD
+=======
+        },
+        {
+          "day": 58,
+          "date": "2025-11-13",
+          "daily": 0.128485,
+          "cumulative": 2.112427
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
         }
       ]
     },
@@ -12414,7 +13034,7 @@
       "name": "Orca (ETH\u2013USDC)",
       "protocol": "Orca",
       "establishment_date": "2025-08-02",
-      "total_revenue": 1.974677,
+      "total_revenue": 1.975166,
       "days_of_data": 90,
       "days": [
         {
@@ -12980,8 +13600,13 @@
       "name": "Fusion USDC-PUMP",
       "protocol": "Fusion",
       "establishment_date": "2025-10-23",
+<<<<<<< HEAD
       "total_revenue": 1.463224,
       "days_of_data": 21,
+=======
+      "total_revenue": 1.530896,
+      "days_of_data": 22,
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "days": [
         {
           "day": 1,
@@ -13108,6 +13733,15 @@
           "date": "2025-11-12",
           "daily": 0.080406,
           "cumulative": 1.463224
+<<<<<<< HEAD
+=======
+        },
+        {
+          "day": 22,
+          "date": "2025-11-13",
+          "daily": 0.067672,
+          "cumulative": 1.530896
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
         }
       ]
     },
@@ -13117,7 +13751,11 @@
       "protocol": "Fusion",
       "establishment_date": "2025-09-19",
       "total_revenue": 0.88969,
+<<<<<<< HEAD
       "days_of_data": 55,
+=======
+      "days_of_data": 56,
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "days": [
         {
           "day": 1,
@@ -13448,6 +14086,15 @@
           "date": "2025-11-12",
           "daily": 0.0,
           "cumulative": 0.88969
+<<<<<<< HEAD
+=======
+        },
+        {
+          "day": 56,
+          "date": "2025-11-13",
+          "daily": 0.0,
+          "cumulative": 0.88969
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
         }
       ]
     },
@@ -13456,7 +14103,11 @@
       "name": "Orca (SOL\u2013AI16Z)",
       "protocol": "Orca",
       "establishment_date": "2025-07-31",
+<<<<<<< HEAD
       "total_revenue": 0.850636,
+=======
+      "total_revenue": 0.874606,
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "days_of_data": 90,
       "days": [
         {
@@ -14556,7 +15207,11 @@
       "name": "Orca (WBTC\u2013USDC)",
       "protocol": "Orca",
       "establishment_date": "2025-08-02",
+<<<<<<< HEAD
       "total_revenue": 0.432621,
+=======
+      "total_revenue": 0.432653,
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "days_of_data": 90,
       "days": [
         {
@@ -15657,7 +16312,11 @@
       "protocol": "Fusion",
       "establishment_date": "2025-10-31",
       "total_revenue": 0.196003,
+<<<<<<< HEAD
       "days_of_data": 13,
+=======
+      "days_of_data": 14,
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "days": [
         {
           "day": 1,
@@ -15736,16 +16395,29 @@
           "date": "2025-11-12",
           "daily": 0.0,
           "cumulative": 0.196003
+<<<<<<< HEAD
+=======
+        },
+        {
+          "day": 14,
+          "date": "2025-11-13",
+          "daily": 0.0,
+          "cumulative": 0.196003
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
         }
       ]
     },
     {
       "pool_id": "GTTGMvvPq51CTEND7zfME4LiNo6vxjP64hB85jCszjz6",
-      "name": "Fusion SOL-fun",
+      "name": "Fusion WSOL-fun",
       "protocol": "Fusion",
       "establishment_date": "2025-10-31",
       "total_revenue": 0.144098,
+<<<<<<< HEAD
       "days_of_data": 13,
+=======
+      "days_of_data": 14,
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "days": [
         {
           "day": 1,
@@ -15824,6 +16496,15 @@
           "date": "2025-11-12",
           "daily": 0.0,
           "cumulative": 0.144098
+<<<<<<< HEAD
+=======
+        },
+        {
+          "day": 14,
+          "date": "2025-11-13",
+          "daily": 0.0,
+          "cumulative": 0.144098
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
         }
       ]
     },
@@ -16933,7 +17614,11 @@
       "protocol": "Orca",
       "establishment_date": "2025-09-19",
       "total_revenue": 0.018055,
+<<<<<<< HEAD
       "days_of_data": 55,
+=======
+      "days_of_data": 56,
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "days": [
         {
           "day": 1,
@@ -17264,6 +17949,15 @@
           "date": "2025-11-12",
           "daily": 0.0,
           "cumulative": 0.018055
+<<<<<<< HEAD
+=======
+        },
+        {
+          "day": 56,
+          "date": "2025-11-13",
+          "daily": 0.0,
+          "cumulative": 0.018055
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
         }
       ]
     },
@@ -17273,7 +17967,11 @@
       "protocol": "Orca",
       "establishment_date": "2025-08-17",
       "total_revenue": 0.014982,
+<<<<<<< HEAD
       "days_of_data": 88,
+=======
+      "days_of_data": 89,
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "days": [
         {
           "day": 1,
@@ -17802,6 +18500,15 @@
           "date": "2025-11-12",
           "daily": 0.0,
           "cumulative": 0.014982
+<<<<<<< HEAD
+=======
+        },
+        {
+          "day": 89,
+          "date": "2025-11-13",
+          "daily": 0.0,
+          "cumulative": 0.014982
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
         }
       ]
     },
@@ -19461,7 +20168,11 @@
       "protocol": "Orca",
       "establishment_date": "2025-10-24",
       "total_revenue": 5e-06,
+<<<<<<< HEAD
       "days_of_data": 20,
+=======
+      "days_of_data": 21,
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "days": [
         {
           "day": 1,
@@ -19582,6 +20293,15 @@
           "date": "2025-11-12",
           "daily": 0.0,
           "cumulative": 5e-06
+<<<<<<< HEAD
+=======
+        },
+        {
+          "day": 21,
+          "date": "2025-11-13",
+          "daily": 0.0,
+          "cumulative": 5e-06
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
         }
       ]
     },
@@ -19591,7 +20311,11 @@
       "protocol": "Orca",
       "establishment_date": "2025-08-17",
       "total_revenue": 1e-06,
+<<<<<<< HEAD
       "days_of_data": 88,
+=======
+      "days_of_data": 89,
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
       "days": [
         {
           "day": 1,
@@ -20120,6 +20844,15 @@
           "date": "2025-11-12",
           "daily": 0.0,
           "cumulative": 1e-06
+<<<<<<< HEAD
+=======
+        },
+        {
+          "day": 89,
+          "date": "2025-11-13",
+          "daily": 0.0,
+          "cumulative": 1e-06
+>>>>>>> d1b252ff54a8a74f66357afffd65f81f6620234a
         }
       ]
     }
