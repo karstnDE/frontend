@@ -51,7 +51,7 @@ const config: Config = {
           },
           {
             from: '/analysis/usage-statistics/usage-statistics-overview',
-            to: '/analysis/defituna/usage-statistics/usage-statistics-overview',
+            to: '/analysis/defituna/usage-statistics/',
           },
           {
             from: '/analysis/usage-statistics/usage-statistics-stakers',
