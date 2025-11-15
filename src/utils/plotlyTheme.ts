@@ -30,10 +30,31 @@ function getColors(isDark: boolean): PlotlyColors {
   };
 }
 
-export function getPlotlyTemplate(isDark: boolean) {
+export interface PlotlyTemplateOptions {
+  /** Add watermark branding to chart (default: false) */
+  showBranding?: boolean;
+}
+
+export function getPlotlyTemplate(isDark: boolean, options?: PlotlyTemplateOptions) {
   const colors = getColors(isDark);
   const accent = getThemeColor('--accent', ACCENT);
   const accentAlt = getThemeColor('--accent-hover', ACCENT_HOVER);
+
+  const annotations = options?.showBranding
+    ? [
+        {
+          text: 'karstenalytics.github.io',
+          xref: 'paper' as const,
+          yref: 'paper' as const,
+          x: 1,
+          y: -0.15,
+          xanchor: 'right' as const,
+          yanchor: 'top' as const,
+          showarrow: false,
+          font: { size: 10, color: isDark ? '#888' : '#999' },
+        },
+      ]
+    : [];
 
   return {
     layout: {
@@ -53,6 +74,7 @@ export function getPlotlyTemplate(isDark: boolean) {
       paper_bgcolor: colors.paper,
       plot_bgcolor: colors.bg,
       margin: { l: 60, r: 24, t: 32, b: 48 },
+      annotations,
       xaxis: {
         gridcolor: colors.grid,
         zeroline: false,

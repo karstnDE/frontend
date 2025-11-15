@@ -5,6 +5,7 @@ import { getPlotlyTemplate, defaultPlotlyConfig } from '@site/src/utils/plotlyTh
 import LoadingSpinner from '../common/LoadingSpinner';
 import { useChartTracking } from '@site/src/hooks/useChartTracking';
 import { trackCustomEvent } from '@site/src/utils/analytics';
+import { ShareButton } from '@site/src/components/ShareButton';
 
 interface AprDataPoint {
   date: string;
@@ -254,6 +255,19 @@ export default function ApyChart(): React.ReactElement {
         padding: '16px',
         marginBottom: '24px',
       }}>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '8px',
+        }}>
+          <div style={{ flex: 1 }} />
+          <ShareButton
+            plotRef={plotRef}
+            chartName="TUNA Staking APR"
+            shareText={`Check out the TUNA Staking APR trends - currently at ${data.summary.current_reference_apr.toFixed(2)}%! 📊`}
+          />
+        </div>
         <Plot
           data={traces}
           layout={{
