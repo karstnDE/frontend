@@ -23,8 +23,12 @@ function useDocTOC() {
   const hidden = frontMatter.hide_table_of_contents;
   const canRender = !hidden && toc.length > 0;
 
+  // Hide mobile TOC on tablet viewports (handled by CSS for tablets)
+  // Mobile TOC shows only on mobile (<768px), hidden on tablets and desktop
   const mobile = canRender ? <DocItemTOCMobile /> : undefined;
 
+  // Desktop TOC only shows on large desktop viewports (≥1280px)
+  // For tablets (768px-1279px), neither mobile nor desktop TOC is shown
   const desktop =
     canRender && (windowSize === 'desktop' || windowSize === 'ssr') ? (
       <DocItemTOCDesktop />

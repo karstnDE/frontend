@@ -495,7 +495,8 @@ body {
   margin-top: 4px;
 }
 
-@media (min-width: 997px) {
+/* Desktop TOC positioning - only on large desktops (≥1280px) */
+@media (min-width: 1280px) {
   .theme-doc-sidebar-container {
     margin-left: -40px;
   }
@@ -588,7 +589,8 @@ main[class*="docMainContainer"] > .container > .row > .col:first-child {
 main[class*="docMainContainer"] > .container > .row > .col:last-child {
   padding-right: 0;
 }
-@media (min-width: 997px) {
+/* Desktop TOC column sizing - only on large desktops (≥1280px) */
+@media (min-width: 1280px) {
   main[class*="docMainContainer"] > .container > .row > .col.col--3 {
     flex: 0 0 auto;
     width: auto;
@@ -805,6 +807,30 @@ textarea:focus {
 /* ========================
    Responsive adjustments
    ======================== */
+/* Tablet viewports: Hide TOC completely and expand content */
+@media (min-width: 768px) and (max-width: 1279px) {
+  /* Hide mobile TOC on tablets */
+  .theme-doc-toc-mobile {
+    display: none !important;
+  }
+
+  /* Hide desktop TOC on tablets */
+  .theme-doc-toc-desktop,
+  .col.col--3 {
+    display: none !important;
+  }
+
+  /* Expand main content to use full width on tablets */
+  .docItemCol {
+    max-width: 100% !important;
+  }
+
+  /* Ensure article uses available space */
+  article {
+    max-width: 100%;
+  }
+}
+
 /* Large tablets and small desktops */
 @media (max-width: 1200px) {
   /* Dynamic padding/margin formulas handle responsive behavior automatically */
