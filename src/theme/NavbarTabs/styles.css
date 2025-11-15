@@ -85,6 +85,20 @@
 }
 
 /* Responsive adjustments */
+/* Tablet viewports: Remove max-width constraint to allow tabs to move left */
+@media (min-width: 997px) and (max-width: 1199px) {
+  .navbar-tabs__inner {
+    max-width: none !important;
+  }
+}
+
+/* Desktop: Restore max-width constraint above 1200px */
+@media (min-width: 1200px) {
+  .navbar-tabs__inner {
+    max-width: var(--max-content-width) !important;
+  }
+}
+
 @media (max-width: 768px) {
   .navbar-tabs {
     height: 48px;

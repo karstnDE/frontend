@@ -16,7 +16,8 @@ Two-dimensional revenue distribution showing how transaction types and liquidity
     const { useState, useEffect } = require('react');
     const PoolTypeMatrixChart = require('@site/src/components/Dashboard/PoolTypeMatrixChart').default;
     const TopTransactionsTable = require('@site/src/components/Dashboard/TopTransactionsTable').default;
-    
+    const useBaseUrl = require('@docusaurus/useBaseUrl').default;
+
     function PoolTypeMatrix() {
       const [selectedSegment, setSelectedSegment] = useState(null);
       const [topTransactionsPool, setTopTransactionsPool] = useState({});
@@ -24,11 +25,15 @@ Two-dimensional revenue distribution showing how transaction types and liquidity
       const [summary, setSummary] = useState(null);
       const [loading, setLoading] = useState(true);
 
+      const topTransactionsPoolPath = useBaseUrl('/data/top_transactions_pool.json');
+      const topTransactionsPoolTypePath = useBaseUrl('/data/top_transactions_pool_type.json');
+      const summaryPath = useBaseUrl('/data/summary.json');
+
       useEffect(() => {
         Promise.all([
-          fetch('/data/top_transactions_pool.json').then(res => res.json()),
-          fetch('/data/top_transactions_pool_type.json').then(res => res.json()),
-          fetch('/data/summary.json').then(res => res.json())
+          fetch(topTransactionsPoolPath).then(res => res.json()),
+          fetch(topTransactionsPoolTypePath).then(res => res.json()),
+          fetch(summaryPath).then(res => res.json())
         ])
           .then(([poolData, poolTypeData, summaryData]) => {
             setTopTransactionsPool(poolData);
@@ -40,7 +45,7 @@ Two-dimensional revenue distribution showing how transaction types and liquidity
             console.error('Error loading transaction data:', err);
             setLoading(false);
           });
-      }, []);
+      }, [topTransactionsPoolPath, topTransactionsPoolTypePath, summaryPath]);
 
       const handleSegmentClick = (poolId, poolLabel, displayName, technicalTypes) => {
         setSelectedSegment({ poolId, poolLabel, displayName, technicalTypes });

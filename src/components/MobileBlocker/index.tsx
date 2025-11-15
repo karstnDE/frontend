@@ -8,8 +8,9 @@ export default function MobileBlocker(): React.ReactElement | null {
   useEffect(() => {
     setMounted(true);
     const checkMobile = () => {
-      // Block access for devices smaller than tablets (768px)
-      setIsMobile(window.innerWidth < 768);
+      // Block access when sidebar collapses to mobile menu (< 997px)
+      // This matches Docusaurus's mobile breakpoint where layout becomes unusable
+      setIsMobile(window.innerWidth < 997);
     };
 
     checkMobile();

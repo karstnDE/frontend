@@ -466,7 +466,7 @@ body {
 
 .theme-doc-sidebar-container .menu__link--sublist-caret::after {
   margin-left: 10px;
-  margin-right: 6px;
+  margin-right: 14px;
 }
 
 .theme-doc-sidebar-container .menu__list .menu__list .linkIconPlaceholder,
@@ -811,7 +811,7 @@ textarea:focus {
    Responsive adjustments
    ======================== */
 /* Tablet viewports: Hide TOC completely and expand content */
-@media (min-width: 768px) and (max-width: 1199px) {
+@media (min-width: 997px) and (max-width: 1199px) {
   /* Hide desktop TOC column on tablets */
   .col.col--3 {
     display: none !important;
@@ -832,26 +832,42 @@ textarea:focus {
   :root {
     --page-gutter: 12px;
   }
+
+  /* Remove max-width constraints to allow content to move left */
+  .navbar__inner,
+  .main-wrapper [class*="docRoot"],
+  .social-footer__content {
+    max-width: none !important;
+  }
 }
 
 /* Medium tablets - reduce gutter further */
-@media (min-width: 768px) and (max-width: 1023px) {
+@media (min-width: 997px) and (max-width: 1100px) {
   :root {
     --page-gutter: 8px;
   }
 }
 
 /* Small tablets - minimal gutter */
-@media (min-width: 768px) and (max-width: 900px) {
+@media (min-width: 997px) and (max-width: 1050px) {
   :root {
     --page-gutter: 4px;
   }
 }
 
 /* Smallest tablet size - no gutter */
-@media (min-width: 768px) and (max-width: 820px) {
+@media (min-width: 997px) and (max-width: 1000px) {
   :root {
     --page-gutter: 0px;
+  }
+}
+
+/* Desktop: Restore max-width constraints above 1200px */
+@media (min-width: 1200px) {
+  .navbar__inner,
+  .main-wrapper [class*="docRoot"],
+  .social-footer__content {
+    max-width: var(--max-content-width) !important;
   }
 }
 
