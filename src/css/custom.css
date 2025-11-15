@@ -495,6 +495,7 @@ body {
   margin-top: 4px;
 }
 
+/* Left sidebar positioning - applies from tablet up */
 @media (min-width: 997px) {
   .theme-doc-sidebar-container {
     margin-left: -40px;
@@ -507,7 +508,10 @@ body {
     bottom: auto !important;
     max-height: calc(100vh - var(--sidebar-sticky-top)) !important;
   }
+}
 
+/* Right TOC positioning - only on large desktops (≥1200px) */
+@media (min-width: 1200px) {
   /* Fix TOC sticky position to stay below navbar */
   [class*="tocCollapsible"] {
     top: var(--toc-sticky-top) !important;
@@ -588,7 +592,8 @@ main[class*="docMainContainer"] > .container > .row > .col:first-child {
 main[class*="docMainContainer"] > .container > .row > .col:last-child {
   padding-right: 0;
 }
-@media (min-width: 997px) {
+/* Desktop TOC column sizing - only on large desktops (≥1200px) */
+@media (min-width: 1200px) {
   main[class*="docMainContainer"] > .container > .row > .col.col--3 {
     flex: 0 0 auto;
     width: auto;
@@ -805,6 +810,51 @@ textarea:focus {
 /* ========================
    Responsive adjustments
    ======================== */
+/* Tablet viewports: Hide TOC completely and expand content */
+@media (min-width: 768px) and (max-width: 1199px) {
+  /* Hide desktop TOC column on tablets */
+  .col.col--3 {
+    display: none !important;
+  }
+
+  /* Expand main content to use full width on tablets */
+  .docItemCol {
+    max-width: 100% !important;
+  }
+
+  /* Force main content column to full width */
+  .row > .col:first-child {
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Progressively reduce page gutter on tablets for more content space */
+  :root {
+    --page-gutter: 12px;
+  }
+}
+
+/* Medium tablets - reduce gutter further */
+@media (min-width: 768px) and (max-width: 1023px) {
+  :root {
+    --page-gutter: 8px;
+  }
+}
+
+/* Small tablets - minimal gutter */
+@media (min-width: 768px) and (max-width: 900px) {
+  :root {
+    --page-gutter: 4px;
+  }
+}
+
+/* Smallest tablet size - no gutter */
+@media (min-width: 768px) and (max-width: 820px) {
+  :root {
+    --page-gutter: 0px;
+  }
+}
+
 /* Large tablets and small desktops */
 @media (max-width: 1200px) {
   /* Dynamic padding/margin formulas handle responsive behavior automatically */
